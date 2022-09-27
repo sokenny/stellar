@@ -3,6 +3,7 @@ import Scrapper from '../controllers/scrapper';
 
 const router = express.Router()
 
-router.post('/', Scrapper.scrap)
+router.get('/test', Scrapper.test)
+router.post('/onboard', Scrapper.onboardNewPage)
 
 export default router;

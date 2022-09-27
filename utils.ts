@@ -3,16 +3,16 @@ import { ElementHandle } from "puppeteer";
 
 export const websitesToTest: string[] = [
     "https://lengaswear.com",
-    // "https://www.dipseastories.com/",
-    // "https://pinklabel.tv/",
-    // "https://www.bitstamp.net/",
-    // "https://wallet.uphold.com/",
-    // "https://www.gemini.com/share/vrnwe6s8",
+    "https://www.dipseastories.com/",
+    "https://pinklabel.tv/",
+    "https://www.bitstamp.net/",
+    "https://wallet.uphold.com/",
+    "https://www.gemini.com/share/vrnwe6s8",
     "https://bitcoinira.com/",
-    // "https://www.apartments.com/",
-    // "https://www.lemonade.com/car",
-    // "https://clearcover.com/",
-    // 'https://www.autooptimize.ai/'
+    "https://www.apartments.com/",
+    "https://www.lemonade.com/car",
+    "https://clearcover.com/",
+    'https://www.autooptimize.ai/'
 ];
 
 export const loginCtas:string[] = [
@@ -36,6 +36,14 @@ export const registerCtas:string[] = [
     'open account'
 ]
 
+export const otherIrrelevantCtas:string[] = [
+    'got it',
+    'ok',
+    'close',
+    'cancel',
+    'x',
+]
+
 export const buttonClasses:string[] = [
     'btn',
     'button',
@@ -43,7 +51,6 @@ export const buttonClasses:string[] = [
 ]
 
 
-// Create class called DOMHelper
 export function DOMHelper(page:any, window:any) {
 
     return {
@@ -121,10 +128,17 @@ export function DOMHelper(page:any, window:any) {
         },
         getSelector: async function(element: ElementHandle) {
             const selector = await element.evaluate((el:any) => {
+                const getNthChild = function (htmlElement:any) {
+                    let nth = 1;
+                    while (htmlElement.previousElementSibling) {
+                        htmlElement = htmlElement.previousElementSibling;
+                        nth++;
+                    }
+                    return nth;
+                }
                 const firstEl = el;
                 const elementsInTree = [firstEl];
-                // get nth of child of firstEl
-                const nthChild = this.getNthChild(firstEl);
+                const nthChild = getNthChild(firstEl);
                 while (el.parentNode) {
                     el = el.parentNode;
                     elementsInTree.push(el);
@@ -140,18 +154,10 @@ export function DOMHelper(page:any, window:any) {
                     }
                     selector += ' > ' + elementsInTree[i].tagName.toLowerCase();
                 }
-                console.log('nthChild', nthChild);
+                selector += ':nth-child(' + nthChild + ')';
                 return selector;
             });
             return selector;
-        },
-        getNthOfChild: function (el:any) {
-            let nth = 0;
-            while (el.previousElementSibling) {
-                el = el.previousElementSibling;
-                nth++;
-            }
-            return nth;
         }
     }
 }
