@@ -1,5 +1,7 @@
+import {ElementHandle} from 'puppeteer';
+
 export type MainElements = {
-    h1: string | null;
-    description: string | null;
-    button: string | null;
+    h1: ElementHandle | null;
+    description: ElementHandle | null;
+    cta: ElementHandle | null;
 };

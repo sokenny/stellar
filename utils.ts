@@ -1,17 +1,18 @@
 import { MainElements } from "./types";
+import { ElementHandle } from "puppeteer";
 
 export const websitesToTest: string[] = [
     "https://lengaswear.com",
-    "https://www.dipseastories.com/",
-    "https://pinklabel.tv/",
-    "https://www.bitstamp.net/",
-    "https://wallet.uphold.com/",
-    "https://www.gemini.com/share/vrnwe6s8",
+    // "https://www.dipseastories.com/",
+    // "https://pinklabel.tv/",
+    // "https://www.bitstamp.net/",
+    // "https://wallet.uphold.com/",
+    // "https://www.gemini.com/share/vrnwe6s8",
     "https://bitcoinira.com/",
-    "https://www.apartments.com/",
-    "https://www.lemonade.com/car",
-    "https://clearcover.com/",
-    'https://www.autooptimize.ai/'
+    // "https://www.apartments.com/",
+    // "https://www.lemonade.com/car",
+    // "https://clearcover.com/",
+    // 'https://www.autooptimize.ai/'
 ];
 
 export const loginCtas:string[] = [
@@ -43,76 +44,114 @@ export const buttonClasses:string[] = [
 
 
 // Create class called DOMHelper
-export function DOMHelper(document:any, window:any) {
+export function DOMHelper(page:any, window:any) {
 
     return {
-        isInRelevantScreenArea: function(element: Element): boolean {
-            const rect = element.getBoundingClientRect();
-            console.log('rect: ', rect);
-            const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-            console.log('windowHeight: ', windowHeight);
-            const windowWidth = (window.innerWidth || document.documentElement.clientWidth);
-            console.log('windowWidth: ', windowWidth);
+        isInRelevantScreenArea: async function(element: any):Promise<boolean> {
+            const rect:any  = await element.evaluate((el:any) => {
+                const {x, y, left, top, width, height} = el.getBoundingClientRect();
+                return {x, y, left, top, width, height};
+            });
+            const windowHeight = (window.innerHeight || page.pageElement.clientHeight);
+            const windowWidth = (window.innerWidth || page.pageElement.clientWidth);
             const vertInViewMinus20Percent = (rect.top <= windowHeight * 0.8) && ((rect.top + rect.height) >= windowHeight * .2);
-            console.log('vertInViewMinus20Percent: ', vertInViewMinus20Percent);
             const horInView = (rect.left <= windowWidth) && ((rect.left + rect.width) >= 0);
-            console.log('horInView: ', horInView);
             return (vertInViewMinus20Percent && horInView);
         },
-        isImportantCtaButton: function(element: Element): boolean {
-            const hasButtonClass = (element:any) => buttonClasses.some((buttonClass) => element.className.toLocaleLowerCase().includes(buttonClass));
-            const isNotLoginCta = (element:any) => !loginCtas.includes(element.textContent.toLocaleLowerCase());
+        isImportantCtaButton: async function(element: ElementHandle): Promise<boolean> {
+            const domElementClassName:string = await element.evaluate((el:any) =>  el.className);
+            const domElementTextContent:string = await element.evaluate((el:any) =>  el.textContent);
+            const hasButtonClass = async () => buttonClasses.some((buttonClass) => domElementClassName.toLocaleLowerCase().includes(buttonClass));
+            const isNotLoginCta = async () => !loginCtas.includes(domElementTextContent.toLocaleLowerCase());
             try{
-                return hasButtonClass(element) && isNotLoginCta(element) && this.isInRelevantScreenArea(element);
+                return await hasButtonClass() && await isNotLoginCta() && await this.isInRelevantScreenArea(element);
             } catch (e) {
                 return false;
             }
         },
-        getVisibleElementWithBiggestFontSize: function (elements: HTMLElement[]): HTMLElement {
-            let biggestFontSize = 0;
-            let biggestFontSizeElement:HTMLElement = elements[0];
-            elements.forEach((element) => {
-                const fontSize = window.getComputedStyle(element).getPropertyValue('font-size');
-                const isVisible = window.getComputedStyle(element).getPropertyValue('display') !== 'none' && window.getComputedStyle(element).getPropertyValue('opacity') !== '0'
-                // TODO-p2 check if parent elements are visible
-                if (parseInt(fontSize) > biggestFontSize && isVisible) {
-                    biggestFontSize = parseInt(fontSize);
-                    biggestFontSizeElement = element;
+        getVisibleElementWithNBiggestFontSize: async function (elements: any[], n:number): Promise<HTMLElement> {
+            const elementsWithFontSize = [];
+            for(const element of elements) {
+                const fontSize = await element.evaluate(el => window.getComputedStyle(el).getPropertyValue('font-size'));
+                const isVisible = await element.evaluate(el => window.getComputedStyle(el).getPropertyValue('display') !== 'none' && window.getComputedStyle(el).getPropertyValue('opacity') !== '0');
+                const isUnder500Chars = await element.evaluate(el => el.textContent.length < 500);
+                if (isVisible && isUnder500Chars) {
+                    elementsWithFontSize.push({element, fontSize: parseInt(fontSize)});
                 }
-            });
-            return biggestFontSizeElement;
+            }
+            elementsWithFontSize.sort((a:any, b:any) => b.fontSize - a.fontSize);
+            return elementsWithFontSize[n-1].element;
         },
-        getRelevantElementsToScan: function(elements: HTMLElement[]): HTMLElement[] {
+        getRelevantElementsToScan: async function(elements: HTMLElement[]): Promise<HTMLElement[]> {
             const relevantElements:HTMLElement[] = [];
-            elements.forEach((element) => {
-                if (this.isInRelevantScreenArea(element)){
+            for (const element of elements) {
+                if (await this.isInRelevantScreenArea(element)){
                     relevantElements.push(element);
                 }
-            });
+            }
             return relevantElements;
         },
-        retrieveElements: function(){
-            const mainElements:MainElements = {h1: null, description: null, button: null};
-            let h1 = document.querySelector('h1');
-            let button = document.querySelector('button');
-            const relevantElements = this.getRelevantElementsToScan(Array.from(document.querySelectorAll('*')));
-            console.log('Relevant elements: ', relevantElements);
-            const isImportantCtaButton = this.isImportantCtaButton;
-            relevantElements.forEach(function(element) {
-                if (isImportantCtaButton(element)) {
+        retrieveElements: async function(){
+            const mainElements:MainElements = {h1: null, description: null, cta: null};
+            const h1 = await page.$('h1');
+            const h2 = await page.$('h2');
+            let cta = await page.$('button');
+            const elements = await page.$$('*');
+            const relevantElements = await this.getRelevantElementsToScan(elements);
+            for(const element of relevantElements){
+                if (await this.isImportantCtaButton(element)) {
                     console.log('IS IMPORTANT!');
-                    console.log(element?.textContent);
+                    console.log(await element.evaluate(el => el.textContent));
+                    cta = element;
                 }
-            });
-            console.log("H1: ", h1?.textContent);
-            console.log("Button", button?.textContent);
+            }
     
-            const biggestText = this.getVisibleElementWithBiggestFontSize(relevantElements);
-            console.log("Biggest text: ", biggestText?.textContent);
+            const biggestText = await this.getVisibleElementWithNBiggestFontSize(relevantElements, 1);
+            const secondBiggestText = await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
+
+            mainElements.h1 = h1 || biggestText;
+            mainElements.description = h2 || secondBiggestText;
+            mainElements.cta = cta;
+            return mainElements;
+
         },
-        printAppTitle: function() {
-            const title = document.querySelector('title');
-            console.log(title?.textContent);
+        printAppTitle: async function() {
+            const title = await page.title();
+            console.log("Title: ", title);
+        },
+        getSelector: async function(element: ElementHandle) {
+            const selector = await element.evaluate((el:any) => {
+                const firstEl = el;
+                const elementsInTree = [firstEl];
+                // get nth of child of firstEl
+                const nthChild = this.getNthChild(firstEl);
+                while (el.parentNode) {
+                    el = el.parentNode;
+                    elementsInTree.push(el);
+                    if (el.tagName === 'BODY') {
+                        break;
+                    }
+                }
+                let selector = '';
+                for (let i = elementsInTree.length - 1; i >= 0; i--) {
+                    if(selector === ''){
+                        selector = elementsInTree[i].tagName.toLowerCase();
+                        continue;   
+                    }
+                    selector += ' > ' + elementsInTree[i].tagName.toLowerCase();
+                }
+                console.log('nthChild', nthChild);
+                return selector;
+            });
+            return selector;
+        },
+        getNthOfChild: function (el:any) {
+            let nth = 0;
+            while (el.previousElementSibling) {
+                el = el.previousElementSibling;
+                nth++;
+            }
+            return nth;
         }
     }
 }
