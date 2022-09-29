@@ -54,6 +54,7 @@ export default {
     onboardNewPage
 }
 
+// TODO-P1 add origin and push
 // TODO-P1 - Create function 'onboardWebsite' that will:
 // -scrapMainElements from website
 // -for each mainElement retrieved, create an ELEMENT (must have unique selector for each domain + page).
