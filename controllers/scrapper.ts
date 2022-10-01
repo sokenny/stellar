@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import jsdom from 'jsdom';
 import {DOMHelper, websitesToTest} from '../utils';
 import { MainElements } from "../types";
+import Element from '../models/element'; 
 
 async function initiatePage(website){
     const browser = await puppeteer.launch();
@@ -42,10 +43,21 @@ async function test(req: Request, res: Response){
 }
 
 async function onboardNewPage(req: Request, res: Response){
-    console.log('body: ', req.body);
     const {website} = req.body;
     const mainElements = await scrapMainElements(website);
+    const createdElements = await createElements(Object.values(mainElements));
     res.status(200).send(mainElements);
+}
+
+async function createElements(elements:any[]){
+    // for each element, create element using Element model
+    elements.forEach(async (element) => {
+        // const elementText = await element.evaluate(el => el.textContent);
+        // const elementSelector = await element.evaluate(el => el.className);
+        // const createdElement = await Element.create({elementText, elementSelector});
+        // console.log('Created element: ', createdElement);
+    }
+    )   
 }
 
 export default {

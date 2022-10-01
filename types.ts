@@ -5,3 +5,18 @@ export type MainElements = {
     description: ElementHandle | null;
     cta: ElementHandle | null;
 };
+
+export interface IElementProperties {
+    innerText: string;
+    fontSize: string;
+    color: string;
+    backgroundColor: string;
+}
+
+export interface IElement {
+    type: string;
+    page: string;
+    selector: string;
+    properties: IElementProperties;
+    project: any;
+}
