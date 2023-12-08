@@ -13,10 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/scrapper', scrapper);
 
-const CONNECTION_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.viitndt.mongodb.net/?retryWrites=true&w=majority`
+const CONNECTION_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.viitndt.mongodb.net/stellar?retryWrites=true&w=majority`
 
 mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true} as ConnectOptions)
     .then(()=> app.listen(PORT, ()=>console.log('Server running on port: ' + PORT)))
     .catch((error)=> console.log(error.message)) 
-
-//
