@@ -1,21 +1,50 @@
-import mongoose from "mongoose";
-import { IElement, IElementProperties } from "../types";
+// Element.ts
+import { Model, DataTypes } from 'sequelize';
+import sequelize from '../db'; // Adjust the import path as necessary
+import ElementProperties from './ElementProperties';
+import Project from './Project';
 
-const elementPropertiesSchema = new mongoose.Schema<IElementProperties>({
-    innerText: String,
-    fontSize: String,
-    color: String,
-    backgroundColor: String,
+class Element extends Model {
+    public id!: number;
+    public type!: string;
+    public page!: string;
+    public selector!: string;
+    public properties!: ElementProperties;
+    public projectId!: number; // Assuming 'project' is a separate model
+}
+
+Element.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    page: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    selector: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Projects', // This should match the table name of the Project model
+            key: 'id',
+        },
+    },
+}, {
+    sequelize,
+    modelName: 'Element',
 });
 
-const elementSchema = new mongoose.Schema<IElement>({
-    type: { type: String, required: true },
-    page: { type: String, required: true },
-    selector: { type: String, required: true },
-    properties: elementPropertiesSchema,
-    project: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
-});
-
-const Element = mongoose.model("element", elementSchema);
+// Association (if Project model is defined)
+Element.belongsTo(Project, { foreignKey: 'projectId' });
 
 export default Element;

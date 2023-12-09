@@ -1,5 +1,5 @@
 import express from 'express';
-import Scrapper from '../controllers/scrapper';
+import Scrapper from '../services/scrapper';
 
 const router = express.Router();
 

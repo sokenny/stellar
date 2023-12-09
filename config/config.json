@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "Jchskate12",
+    "database": "stellar",
+    "host": "34.172.27.248",
+    "dialect": "postgresql"
+  },
+  "test": {
+    "username": "admin",
+    "password": "Jchskate12",
+    "database": "stellar",
+    "host": "34.172.27.248",
+    "dialect": "postgresql"
+  },
+  "production": {
+    "username": "admin",
+    "password": "Jchskate12",
+    "database": "stellar",
+    "host": "34.172.27.248",
+    "dialect": "postgresql"
+  }
+}

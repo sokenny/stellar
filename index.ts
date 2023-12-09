@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import scrapper from './routes/scrapper';
-import mongoose, {ConnectOptions} from 'mongoose'
+import sequelize from './db'; // Import Sequelize connection
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -13,8 +13,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/scrapper', scrapper);
 
-const CONNECTION_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.viitndt.mongodb.net/stellar?retryWrites=true&w=majority`
-
-mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true} as ConnectOptions)
-    .then(()=> app.listen(PORT, ()=>console.log('Server running on port: ' + PORT)))
-    .catch((error)=> console.log(error.message)) 
+// Establish connection to the database using Sequelize
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+        // Start the server only after the database connection is established
+        app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });

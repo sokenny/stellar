@@ -4,11 +4,11 @@ import jsdom from 'jsdom';
 import { DOMHelper, websitesToTest } from '../utils';
 import { MainElements } from '../types';
 import { IElement, IVariant } from '../types';
-import Element from '../models/element';
-import Project from '../models/project';
-import Variant from '../models/variant';
-import Journey from '../models/journey';
-import Experiment from '../models/experiment';
+import Element from '../models/Element';
+import Project from '../models/Project';
+import Variant from '../models/Variant';
+import Journey from '../models/Journey';
+import Experiment from '../models/Experiment';
 
 async function initiatePage(website) {
   const browser = await puppeteer.launch();
@@ -43,50 +43,50 @@ async function test(req: Request, res: Response) {
   res.status(200).send('Testing done');
 }
 
-async function findOrCreateProject(website_url: string): Promise<any> {
-  const hardcodedUserId = '5f9f1b0b0b1b9c0b1c1b1b1b';
+async function findOrCreateProject(website_url: string) {
   const domain = website_url
     .replace('https://', '')
     .replace('http://', '')
     .replace('www.', '');
-  const project = await Project.findOne({
-    domain,
-    user: hardcodedUserId,
+
+  let project = await Project.findOne({
+    where: { domain }
   });
+
   if (!project) {
-    const newProject = await Project.create({
+    project = await Project.create({
       name: domain,
-      domain,
-      user: hardcodedUserId,
+      domain
+      // Add other project fields here, like userId if applicable
     });
-    console.log('Created new project: ', newProject);
-    return newProject;
+    console.log('Created new project: ', project);
   }
+
   console.log('Project already exists: ', project);
   return project;
 }
 
-async function createVariants(
-  element: IElement,
-  experimentId: any,
-): Promise<IVariant[]> {
+
+async function createVariants(element, experimentId) {
   const variantsForThisElement = [];
-  const text = await element.properties.innerText;
-  const color = await element.properties.color;
+  const text = element.properties.innerText; // Assuming properties are already resolved
+  const color = element.properties.color;
+
   for (let i = 0; i < 3; i++) {
     const variant = await Variant.create({
-      element: element._id,
-      text: text + ' - ' + i,
+      elementId: element.id,
+      text: `${text} - ${i}`,
       fontSize: null,
       color,
       backgroundColor: null,
-      experiment: experimentId,
+      experimentId
     });
     variantsForThisElement.push(variant);
   }
 
   return variantsForThisElement;
 }
+
 
 function getEndDate(startDate) {
   const endDate = new Date(startDate);
@@ -101,27 +101,27 @@ function getStartDate(experiments: any[]) {
   return startDate;
 }
 
-async function createExperiments(elements: IElement[], journey_id: any) {
+async function createExperiments(elements, journeyId) {
   const experiments = [];
   for (const element of elements) {
     const startDate = getStartDate(experiments);
     const endDate = getEndDate(startDate);
-    console.log('start date and end date: ', startDate, endDate)
+    
     const experiment = await Experiment.create({
       name: 'hardcoded name',
       startDate,
       endDate,
-      element: element._id,
-      journey: journey_id,
-      url: 'hardcoded url',
+      elementId: element.id,
+      journeyId,
+      url: 'hardcoded url'
     });
-    const variants = await createVariants(element, experiment._id);
-    experiment.variants = variants.map((variant) => variant._id);
-    await experiment.save();
+
+    const variants = await createVariants(element, experiment.id);
     experiments.push(experiment);
   }
   return experiments;
 }
+
 
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
   const { website_url } = req.body;
@@ -132,51 +132,42 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
       domReference: element[1],
       type: element[0],
     })),
-    project._id,
+    project.id,
   );
   console.log('createdElements: ', createdElements);
   const journey = await Journey.create({
     name: 'hardcoded name',
     page: website_url,
-    elements: createdElements.map((element) => element._id),
-    project: project._id,
+    elements: createdElements.map((element) => element.id),
+    project: project.id,
   });
   console.log('created journey: ', journey);
-  const experiments = await createExperiments(createdElements, journey._id);
+  const experiments = await createExperiments(createdElements, journey.id);
   console.log('created experiments: ', experiments);
-  journey.experiments = experiments.map((experiment) => experiment._id);
+  journey.experiments = experiments.map((experiment) => experiment.id);
   await journey.save();
   console.log('journey: ', journey);
   res.status(200).send(mainElements);
 }
 
-async function createElements(elements: any[], project_id: any) {
+async function createElements(elements, projectId) {
   const createdElements = [];
   for (const element of elements) {
-    const elementText = await element.domReference.evaluate(
-      (el) => el.textContent,
-    );
-    const elementSelector = await element.domReference.evaluate(
-      (el) => el.className,
-    );
-    const elementColor = await element.domReference.evaluate(
-      (el) => el.style.color,
-    );
-    const elementToCreate: IElement = {
+    const createdElement = await Element.create({
       type: element.type,
       page: 'test',
-      selector: elementSelector,
-      properties: {
-        innerText: elementText,
-        color: elementColor,
+      selector: element.selector,
+      properties: { // Assuming properties is a JSON object
+        innerText: element.properties.innerText,
+        color: element.properties.color
       },
-      project: project_id,
-    };
-    const createdElement = await Element.create(elementToCreate);
+      projectId
+    });
     createdElements.push(createdElement);
   }
   return createdElements;
 }
+
 
 export default {
   scrapMainElements,
