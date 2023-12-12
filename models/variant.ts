@@ -1,51 +1,49 @@
-// Variant.ts
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../db'; // Adjust the import path as necessary
-import Element from './Element';
-import Experiment from './Experiment';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Variant extends Model {
     public id!: number;
-    public elementId!: number; // Assuming 'Element' is a separate model
+    public element_id!: number; 
     public text?: string;
-    public fontSize?: string;
+    public font_size?: string;
     public color?: string;
-    public backgroundColor?: string;
-    public experimentId!: number; // Assuming 'Experiment' is a separate model
+    public background_color?: string;
+    public experiment_id!: number;
 }
 
-Variant.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    elementId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Elements', // This should match the table name of the Element model
-            key: 'id',
-        },
-    },
-    text: DataTypes.STRING,
-    fontSize: DataTypes.STRING,
-    color: DataTypes.STRING,
-    backgroundColor: DataTypes.STRING,
-    experimentId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Experiments', // This should match the table name of the Experiment model
-            key: 'id',
-        },
-    },
-}, {
-    sequelize,
-    modelName: 'Variant',
-});
 
-// Associations
-Variant.belongsTo(Element, { foreignKey: 'elementId' });
-Variant.belongsTo(Experiment, { foreignKey: 'experimentId' });
+export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
+    Variant.init({
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        element_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'elements', // This should match the table name of the Element model
+                key: 'id',
+            },
+        },
+        text: DataTypes.STRING,
+        font_size: DataTypes.STRING,
+        color: DataTypes.STRING,
+        background_color: DataTypes.STRING,
+        experiment_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'experiments', 
+                key: 'id',
+            },
+        },
+    }, {
+        sequelize,
+        modelName: 'Variant',
+        tableName: 'variants',
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+    });
 
-export default Variant;
+    return Variant;
+}

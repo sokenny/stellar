@@ -1,65 +1,61 @@
-// Experiment.ts
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../db'; // Adjust the import path as necessary
-import Element from './Element';
-import Journey from './Journey';
-import Variant from './Variant';
+import { Model, DataTypes, Sequelize } from 'sequelize';
+
 
 class Experiment extends Model {
     public id!: number;
     public name!: string;
-    public startDate!: Date;
-    public endDate!: Date;
-    public elementId!: number; // Assuming 'Element' is a separate model
-    public journeyId!: number; // Assuming 'Journey' is a separate model
+    public start_date!: Date;
+    public end_date!: Date;
+    public element_id!: number; 
+    public journey_id!: number; 
     public url!: string;
-    // Variants association will be handled separately
 }
 
-Experiment.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    startDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    endDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    elementId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Elements', // This should match the table name of the Element model
-            key: 'id',
+export const initializeExperiment = (sequelize: Sequelize): typeof Experiment => {
+    Experiment.init({
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
         },
-    },
-    journeyId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'Journeys', // This should match the table name of the Journey model
-            key: 'id',
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
-    },
-    url: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-}, {
-    sequelize,
-    modelName: 'Experiment',
-});
+        start_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        end_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        element_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'elements', // This should match the table name of the Element model
+                key: 'id',
+            },
+        },
+        journey_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'journeys', 
+                key: 'id',
+            },
+        },
+        url: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    }, {
+        sequelize,
+        modelName: 'Experiment',
+        tableName: 'experiments',
+        createdAt: 'created_at', 
+        updatedAt: 'updated_at', 
+    });
+    
 
-// Associations
-// Experiment.belongsTo(Element, { foreignKey: 'elementId' });
-// Experiment.belongsTo(Journey, { foreignKey: 'journeyId' });
-// Experiment.hasMany(Variant, { foreignKey: 'experimentId' }); // If Variant is a separate model
-
-export default Experiment;
+    return Experiment;
+}

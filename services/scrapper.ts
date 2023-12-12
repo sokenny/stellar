@@ -4,11 +4,7 @@ import jsdom from 'jsdom';
 import { DOMHelper, websitesToTest } from '../utils';
 import { MainElements } from '../types';
 import { IElement, IVariant } from '../types';
-import Element from '../models/Element';
-import Project from '../models/Project';
-import Variant from '../models/Variant';
-import Journey from '../models/Journey';
-import Experiment from '../models/Experiment';
+import db from '../models';
 
 async function initiatePage(website) {
   const browser = await puppeteer.launch();
@@ -49,21 +45,18 @@ async function findOrCreateProject(website_url: string) {
     .replace('http://', '')
     .replace('www.', '');
 
-  let project = await Project.findOne({
-    where: { domain }
+  const projects = await db.Project.findAll();
+
+  const newProject = await db.Project.create({
+    name: domain,
+    domain
   });
 
-  if (!project) {
-    project = await Project.create({
-      name: domain,
-      domain
-      // Add other project fields here, like userId if applicable
-    });
-    console.log('Created new project: ', project);
-  }
+  console.log("new ", newProject)
+    
+  console.log("projects: ", projects.length)
 
-  console.log('Project already exists: ', project);
-  return project;
+  return projects;
 }
 
 
@@ -73,13 +66,13 @@ async function createVariants(element, experimentId) {
   const color = element.properties.color;
 
   for (let i = 0; i < 3; i++) {
-    const variant = await Variant.create({
-      elementId: element.id,
+    const variant = await db.Variant.create({
+      element_id: element.id,
       text: `${text} - ${i}`,
-      fontSize: null,
+      font_size: null,
       color,
-      backgroundColor: null,
-      experimentId
+      background_color: null,
+      experiment_id: experimentId
     });
     variantsForThisElement.push(variant);
   }
@@ -107,12 +100,12 @@ async function createExperiments(elements, journeyId) {
     const startDate = getStartDate(experiments);
     const endDate = getEndDate(startDate);
     
-    const experiment = await Experiment.create({
+    const experiment = await db.Experiment.create({
       name: 'hardcoded name',
-      startDate,
-      endDate,
-      elementId: element.id,
-      journeyId,
+      start_date: startDate,
+      end_date: endDate,
+      element_id: element.id,
+      journey_id: journeyId,
       url: 'hardcoded url'
     });
 
@@ -125,43 +118,49 @@ async function createExperiments(elements, journeyId) {
 
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
   const { website_url } = req.body;
+  console.log("body: ", req.body)
+  console.log("WEBSITE URL :", website_url)
   const project = await findOrCreateProject(website_url);
-  const mainElements = await scrapMainElements(website_url, false);
-  const createdElements = await createElements(
-    Object.entries(mainElements).map((element) => ({
-      domReference: element[1],
-      type: element[0],
-    })),
-    project.id,
-  );
-  console.log('createdElements: ', createdElements);
-  const journey = await Journey.create({
-    name: 'hardcoded name',
-    page: website_url,
-    elements: createdElements.map((element) => element.id),
-    project: project.id,
-  });
-  console.log('created journey: ', journey);
-  const experiments = await createExperiments(createdElements, journey.id);
-  console.log('created experiments: ', experiments);
-  journey.experiments = experiments.map((experiment) => experiment.id);
-  await journey.save();
-  console.log('journey: ', journey);
-  res.status(200).send(mainElements);
+  // return
+  // const mainElements = await scrapMainElements(website_url, false);
+  // const createdElements = await createElements(
+  //   Object.entries(mainElements).map((element) => ({
+  //     domReference: element[1],
+  //     type: element[0],
+  //   })),
+  //   project.id,
+  // );
+  // console.log('createdElements: ', createdElements);
+  // const journey = await db.Journey.create({
+  //   name: 'hardcoded name',
+  //   page: website_url,
+  //   elements: createdElements.map((element) => element.id),
+  //   project: project.id,
+  // });
+  // console.log('created journey: ', journey);
+  // const experiments = await createExperiments(createdElements, journey.id);
+  // console.log('created experiments: ', experiments);
+  // // journey.experiments = experiments.map((experiment) => experiment.id);
+  // await journey.save();
+  // console.log('journey: ', journey);
+  // res.status(200).send(mainElements);
+  res.status(200).send(project);
 }
 
 async function createElements(elements, projectId) {
   const createdElements = [];
+  console.log("project id que llega: ", projectId)
   for (const element of elements) {
-    const createdElement = await Element.create({
+    console.log("creando element: ", element)
+    const createdElement = await db.Element.create({
       type: element.type,
       page: 'test',
-      selector: element.selector,
+      selector: element?.selector || "juanito",
       properties: { // Assuming properties is a JSON object
-        innerText: element.properties.innerText,
-        color: element.properties.color
+        innerText: element?.properties?.innerText,
+        color: element?.properties?.color
       },
-      projectId
+      project_id: projectId
     });
     createdElements.push(createdElement);
   }

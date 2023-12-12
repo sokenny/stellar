@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "admin",
-    "password": "Jchskate12",
-    "database": "stellar",
+    "username": "DB_USER",
+    "password": "DB_PASSWORD",
+    "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgresql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "admin",
-    "password": "Jchskate12",
-    "database": "stellar",
+    "username": "DB_USER",
+    "password": "DB_PASSWORD",
+    "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgresql"
+    "dialect": "postgres"
   },
   "production": {
-    "username": "admin",
-    "password": "Jchskate12",
-    "database": "stellar",
+    "username": "DB_USER",
+    "password": "DB_PASSWORD",
+    "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgresql"
+    "dialect": "postgres"
   }
 }

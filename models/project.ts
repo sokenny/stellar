@@ -1,42 +1,34 @@
-// Project.ts
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../db'; // Adjust the import path as necessary
+import { Model, DataTypes, Sequelize } from 'sequelize';
+
 
 class Project extends Model {
     public id!: number;
     public name!: string;
     public domain!: string;
-    public userId!: number; // Assuming 'User' is a separate model with an 'id' field
 }
 
-Project.init({
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    domain: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Users', // This should match the table name of the User model
-            key: 'id',
+export const initializeProject = (sequelize: Sequelize): typeof Project => {
+    Project.init({
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
         },
-    },
-}, {
-    sequelize,
-    modelName: 'Project',
-});
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        domain: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+    }, {
+        sequelize,
+        modelName: 'Project',
+        tableName: 'projects',
+        createdAt: 'created_at', 
+        updatedAt: 'updated_at', 
+    });
 
-// Association (if User model is defined)
-// Project.belongsTo(User, { foreignKey: 'userId' });
-
-export default Project;
+    return Project;
+}
