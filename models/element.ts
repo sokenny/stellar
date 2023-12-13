@@ -3,9 +3,9 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 class Element extends Model {
     public id!: number;
     public type!: string;
-    public page!: string;
     public selector!: string;
     public project_id!: number; // Assuming 'project' is a separate model
+    public properties!: object;
 }
 
 
@@ -20,10 +20,6 @@ export const initializeElement = (sequelize: Sequelize): typeof Element => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        page: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         selector: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -35,6 +31,10 @@ export const initializeElement = (sequelize: Sequelize): typeof Element => {
                 model: 'projects', 
                 key: 'id',
             },
+        },
+        properties: {
+            type: DataTypes.JSONB,
+            allowNull: true,
         },
     }, {
         sequelize,

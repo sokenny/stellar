@@ -87,7 +87,7 @@ export function DOMHelper(page:any, window:any) {
                 }
             }
             elementsWithFontSize.sort((a:any, b:any) => b.fontSize - a.fontSize);
-            return elementsWithFontSize[n-1].element;
+            return elementsWithFontSize[n-1]?.element;
         },
         getRelevantElementsToScan: async function(elements: HTMLElement[]): Promise<HTMLElement[]> {
             const relevantElements:HTMLElement[] = [];
@@ -98,8 +98,18 @@ export function DOMHelper(page:any, window:any) {
             }
             return relevantElements;
         },
+        getBasicStyles: async function(element): Promise<any> {
+            return element.evaluate((el:any) => {
+                const style = window.getComputedStyle(el);
+                return {
+                    fontSize: style.getPropertyValue('font-size'),
+                    fontWeight: style.getPropertyValue('font-weight'),
+                    color: style.getPropertyValue('color')
+                };
+            });
+        },
         retrieveElements: async function(){
-            const mainElements:MainElements = {h1: null, description: null, cta: null};
+            const mainElements:MainElements = {h1: [null, null, {}], description: [null, null, {}], cta: [null, null, {}]};
             const h1 = await page.$('h1');
             const h2 = await page.$('h2');
             let cta = await page.$('button');
@@ -116,9 +126,25 @@ export function DOMHelper(page:any, window:any) {
             const biggestText = await this.getVisibleElementWithNBiggestFontSize(relevantElements, 1);
             const secondBiggestText = await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
 
-            mainElements.h1 = h1 || biggestText;
-            mainElements.description = h2 || secondBiggestText;
-            mainElements.cta = cta;
+            const chosenH1 = h1 || biggestText;
+            const chosenDescription = h2 || secondBiggestText;
+            
+            const h1Styles = await this.getBasicStyles(chosenH1);
+            const h2Styles = await this.getBasicStyles(chosenDescription);
+            const ctaStyles = await this.getBasicStyles(cta);
+
+            mainElements.h1 = [chosenH1, 
+                await this.getSelector(chosenH1),
+                h1Styles
+            ];
+            mainElements.description = [chosenDescription,
+                await this.getSelector(chosenDescription),
+                h2Styles
+            ];
+            mainElements.cta = [cta, 
+            await this.getSelector(cta),
+            ctaStyles
+            ];
             return mainElements;
 
         },
@@ -127,37 +153,42 @@ export function DOMHelper(page:any, window:any) {
             console.log("Title: ", title);
         },
         getSelector: async function(element: ElementHandle) {
-            const selector = await element.evaluate((el:any) => {
-                const getNthChild = function (htmlElement:any) {
-                    let nth = 1;
-                    while (htmlElement.previousElementSibling) {
-                        htmlElement = htmlElement.previousElementSibling;
-                        nth++;
+            try {
+                const selector = await element.evaluate((el:any) => {
+                    const getNthChild = function (htmlElement:any) {
+                        let nth = 1;
+                        while (htmlElement.previousElementSibling) {
+                            htmlElement = htmlElement.previousElementSibling;
+                            nth++;
+                        }
+                        return nth;
                     }
-                    return nth;
-                }
-                const firstEl = el;
-                const elementsInTree = [firstEl];
-                const nthChild = getNthChild(firstEl);
-                while (el.parentNode) {
-                    el = el.parentNode;
-                    elementsInTree.push(el);
-                    if (el.tagName === 'BODY') {
-                        break;
+                    const firstEl = el;
+                    const elementsInTree = [firstEl];
+                    const nthChild = getNthChild(firstEl);
+                    while (el.parentNode) {
+                        el = el.parentNode;
+                        elementsInTree.push(el);
+                        if (el.tagName === 'BODY') {
+                            break;
+                        }
                     }
-                }
-                let selector = '';
-                for (let i = elementsInTree.length - 1; i >= 0; i--) {
-                    if(selector === ''){
-                        selector = elementsInTree[i].tagName.toLowerCase();
-                        continue;   
+                    let selector = '';
+                    for (let i = elementsInTree.length - 1; i >= 0; i--) {
+                        if(selector === ''){
+                            selector = elementsInTree[i].tagName.toLowerCase();
+                            continue;   
+                        }
+                        selector += ' > ' + elementsInTree[i].tagName.toLowerCase();
                     }
-                    selector += ' > ' + elementsInTree[i].tagName.toLowerCase();
-                }
-                selector += ':nth-child(' + nthChild + ')';
+                    selector += ':nth-child(' + nthChild + ')';
+                    return selector;
+                });
                 return selector;
-            });
-            return selector;
+            }catch(e){
+                console.log(e);
+                return null;
+            }
         }
     }
 }

@@ -1,9 +1,9 @@
 import {ElementHandle} from 'puppeteer';
 
 export type MainElements = {
-    h1: ElementHandle | null;
-    description: ElementHandle | null;
-    cta: ElementHandle | null;
+    h1: [ElementHandle | null, string | null, Record<string, any>];
+    description: [ElementHandle | null, string | null, Record<string, any>];
+    cta: [ElementHandle | null, string | null, Record<string, any>];
 };
 
 export interface IElementProperties {

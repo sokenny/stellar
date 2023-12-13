@@ -45,18 +45,18 @@ async function findOrCreateProject(website_url: string) {
     .replace('http://', '')
     .replace('www.', '');
 
-  const projects = await db.Project.findAll();
-
-  const newProject = await db.Project.create({
-    name: domain,
-    domain
+  const project = await db.Project.findOrCreate({
+    where: {
+      domain
+    },
+    defaults: {
+      name: domain,
+      domain
+    }
   });
 
-  console.log("new ", newProject)
     
-  console.log("projects: ", projects.length)
-
-  return projects;
+  return project[0];
 }
 
 
@@ -74,46 +74,45 @@ async function createVariants(element, experimentId) {
       background_color: null,
       experiment_id: experimentId
     });
+
     variantsForThisElement.push(variant);
   }
 
   return variantsForThisElement;
 }
 
-
-function getEndDate(startDate) {
-  const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 14);
-  return endDate;
-}
-
-function getStartDate(experiments: any[]) {
-  const today = new Date();
-  const startDate =
-    experiments.length === 0 ? today : experiments.slice(-1)[0].endDate;
-  return startDate;
-}
-
 async function createExperiments(elements, journeyId) {
-  const experiments = [];
-  for (const element of elements) {
-    const startDate = getStartDate(experiments);
-    const endDate = getEndDate(startDate);
-    
-    const experiment = await db.Experiment.create({
-      name: 'hardcoded name',
-      start_date: startDate,
-      end_date: endDate,
-      element_id: element.id,
-      journey_id: journeyId,
-      url: 'hardcoded url'
-    });
+  try {
+    const experiments = [];
+    let startDate = new Date(); 
 
-    const variants = await createVariants(element, experiment.id);
-    experiments.push(experiment);
+    for (const element of elements) {
+      const endDate = new Date(startDate.getTime());
+      endDate.setDate(startDate.getDate() + 7); 
+
+      const experiment = await db.Experiment.create({
+        name: `${element.type} Experiment`,
+        start_date: startDate,
+        end_date: endDate,
+        element_id: element.id,
+        journey_id: journeyId,
+        url: 'hardcoded url'
+      });
+
+      await createVariants(element, experiment.id);
+      experiments.push(experiment);
+
+      startDate = new Date(endDate.getTime());
+    }
+
+    return experiments;
+  } catch (error) {
+    console.error('Error creating experiments:', error);
+    throw error;
   }
-  return experiments;
 }
+
+
 
 
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
@@ -121,44 +120,38 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
   console.log("body: ", req.body)
   console.log("WEBSITE URL :", website_url)
   const project = await findOrCreateProject(website_url);
-  // return
-  // const mainElements = await scrapMainElements(website_url, false);
-  // const createdElements = await createElements(
-  //   Object.entries(mainElements).map((element) => ({
-  //     domReference: element[1],
-  //     type: element[0],
-  //   })),
-  //   project.id,
-  // );
-  // console.log('createdElements: ', createdElements);
-  // const journey = await db.Journey.create({
-  //   name: 'hardcoded name',
-  //   page: website_url,
-  //   elements: createdElements.map((element) => element.id),
-  //   project: project.id,
-  // });
-  // console.log('created journey: ', journey);
-  // const experiments = await createExperiments(createdElements, journey.id);
-  // console.log('created experiments: ', experiments);
-  // // journey.experiments = experiments.map((experiment) => experiment.id);
-  // await journey.save();
-  // console.log('journey: ', journey);
-  // res.status(200).send(mainElements);
+  console.log("proyecto: ", project)
+  const mainElements = await scrapMainElements(website_url, false);
+  const createdElements = await createElements(
+    Object.entries(mainElements).map((element) => ({
+      domReference: element[1][0],
+      selector: element[1][1],
+      type: element[0],
+      style: element[1][2],
+    })),
+    project.id,
+  );
+  console.log('createdElements: ', createdElements);
+  const journey = await db.Journey.create({
+    name: 'hardcoded name',
+    page: website_url, // Maybe store just the path instead
+    project_id: project.id,
+  });
+  const experiments = await createExperiments(createdElements, journey.id);
+  console.log('created experiments: ', experiments);
   res.status(200).send(project);
 }
 
 async function createElements(elements, projectId) {
   const createdElements = [];
-  console.log("project id que llega: ", projectId)
   for (const element of elements) {
-    console.log("creando element: ", element)
     const createdElement = await db.Element.create({
       type: element.type,
-      page: 'test',
-      selector: element?.selector || "juanito",
-      properties: { // Assuming properties is a JSON object
-        innerText: element?.properties?.innerText,
-        color: element?.properties?.color
+      selector : element.selector,
+      properties: { 
+        innerText: await element.domReference.evaluate((el:any) =>  el.textContent),
+        color: await element.domReference.evaluate((el:any) =>  el.style.color), 
+        ...element.style
       },
       project_id: projectId
     });

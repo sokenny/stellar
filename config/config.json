@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "DB_USER",
+    "username": "admin",
     "password": "DB_PASSWORD",
     "database": "DB_NAME",
     "host": "34.172.27.248",

@@ -2,7 +2,6 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Variant extends Model {
     public id!: number;
-    public element_id!: number; 
     public text?: string;
     public font_size?: string;
     public color?: string;
@@ -17,13 +16,6 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-        },
-        element_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'elements', // This should match the table name of the Element model
-                key: 'id',
-            },
         },
         text: DataTypes.STRING,
         font_size: DataTypes.STRING,
