@@ -5,6 +5,7 @@ import { DOMHelper, websitesToTest } from '../utils';
 import { MainElements } from '../types';
 import { IElement, IVariant } from '../types';
 import db from '../models';
+import getTextVariants, { generateAiTextResponse } from './getTextVariants';
 
 async function initiatePage(website) {
   const browser = await puppeteer.launch();
@@ -66,9 +67,11 @@ async function createVariants(element, experimentId) {
   const color = element.properties.color;
 
   for (let i = 0; i < 3; i++) {
+    const isControl = i === 0;
     const variant = await db.Variant.create({
+      is_control: isControl,
       element_id: element.id,
-      text: `${text} - ${i}`,
+      text: isControl ? text : `${text} ${i}`,
       font_size: null,
       color,
       background_color: null,
@@ -116,11 +119,13 @@ async function createExperiments(elements, journeyId) {
 
 
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
+  // const prueba = await generateAiTextResponse({
+  //   prompt: "decime algo de 5 palabras, cualquier cosa"
+  // });
+  // console.log("prueba res: ", JSON.stringify(prueba))
+  // return
   const { website_url } = req.body;
-  console.log("body: ", req.body)
-  console.log("WEBSITE URL :", website_url)
   const project = await findOrCreateProject(website_url);
-  console.log("proyecto: ", project)
   const mainElements = await scrapMainElements(website_url, false);
   const createdElements = await createElements(
     Object.entries(mainElements).map((element) => ({
@@ -131,14 +136,12 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
     })),
     project.id,
   );
-  console.log('createdElements: ', createdElements);
   const journey = await db.Journey.create({
     name: 'hardcoded name',
     page: website_url, // Maybe store just the path instead
     project_id: project.id,
   });
-  const experiments = await createExperiments(createdElements, journey.id);
-  console.log('created experiments: ', experiments);
+  await createExperiments(createdElements, journey.id);
   res.status(200).send(project);
 }
 

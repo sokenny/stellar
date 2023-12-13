@@ -7,6 +7,7 @@ class Variant extends Model {
     public color?: string;
     public background_color?: string;
     public experiment_id!: number;
+    public is_control?: boolean;
 }
 
 
@@ -29,6 +30,7 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
                 key: 'id',
             },
         },
+        is_control: DataTypes.BOOLEAN,
     }, {
         sequelize,
         modelName: 'Variant',
