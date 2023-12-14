@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/scrapper', scrapper);
 
 console.log("RUNN")
+
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
 

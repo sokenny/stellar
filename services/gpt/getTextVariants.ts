@@ -6,13 +6,9 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export const generateAiTextResponse = async ({
-  model = 'gpt-3.5-turbo',
-  prompt,
-}) => {
-
+export const getTextVariants = async ({ model = 'gpt-3.5-turbo', prompt }) => {
   try {
-    const MAX_TOKENS = 50; 
+    const MAX_TOKENS = 50;
 
     const openaiResponse = await openai.createChatCompletion({
       model,
@@ -21,10 +17,9 @@ export const generateAiTextResponse = async ({
       temperature: 0.8,
     });
 
-    const res = {
-      body: openaiResponse.data,
-    };
-    return res;
+    const stringifiedVariants = openaiResponse.data.choices[0].message.content;
+
+    return JSON.parse(stringifiedVariants);
   } catch (e) {
     return {
       error: e.response.data,

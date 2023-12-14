@@ -14,7 +14,7 @@ export interface IElementProperties {
 }
 
 export interface IElement {
-    _id?: string;
+    id?: number;
     type: string;
     page: string;
     selector: string;
@@ -39,13 +39,14 @@ export interface IExperiment {
 }
 
 export interface IVariant {
-    _id?: string;
+    id?: number;
     element: any;
     text: string;
-    fontSize: string;
+    font_size: string;
     color: string;
-    backgroundColor: string;
-    experiment: any;
+    background_color: string;
+    experiment_id: number;
+    is_control: boolean;
 }
 
 export interface IJourney {

@@ -6,6 +6,7 @@ class Journey extends Model {
     public name!: string;
     public page!: string;
     public project_id!: number; 
+    public context!: object;
 }
 
 export const initializeJourney = (sequelize: Sequelize): typeof Journey => {
@@ -30,6 +31,10 @@ export const initializeJourney = (sequelize: Sequelize): typeof Journey => {
                 model: 'projects', 
                 key: 'id',
             },
+        },
+        context: {
+            type: DataTypes.JSONB,
+            allowNull: true,
         },
     }, {
         sequelize,

@@ -19,19 +19,17 @@ import { initializeElement } from './Element';
 export const db: { [key: string]: any } = {};
 
 export let sequelize: Sequelize;
-const DB_PASSWORD = process.env[config[env].password]
-const DB_NAME = process.env[config[env].database]
-const DB_USER = process.env[config[env].username]
+const DB_PASSWORD = process.env[config[env].password];
+const DB_NAME = process.env[config[env].database];
+const DB_USER = process.env[config[env].username];
 sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, config[env]);
 
-const modelFiles = fs.readdirSync(__dirname)
-    .filter((file: string) => {
-        return (
-            file.indexOf('.') !== 0 &&
-            file !== basename
-            // Add more filters as needed
-        );
-    });
+const modelFiles = fs.readdirSync(__dirname).filter((file: string) => {
+  return (
+    file.indexOf('.') !== 0 && file !== basename
+    // Add more filters as needed
+  );
+});
 
 // Load models asynchronously
 // Promise.all(modelFiles.map(async (file: string) => {
@@ -50,9 +48,9 @@ const modelFiles = fs.readdirSync(__dirname)
 
 db.Journey = initializeJourney(sequelize);
 db.Project = initializeProject(sequelize);
-db.Variant = initializeVariant(sequelize)
-db.Experiment = initializeExperiment(sequelize)
-db.ElementProperties = initializeElementProperties(sequelize)
+db.Variant = initializeVariant(sequelize);
+db.Experiment = initializeExperiment(sequelize);
+db.ElementProperties = initializeElementProperties(sequelize);
 db.Element = initializeElement(sequelize);
 
 export default db;
