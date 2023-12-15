@@ -1,12 +1,30 @@
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
-// import scrapper from './routes/scrapper';
 import api from './routes/api';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config();
 
 const app: Express = express();
 const PORT = 3001;
+
+const allowedOrigins = [
+  'https://lengaswear.vercel.app',
+  'https://www.lengaswear.vercel.app',
+  'https://anotherdomain.com' /* other domains you want to allow */,
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

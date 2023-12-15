@@ -24,19 +24,14 @@ const DB_NAME = process.env[config[env].database];
 const DB_USER = process.env[config[env].username];
 sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, config[env]);
 
-const modelFiles = fs.readdirSync(__dirname).filter((file: string) => {
-  return (
-    file.indexOf('.') !== 0 && file !== basename
-    // Add more filters as needed
-  );
-});
-
 db.Journey = initializeJourney(sequelize);
 db.Project = initializeProject(sequelize);
 db.Variant = initializeVariant(sequelize);
 db.Experiment = initializeExperiment(sequelize);
 db.ElementProperties = initializeElementProperties(sequelize);
 db.Element = initializeElement(sequelize);
+
+db.sequelize = sequelize;
 
 const associateModels = () => {
   db.Journey.hasMany(db.Experiment, {
@@ -49,15 +44,13 @@ const associateModels = () => {
   });
 
   db.Experiment.hasMany(db.Variant, {
-    foreignKey: 'experiment_id', // Adjust the foreign key as per your database schema
-    as: 'variants', // This is the alias for the association
+    foreignKey: 'experiment_id',
+    as: 'variants',
   });
   db.Variant.belongsTo(db.Experiment, {
-    foreignKey: 'experiment_id', // Adjust the foreign key as per your database schema
-    as: 'experiment', // This is the alias for the association
+    foreignKey: 'experiment_id',
+    as: 'experiment',
   });
-
-  // Add more associations as needed
 };
 
 associateModels();

@@ -1,8 +1,0 @@
-import express from 'express';
-import onboardNewPage from '../services/scrapper/onboardNewPage';
-
-const router = express.Router();
-
-router.post('/onboard', onboardNewPage);
-
-export default router;

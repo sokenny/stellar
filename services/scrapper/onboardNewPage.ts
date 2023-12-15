@@ -37,7 +37,7 @@ async function getPageContext(website_url: string, browserSession: any) {
   return context;
 }
 
-async function findOrCreateProject(website_url: string) {
+async function findOrCreateProject(website_url: string, transaction) {
   const domain = website_url
     .replace('https://', '')
     .replace('http://', '')
@@ -51,11 +51,17 @@ async function findOrCreateProject(website_url: string) {
       name: domain,
       domain,
     },
+    transaction,
   });
   return project[0];
 }
 
-async function createVariants(element: IElement, experimentId, pageContext) {
+async function createVariants(
+  element: IElement,
+  experimentId,
+  pageContext,
+  transaction,
+) {
   const variantsForThisElement = [];
   const text = element.properties.innerText;
   const color = element.properties.color;
@@ -65,15 +71,20 @@ async function createVariants(element: IElement, experimentId, pageContext) {
 
   for (let i = 0; i < 3; i++) {
     const isControl = i === 0;
-    const variant: IVariant = await db.Variant.create({
-      is_control: isControl,
-      element_id: element.id,
-      text: isControl ? text : variants[i - 1],
-      font_size: null,
-      color,
-      background_color: null,
-      experiment_id: experimentId,
-    });
+    const variant: IVariant = await db.Variant.create(
+      {
+        is_control: isControl,
+        element_id: element.id,
+        text: isControl ? text : variants[i - 1],
+        font_size: null,
+        color,
+        background_color: null,
+        experiment_id: experimentId,
+      },
+      {
+        transaction,
+      },
+    );
 
     variantsForThisElement.push(variant);
   }
@@ -81,7 +92,7 @@ async function createVariants(element: IElement, experimentId, pageContext) {
   return variantsForThisElement;
 }
 
-async function createExperiments(elements, journey) {
+async function createExperiments(elements, journey, transaction) {
   try {
     const experiments = [];
     let startDate = new Date();
@@ -90,16 +101,26 @@ async function createExperiments(elements, journey) {
       const endDate = new Date(startDate.getTime());
       endDate.setDate(startDate.getDate() + 7);
 
-      const experiment = await db.Experiment.create({
-        name: `${element.type} Experiment`,
-        start_date: startDate,
-        end_date: endDate,
-        element_id: element.id,
-        journey_id: journey.id,
-        url: journey.page,
-      });
+      const experiment = await db.Experiment.create(
+        {
+          name: `${element.type} Experiment`,
+          start_date: startDate,
+          end_date: endDate,
+          element_id: element.id,
+          journey_id: journey.id,
+          url: journey.page,
+        },
+        {
+          transaction,
+        },
+      );
 
-      await createVariants(element, experiment.id, journey.context);
+      await createVariants(
+        element,
+        experiment.id,
+        journey.context,
+        transaction,
+      );
       experiments.push(experiment);
 
       startDate = new Date(endDate.getTime());
@@ -112,78 +133,96 @@ async function createExperiments(elements, journey) {
   }
 }
 
-async function createElements(elements, journeyId) {
+async function createElements(elements, journeyId, transaction) {
   const createdElements = [];
   for (const element of elements) {
-    const createdElement = await db.Element.create({
-      type: element.type,
-      selector: element.selector,
-      properties: {
-        innerText: await tryOrReturn(
-          async () => element.domReference.evaluate((el: any) => el.innerText),
-          '',
-        ),
-        color: await tryOrReturn(
-          async () =>
-            element.domReference.evaluate((el: any) => el.style.color),
-          '',
-        ),
-        ...element.style,
+    const createdElement = await db.Element.create(
+      {
+        type: element.type,
+        selector: element.selector,
+        properties: {
+          innerText: await tryOrReturn(
+            async () =>
+              element.domReference.evaluate((el: any) => el.innerText),
+            '',
+          ),
+          color: await tryOrReturn(
+            async () =>
+              element.domReference.evaluate((el: any) => el.style.color),
+            '',
+          ),
+          ...element.style,
+        },
+        journey_id: journeyId,
       },
-      journey_id: journeyId,
-    });
+      {
+        transaction,
+      },
+    );
     createdElements.push(createdElement);
   }
   return createdElements;
 }
 
 function buildPromptFromPageContext(pageContext, element) {
-  return `I am creating an A/B test for a page in my website. I am creating variants for an element of type "${element.type}"
-    
-    I will now give you some context about the page so you understand what it is about:
+  return `I am running an A/B test for a "${element.type}" element on a webpage. I need alternative text variants for this element to compare against the original text. 
 
-    [Page Text Content]: ${pageContext.bodyText}.
-    [Page Title]: ${pageContext.metaTitle}.
-    [Page Description]: ${pageContext.metaDescription}.
+Original Text: "${element.properties.innerText}"
 
-    The element's current text is: "${element.properties.innerText}".
+Please provide 2 additional text variants specifically in an array format, aiming to enhance page interaction and conversion rates. For instance, the response should be structured like this:
 
-    Give me 2 more variants for this element. The aim of course, is to increase the conversion rate / interaction of the page.
+["First alternative text variant", "Second alternative text variant"].
 
-    The format of the answer should be an array of strings, each string being a variant. For example: ["variant 1", "variant 2"].
+Contextual information:
+- Page Body Text: ${pageContext.bodyText}
+- Page Title: ${pageContext.metaTitle}
+- Page Description: ${pageContext.metaDescription}
 
-    `;
+Remember, only the array format is acceptable for the response.`;
 }
 
 // TODO: Have the onboarding be a transaction
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
-  const { website_url } = req.body;
-  const project = await findOrCreateProject(website_url);
-  const browserSession = await initiatePage(website_url);
-  const mainElements = await scrapMainElements(website_url, browserSession);
+  const transaction = await db.sequelize.transaction();
+  try {
+    const { website_url } = req.body;
+    const project = await findOrCreateProject(website_url, transaction);
+    const browserSession = await initiatePage(website_url);
+    const mainElements = await scrapMainElements(website_url, browserSession);
 
-  const context = await getPageContext(website_url, browserSession);
+    const context = await getPageContext(website_url, browserSession);
 
-  const journey = await db.Journey.create({
-    name: 'Journey for ' + project.name,
-    page: website_url, // Maybe store just the path instead
-    project_id: project.id,
-    context,
-  });
+    const journey = await db.Journey.create(
+      {
+        name: 'Journey for ' + project.name,
+        page: website_url,
+        project_id: project.id,
+        context,
+      },
+      { transaction },
+    );
 
-  const createdElements = await createElements(
-    Object.entries(mainElements).map((element) => ({
-      domReference: element[1][0],
-      selector: element[1][1],
-      type: element[0],
-      style: element[1][2],
-    })),
-    journey.id,
-  );
+    const createdElements = await createElements(
+      Object.entries(mainElements).map((element) => ({
+        domReference: element[1][0],
+        selector: element[1][1],
+        type: element[0],
+        style: element[1][2],
+      })),
+      journey.id,
+      transaction,
+    );
 
-  await createExperiments(createdElements, journey);
-  browserSession.browser.close();
-  res.status(200).send(project);
+    await createExperiments(createdElements, journey, transaction);
+    await browserSession.browser.close();
+
+    await transaction.commit();
+    res.status(200).send(project);
+  } catch (error) {
+    await transaction.rollback();
+    console.error('Error during onboarding:', error);
+    res.status(500).send('An error occurred during onboarding');
+  }
 }
 
 export default onboardNewPage;

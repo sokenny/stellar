@@ -6,18 +6,22 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export const getTextVariants = async ({ model = 'gpt-3.5-turbo', prompt }) => {
+export const getTextVariants = async ({ prompt }) => {
   try {
-    const MAX_TOKENS = 50;
+    const MAX_TOKENS = 100;
 
     const openaiResponse = await openai.createChatCompletion({
-      model,
+      model: 'gpt-4-1106-preview',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: MAX_TOKENS,
-      temperature: 0.8,
+      temperature: 0.5,
     });
 
+    console.log('gpt data!! ', openaiResponse.data);
+
     const stringifiedVariants = openaiResponse.data.choices[0].message.content;
+
+    console.log('stringifiedVariants! ', stringifiedVariants);
 
     return JSON.parse(stringifiedVariants);
   } catch (e) {
