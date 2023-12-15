@@ -31,26 +31,35 @@ const modelFiles = fs.readdirSync(__dirname).filter((file: string) => {
   );
 });
 
-// Load models asynchronously
-// Promise.all(modelFiles.map(async (file: string) => {
-//   const module = await import(path.join(__dirname, file));
-//   const model = module.default;
-//   db[model.name] = model;
-//   return model;
-// })).then((models) => {
-//   models.forEach((model) => {
-//       if (model.associate) {
-//           model.associate(db);
-//       }
-//   });
-//   // Other operations after models are loaded
-// });
-
 db.Journey = initializeJourney(sequelize);
 db.Project = initializeProject(sequelize);
 db.Variant = initializeVariant(sequelize);
 db.Experiment = initializeExperiment(sequelize);
 db.ElementProperties = initializeElementProperties(sequelize);
 db.Element = initializeElement(sequelize);
+
+const associateModels = () => {
+  db.Journey.hasMany(db.Experiment, {
+    foreignKey: 'journey_id',
+    as: 'experiments',
+  });
+  db.Experiment.belongsTo(db.Journey, {
+    foreignKey: 'journey_id',
+    as: 'journey',
+  });
+
+  db.Experiment.hasMany(db.Variant, {
+    foreignKey: 'experiment_id', // Adjust the foreign key as per your database schema
+    as: 'variants', // This is the alias for the association
+  });
+  db.Variant.belongsTo(db.Experiment, {
+    foreignKey: 'experiment_id', // Adjust the foreign key as per your database schema
+    as: 'experiment', // This is the alias for the association
+  });
+
+  // Add more associations as needed
+};
+
+associateModels();
 
 export default db;

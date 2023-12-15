@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
-import scrapper from './routes/scrapper';
+// import scrapper from './routes/scrapper';
+import api from './routes/api';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -10,12 +11,12 @@ const PORT = 3001;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/scrapper', scrapper);
+// app.use('/scrapper', scrapper);
+app.use('/api', api);
 
-console.log("RUNN")
+console.log('RUNN');
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
-
 
 process.once('SIGUSR2', function () {
   process.kill(process.pid, 'SIGUSR2');

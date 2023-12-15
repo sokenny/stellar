@@ -21,6 +21,7 @@ export const getTextVariants = async ({ model = 'gpt-3.5-turbo', prompt }) => {
 
     return JSON.parse(stringifiedVariants);
   } catch (e) {
+    console.log('error! ', e);
     return {
       error: e.response.data,
     };
