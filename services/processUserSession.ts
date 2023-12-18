@@ -1,17 +1,21 @@
 import { Request, Response } from 'express';
+import db from '../models';
 
 async function processUserSession(req: Request, res: Response) {
   try {
-    // req.body is a buffer, convert it to a string and then parse it as JSON
-    console.log('req: ', req);
-    console.log('body actual:', req.body);
     const payloadString = req.body.toString();
-    // const payload = JSON.parse(payloadString);
+    const payload = JSON.parse(payloadString);
 
-    console.log('PAYLOAD: ', payloadString);
+    await db.Session.create({
+      session_id: payload.sessionId,
+      length: payload.timeOnPage,
+      click_count: payload.clickCount,
+      scroll_depth: payload.scrollDepth,
+      journey_id: 1,
+      experiments_run: payload.experimentsRun,
+    });
 
-    // Continue with your logic
-    res.json({ message: 'Session processed', payloadString });
+    res.status(204).send('OK');
   } catch (error) {
     console.error('Error processing session data:', error);
     res.status(400).send('Bad request');

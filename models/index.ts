@@ -1,6 +1,5 @@
-import fs from 'fs';
 import path from 'path';
-import { Sequelize, DataTypes } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
 
 dotenvConfig();
@@ -15,6 +14,9 @@ import { initializeVariant } from './Variant';
 import { initializeExperiment } from './Experiment';
 import { initializeElementProperties } from './ElementProperties';
 import { initializeElement } from './Element';
+import { initializeSession } from './Session';
+import { initializeUser } from './User';
+import { initializeApiKey } from './ApiKey';
 
 export const db: { [key: string]: any } = {};
 
@@ -30,10 +32,22 @@ db.Variant = initializeVariant(sequelize);
 db.Experiment = initializeExperiment(sequelize);
 db.ElementProperties = initializeElementProperties(sequelize);
 db.Element = initializeElement(sequelize);
+db.Session = initializeSession(sequelize);
+db.User = initializeUser(sequelize);
+db.ApiKey = initializeApiKey(sequelize);
 
 db.sequelize = sequelize;
+db.Sequelize = sequelize;
 
 const associateModels = () => {
+  db.Journey.belongsTo(db.Project, {
+    foreignKey: 'project_id',
+    as: 'project',
+  });
+  db.Project.hasMany(db.Journey, {
+    foreignKey: 'project_id',
+    as: 'journeys',
+  });
   db.Journey.hasMany(db.Experiment, {
     foreignKey: 'journey_id',
     as: 'experiments',
@@ -42,7 +56,6 @@ const associateModels = () => {
     foreignKey: 'journey_id',
     as: 'journey',
   });
-
   db.Experiment.hasMany(db.Variant, {
     foreignKey: 'experiment_id',
     as: 'variants',
@@ -50,6 +63,22 @@ const associateModels = () => {
   db.Variant.belongsTo(db.Experiment, {
     foreignKey: 'experiment_id',
     as: 'experiment',
+  });
+  db.Journey.hasMany(db.Element, {
+    foreignKey: 'journey_id',
+    as: 'elements',
+  });
+  db.Element.belongsTo(db.Journey, {
+    foreignKey: 'journey_id',
+    as: 'journey',
+  });
+  db.Session.belongsTo(db.Journey, {
+    foreignKey: 'journey_id',
+    as: 'journey',
+  });
+  db.ApiKey.belongsTo(db.User, {
+    foreignKey: 'user_id',
+    as: 'user',
   });
 };
 

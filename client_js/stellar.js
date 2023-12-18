@@ -1,46 +1,62 @@
+// TODO: loading state before applying changes
+// TODO: persist session / dont unload when user navigates to another page inside the same domain
+
 (function () {
   'use strict';
 
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
-  // Generate or retrieve a unique session ID
-  const getSessionId = () => {
+  function getSessionId() {
     let sessionId = localStorage.getItem('stellar_session_id');
     if (!sessionId) {
-      const userAgent = window.navigator.userAgent.replace(/\D/g, ''); // Strip non-numeric characters
+      const userAgent = window.navigator.userAgent.replace(/\D/g, '');
       sessionId = `session_${Date.now()}_${userAgent}`;
       localStorage.setItem('stellar_session_id', sessionId);
     }
     return sessionId;
-  };
+  }
 
   const sessionId = getSessionId();
 
-  // Variables to keep track of time and clicks
   let timeOnPage = 0;
   let clickCount = 0;
+  let scrollDepth = 0;
+  let experimentsRun = [];
 
-  // Function to handle the time tracking
-  const startTimeTracking = () => {
+  function startTimeTracking() {
     setInterval(() => {
-      timeOnPage += 1; // Increment every second
+      timeOnPage += 1;
     }, 1000);
-  };
+  }
 
-  // Function to handle click events
-  const trackClicks = () => {
+  function trackClicks() {
     document.addEventListener('click', () => {
       clickCount++;
     });
-  };
+  }
 
-  // Function to send data to server when user leaves page
-  const sendDataOnLeave = () => {
+  function trackScrollDepth() {
+    document.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const totalHeight = document.documentElement.scrollHeight;
+
+      const currentDepth = Math.floor(
+        ((scrolled + viewportHeight) / totalHeight) * 100,
+      );
+      scrollDepth = Math.max(scrollDepth, currentDepth);
+    });
+  }
+
+  function sendDataOnLeave() {
     window.addEventListener('beforeunload', () => {
       const data = {
         sessionId,
         timeOnPage,
         clickCount,
+        scrollDepth,
+        idempotencyKey: sessionId,
+        experimentsRun,
       };
 
       navigator.sendBeacon(
@@ -48,12 +64,28 @@
         JSON.stringify(data),
       );
     });
-  };
+  }
 
-  // Function to make a GET request to the server
-  const fetchExperiments = async () => {
+  function mountExperiments(experiments) {
+    experiments.forEach((experiment) => {
+      const element = experiment.journey.elements.find((element) => {
+        return element.id === experiment.element_id;
+      });
+      experiment.variants.forEach((variant) => {
+        if (variant.id === experiment.variant_to_use) {
+          document.querySelector(element.selector).innerHTML = variant.text;
+          experimentsRun.push({
+            experiment: experiment.id,
+            variant: variant.id,
+          });
+        }
+      });
+    });
+  }
+
+  async function fetchExperiments() {
     const pageUrl = window.location.href;
-    const apiKey = 'your_api_public_key'; // Replace with your actual public API key
+    const apiKey = 'your_api_public_key';
 
     try {
       const response = await fetch(
@@ -73,14 +105,20 @@
 
       const data = await response.json();
       console.log(data);
+
+      mountExperiments(data);
     } catch (error) {
       console.error('Error fetching experiments:', error);
     }
-  };
+  }
 
-  // Initialize the script
-  startTimeTracking();
-  trackClicks();
-  sendDataOnLeave();
-  fetchExperiments();
+  function initializeScript() {
+    startTimeTracking();
+    trackClicks();
+    trackScrollDepth();
+    sendDataOnLeave();
+    fetchExperiments();
+  }
+
+  initializeScript();
 })();

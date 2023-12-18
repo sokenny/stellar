@@ -1,13 +1,104 @@
+import { Op } from 'sequelize';
+import db from '../models';
+
+async function getUserByApiKey(apiKey: string) {
+  // lookup ApiKey and include user required true
+  const keyWUser = await db.ApiKey.findOne({
+    where: { key: apiKey },
+    attributes: ['id'],
+    include: [
+      {
+        model: db.User,
+        required: true,
+        as: 'user',
+      },
+    ],
+  });
+
+  if (!keyWUser) {
+    return null;
+  }
+
+  return keyWUser.user;
+}
+
+async function getExperimentsForUser(userId: number) {
+  const experimentInstances = await db.Experiment.findAll({
+    where: {
+      start_date: {
+        [Op.lte]: new Date(),
+      },
+      end_date: {
+        [Op.gte]: new Date(),
+      },
+    },
+    include: [
+      {
+        model: db.Variant,
+        as: 'variants',
+        required: true,
+      },
+      {
+        model: db.Journey,
+        as: 'journey',
+        required: true,
+        attributes: ['id'],
+        include: [
+          {
+            model: db.Project,
+            as: 'project',
+            required: true,
+            attributes: ['id'],
+            where: {
+              user_id: userId,
+            },
+          },
+          {
+            model: db.Element,
+            as: 'elements',
+            required: true,
+            attributes: ['id', 'type', 'selector'],
+          },
+        ],
+      },
+    ],
+  });
+
+  const experiments = experimentInstances.map((experiment) => {
+    const experimentJson = experiment.toJSON();
+    const potentialVariants = experimentJson.variants
+      .filter((variant) => !variant.is_control)
+      .map((variant) => variant.id);
+    let selectedVariantId = null;
+    if (potentialVariants.length > 0) {
+      const randomIndex = Math.floor(Math.random() * potentialVariants.length);
+      selectedVariantId = potentialVariants[randomIndex];
+    }
+    experimentJson.variant_to_use = selectedVariantId;
+    return experimentJson;
+  });
+
+  return experiments;
+}
+
 async function getExperiments(req, res) {
-  // read page sent in url query
-  const { page } = req.query;
-  console.log('Page: ', page);
+  const apiKey = req.header('Authorization').substring(7);
 
-  // read authorization bearer
-  const { authorization } = req.headers;
-  console.log('Authorization: ', authorization);
+  if (!apiKey) {
+    return res.status(401).send('API key is required');
+  }
 
-  return res.json({ message: 'Hello World', page, authorization });
+  const user = await getUserByApiKey(apiKey);
+
+  if (!user) {
+    return res.status(401).send('Invalid API key');
+  }
+
+  const experiments = await getExperimentsForUser(user.id);
+
+  console.log('Experiments: ', experiments);
+
+  res.json(experiments);
 }
 
 export default getExperiments;

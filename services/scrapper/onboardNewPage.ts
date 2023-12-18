@@ -50,6 +50,7 @@ async function findOrCreateProject(website_url: string, transaction) {
     defaults: {
       name: domain,
       domain,
+      user_id: 1,
     },
     transaction,
   });
@@ -181,7 +182,6 @@ Contextual information:
 Remember, only the array format is acceptable for the response.`;
 }
 
-// TODO: Have the onboarding be a transaction
 async function onboardNewPage(req: Request, res: Response): Promise<void> {
   const transaction = await db.sequelize.transaction();
   try {
