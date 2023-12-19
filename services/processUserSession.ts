@@ -6,6 +6,8 @@ async function processUserSession(req: Request, res: Response) {
     const payloadString = req.body.toString();
     const payload = JSON.parse(payloadString);
 
+    console.log('payload that arrived: ', payload);
+
     await db.Session.create({
       session_id: payload.sessionId,
       length: payload.timeOnPage,
@@ -13,6 +15,7 @@ async function processUserSession(req: Request, res: Response) {
       scroll_depth: payload.scrollDepth,
       journey_id: 1,
       experiments_run: payload.experimentsRun,
+      visited_pages: payload.visitedPages,
     });
 
     res.status(204).send('OK');

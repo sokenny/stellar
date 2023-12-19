@@ -1,6 +1,3 @@
-// TODO: loading state before applying changes
-// TODO: persist session / dont unload when user navigates to another page inside the same domain
-
 (function () {
   'use strict';
 
@@ -22,6 +19,10 @@
   let clickCount = 0;
   let scrollDepth = 0;
   let experimentsRun = [];
+  let visitedPages = [];
+
+  let isInternalNavigation = false;
+  let pagesWithExperiments = [];
 
   function startTimeTracking() {
     setInterval(() => {
@@ -48,21 +49,67 @@
     });
   }
 
+  function updateSessionStorage() {
+    const sessionData = {
+      timeOnPage,
+      clickCount,
+      scrollDepth,
+      experimentsRun,
+      visitedPages,
+      pagesWithExperiments,
+    };
+    sessionStorage.setItem('stellarSessionData', JSON.stringify(sessionData));
+  }
+
+  function restoreSessionData() {
+    const storedData = sessionStorage.getItem('stellarSessionData');
+    if (storedData) {
+      const {
+        timeOnPage: storedTime,
+        clickCount: storedClicks,
+        scrollDepth: storedDepth,
+        experimentsRun: storedExperiments,
+        visitedPages: storedVisitedPages,
+        pagesWithExperiments: storedPagesWithExperiments,
+      } = JSON.parse(storedData);
+      timeOnPage = storedTime;
+      clickCount = storedClicks;
+      scrollDepth = storedDepth;
+      experimentsRun = storedExperiments;
+      visitedPages = storedVisitedPages;
+      pagesWithExperiments = storedPagesWithExperiments;
+    }
+  }
+
   function sendDataOnLeave() {
     window.addEventListener('beforeunload', () => {
-      const data = {
-        sessionId,
-        timeOnPage,
-        clickCount,
-        scrollDepth,
-        idempotencyKey: sessionId,
-        experimentsRun,
-      };
+      if (!isInternalNavigation) {
+        const data = {
+          sessionId,
+          timeOnPage,
+          clickCount,
+          scrollDepth,
+          idempotencyKey: sessionId,
+          experimentsRun,
+          visitedPages,
+        };
 
-      navigator.sendBeacon(
-        `${STELLAR_API_URL}/experiments/end-session`,
-        JSON.stringify(data),
-      );
+        navigator.sendBeacon(
+          `${STELLAR_API_URL}/experiments/end-session`,
+          JSON.stringify(data),
+        );
+      }
+    });
+
+    // Detect internal navigation (links within the site)
+    document.addEventListener('click', (e) => {
+      if (
+        e.target.tagName === 'A' &&
+        e.target.hostname === window.location.hostname
+      ) {
+        isInternalNavigation = true;
+        updateSessionStorage(); // Store session data before navigating away
+      }
     });
   }
 
@@ -83,8 +130,42 @@
     });
   }
 
+  function showLoadingState() {
+    const loadingElement = document.createElement('div');
+    loadingElement.id = 'stellar-loading';
+    loadingElement.textContent = 'LOADING...';
+    loadingElement.style.position = 'fixed';
+    loadingElement.style.top = '0';
+    loadingElement.style.left = '0';
+    loadingElement.style.height = '100%';
+    loadingElement.style.width = '100%';
+    loadingElement.style.backgroundColor = 'black';
+    loadingElement.style.zIndex = '9999';
+    loadingElement.style.display = 'flex';
+    loadingElement.style.justifyContent = 'center';
+    loadingElement.style.alignItems = 'center';
+    loadingElement.style.fontSize = '1.2rem';
+    loadingElement.style.color = '#fff';
+    document.body.appendChild(loadingElement);
+  }
+
+  function hideLoadingState() {
+    const loadingElement = document.getElementById('stellar-loading');
+    if (loadingElement) {
+      loadingElement.remove();
+    }
+  }
+
   async function fetchExperiments() {
     const pageUrl = window.location.href;
+
+    if (!pagesWithExperiments.includes(pageUrl) && visitedPages.length > 1) {
+      console.log('we do not have experiments for this page');
+      return;
+    }
+
+    showLoadingState();
+
     const apiKey = 'your_api_public_key';
 
     try {
@@ -106,13 +187,46 @@
       const data = await response.json();
       console.log(data);
 
+      pagesWithExperiments = data.map((experiment) => experiment.url);
+
       mountExperiments(data);
     } catch (error) {
       console.error('Error fetching experiments:', error);
+    } finally {
+      hideLoadingState();
     }
   }
 
+  function trackPageVisit() {
+    const currentPage = window.location.pathname;
+    visitedPages.push(currentPage);
+    updateSessionStorage();
+  }
+
+  // Wrap history methods to detect SPA navigation
+  function wrapHistoryMethods() {
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+
+    history.pushState = function () {
+      originalPushState.apply(this, arguments);
+      trackPageVisit();
+    };
+
+    history.replaceState = function () {
+      originalReplaceState.apply(this, arguments);
+      trackPageVisit();
+    };
+
+    window.addEventListener('popstate', function () {
+      trackPageVisit();
+    });
+  }
+
   function initializeScript() {
+    restoreSessionData();
+    trackPageVisit();
+    wrapHistoryMethods();
     startTimeTracking();
     trackClicks();
     trackScrollDepth();
