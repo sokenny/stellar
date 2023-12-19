@@ -66,14 +66,13 @@ async function getExperimentsForUser(userId: number) {
 
   const experiments = experimentInstances.map((experiment) => {
     const experimentJson = experiment.toJSON();
-    const potentialVariants = experimentJson.variants
-      .filter((variant) => !variant.is_control)
-      .map((variant) => variant.id);
+    const variantIds = experimentJson.variants.map((variant) => variant.id);
     let selectedVariantId = null;
-    if (potentialVariants.length > 0) {
-      const randomIndex = Math.floor(Math.random() * potentialVariants.length);
-      selectedVariantId = potentialVariants[randomIndex];
+    if (variantIds.length > 0) {
+      const randomIndex = Math.floor(Math.random() * variantIds.length);
+      selectedVariantId = variantIds[randomIndex];
     }
+    // NOTE: If the client already has a variant in localStorage, it will use that one instead of the one we select here
     experimentJson.variant_to_use = selectedVariantId;
     return experimentJson;
   });

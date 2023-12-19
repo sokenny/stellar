@@ -1,7 +1,23 @@
 (function () {
   'use strict';
 
+  // TODO: Design arquitecture for goal tracking,  research w gpt main ways: click of elements, specific url visited, time on page, scroll depth, etc.
+
   const STELLAR_API_URL = 'http://localhost:3001/api';
+
+  function getApiKey() {
+    const scriptTag = document.querySelector('script[data-stellar-api-key]');
+    return scriptTag ? scriptTag.getAttribute('data-stellar-api-key') : null;
+  }
+
+  function getStellarData() {
+    const stellarData = localStorage.getItem('stellarData');
+    return stellarData ? JSON.parse(stellarData) : {};
+  }
+
+  function setStellarData(data) {
+    localStorage.setItem('stellarData', JSON.stringify(data));
+  }
 
   function getSessionId() {
     let sessionId = localStorage.getItem('stellar_session_id');
@@ -23,6 +39,7 @@
 
   let isInternalNavigation = false;
   let pagesWithExperiments = [];
+  let hasFetchedExperiments = false;
 
   function startTimeTracking() {
     setInterval(() => {
@@ -57,6 +74,7 @@
       experimentsRun,
       visitedPages,
       pagesWithExperiments,
+      hasFetchedExperiments,
     };
     sessionStorage.setItem('stellarSessionData', JSON.stringify(sessionData));
   }
@@ -71,6 +89,7 @@
         experimentsRun: storedExperiments,
         visitedPages: storedVisitedPages,
         pagesWithExperiments: storedPagesWithExperiments,
+        hasFetchedExperiments: storedHasFetchedExperiments,
       } = JSON.parse(storedData);
       timeOnPage = storedTime;
       clickCount = storedClicks;
@@ -78,6 +97,7 @@
       experimentsRun = storedExperiments;
       visitedPages = storedVisitedPages;
       pagesWithExperiments = storedPagesWithExperiments;
+      hasFetchedExperiments = storedHasFetchedExperiments;
     }
   }
 
@@ -101,26 +121,46 @@
       }
     });
 
-    // Detect internal navigation (links within the site)
     document.addEventListener('click', (e) => {
       if (
         e.target.tagName === 'A' &&
         e.target.hostname === window.location.hostname
       ) {
         isInternalNavigation = true;
-        updateSessionStorage(); // Store session data before navigating away
+        updateSessionStorage();
       }
     });
   }
 
   function mountExperiments(experiments) {
+    console.log('mounting experiments: ', experiments);
+    const stellarData = getStellarData();
+
     experiments.forEach((experiment) => {
-      const element = experiment.journey.elements.find((element) => {
-        return element.id === experiment.element_id;
-      });
+      console.log('mounting experiment: ', experiment);
+      const storedVariantId = stellarData[experiment.id];
+
+      const element = experiment.journey.elements.find(
+        (element) => element.id === experiment.element_id,
+      );
+
+      let variantToUse = storedVariantId || experiment.variant_to_use;
+
       experiment.variants.forEach((variant) => {
-        if (variant.id === experiment.variant_to_use) {
+        if (variant.id === variantToUse) {
+          console.log(
+            'element selector: ',
+            element.selector,
+            document.querySelector(element.selector),
+          );
           document.querySelector(element.selector).innerHTML = variant.text;
+
+          if (!storedVariantId) {
+            // Store the variant in stellarData
+            stellarData[experiment.id] = variant.id;
+            setStellarData(stellarData);
+          }
+
           experimentsRun.push({
             experiment: experiment.id,
             variant: variant.id,
@@ -156,17 +196,21 @@
     }
   }
 
+  // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
     const pageUrl = window.location.href;
-
-    if (!pagesWithExperiments.includes(pageUrl) && visitedPages.length > 1) {
+    if (
+      !pagesWithExperiments.includes(pageUrl) &&
+      visitedPages.length > 1 &&
+      hasFetchedExperiments
+    ) {
       console.log('we do not have experiments for this page');
       return;
     }
 
     showLoadingState();
 
-    const apiKey = 'your_api_public_key';
+    const apiKey = getApiKey();
 
     try {
       const response = await fetch(
@@ -189,7 +233,12 @@
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
-      mountExperiments(data);
+      // TODO: This filtering should be done on the server. fetchexperiments could send the domain, and we can then retrieve experiments for projects with this domain
+      const experimentsToMount = data.filter((experiment) =>
+        window.location.href.includes(experiment.url),
+      );
+
+      mountExperiments(experimentsToMount);
     } catch (error) {
       console.error('Error fetching experiments:', error);
     } finally {

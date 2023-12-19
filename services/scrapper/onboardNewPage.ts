@@ -5,7 +5,7 @@ import jsdom from 'jsdom';
 import { MainElements } from '../../types';
 import { IElement, IVariant } from '../../types';
 import db from '../../models';
-import { getTextVariants } from '../gpt/getTextVariants';
+import { getTextVariants, MAX_TOKENS } from '../gpt/getTextVariants';
 import DOMHelper from './DOMHelper';
 import tryOrReturn from '../../helpers/tryOrReturn';
 
@@ -166,7 +166,9 @@ async function createElements(elements, journeyId, transaction) {
 }
 
 function buildPromptFromPageContext(pageContext, element) {
-  return `I am running an A/B test for a "${element.type}" element on a webpage. I need alternative text variants for this element to compare against the original text. 
+  return `I am running an A/B test for a "${
+    element.type
+  }" element on a webpage. I need alternative text variants for this element to compare against the original text. 
 
 Original Text: "${element.properties.innerText}"
 
@@ -179,7 +181,9 @@ Contextual information:
 - Page Title: ${pageContext.metaTitle}
 - Page Description: ${pageContext.metaDescription}
 
-Remember, only the array format is acceptable for the response.`;
+Remember, only the array format is acceptable for the response. And be sure to keep the response length under ${
+    MAX_TOKENS * 4
+  } characters (this should be the absolute max but this does not mean you need to use up to this amount. If you are creating variants on a short text, then a similar length will usually be suitable)!`;
 }
 
 async function onboardNewPage(req: Request, res: Response): Promise<void> {

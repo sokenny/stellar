@@ -6,15 +6,15 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+export const MAX_TOKENS = 200;
+
 export const getTextVariants = async ({ prompt }) => {
   try {
-    const MAX_TOKENS = 100;
-
     const openaiResponse = await openai.createChatCompletion({
       model: 'gpt-4-1106-preview',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: MAX_TOKENS,
       temperature: 0.5,
+      max_tokens: MAX_TOKENS,
     });
 
     console.log('gpt data!! ', openaiResponse.data);
