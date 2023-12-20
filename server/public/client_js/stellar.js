@@ -1,8 +1,6 @@
 (function () {
   'use strict';
 
-  // TODO: Design arquitecture for goal tracking,  research w gpt main ways: click of elements, specific url visited, time on page, scroll depth, etc.
-
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
   function getApiKey() {
