@@ -11,9 +11,11 @@ const router = express.Router();
 // are authenticated with the public api key
 
 router.post('/onboard', onboardNewPage);
-router.get('/get-journey', getJourneyTree);
+
+router.get('/journey/:id', getJourneyTree);
 
 router.get('/experiments', getExperiments);
+
 router.post(
   '/experiments/end-session',
   express.text({ type: '*/*' }),

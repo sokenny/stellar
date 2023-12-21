@@ -1,0 +1,76 @@
+
+.Experiment{
+    width: fit-content;
+    padding: 46px 32px 46px 0px;
+    border-bottom: 1px solid var(--whiteCardStroke);
+    border-radius: 4px;
+    font-weight: 300;
+}
+
+/* .Experiment:hover{
+    background-color: var(--whiteCardBg);
+} */
+
+.edit{
+    text-decoration: underline;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.name{
+    font-weight: 600;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.dates{
+    text-transform: uppercase;
+    margin-bottom: 32px;
+}
+
+.dates > div:first-child{
+    margin-bottom: 4px;
+}
+
+.value{
+    color: var(--textBody);
+}
+
+.variants > div{
+    margin-right: 16px;
+}
+
+.variants > div:last-child{
+    margin-right: 0;
+}
+
+.variants{
+    display: flex;
+    flex-direction: column;
+}
+
+.variantsTitle{
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.variantsContainer{
+    display: flex;
+}
+
+.variantsContainer > div{
+    margin-right: 16px;
+}
+
+.variantsContainer > div:last-child{
+    margin-right: 0;
+}

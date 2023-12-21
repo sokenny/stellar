@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import db from '../models';
 
 async function getJourneyTree(req: Request, res: Response): Promise<void> {
-  const { journeyId } = req.body;
+  const journeyId = req.params.id;
 
   const journey = await db.Journey.findOne({
     where: {
