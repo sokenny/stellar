@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
+import Button from '../Button/Button';
 import styles from './EnterUrlForm.module.css';
 
 const EnterUrlForm = () => {
@@ -50,12 +51,9 @@ const EnterUrlForm = () => {
             </span>
           )}
         </div>
-        <button
-          className={`${styles.button} ${loading ? styles.loading : ''}`}
-          disabled={loading}
-        >
+        <Button disabled={loading} loading={loading}>
           go stellar
-        </button>
+        </Button>
       </form>
     </div>
   );

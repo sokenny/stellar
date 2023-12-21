@@ -1,0 +1,14 @@
+.title{
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.subTitle{
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--textBody);
+}
+
+.header{
+    margin-bottom: 64px;
+}

@@ -1,0 +1,15 @@
+.Button{
+    padding: 8px 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: var(--blue);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.Button.loading, .Button.disabled{
+    opacity: 0.5;
+    cursor: initial;
+}

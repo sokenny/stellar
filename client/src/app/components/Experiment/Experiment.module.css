@@ -5,13 +5,14 @@
     border-bottom: 1px solid var(--whiteCardStroke);
     border-radius: 4px;
     font-weight: 300;
+    width: 800px;
 }
 
-/* .Experiment:hover{
-    background-color: var(--whiteCardBg);
-} */
+.Experiment.isClosed .header{
+    margin-bottom: 0;
+}
 
-.edit{
+.button{
     text-decoration: underline;
     text-transform: uppercase;
     cursor: pointer;

@@ -4,6 +4,7 @@ import getJourneyTree from '../services/getJourneyTree';
 import getExperiments from '../services/getExperiments';
 import processUserSession from '../services/processUserSession';
 import deleteProject from '../services/deleteProject';
+import getExperiment from '../services/getExperiment';
 
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.post('/onboard', onboardNewPage);
 router.get('/journey/:id', getJourneyTree);
 
 router.get('/experiments', getExperiments);
+
+router.get('/experiment/:id', getExperiment);
 
 router.post(
   '/experiments/end-session',
