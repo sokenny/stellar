@@ -3,15 +3,15 @@
 import { useRouter } from 'next/navigation';
 import Button from '@/app/components/Button/Button';
 
-const Footer = ({ experimentId }) => {
+const SetUpGoal = ({ experimentId }) => {
   const router = useRouter();
   return (
     <div>
       <Button onClick={() => router.push(`/set-goal/${experimentId}`)}>
-        Continue
+        Set Up Goal For This Experiment
       </Button>
     </div>
   );
 };
 
-export default Footer;
+export default SetUpGoal;

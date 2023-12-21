@@ -8,6 +8,8 @@ class Experiment extends Model {
   public element_id!: number;
   public journey_id!: number;
   public url!: string;
+  public started_at!: Date;
+  public ended_at!: Date;
 }
 
 export const initializeExperiment = (
@@ -49,6 +51,14 @@ export const initializeExperiment = (
       url: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      started_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      ended_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
     },
     {

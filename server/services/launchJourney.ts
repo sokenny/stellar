@@ -3,11 +3,33 @@ import db from '../models';
 async function launchJourney(req, res) {
   const { id } = req.params;
 
-  // check it has not been launched
+  const experiments = await db.Experiment.findAll({
+    where: {
+      journey_id: id,
+    },
+  });
 
-  // get experiment with this journey id and earliest start_date - check it has a goal set
+  const hasExperimentStarted = experiments.some(
+    (experiment) => experiment.started_at !== null,
+  );
 
-  // set its column started_at to now (add columns started_at and edited_at to experiments table)
+  if (hasExperimentStarted) {
+    return res.status(400).send({
+      message: 'This journey has already been launched',
+    });
+  }
+
+  const experiment = experiments.reduce((prev, current) =>
+    prev.start_date < current.start_date ? prev : current,
+  );
+
+  await experiment.update({
+    started_at: new Date(),
+  });
+
+  return res.status(200).send({
+    message: 'Journey launched successfully',
+  });
 }
 
 export default launchJourney;

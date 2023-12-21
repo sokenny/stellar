@@ -1,5 +1,5 @@
 import Experiment from '@/app/components/Experiment/Experiment';
-import Footer from '../Footer/Footer';
+import SetUpGoal from '../SetUpGoal/SetUpGoal';
 import styles from './page.module.css';
 
 // TODO: Design journey concept page on figma
@@ -9,6 +9,7 @@ export default async function Journey({ params }) {
     // cache: 'force-cache',
     cache: 'no-store',
   });
+
   const journey = await res.json();
 
   const firstExperiment = journey.experiments[0];
@@ -29,6 +30,7 @@ export default async function Journey({ params }) {
           goal={firstExperiment.goal}
           url={firstExperiment.url}
         />
+        <SetUpGoal experimentId={firstExperiment.id} />
       </div>
       {queuedExperiments.length > 0 && (
         <>
@@ -51,7 +53,6 @@ export default async function Journey({ params }) {
           </div>
         </>
       )}
-      <Footer experimentId={firstExperiment.id} />
     </div>
   );
 }

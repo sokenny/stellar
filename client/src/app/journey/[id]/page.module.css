@@ -4,6 +4,10 @@
     font-weight: 500;
 }
 
+.firstExperiment{
+    margin-bottom: 64px;
+}
+
 .firstExperiment > div{
     border-bottom: none;
 }

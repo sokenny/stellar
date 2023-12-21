@@ -4,6 +4,8 @@ import moment from 'moment';
 import { useState } from 'react';
 import Link from 'next/link';
 import Variant from '../Variant/Variant';
+import Button from '../Button/Button';
+import GoalsForm from '../GoalsForm/GoalsForm';
 import styles from './Experiment.module.css';
 
 const Goal = ({ goal }) => {
@@ -51,6 +53,7 @@ const Experiment = ({
   open = true,
 }) => {
   const [isOpen, setIsOpen] = useState(open);
+  const [showGoalsForm, setShowGoalsForm] = useState(false);
 
   function getStartsInCopy() {
     const today = moment().startOf('day');
@@ -107,7 +110,7 @@ const Experiment = ({
               </span>
             </div>
             <div>
-              Preview Url:{' '}
+              Url:{' '}
               <Link href={url} target="_blank" rel="noopener noreferrer">
                 {url}
               </Link>
@@ -121,8 +124,19 @@ const Experiment = ({
               ))}
             </div>
           </div>
-          {/* TODO: add goal section here */}
           {goal && <Goal goal={goal} />}
+          {/* {!goal && !showGoalsForm && (
+            <Button
+              className={styles.setUpGoal}
+              onClick={() => setShowGoalsForm(true)}
+            >
+              Set up goal
+            </Button>
+          )} */}
+
+          {showGoalsForm && (
+            <GoalsForm domain="caca" experimentId={1} journeyId={2} />
+          )}
         </div>
       )}
     </div>

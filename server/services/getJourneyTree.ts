@@ -34,6 +34,7 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
         ],
       },
     ],
+    order: [[{ model: db.Experiment, as: 'experiments' }, 'start_date', 'ASC']],
   });
 
   res.send(journey);
