@@ -2,11 +2,68 @@
 
 import moment from 'moment';
 import { useState } from 'react';
+import Link from 'next/link';
 import Variant from '../Variant/Variant';
 import styles from './Experiment.module.css';
 
-const Experiment = ({ name, variants, startDate, endDate, open = true }) => {
+const Goal = ({ goal }) => {
+  const goalDescriptionMapper = {
+    PAGE_VISIT: (
+      <>
+        User visits to{' '}
+        <a href={goal.page_url} target="_blank" rel="noopener noreferrer">
+          {goal.page_url}
+        </a>
+        .
+      </>
+    ),
+    CLICK: (
+      <>
+        User clicks on a{' '}
+        <a
+        // href="" we send them to page_url passing the selector in the params and the client side JS will do the rest
+        >
+          specific element
+        </a>
+        .
+      </>
+    ),
+    SESSION_TIME: <>Time spent by user on the page.</>,
+  };
+
+  return (
+    <div className={styles.goal}>
+      <div className={styles.goalTitle}>Goal:</div>
+      <div className={styles.goalDescription}>
+        {goalDescriptionMapper[goal.type]}
+      </div>
+    </div>
+  );
+};
+
+const Experiment = ({
+  name,
+  variants,
+  startDate,
+  endDate,
+  goal,
+  url,
+  open = true,
+}) => {
   const [isOpen, setIsOpen] = useState(open);
+
+  function getStartsInCopy() {
+    const today = moment().startOf('day');
+    const start = moment(startDate).startOf('day');
+    const diff = start.diff(today, 'days');
+    if (diff < 0) {
+      return 'starts now';
+    }
+    return `starts in ${diff} days`;
+  }
+
+  const startsIn = getStartsInCopy();
+
   return (
     <div
       className={`${styles.Experiment} ${
@@ -16,29 +73,44 @@ const Experiment = ({ name, variants, startDate, endDate, open = true }) => {
       <div className={styles.header}>
         <div className={styles.name}>{name}</div>
 
-        {isOpen ? (
-          <div className={styles.button}>edit</div>
-        ) : (
-          <div className={styles.button} onClick={() => setIsOpen(true)}>
-            View More
+        <div className={styles.colRight}>
+          <div
+            className={`${styles.startsIn} ${
+              startsIn === 'starts now' ? styles.now : ''
+            }`}
+          >
+            {startsIn}
           </div>
-        )}
+          {isOpen ? (
+            <div className={styles.button}>edit</div>
+          ) : (
+            <div className={styles.button} onClick={() => setIsOpen(true)}>
+              View Details
+            </div>
+          )}
+        </div>
       </div>
 
       {isOpen && (
         <div>
           <div className={styles.dates}>
             <div>
-              Start Date:{' '}
+              Starts:{' '}
               <span className={styles.value}>
                 {moment(startDate).format('DD MMM, YYYY')}
               </span>
             </div>
             <div>
-              End Date:{' '}
+              Ends:{' '}
               <span className={styles.value}>
                 {moment(endDate).format('DD MMM, YYYY')}
               </span>
+            </div>
+            <div>
+              Preview Url:{' '}
+              <Link href={url} target="_blank" rel="noopener noreferrer">
+                {url}
+              </Link>
             </div>
           </div>
           <div className={styles.variants}>
@@ -49,6 +121,8 @@ const Experiment = ({ name, variants, startDate, endDate, open = true }) => {
               ))}
             </div>
           </div>
+          {/* TODO: add goal section here */}
+          {goal && <Goal goal={goal} />}
         </div>
       )}
     </div>

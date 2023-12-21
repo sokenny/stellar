@@ -17,6 +17,7 @@ import { initializeElement } from './Element';
 import { initializeSession } from './Session';
 import { initializeUser } from './User';
 import { initializeApiKey } from './ApiKey';
+import { initializeGoal } from './Goal';
 
 export const db: { [key: string]: any } = {};
 
@@ -35,6 +36,7 @@ db.Element = initializeElement(sequelize);
 db.Session = initializeSession(sequelize);
 db.User = initializeUser(sequelize);
 db.ApiKey = initializeApiKey(sequelize);
+db.Goal = initializeGoal(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -79,6 +81,14 @@ const associateModels = () => {
   db.ApiKey.belongsTo(db.User, {
     foreignKey: 'user_id',
     as: 'user',
+  });
+  db.Experiment.hasOne(db.Goal, {
+    foreignKey: 'experiment_id',
+    as: 'goal',
+  });
+  db.Goal.belongsTo(db.Experiment, {
+    foreignKey: 'experiment_id',
+    as: 'experiment',
   });
 };
 

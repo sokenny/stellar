@@ -7,6 +7,7 @@ const Variant = ({ variant, n }) => {
         variant.is_control ? styles.isControl : ''
       }`}
     >
+      {/* TODO: add link to "preview variant" that takes you to preview mode of the variant */}
       <div className={styles.header}>
         <div className={styles.title}>#{n}</div>
         {!variant.is_control && <div className={styles.edit}>edit</div>}

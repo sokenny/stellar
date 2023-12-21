@@ -6,7 +6,8 @@ import styles from './page.module.css';
 export default async function Journey({ params }) {
   const joruneyId = params.id;
   const res = await fetch(`http://localhost:3001/api/journey/${joruneyId}`, {
-    cache: 'force-cache',
+    // cache: 'force-cache',
+    cache: 'no-store',
   });
   const journey = await res.json();
 
@@ -25,6 +26,8 @@ export default async function Journey({ params }) {
           startDate={firstExperiment.start_date}
           endDate={firstExperiment.end_date}
           variants={firstExperiment.variants}
+          goal={firstExperiment.goal}
+          url={firstExperiment.url}
         />
       </div>
       {queuedExperiments.length > 0 && (
@@ -40,6 +43,8 @@ export default async function Journey({ params }) {
                 startDate={experiment.start_date}
                 endDate={experiment.end_date}
                 variants={experiment.variants}
+                goal={experiment.goal}
+                url={experiment.url}
                 open={false}
               />
             ))}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '../Button/Button';
 import styles from './GoalsForm.module.css';
@@ -7,29 +8,33 @@ import styles from './GoalsForm.module.css';
 const goals = [
   {
     title: 'Clicks',
-    description: 'Track clicks on a particular element of your website',
+    description: 'Clicks on a particular element of your website',
     icon: 'i',
     value: 'CLICK',
   },
   {
     title: 'Page Visit',
-    description: 'Track visits to a particular page on your website',
+    description: 'Visits to a particular page on your website',
     icon: 'i',
     value: 'PAGE_VISIT',
   },
   {
     title: 'Time on Page',
-    description: 'Track how long users spend on a particular page',
+    description: 'How long users spend on a particular page',
     icon: 'i',
     value: 'SESSION_TIME',
   },
 ];
 
-const GoalsForm = ({ domain }) => {
+const GoalsForm = ({ domain, experimentId, journeyId }) => {
+  const router = useRouter();
+  const [submiting, setSubmiting] = useState(false);
   const [goalType, setGoalType] = useState(null);
   const [visitUrl, setVisitUrl] = useState(null);
   const visitUrlIsValid = false;
   const clickElementSelected = false;
+
+  const inJourney = !!journeyId;
 
   function canContinue() {
     if (goalType === 'SESSION_TIME') {
@@ -44,6 +49,38 @@ const GoalsForm = ({ domain }) => {
       return true;
     }
   }
+
+  async function onReviewAndLaunch() {
+    // send goals data to server
+    console.log('funcion llamada! ');
+
+    try {
+      setSubmiting(true);
+      const response = await fetch('http://localhost:3001/api/goals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          experimentId,
+          type: goalType,
+          selector: null,
+          page_url: visitUrl,
+        }),
+      });
+
+      if (inJourney) {
+        router.push(`/journey/${journeyId}/review`);
+      } else {
+        router.push(`/experiment/${experimentId}/review`);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubmiting(false);
+    }
+  }
+
   return (
     <section className={styles.GoalsForm}>
       <div className={styles.goals}>
@@ -53,6 +90,7 @@ const GoalsForm = ({ domain }) => {
               goalType === goal.value ? styles.selected : ''
             }`}
             onClick={() => setGoalType(goal.value)}
+            key={goal.value}
           >
             <div className={styles.icon}>{goal.icon}</div>
             <h3 className={styles.goalTitle}>{goal.title}</h3>
@@ -92,7 +130,12 @@ const GoalsForm = ({ domain }) => {
         )}
       </div>
       {canContinue() && (
-        <Button className={styles.continueButton}>
+        <Button
+          className={styles.continueButton}
+          loading={submiting}
+          disabled={submiting}
+          onClick={onReviewAndLaunch}
+        >
           Review & Launch Experiments
         </Button>
       )}

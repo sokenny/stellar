@@ -13,19 +13,29 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
       {
         model: db.Experiment,
         as: 'experiments',
-        attributes: ['id', 'name', 'start_date', 'end_date', 'element_id'],
+        attributes: [
+          'id',
+          'name',
+          'start_date',
+          'end_date',
+          'element_id',
+          'url',
+        ],
         include: [
           {
             model: db.Variant,
             as: 'variants',
             attributes: ['id', 'is_control', 'text'],
           },
+          {
+            model: db.Goal,
+            as: 'goal',
+          },
         ],
       },
     ],
   });
 
-  console.log('journey! ', journey);
   res.send(journey);
 }
 

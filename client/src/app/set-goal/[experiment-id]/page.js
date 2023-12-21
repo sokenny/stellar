@@ -1,5 +1,6 @@
 import getDomainFromUrl from '@/app/helpers/getDomainFromUrl';
 import GoalsForm from '@/app/components/GoalsForm/GoalsForm';
+import Link from 'next/link';
 import styles from './page.module.css';
 
 // TODO: Design journey concept page on figma
@@ -21,11 +22,22 @@ export default async function SetGoal({ params }) {
       <div className={styles.header}>
         <h1 className={styles.title}>Set Goal</h1>
         <h2 className={styles.subTitle}>
-          What valuable action should we track to measure success in your first
+          What valuable action should we track to measure success in your{' '}
+          <Link
+            href={`/experiment/${experiment.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {experiment.name}
+          </Link>{' '}
           experiment?
         </h2>
       </div>
-      <GoalsForm domain={getDomainFromUrl(experiment?.url)} />
+      <GoalsForm
+        domain={getDomainFromUrl(experiment?.url)}
+        experimentId={experimentId}
+        journeyId={experiment.journey_id}
+      />
     </div>
   );
 }

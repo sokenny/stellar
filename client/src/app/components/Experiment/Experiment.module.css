@@ -1,77 +1,110 @@
-
-.Experiment{
-    width: fit-content;
-    padding: 46px 32px 46px 0px;
-    border-bottom: 1px solid var(--whiteCardStroke);
-    border-radius: 4px;
-    font-weight: 300;
-    width: 800px;
+.Experiment {
+  width: fit-content;
+  padding: 46px 32px 46px 0px;
+  border-bottom: 1px solid var(--whiteCardStroke);
+  border-radius: 4px;
+  font-weight: 300;
+  width: 800px;
 }
 
-.Experiment.isClosed .header{
-    margin-bottom: 0;
+.Experiment.isClosed .header {
+  margin-bottom: 0;
 }
 
-.button{
-    text-decoration: underline;
-    text-transform: uppercase;
-    cursor: pointer;
+.colRight {
+  display: flex;
 }
 
-.header{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
+.startsIn {
+  margin-right: 16px;
+  font-weight: 600;
+  color: var(--yellow);
 }
 
-.name{
-    font-weight: 600;
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 18px;
+.startsIn.now {
+  color: var(--green);
 }
 
-.dates{
-    text-transform: uppercase;
-    margin-bottom: 32px;
+.button {
+  text-decoration: underline;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
-.dates > div:first-child{
-    margin-bottom: 4px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
-.value{
-    color: var(--textBody);
+.name {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 18px;
 }
 
-.variants > div{
-    margin-right: 16px;
+.dates {
+  text-transform: uppercase;
+  margin-bottom: 32px;
 }
 
-.variants > div:last-child{
-    margin-right: 0;
+.dates > div {
+  margin-bottom: 4px;
+}
+.dates > div:last-child {
+  margin-bottom: 0;
 }
 
-.variants{
-    display: flex;
-    flex-direction: column;
+.value {
+  color: var(--textBody);
 }
 
-.variantsTitle{
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 18px;
-    margin-bottom: 12px;
+.variants > div {
+  margin-right: 16px;
 }
 
-.variantsContainer{
-    display: flex;
+.variants > div:last-child {
+  margin-right: 0;
 }
 
-.variantsContainer > div{
-    margin-right: 16px;
+.variants {
+  display: flex;
+  flex-direction: column;
 }
 
-.variantsContainer > div:last-child{
-    margin-right: 0;
+.variantsTitle {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 18px;
+  margin-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.variantsContainer {
+  display: flex;
+}
+
+.variantsContainer > div {
+  margin-right: 16px;
+}
+
+.variantsContainer > div:last-child {
+  margin-right: 0;
+}
+
+.goal {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.goalTitle {
+  margin-right: 8px;
+}
+
+.goalTitle {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 18px;
 }

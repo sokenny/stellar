@@ -1,0 +1,25 @@
+.ReviewJourney{
+    max-width: var(--narrowBody);
+}
+
+.title{
+    font-weight: 500;
+    color: black;
+}
+
+.subTitle{
+    color: var(--textBody);
+    font-weight: 300;
+}
+
+.header{
+    margin-bottom: 32px;
+}
+
+.experiments{
+    margin-bottom: 24px;
+}
+
+.experiments > div:last-child{
+    border-bottom: none;
+}

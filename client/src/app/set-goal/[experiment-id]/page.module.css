@@ -1,3 +1,7 @@
+.SetGoal{
+    max-width: var(--narrowBody);
+}
+
 .title{
     font-weight: 500;
     margin-bottom: 12px;
