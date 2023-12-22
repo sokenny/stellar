@@ -6,7 +6,6 @@ async function createGoal(req, res) {
   const experiment = await db.Experiment.findOne({
     where: {
       id: experimentId,
-      // TODO: check that experiment is not running yet - we will need a column like 'started_at'
     },
     include: [
       {
@@ -25,6 +24,12 @@ async function createGoal(req, res) {
   if (experiment.goal) {
     return res.status(400).json({
       error: 'Experiment already has a goal',
+    });
+  }
+
+  if (experiment.started_at) {
+    return res.status(400).json({
+      error: 'Cannot add goal to an experiment that has already started',
     });
   }
 

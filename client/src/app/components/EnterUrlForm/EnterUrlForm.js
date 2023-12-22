@@ -23,7 +23,7 @@ const EnterUrlForm = () => {
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      router.push('/journey/47');
+      router.push('/journey/47/review');
     } catch (err) {
       console.log(err);
     } finally {

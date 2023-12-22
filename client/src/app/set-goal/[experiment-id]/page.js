@@ -1,9 +1,8 @@
-import getDomainFromUrl from '@/app/helpers/getDomainFromUrl';
-import GoalsForm from '@/app/components/GoalsForm/GoalsForm';
+import getDomainFromUrl from '../../helpers/getDomainFromUrl';
+import GoalsForm from '../../components/GoalsForm/GoalsForm';
 import Link from 'next/link';
 import styles from './page.module.css';
 
-// TODO: Design journey concept page on figma
 export default async function SetGoal({ params }) {
   const experimentId = params['experiment-id'];
 

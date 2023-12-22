@@ -101,15 +101,14 @@
 
 .goalTitle {
   margin-right: 8px;
-}
-
-.goalTitle {
   text-transform: uppercase;
   font-weight: 400;
   font-size: 18px;
 }
 
-.setUpGoal{
-  margin-top: 16px;
-  font-size: 12px;
+.edit{
+  margin-left: 8px;
+  text-decoration: underline;
+  color: gray;
+  cursor: pointer;
 }

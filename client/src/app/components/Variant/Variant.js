@@ -9,7 +9,12 @@ const Variant = ({ variant, n }) => {
     >
       {/* TODO: add link to "preview variant" that takes you to preview mode of the variant */}
       <div className={styles.header}>
-        <div className={styles.title}>#{n}</div>
+        <div className={styles.colLeft}>
+          <div className={styles.title}>#{n}</div>
+          {variant.is_control && (
+            <div className={styles.original}>original</div>
+          )}
+        </div>
         {!variant.is_control && <div className={styles.edit}>edit</div>}
       </div>
       <div className={styles.text}>

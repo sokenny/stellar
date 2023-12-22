@@ -1,7 +1,8 @@
 'use client';
 
-import moment from 'moment';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import moment from 'moment';
 import Link from 'next/link';
 import Variant from '../Variant/Variant';
 import Button from '../Button/Button';
@@ -9,6 +10,7 @@ import GoalsForm from '../GoalsForm/GoalsForm';
 import styles from './Experiment.module.css';
 
 const Goal = ({ goal }) => {
+  const router = useRouter();
   const goalDescriptionMapper = {
     PAGE_VISIT: (
       <>
@@ -39,10 +41,19 @@ const Goal = ({ goal }) => {
       <div className={styles.goalDescription}>
         {goalDescriptionMapper[goal.type]}
       </div>
+      <div
+        className={styles.edit}
+        onClick={() => router.push(`/set-goal/${goal.experiment_id}`)}
+      >
+        edit
+      </div>
     </div>
   );
 };
 
+// TODO: unificar journey/47/review y journey/47/. Que vaya desde "Go Stellar" a "Review & Launch"
+// TODO: allow editing the experiment order
+// TODO: have click on edit goal open up a modal located in route /journey/:id/goal/:experiment-id or similar
 const Experiment = ({
   name,
   variants,
@@ -53,7 +64,7 @@ const Experiment = ({
   open = true,
 }) => {
   const [isOpen, setIsOpen] = useState(open);
-  const [showGoalsForm, setShowGoalsForm] = useState(false);
+  // const [showGoalsForm, setShowGoalsForm] = useState(false);
 
   function getStartsInCopy() {
     const today = moment().startOf('day');
@@ -84,9 +95,8 @@ const Experiment = ({
           >
             {startsIn}
           </div>
-          {isOpen ? (
-            <div className={styles.button}>edit</div>
-          ) : (
+          <div className={styles.order}>#n</div>
+          {!isOpen && (
             <div className={styles.button} onClick={() => setIsOpen(true)}>
               View Details
             </div>
@@ -96,7 +106,8 @@ const Experiment = ({
 
       {isOpen && (
         <div>
-          <div className={styles.dates}>
+          {/* TODO-p1: get rid of start_date and end_date columns, switch them for "order" column */}
+          {/* <div className={styles.dates}>
             <div>
               Starts:{' '}
               <span className={styles.value}>
@@ -115,7 +126,7 @@ const Experiment = ({
                 {url}
               </Link>
             </div>
-          </div>
+          </div> */}
           <div className={styles.variants}>
             <div className={styles.variantsTitle}>Variants</div>
             <div className={styles.variantsContainer}>
@@ -125,18 +136,6 @@ const Experiment = ({
             </div>
           </div>
           {goal && <Goal goal={goal} />}
-          {/* {!goal && !showGoalsForm && (
-            <Button
-              className={styles.setUpGoal}
-              onClick={() => setShowGoalsForm(true)}
-            >
-              Set up goal
-            </Button>
-          )} */}
-
-          {showGoalsForm && (
-            <GoalsForm domain="caca" experimentId={1} journeyId={2} />
-          )}
         </div>
       )}
     </div>

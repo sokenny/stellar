@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Button from '@/app/components/Button/Button';
+import Button from '../../../../components/Button/Button';
 import styles from './LaunchButton.module.css';
 
 const LaunchButton = ({ journeyId }) => {

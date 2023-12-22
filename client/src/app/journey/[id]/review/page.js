@@ -1,4 +1,4 @@
-import Experiment from '@/app/components/Experiment/Experiment';
+import Experiment from '../../../components/Experiment/Experiment';
 import LaunchButton from './LaunchButton/LaunchButton';
 import styles from './page.module.css';
 

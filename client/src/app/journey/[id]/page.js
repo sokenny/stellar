@@ -1,11 +1,11 @@
-import Experiment from '@/app/components/Experiment/Experiment';
+import Experiment from '../../components/Experiment/Experiment';
+import Continue from './Continue/Continue';
 import SetUpGoal from '../SetUpGoal/SetUpGoal';
 import styles from './page.module.css';
 
-// TODO: Design journey concept page on figma
 export default async function Journey({ params }) {
-  const joruneyId = params.id;
-  const res = await fetch(`http://localhost:3001/api/journey/${joruneyId}`, {
+  const journeyId = params.id;
+  const res = await fetch(`http://localhost:3001/api/journey/${journeyId}`, {
     // cache: 'force-cache',
     cache: 'no-store',
   });
@@ -20,6 +20,10 @@ export default async function Journey({ params }) {
       <h1 className={styles.title}>
         This is the first experiment we will run:
       </h1>
+      <h2 className={styles.subTitle}>
+        Continue by setting up a goal, or choose a different experiment to start
+        your journey with.
+      </h2>
       <div className={styles.firstExperiment}>
         <Experiment
           key={firstExperiment.id}
@@ -30,7 +34,9 @@ export default async function Journey({ params }) {
           goal={firstExperiment.goal}
           url={firstExperiment.url}
         />
-        <SetUpGoal experimentId={firstExperiment.id} />
+        {!firstExperiment.goal && (
+          <SetUpGoal experimentId={firstExperiment.id} />
+        )}
       </div>
       {queuedExperiments.length > 0 && (
         <>
@@ -52,6 +58,9 @@ export default async function Journey({ params }) {
             ))}
           </div>
         </>
+      )}
+      {firstExperiment.goal && (
+        <Continue journeyId={journeyId}>Continue</Continue>
       )}
     </div>
   );
