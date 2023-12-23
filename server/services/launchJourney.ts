@@ -19,9 +19,7 @@ async function launchJourney(req, res) {
     });
   }
 
-  const experiment = experiments.reduce((prev, current) =>
-    prev.start_date < current.start_date ? prev : current,
-  );
+  const experiment = experiments.find((experiment) => experiment.order === 1);
 
   await experiment.update({
     started_at: new Date(),

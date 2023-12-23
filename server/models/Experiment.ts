@@ -5,6 +5,7 @@ class Experiment extends Model {
   public name!: string;
   public start_date!: Date;
   public end_date!: Date;
+  public order!: number;
   public element_id!: number;
   public journey_id!: number;
   public url!: string;
@@ -28,11 +29,11 @@ export const initializeExperiment = (
       },
       start_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       end_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       element_id: {
         type: DataTypes.INTEGER,

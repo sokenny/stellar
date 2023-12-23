@@ -10,6 +10,12 @@ export default async function ReviewJourney({ params }) {
   });
   const journey = await res.json();
 
+  const goalSetForFirstExperiment = journey.experiments.find(
+    (experiment) => experiment.id === journey.experiments_order[0],
+  ).goal;
+
+  console.log('journey.experiments_order: ', journey.experiments_order);
+
   return (
     <div className={styles.ReviewJourney}>
       <div className={styles.header}>
@@ -21,20 +27,24 @@ export default async function ReviewJourney({ params }) {
       </div>
 
       <div className={styles.experiments}>
-        {journey.experiments.map((experiment, i) => (
-          <Experiment
-            key={experiment.id}
-            name={experiment.name}
-            startDate={experiment.start_date}
-            endDate={experiment.end_date}
-            variants={experiment.variants}
-            goal={experiment.goal}
-            open={i === 0}
-            url={experiment.url}
-          />
-        ))}
+        {journey.experiments.map((experiment, i) => {
+          const order = journey.experiments_order.indexOf(experiment.id) + 1;
+          return (
+            <Experiment
+              key={experiment.id}
+              experiment={experiment}
+              isFirst={order === 1}
+              open={order === 1}
+              journeyId={joruneyId}
+              order={order}
+            />
+          );
+        })}
       </div>
-      <LaunchButton journeyId={journey.id} />
+      <LaunchButton
+        journeyId={journey.id}
+        disabled={!goalSetForFirstExperiment}
+      />
     </div>
   );
 }

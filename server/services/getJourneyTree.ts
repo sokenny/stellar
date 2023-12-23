@@ -8,19 +8,12 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
     where: {
       id: journeyId,
     },
-    attributes: ['id', 'page'],
+    attributes: ['id', 'page', 'experiments_order'],
     include: [
       {
         model: db.Experiment,
         as: 'experiments',
-        attributes: [
-          'id',
-          'name',
-          'start_date',
-          'end_date',
-          'element_id',
-          'url',
-        ],
+        attributes: ['id', 'name', 'element_id', 'url'],
         include: [
           {
             model: db.Variant,
@@ -34,7 +27,6 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
         ],
       },
     ],
-    order: [[{ model: db.Experiment, as: 'experiments' }, 'start_date', 'ASC']],
   });
 
   res.send(journey);

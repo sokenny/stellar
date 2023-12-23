@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Button from '../../../../components/Button/Button';
 import styles from './LaunchButton.module.css';
 
-const LaunchButton = ({ journeyId }) => {
+const LaunchButton = ({ journeyId, disabled }) => {
   const router = useRouter();
   const [isLaunching, setIsLaunching] = useState(false);
   async function handleLaunchJourney() {
@@ -36,7 +36,7 @@ const LaunchButton = ({ journeyId }) => {
       <Button
         onClick={handleLaunchJourney}
         loading={isLaunching}
-        disabled={isLaunching}
+        disabled={isLaunching || disabled}
       >
         Launch Journey
       </Button>

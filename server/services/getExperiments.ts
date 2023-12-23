@@ -25,12 +25,16 @@ async function getUserByApiKey(apiKey: string) {
 async function getExperimentsForUser(userId: number) {
   const experimentInstances = await db.Experiment.findAll({
     where: {
-      start_date: {
-        [Op.lte]: new Date(),
-      },
-      end_date: {
-        [Op.gte]: new Date(),
-      },
+      [Op.and]: [
+        {
+          started_at: {
+            [Op.ne]: null,
+          },
+          ended_at: {
+            [Op.eq]: null,
+          },
+        },
+      ],
     },
     include: [
       {

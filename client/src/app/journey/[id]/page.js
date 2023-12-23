@@ -25,15 +25,7 @@ export default async function Journey({ params }) {
         your journey with.
       </h2>
       <div className={styles.firstExperiment}>
-        <Experiment
-          key={firstExperiment.id}
-          name={firstExperiment.name}
-          startDate={firstExperiment.start_date}
-          endDate={firstExperiment.end_date}
-          variants={firstExperiment.variants}
-          goal={firstExperiment.goal}
-          url={firstExperiment.url}
-        />
+        <Experiment key={firstExperiment.id} experiment={firstExperiment} />
         {!firstExperiment.goal && (
           <SetUpGoal experimentId={firstExperiment.id} />
         )}
@@ -47,12 +39,7 @@ export default async function Journey({ params }) {
             {queuedExperiments.map((experiment, i) => (
               <Experiment
                 key={experiment.id}
-                name={experiment.name}
-                startDate={experiment.start_date}
-                endDate={experiment.end_date}
-                variants={experiment.variants}
-                goal={experiment.goal}
-                url={experiment.url}
+                experiment={experiment}
                 open={false}
               />
             ))}

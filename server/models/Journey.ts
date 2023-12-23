@@ -36,6 +36,10 @@ export const initializeJourney = (sequelize: Sequelize): typeof Journey => {
         type: DataTypes.JSONB,
         allowNull: true,
       },
+      experiments_order: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        allowNull: true,
+      },
     },
     {
       sequelize,

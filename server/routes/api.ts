@@ -5,7 +5,7 @@ import getExperiments from '../services/getExperiments';
 import processUserSession from '../services/processUserSession';
 import deleteProject from '../services/deleteProject';
 import getExperiment from '../services/getExperiment';
-import createGoal from '../services/createGoal';
+import setGoal from '../services/setGoal';
 import launchJourney from '../services/launchJourney';
 
 const router = express.Router();
@@ -21,7 +21,7 @@ router.get('/experiments', getExperiments);
 
 router.get('/experiment/:id', getExperiment);
 
-router.post('/goals', createGoal);
+router.post('/goals', setGoal);
 
 router.post('/journey/:id/launch', launchJourney);
 

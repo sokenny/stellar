@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '../Button/Button';
 import styles from './GoalsForm.module.css';
@@ -26,15 +25,12 @@ const goals = [
   },
 ];
 
-const GoalsForm = ({ domain, experimentId, journeyId }) => {
-  const router = useRouter();
+const GoalsForm = ({ domain, experimentId, journeyId, goal, onSuccess }) => {
   const [submiting, setSubmiting] = useState(false);
-  const [goalType, setGoalType] = useState(null);
+  const [goalType, setGoalType] = useState(goal?.type ? goal.type : null);
   const [visitUrl, setVisitUrl] = useState(null);
   const visitUrlIsValid = false;
   const clickElementSelected = false;
-
-  const inJourney = !!journeyId;
 
   function canContinue() {
     if (goalType === 'SESSION_TIME') {
@@ -50,10 +46,7 @@ const GoalsForm = ({ domain, experimentId, journeyId }) => {
     }
   }
 
-  async function onReviewAndLaunch() {
-    // send goals data to server
-    console.log('funcion llamada! ');
-
+  async function onSetGoal() {
     try {
       setSubmiting(true);
       const response = await fetch('http://localhost:3001/api/goals', {
@@ -62,18 +55,15 @@ const GoalsForm = ({ domain, experimentId, journeyId }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          experimentId,
+          experiment_id: experimentId,
+          journey_id: journeyId,
           type: goalType,
           selector: null,
           page_url: visitUrl,
         }),
       });
-
-      if (inJourney) {
-        router.push(`/journey/${journeyId}/review`);
-      } else {
-        router.push(`/experiment/${experimentId}/review`);
-      }
+      console.log('Response! ', response);
+      onSuccess();
     } catch (e) {
       console.log(e);
     } finally {
@@ -129,16 +119,18 @@ const GoalsForm = ({ domain, experimentId, journeyId }) => {
           </div>
         )}
       </div>
-      {canContinue() && (
-        <Button
-          className={styles.continueButton}
-          loading={submiting}
-          disabled={submiting}
-          onClick={onReviewAndLaunch}
-        >
-          Review & Launch Experiments
-        </Button>
-      )}
+      <div className={styles.actions}>
+        {canContinue() && (
+          <Button
+            className={styles.continueButton}
+            loading={submiting}
+            disabled={submiting}
+            onClick={onSetGoal}
+          >
+            Set Goal
+          </Button>
+        )}
+      </div>
     </section>
   );
 };

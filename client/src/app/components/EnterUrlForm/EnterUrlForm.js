@@ -13,13 +13,13 @@ const EnterUrlForm = () => {
   const onSubmit = useCallback(async () => {
     try {
       setLoading(true);
-      //   const response = await fetch('http://localhost:3001/api/onboard', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({ website_url: websiteUrl }),
-      //   });
+      const response = await fetch('http://localhost:3001/api/onboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ website_url: url }),
+      });
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
 

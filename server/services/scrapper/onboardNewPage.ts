@@ -96,17 +96,11 @@ async function createVariants(
 async function createExperiments(elements, journey, transaction) {
   try {
     const experiments = [];
-    let startDate = new Date();
 
     for (const element of elements) {
-      const endDate = new Date(startDate.getTime());
-      endDate.setDate(startDate.getDate() + 7);
-
       const experiment = await db.Experiment.create(
         {
           name: `${element.type} Experiment`,
-          start_date: startDate,
-          end_date: endDate,
           element_id: element.id,
           journey_id: journey.id,
           url: journey.page,
@@ -123,8 +117,6 @@ async function createExperiments(elements, journey, transaction) {
         transaction,
       );
       experiments.push(experiment);
-
-      startDate = new Date(endDate.getTime());
     }
 
     return experiments;
@@ -217,7 +209,21 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
       transaction,
     );
 
-    await createExperiments(createdElements, journey, transaction);
+    const createdExperiments = await createExperiments(
+      createdElements,
+      journey,
+      transaction,
+    );
+
+    await journey.update(
+      {
+        experiments_order: createdExperiments.map(
+          (experiment) => experiment.id,
+        ),
+      },
+      { transaction },
+    );
+
     await browserSession.browser.close();
 
     await transaction.commit();
