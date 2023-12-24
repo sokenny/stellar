@@ -1,17 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import moment from 'moment';
-import Link from 'next/link';
 import Variant from '../Variant/Variant';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
+import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
 import Button from '../Button/Button';
-import GoalsForm from '../GoalsForm/GoalsForm';
+import Edit from '../../icons/Edit';
 import styles from './Experiment.module.css';
 
 const Goal = ({ goal, onEdit }) => {
-  const router = useRouter();
   const goalDescriptionMapper = {
     PAGE_VISIT: (
       <>
@@ -43,13 +40,12 @@ const Goal = ({ goal, onEdit }) => {
         {goalDescriptionMapper[goal.type]}
       </div>
       <div className={styles.edit} onClick={onEdit}>
-        edit
+        <Edit width={17} height={17} />
       </div>
     </div>
   );
 };
 
-// TODO: allow editing the experiment order
 const Experiment = ({
   experiment,
   journeyId,
@@ -60,6 +56,13 @@ const Experiment = ({
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
+  const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
+
+  const sortedVariants = variants.sort((a, b) => {
+    if (a.is_control) return -1;
+    if (b.is_control) return 1;
+    return 0;
+  });
 
   return (
     <div
@@ -73,7 +76,12 @@ const Experiment = ({
         <div className={styles.colLeft}>
           <div className={styles.order}>{order}</div>
           <div className={styles.name}>{name}</div>
-          <div className={styles.editExperiment}>(edit)</div>
+          <div
+            className={styles.editExperiment}
+            onClick={() => setShowEditExperimentModal(true)}
+          >
+            <Edit />
+          </div>
         </div>
 
         <div className={styles.colRight}>
@@ -94,7 +102,7 @@ const Experiment = ({
           <div className={styles.variants}>
             <div className={styles.variantsTitle}>Variants</div>
             <div className={styles.variantsContainer}>
-              {variants.map((variant, i) => (
+              {sortedVariants.map((variant, i) => (
                 <Variant key={variant.id} variant={variant} n={i + 1} />
               ))}
             </div>
@@ -119,6 +127,17 @@ const Experiment = ({
           experiment={experiment}
           onClose={() => setShowSetUpGoalModal(false)}
           goal={goal}
+        />
+      )}
+      {showEditExperimentModal && (
+        <EditExperimentModal
+          onClose={() => setShowEditExperimentModal(false)}
+          initialValues={{
+            name: experiment.name,
+            order,
+          }}
+          experimentId={experiment.id}
+          journeyId={journeyId}
         />
       )}
     </div>

@@ -99,3 +99,16 @@
     margin-right: 8px;
     color: var(--textBody);
 }
+
+.actions{
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.cancel{
+    text-decoration: underline;
+    margin-left: 16px;
+    color: var(--textBody);
+    cursor: pointer;
+}

@@ -1,7 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
 
 const goals = [
@@ -25,7 +27,8 @@ const goals = [
   },
 ];
 
-const GoalsForm = ({ domain, experimentId, journeyId, goal, onSuccess }) => {
+const GoalsForm = ({ domain, experimentId, journeyId, goal, onClose }) => {
+  const router = useRouter();
   const [submiting, setSubmiting] = useState(false);
   const [goalType, setGoalType] = useState(goal?.type ? goal.type : null);
   const [visitUrl, setVisitUrl] = useState(null);
@@ -63,7 +66,8 @@ const GoalsForm = ({ domain, experimentId, journeyId, goal, onSuccess }) => {
         }),
       });
       console.log('Response! ', response);
-      onSuccess();
+      router.refresh();
+      onClose();
     } catch (e) {
       console.log(e);
     } finally {
@@ -100,7 +104,7 @@ const GoalsForm = ({ domain, experimentId, journeyId, goal, onSuccess }) => {
             </div>
             <div className={styles.row}>
               <div className={styles.domain}>{domain}/</div>
-              <input className={styles.input} type="text" />
+              <Input type="text" />
               <Button>Go</Button>
             </div>
           </div>
@@ -113,23 +117,24 @@ const GoalsForm = ({ domain, experimentId, journeyId, goal, onSuccess }) => {
             </div>
             <div className={styles.row}>
               <div className={styles.domain}>{domain}/</div>
-              <input className={styles.input} type="text" />
+              <Input type="text" />
               <Button>Go</Button>
             </div>
           </div>
         )}
       </div>
       <div className={styles.actions}>
-        {canContinue() && (
-          <Button
-            className={styles.continueButton}
-            loading={submiting}
-            disabled={submiting}
-            onClick={onSetGoal}
-          >
-            Set Goal
-          </Button>
-        )}
+        <Button
+          className={styles.continueButton}
+          loading={submiting}
+          disabled={!canContinue() || submiting}
+          onClick={onSetGoal}
+        >
+          Set Goal
+        </Button>
+        <div className={styles.cancel} onClick={onClose}>
+          cancel
+        </div>
       </div>
     </section>
   );

@@ -14,6 +14,12 @@ export default async function ReviewJourney({ params }) {
     (experiment) => experiment.id === journey.experiments_order[0],
   ).goal;
 
+  const sortedExperiments = journey.experiments_order
+    .map((orderId) =>
+      journey.experiments.find((experiment) => experiment.id === orderId),
+    )
+    .filter((experiment) => experiment != null);
+
   console.log('journey.experiments_order: ', journey.experiments_order);
 
   return (
@@ -27,8 +33,8 @@ export default async function ReviewJourney({ params }) {
       </div>
 
       <div className={styles.experiments}>
-        {journey.experiments.map((experiment, i) => {
-          const order = journey.experiments_order.indexOf(experiment.id) + 1;
+        {sortedExperiments.map((experiment, i) => {
+          const order = i + 1;
           return (
             <Experiment
               key={experiment.id}

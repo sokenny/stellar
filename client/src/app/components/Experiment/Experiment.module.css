@@ -7,7 +7,7 @@
   width: 800px;
 }
 
-.Experiment.isFirst .startOrder{
+.Experiment.isFirst .startOrder {
   color: var(--green);
 }
 
@@ -15,18 +15,18 @@
   margin-bottom: 0;
 }
 
-.colLeft{
+.colLeft {
   display: flex;
   align-items: center;
 }
 
-.order{
+.order {
   margin-right: 8px;
   height: 20px;
   width: 20px;
   border-radius: 10px;
   font-size: 12px;
-  border: 1.75px solid var(--blue);
+  border: 2px solid var(--blue);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,15 +34,16 @@
   font-weight: 700;
 }
 
-.editExperiment{
+.editExperiment {
   margin-left: 8px;
+  cursor: pointer;
 }
 
 .colRight {
   display: flex;
 }
 
-.startOrder{
+.startOrder {
   color: var(--yellow);
   font-weight: 500;
   text-transform: uppercase;
@@ -132,13 +133,14 @@
   font-size: 18px;
 }
 
-.edit{
+.edit {
   margin-left: 8px;
   text-decoration: underline;
   color: gray;
   cursor: pointer;
+  line-height: 0;
 }
 
-.setUpGoalBtn{
+.setUpGoalBtn {
   margin-top: 16px;
 }

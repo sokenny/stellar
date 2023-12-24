@@ -2,10 +2,15 @@
 
 import styles from './Modal.module.css';
 
-const Modal = ({ children, onClose, closeOnOverlayClick = true }) => {
+const Modal = ({
+  children,
+  className,
+  onClose,
+  closeOnOverlayClick = true,
+}) => {
   return (
     <div
-      className={styles.Modal}
+      className={`${styles.Modal} ${className ? className : ''}`}
       onClick={closeOnOverlayClick ? onClose : () => {}}
     >
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>

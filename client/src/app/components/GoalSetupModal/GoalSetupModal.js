@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import GoalsForm from '../GoalsForm/GoalsForm';
@@ -8,7 +7,6 @@ import Modal from '../Modal/Modal';
 import styles from './GoalSetupModal.module.css';
 
 const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
-  const router = useRouter();
   return (
     <Modal onClose={onClose} closeOnOverlayClick={false}>
       <div>
@@ -29,12 +27,9 @@ const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
         <GoalsForm
           domain={getDomainFromUrl(experiment.url)}
           experimentId={experiment.id}
-          onSuccess={() => {
-            router.refresh();
-            onClose();
-          }}
           goal={goal}
           journeyId={journeyId}
+          onClose={onClose}
         />
       </div>
     </Modal>

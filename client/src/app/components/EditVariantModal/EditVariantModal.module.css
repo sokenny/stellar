@@ -1,0 +1,36 @@
+.title {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: black;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.label {
+  margin-bottom: 4px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.save {
+  margin-right: 16px;
+}
+
+.cancel {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--textBody);
+}

@@ -1,0 +1,9 @@
+.Input {
+  padding: 4px 12px;
+  outline: none;
+  margin-right: 16px;
+  border: 1px solid var(--whiteCardStroke);
+  background-color: var(--whiteCardBg);
+  color: var(--textBody);
+  font-size: 20px;
+}

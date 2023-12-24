@@ -13,6 +13,7 @@
 
 .content{
     background-color: white;
+    min-width: 400px;
     max-width: 800px;
     max-height: 80vh;
     border-radius: 5px;

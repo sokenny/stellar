@@ -1,6 +1,10 @@
+import { useState } from 'react';
+import Edit from '../../icons/Edit';
+import EditVariantModal from '../EditVariantModal/EditVariantModal';
 import styles from './Variant.module.css';
 
 const Variant = ({ variant, n }) => {
+  const [showEditVariantModal, setShowEditVariantModal] = useState(false);
   return (
     <div
       className={`${styles.Variant} ${
@@ -15,7 +19,14 @@ const Variant = ({ variant, n }) => {
             <div className={styles.original}>original</div>
           )}
         </div>
-        {!variant.is_control && <div className={styles.edit}>edit</div>}
+        {!variant.is_control && (
+          <div
+            className={styles.edit}
+            onClick={() => setShowEditVariantModal(true)}
+          >
+            <Edit width={15} height={15} />
+          </div>
+        )}
       </div>
       <div className={styles.text}>
         <span className={styles.label}>Text: </span>
@@ -25,6 +36,15 @@ const Variant = ({ variant, n }) => {
         <span className={styles.label}>Traffic: </span>33%
       </div>
       <div className={styles.description}>{variant.description}</div>
+      {showEditVariantModal && (
+        <EditVariantModal
+          onClose={() => setShowEditVariantModal(false)}
+          initialValues={{
+            text: variant.text,
+            traffic: variant.traffic,
+          }}
+        />
+      )}
     </div>
   );
 };
