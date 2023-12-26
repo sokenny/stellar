@@ -5,7 +5,6 @@ import colors from '../helpers/colors';
 const Edit = ({ width = 20, height = 20 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       id="Layer_1"
       width={width}
       height={height}

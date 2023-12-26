@@ -20,8 +20,13 @@ const LaunchButton = ({ journeyId, disabled }) => {
           },
         },
       );
+      const status = response.status;
       const parsedResponse = await response.json();
-      console.log('parsedResponse', parsedResponse);
+
+      if (status !== 200) {
+        alert(parsedResponse.message);
+        throw new Error(parsedResponse.message);
+      }
 
       // redirect to dashboard with success toast
       router.push('/dashboard');

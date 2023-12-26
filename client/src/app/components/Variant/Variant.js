@@ -3,46 +3,54 @@ import Edit from '../../icons/Edit';
 import EditVariantModal from '../EditVariantModal/EditVariantModal';
 import styles from './Variant.module.css';
 
-const Variant = ({ variant, n }) => {
+const Variant = ({ id, variants, n }) => {
+  const thisVariant = variants.find((v) => v.id === id);
+  console.log('variants: ', variants);
+  console.log('id: ', id);
+  console.log('thisVariant: ', thisVariant);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
   return (
     <div
       className={`${styles.Variant} ${
-        variant.is_control ? styles.isControl : ''
+        thisVariant.is_control ? styles.isControl : ''
       }`}
     >
       {/* TODO: add link to "preview variant" that takes you to preview mode of the variant */}
       <div className={styles.header}>
         <div className={styles.colLeft}>
           <div className={styles.title}>#{n}</div>
-          {variant.is_control && (
+          {thisVariant.is_control && (
             <div className={styles.original}>original</div>
           )}
         </div>
-        {!variant.is_control && (
-          <div
-            className={styles.edit}
-            onClick={() => setShowEditVariantModal(true)}
-          >
-            <Edit width={15} height={15} />
-          </div>
-        )}
+        <div
+          className={styles.edit}
+          onClick={() => setShowEditVariantModal(true)}
+        >
+          <Edit width={15} height={15} />
+        </div>
       </div>
       <div className={styles.text}>
         <span className={styles.label}>Text: </span>
-        {variant.text}
+        {thisVariant.text}
       </div>
       <div className={styles.traffic}>
-        <span className={styles.label}>Traffic: </span>33%
+        <span className={styles.label}>Traffic: </span>
+        {thisVariant.traffic}%
       </div>
-      <div className={styles.description}>{variant.description}</div>
+      <div className={styles.description}>{thisVariant.description}</div>
       {showEditVariantModal && (
         <EditVariantModal
           onClose={() => setShowEditVariantModal(false)}
           initialValues={{
-            text: variant.text,
-            traffic: variant.traffic,
+            text: thisVariant.text,
+            ...variants.reduce((acc, v) => {
+              acc[`traffic_${v.id}`] = v.traffic;
+              return acc;
+            }, {}),
           }}
+          variants={variants}
+          id={thisVariant.id}
         />
       )}
     </div>

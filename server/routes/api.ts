@@ -8,6 +8,7 @@ import getExperiment from '../services/getExperiment';
 import setGoal from '../services/setGoal';
 import launchJourney from '../services/launchJourney';
 import editExperiment from '../services/editExperiment';
+import editVariant from '../services/editVariant';
 
 const router = express.Router();
 
@@ -23,6 +24,8 @@ router.get('/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
 
 router.put('/experiment/:id', editExperiment);
+
+router.put('/variant/:id', editVariant);
 
 router.post('/goals', setGoal);
 

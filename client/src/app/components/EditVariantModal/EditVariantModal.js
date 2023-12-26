@@ -1,22 +1,64 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import isObjectEqual from '../../helpers/isObjectEqual';
 import Input from '../Input/Input';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import styles from './EditVariantModal.module.css';
 
-const EditVariantModal = ({ onClose, initialValues = {} }) => {
+const EditVariantModal = ({ onClose, id, variants, initialValues = {} }) => {
+  const router = useRouter();
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
-
+  const [errors, setErrors] = useState([]);
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
+  const thisVariant = variants.find((v) => v.id === id);
+  const otherVariants = variants.filter((v) => v.id !== id);
 
-  const onSave = useCallback(async () => {}, [formData]);
+  useEffect(() => {
+    const totalTraffic = Object.keys(formData).reduce((acc, key) => {
+      if (key.startsWith('traffic_')) {
+        const value = parseInt(formData[key], 10);
+        return !isNaN(value) ? acc + value : acc;
+      }
+      return acc;
+    }, 0);
+
+    if (totalTraffic > 100 || totalTraffic < 100) {
+      setErrors(['Toal traffic must be 100%']);
+      return;
+    }
+    setErrors([]);
+  }, [formData]);
+
+  const onSave = useCallback(async () => {
+    try {
+      setSubmitting(true);
+      const response = await fetch(`http://localhost:3001/api/variant/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      router.refresh();
+      onClose();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubmitting(false);
+    }
+  }, [formData, id, router]);
+
   return (
     <Modal onClose={onClose}>
       <div className={styles.header}>
-        <h3 className={styles.title}>Edit Variant</h3>
+        <h3 className={styles.title}>Edit Variant {thisVariant.num}</h3>
       </div>
       <div className={styles.fields}>
         <div className={styles.fieldGroup}>
@@ -25,25 +67,53 @@ const EditVariantModal = ({ onClose, initialValues = {} }) => {
             type="text"
             value={formData?.text}
             onChange={(e) => setFormData({ ...formData, text: e.target.value })}
+            disabled={thisVariant.is_control}
           />
         </div>
         <div className={styles.fieldGroup}>
           <label className={styles.label}>Traffic:</label>
           <Input
             type="number"
-            value={formData?.traffic}
+            value={formData?.[`traffic_${thisVariant.id}`]}
             onChange={(e) =>
-              setFormData({ ...formData, traffic: e.target.value })
+              setFormData({
+                ...formData,
+                [`traffic_${thisVariant.id}`]: e.target.value,
+              })
             }
-            disabled={true}
           />
         </div>
+        {otherVariants.map((v) => (
+          <div className={styles.fieldGroup} key={v.id}>
+            <label className={styles.label}>Variant {v.num} Traffic:</label>
+            <Input
+              type="number"
+              value={formData?.[`traffic_${v.id}`]}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  [`traffic_${v.id}`]: e.target.value,
+                })
+              }
+            />
+          </div>
+        ))}
+
+        {errors.length > 0 && (
+          <div className={styles.errors}>
+            {errors.map((e) => (
+              <div className={styles.error} key={e}>
+                {e}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className={styles.actions}>
         <Button
           className={styles.save}
           onClick={onSave}
-          disabled={isFormPristine || submitting}
+          disabled={isFormPristine || submitting || errors.length > 0}
           loading={submitting}
         >
           Save

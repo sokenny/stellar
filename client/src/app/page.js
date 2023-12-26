@@ -1,7 +1,6 @@
 import EnterUrlForm from './components/EnterUrlForm/EnterUrlForm';
 import styles from './page.module.css';
 
-// TODO: Create onboarding page
 export default function Home() {
   return (
     <main className={styles.main}>

@@ -13,17 +13,19 @@ const EnterUrlForm = () => {
   const onSubmit = useCallback(async () => {
     try {
       setLoading(true);
-      // const response = await fetch('http://localhost:3001/api/onboard', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ website_url: url }),
-      // });
+      const response = await fetch('http://localhost:3001/api/onboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ website_url: url }),
+      });
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      const parsedResponse = await response.json();
 
-      router.push('/journey/50/review');
+      console.log('parsedResponse', parsedResponse);
+
+      router.push(`/journey/${parsedResponse.journey.id}/review`);
     } catch (err) {
       console.log(err);
     } finally {

@@ -1,5 +1,6 @@
 'use client';
 
+import Close from '../../icons/Close';
 import styles from './Modal.module.css';
 
 const Modal = ({
@@ -15,7 +16,7 @@ const Modal = ({
     >
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
         <div className={styles.x} onClick={onClose}>
-          close
+          <Close />
         </div>
         {children}
       </div>

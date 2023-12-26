@@ -62,6 +62,7 @@ const EditExperimentModal = ({
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Order:</label>
+            {/* TODO: Add validation for order. min 1 and max #of experiments in journey */}
             <Input
               type="number"
               value={formData?.order}

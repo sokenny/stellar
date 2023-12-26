@@ -18,7 +18,7 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
           {
             model: db.Variant,
             as: 'variants',
-            attributes: ['id', 'is_control', 'text'],
+            attributes: ['id', 'is_control', 'text', 'traffic'],
           },
           {
             model: db.Goal,

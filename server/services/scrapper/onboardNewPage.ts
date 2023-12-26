@@ -69,9 +69,20 @@ async function createVariants(
 
   const prompt = buildPromptFromPageContext(pageContext, element);
   const variants = await getTextVariants({ prompt });
+  const variantCount = 1 + variants.length; // Including control variant
+  const baseTraffic = Math.floor(100 / variantCount);
+  let residualTraffic = 100 - baseTraffic * variantCount;
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < variantCount; i++) {
     const isControl = i === 0;
+    let traffic = baseTraffic;
+
+    // Assign residual traffic to the control variant
+    if (isControl && residualTraffic > 0) {
+      traffic += residualTraffic;
+      residualTraffic = 0; // Reset residual traffic after assigning
+    }
+
     const variant: IVariant = await db.Variant.create(
       {
         is_control: isControl,
@@ -81,6 +92,7 @@ async function createVariants(
         color,
         background_color: null,
         experiment_id: experimentId,
+        traffic: traffic,
       },
       {
         transaction,
@@ -227,7 +239,7 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
     await browserSession.browser.close();
 
     await transaction.commit();
-    res.status(200).send(project);
+    res.status(200).send({ project, journey });
   } catch (error) {
     await transaction.rollback();
     console.error('Error during onboarding:', error);

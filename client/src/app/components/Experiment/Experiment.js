@@ -58,10 +58,21 @@ const Experiment = ({
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
 
-  const sortedVariants = variants.sort((a, b) => {
-    if (a.is_control) return -1;
-    if (b.is_control) return 1;
+  const nonControlVariants = variants.filter((v) => !v.is_control);
+
+  nonControlVariants.sort((a, b) => {
+    if (a.id > b.id) return -1;
+    if (a.id < b.id) return 1;
     return 0;
+  });
+
+  const sortedVariants = [
+    variants.find((v) => v.is_control),
+    ...nonControlVariants,
+  ];
+
+  sortedVariants.forEach((v, i) => {
+    v.num = i + 1;
   });
 
   return (
@@ -103,7 +114,12 @@ const Experiment = ({
             <div className={styles.variantsTitle}>Variants</div>
             <div className={styles.variantsContainer}>
               {sortedVariants.map((variant, i) => (
-                <Variant key={variant.id} variant={variant} n={i + 1} />
+                <Variant
+                  key={variant.id}
+                  id={variant.id}
+                  variants={variants}
+                  n={i + 1}
+                />
               ))}
             </div>
           </div>
