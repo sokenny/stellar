@@ -93,7 +93,7 @@ const GoalsForm = ({ domain, experimentId, journeyId, goal, onClose }) => {
         ))}
       </div>
       <div className={styles.additionalData}>
-        {/* TODO: Finish this part of the flow */}
+        {/* TODO-p1: Finish this part of the flow */}
         {goalType === 'CLICK' && (
           <div className={styles.clickData}>
             <div className={styles.title}>Which URL is the element at?</div>
@@ -109,7 +109,6 @@ const GoalsForm = ({ domain, experimentId, journeyId, goal, onClose }) => {
             </div>
           </div>
         )}
-        {/* TODO: Finish this part of the flow */}
         {goalType === 'PAGE_VISIT' && (
           <div className={styles.clickData}>
             <div className={styles.title}>

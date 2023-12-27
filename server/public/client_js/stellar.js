@@ -212,7 +212,9 @@
 
     try {
       const response = await fetch(
-        `${STELLAR_API_URL}/experiments?page=${encodeURIComponent(pageUrl)}`,
+        `${STELLAR_API_URL}/experiments/client?page=${encodeURIComponent(
+          pageUrl,
+        )}`,
         {
           method: 'GET',
           headers: {

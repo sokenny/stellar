@@ -3,11 +3,8 @@ import Edit from '../../icons/Edit';
 import EditVariantModal from '../EditVariantModal/EditVariantModal';
 import styles from './Variant.module.css';
 
-const Variant = ({ id, variants, n }) => {
+const Variant = ({ id, experimentStatus, variants, n }) => {
   const thisVariant = variants.find((v) => v.id === id);
-  console.log('variants: ', variants);
-  console.log('id: ', id);
-  console.log('thisVariant: ', thisVariant);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
   return (
     <div
@@ -51,8 +48,11 @@ const Variant = ({ id, variants, n }) => {
           }}
           variants={variants}
           id={thisVariant.id}
+          experimentStatus={experimentStatus}
         />
       )}
+
+      {/* TODO-p1 hacer una seccion "stats" donde mostramos como le fue / está yendo a la variant */}
     </div>
   );
 };

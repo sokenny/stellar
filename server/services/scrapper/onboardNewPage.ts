@@ -105,7 +105,7 @@ async function createVariants(
   return variantsForThisElement;
 }
 
-async function createExperiments(elements, journey, transaction) {
+async function createExperiments(elements, journey, projectId, transaction) {
   try {
     const experiments = [];
 
@@ -115,6 +115,7 @@ async function createExperiments(elements, journey, transaction) {
           name: `${element.type} Experiment`,
           element_id: element.id,
           journey_id: journey.id,
+          project_id: projectId,
           url: journey.page,
         },
         {
@@ -224,6 +225,7 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
     const createdExperiments = await createExperiments(
       createdElements,
       journey,
+      project.id,
       transaction,
     );
 

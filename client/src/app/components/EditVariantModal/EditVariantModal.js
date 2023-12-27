@@ -1,12 +1,19 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import isObjectEqual from '../../helpers/isObjectEqual';
+import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Input from '../Input/Input';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import styles from './EditVariantModal.module.css';
 
-const EditVariantModal = ({ onClose, id, variants, initialValues = {} }) => {
+const EditVariantModal = ({
+  onClose,
+  id,
+  experimentStatus,
+  variants,
+  initialValues = {},
+}) => {
   const router = useRouter();
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
@@ -15,6 +22,11 @@ const EditVariantModal = ({ onClose, id, variants, initialValues = {} }) => {
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
   const thisVariant = variants.find((v) => v.id === id);
   const otherVariants = variants.filter((v) => v.id !== id);
+
+  const canEditAttributes =
+    experimentStatus !== ExperimentStatusesEnum.RUNNING &&
+    experimentStatus !== ExperimentStatusesEnum.COMPLETED &&
+    !thisVariant.is_control;
 
   useEffect(() => {
     const totalTraffic = Object.keys(formData).reduce((acc, key) => {
@@ -46,8 +58,8 @@ const EditVariantModal = ({ onClose, id, variants, initialValues = {} }) => {
       });
       const data = await response.json();
       console.log(data);
-      router.refresh();
       onClose();
+      router.refresh();
     } catch (e) {
       console.log(e);
     } finally {
@@ -67,7 +79,7 @@ const EditVariantModal = ({ onClose, id, variants, initialValues = {} }) => {
             type="text"
             value={formData?.text}
             onChange={(e) => setFormData({ ...formData, text: e.target.value })}
-            disabled={thisVariant.is_control}
+            disabled={!canEditAttributes}
           />
         </div>
         <div className={styles.fieldGroup}>

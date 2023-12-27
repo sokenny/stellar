@@ -7,7 +7,7 @@ import Button from '../Button/Button';
 
 const EditExperimentModal = ({
   onClose,
-  experimentId,
+  experiment,
   journeyId = null,
   initialValues = {},
 }) => {
@@ -19,7 +19,7 @@ const EditExperimentModal = ({
     try {
       setSubmitting(true);
       const response = await fetch(
-        `http://localhost:3001/api/experiment/${experimentId}`,
+        `http://localhost:3001/api/experiment/${experiment.id}`,
         {
           method: 'PUT',
           headers: {
@@ -27,7 +27,7 @@ const EditExperimentModal = ({
           },
           body: JSON.stringify({
             ...formData,
-            experimentId,
+            experimentId: experiment.id,
             journeyId,
           }),
         },
@@ -41,7 +41,7 @@ const EditExperimentModal = ({
     } finally {
       setSubmitting(false);
     }
-  }, [formData, experimentId, router]);
+  }, [formData, experiment.id, router]);
 
   return (
     <Modal onClose={onClose}>
@@ -60,17 +60,19 @@ const EditExperimentModal = ({
               }
             />
           </div>
-          <div className={styles.fieldGroup}>
-            <label className={styles.label}>Order:</label>
-            {/* TODO: Add validation for order. min 1 and max #of experiments in journey */}
-            <Input
-              type="number"
-              value={formData?.order}
-              onChange={(e) =>
-                setFormData({ ...formData, order: e.target.value })
-              }
-            />
-          </div>
+          {!experiment.started_at && (
+            <div className={styles.fieldGroup}>
+              <label className={styles.label}>Order:</label>
+              {/* TODO: Add validation for order. min 1 and max #of experiments in journey */}
+              <Input
+                type="number"
+                value={formData?.order}
+                onChange={(e) =>
+                  setFormData({ ...formData, order: e.target.value })
+                }
+              />
+            </div>
+          )}
         </div>
         <div className={styles.actions}>
           <Button

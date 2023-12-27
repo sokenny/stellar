@@ -37,18 +37,15 @@ async function editVariant(req: Request, res: Response) {
     return res.status(404).send('Variant not found.');
   }
 
-  if (variant.experiment.started_at !== null) {
-    return res
-      .status(400)
-      .send(
-        'Cannot change the text of a variant that is part of a started experiment.',
-      );
+  const valuesToSet = {
+    traffic: trafficObj[variantId],
+  };
+
+  if (variant.experiment.started_at === null) {
+    valuesToSet['text'] = text;
   }
 
-  const updatedVariant = await variant.update({
-    text,
-    traffic: trafficObj[variantId],
-  });
+  const updatedVariant = await variant.update(valuesToSet);
 
   const variantIdsToUpdate = Object.keys(trafficObj).filter(
     (id) => id !== variant.id.toString(),

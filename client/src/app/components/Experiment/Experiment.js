@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Variant from '../Variant/Variant';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
 import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
@@ -8,7 +9,10 @@ import Button from '../Button/Button';
 import Edit from '../../icons/Edit';
 import styles from './Experiment.module.css';
 
-const Goal = ({ goal, onEdit }) => {
+const Goal = ({ goal, experimentStatus, onEdit }) => {
+  const canEditAttributes =
+    experimentStatus !== ExperimentStatusesEnum.RUNNING &&
+    experimentStatus !== ExperimentStatusesEnum.COMPLETED;
   const goalDescriptionMapper = {
     PAGE_VISIT: (
       <>
@@ -39,9 +43,11 @@ const Goal = ({ goal, onEdit }) => {
       <div className={styles.goalDescription}>
         {goalDescriptionMapper[goal.type]}
       </div>
-      <div className={styles.edit} onClick={onEdit}>
-        <Edit width={17} height={17} />
-      </div>
+      {canEditAttributes && (
+        <div className={styles.edit} onClick={onEdit}>
+          <Edit width={17} height={17} />
+        </div>
+      )}
     </div>
   );
 };
@@ -81,6 +87,7 @@ const Experiment = ({
         isOpen ? styles.isOpen : styles.isClosed
       }
       ${isFirst ? styles.isFirst : ''}
+      ${styles[experiment.status]}
       `}
     >
       <div className={styles.header}>
@@ -96,9 +103,9 @@ const Experiment = ({
         </div>
 
         <div className={styles.colRight}>
-          <div className={styles.startOrder}>
+          <div className={styles.status}>
             {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
-            {isFirst ? 'Starts Now' : 'Queued'}
+            {experiment.status}
           </div>
           {!isOpen && (
             <div className={styles.viewDetails} onClick={() => setIsOpen(true)}>
@@ -107,6 +114,17 @@ const Experiment = ({
           )}
         </div>
       </div>
+
+      {experiment.started_at && (
+        <div className={styles.dates}>
+          <div className={styles.date}>
+            <div className={styles.dateLabel}>Start date:</div>
+            <div className={styles.dateValue}>
+              {new Date(experiment.start_date).toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+      )}
 
       {isOpen && (
         <div>
@@ -118,13 +136,18 @@ const Experiment = ({
                   key={variant.id}
                   id={variant.id}
                   variants={variants}
+                  experimentStatus={experiment.status}
                   n={i + 1}
                 />
               ))}
             </div>
           </div>
           {goal ? (
-            <Goal goal={goal} onEdit={() => setShowSetUpGoalModal(true)} />
+            <Goal
+              goal={goal}
+              experimentStatus={experiment.status}
+              onEdit={() => setShowSetUpGoalModal(true)}
+            />
           ) : (
             <div>
               <Button
@@ -152,7 +175,7 @@ const Experiment = ({
             name: experiment.name,
             order,
           }}
-          experimentId={experiment.id}
+          experiment={experiment}
           journeyId={journeyId}
         />
       )}

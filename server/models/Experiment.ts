@@ -8,6 +8,7 @@ class Experiment extends Model {
   public order!: number;
   public element_id!: number;
   public journey_id!: number;
+  public project_id!: number;
   public url!: string;
   public started_at!: Date;
   public ended_at!: Date;
@@ -49,6 +50,13 @@ export const initializeExperiment = (
           key: 'id',
         },
       },
+      project_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'projects',
+          key: 'id',
+        },
+      },
       url: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -60,6 +68,20 @@ export const initializeExperiment = (
       ended_at: {
         type: DataTypes.DATE,
         allowNull: true,
+      },
+      status: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          if (this.ended_at) {
+            return 'completed';
+          } else if (this.started_at) {
+            return 'running';
+          } else if (this.journey_id) {
+            return 'queued';
+          } else {
+            return 'pending';
+          }
+        },
       },
     },
     {

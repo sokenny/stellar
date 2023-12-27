@@ -148,7 +148,7 @@ export default function DOMHelper(page: any, window: any) {
       const secondBiggestText =
         await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
 
-      // TODO: Tambien guardar el 'biggestText' porque muchas veces difiere del h1
+      // TODO-p2: Tambien guardar el 'biggestText' porque muchas veces difiere del h1
       const chosenH1 = h1 || biggestText;
       const chosenDescription = h2 || secondBiggestText;
 

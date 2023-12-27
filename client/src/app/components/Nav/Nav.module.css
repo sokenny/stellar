@@ -1,0 +1,40 @@
+.Nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 10vw;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    display: flex;
+    color: var(--textBody);
+    background-color: white;
+}
+
+.id{
+    margin-right: 64px;
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: black;
+    margin-right: 8px;
+}
+
+.Nav ul{
+    display: flex;
+    text-decoration: none;
+    list-style: none;
+}
+
+.Nav ul li{
+    margin-right: 64px;
+}
+
+.Nav a{
+    text-decoration: none;
+    color: var(--textBody);
+}
