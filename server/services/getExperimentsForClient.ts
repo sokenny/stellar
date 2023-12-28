@@ -99,8 +99,6 @@ async function getExperimentsForClient(req, res) {
 
   const experiments = await getExperimentsForClientForUser(user.id);
 
-  console.log('Experiments: ', experiments);
-
   res.json(experiments);
 }
 

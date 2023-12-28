@@ -1,114 +1,126 @@
-.GoalsForm .goals{
-    display: flex;
+.GoalsForm .goals {
+  display: flex;
 }
 
-.GoalsForm .goals > div{
-    margin-right: 24px;
+.GoalsForm .goals > div {
+  margin-right: 24px;
 }
 
-.GoalsForm .goals > div:last-child{
-    margin-right: 0;
+.GoalsForm .goals > div:last-child {
+  margin-right: 0;
 }
 
-.goals{
-    margin-bottom: 32px;
+.goals {
+  margin-bottom: 32px;
 }
 
-.goal{
-    border: 1px solid var(--whiteCardStroke);
-    padding: 24px;
-    width: 250px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
+.goal {
+  border: 1px solid var(--whiteCardStroke);
+  padding: 24px;
+  width: 250px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
 }
 
-.goal:hover{
-    background-color: var(--whiteCardBg);
+.goal:hover {
+  background-color: var(--whiteCardBg);
 }
 
-.goal.selected{
-    border: 1px solid var(--blue);
+.goal.selected {
+  border: 1px solid var(--blue);
 }
 
-.icon{
-    background-color: var(--blue);
-    width: fit-content;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin-bottom: 16px;
+.icon {
+  background-color: var(--blue);
+  width: fit-content;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 16px;
 }
 
-.goalTitle{
-    font-weight: 500;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+.goalTitle {
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-.goalDescription{
-    font-weight: 300;
-    color: var(--textBody);
+.goalDescription {
+  font-weight: 300;
+  color: var(--textBody);
 }
 
-.title{
-    font-size: 22px;
-    margin-bottom: 4px;
+.title {
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
-.subTitle{
-    color: var(--textBody);
-    font-size: 18px;
-    font-weight: 300;
+.title a {
+  cursor: pointer;
 }
 
-.link{
-    color: var(--linkBlue);
-    text-decoration: underline;
-    cursor: pointer;
+.currentGoal .title {
+  margin-bottom: 16px;
 }
 
-.input{
-    padding: 4px 12px;
-    outline: none;
-    margin-right: 16px;
-    border: 1px solid var(--whiteCardStroke);
-    background-color: var(--whiteCardBg);
-    color: var(--textBody);
-    font-size: 20px;
+.subTitle {
+  color: var(--textBody);
+  font-size: 18px;
+  font-weight: 300;
 }
 
-.row{
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--whiteCardStroke);
-    padding: 8px;
-    width: fit-content;
-    margin-top: 16px;
+.link {
+  color: var(--linkBlue);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.domain{
-    font-size: 20px;
-    margin-right: 8px;
-    color: var(--textBody);
+.input {
+  padding: 4px 12px;
+  outline: none;
+  margin-right: 16px;
+  border: 1px solid var(--whiteCardStroke);
+  background-color: var(--whiteCardBg);
+  color: var(--textBody);
+  font-size: 20px;
 }
 
-.actions{
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
+.visitUrlPathInput {
+  margin-right: 0;
 }
 
-.cancel{
-    text-decoration: underline;
-    margin-left: 16px;
-    color: var(--textBody);
-    cursor: pointer;
+.row {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--whiteCardStroke);
+  padding: 8px;
+  width: fit-content;
+  margin-top: 16px;
+}
+
+.domain {
+  font-size: 20px;
+  margin-right: 8px;
+  color: var(--textBody);
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.cancel {
+  text-decoration: underline;
+  margin-left: 16px;
+  color: var(--textBody);
+  cursor: pointer;
 }

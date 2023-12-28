@@ -16,6 +16,7 @@ const allowedOrigins = [
   'https://incubadora.bluehackers.com',
   'https://www.grantcardonerealestate.com',
   'https://clickup.com',
+  'http://localhost:3002',
 ];
 
 const corsOptions = {

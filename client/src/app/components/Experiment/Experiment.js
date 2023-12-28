@@ -27,7 +27,9 @@ const Goal = ({ goal, experimentStatus, onEdit }) => {
       <>
         User clicks on a{' '}
         <a
-        // href="" we send them to page_url passing the selector in the params and the client side JS will do the rest
+          href={`${goal.page_url}?stellarMode=true&elementToHighlight=${goal.selector}`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           specific element
         </a>
@@ -55,7 +57,7 @@ const Goal = ({ goal, experimentStatus, onEdit }) => {
 const Experiment = ({
   experiment,
   journeyId,
-  order = null,
+  order = '',
   open = true,
   isFirst = false,
 }) => {
@@ -89,6 +91,7 @@ const Experiment = ({
       ${isFirst ? styles.isFirst : ''}
       ${styles[experiment.status]}
       `}
+      onClick={() => (!isOpen ? setIsOpen(true) : null)}
     >
       <div className={styles.header}>
         <div className={styles.colLeft}>

@@ -11,7 +11,7 @@ const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
     <Modal onClose={onClose} closeOnOverlayClick={false}>
       <div>
         <div className={styles.header}>
-          <h3 className={styles.title}>Set Goal</h3>
+          <h3 className={styles.title}>{goal ? 'Edit' : 'Set'} Goal</h3>
           <div className={styles.subTitle}>
             What valuable action should we track to measure success in your{' '}
             <Link
@@ -25,8 +25,7 @@ const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
           </div>
         </div>
         <GoalsForm
-          domain={getDomainFromUrl(experiment.url)}
-          experimentId={experiment.id}
+          experiment={experiment}
           goal={goal}
           journeyId={journeyId}
           onClose={onClose}

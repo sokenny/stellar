@@ -1,13 +1,21 @@
 import styles from './Input.module.css';
 
-const Input = ({ type, onChange, value, disabled = false }) => {
+const Input = ({
+  type,
+  placeholder,
+  className,
+  onChange,
+  value,
+  disabled = false,
+}) => {
   return (
     <input
-      className={styles.Input}
+      className={`${styles.Input} ${className ? className : ''}`}
       type={type}
       onChange={onChange}
       value={value}
       disabled={disabled}
+      placeholder={placeholder}
     />
   );
 };
