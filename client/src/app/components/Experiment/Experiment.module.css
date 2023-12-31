@@ -5,6 +5,11 @@
   border-radius: 4px;
   font-weight: 300;
   width: 800px;
+  cursor: pointer;
+}
+
+.Experiment.isOpen {
+  cursor: initial;
 }
 
 .Experiment.running .status {
@@ -85,6 +90,10 @@
   text-transform: uppercase;
   font-weight: 400;
   font-size: 18px;
+}
+
+.name a {
+  color: black;
 }
 
 .dates {

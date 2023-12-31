@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import getPathAndQueryFromUrl from '../../helpers/getPathAndQueryFromUrl';
@@ -34,10 +34,15 @@ const goals = [
 const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
   const domain = getDomainFromUrl(experiment.url);
   const router = useRouter();
+  const goalCheckIntervalRef = useRef(null);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
   const [submiting, setSubmiting] = useState(false);
 
-  function getDefaultVisitUrl() {
+  useEffect(() => {
+    return () => clearInterval(goalCheckIntervalRef.current);
+  }, []);
+
+  function getDefaultUrlPath() {
     if (goal?.type === GoalTypesEnum.PAGE_VISIT && goal?.page_url) {
       return getPathAndQueryFromUrl(goal.page_url);
     }
@@ -46,7 +51,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
 
   const [formData, setFormData] = useState({
     goalType: goal?.type ? goal.type : null,
-    visitUrlPath: getDefaultVisitUrl(),
+    urlPath: getDefaultUrlPath(),
   });
 
   function canContinue() {
@@ -59,8 +64,8 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
 
     if (
       formData.goalType === GoalTypesEnum.PAGE_VISIT &&
-      formData.visitUrlPath &&
-      formData.visitUrlPath !== ''
+      formData.urlPath &&
+      formData.urlPath !== ''
     ) {
       return true;
     }
@@ -78,7 +83,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
           experiment_id: experiment.id,
           journey_id: journeyId,
           type: formData.goalType,
-          page_url: getDomainFromUrl(experiment.url) + formData.visitUrlPath,
+          page_url: getDomainFromUrl(experiment.url) + formData.urlPath,
           selector: null,
         }),
       });
@@ -97,19 +102,40 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
     }
   }
 
-  function onGoToUrl() {
-    // open http://localhost:3002?stellarMode=true&experimentId=${experiment.id} in a new tab
-    console.log('Go to URL');
+  async function onGoToUrl() {
+    const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
-      `http://localhost:3002?stellarMode=true&experimentId=${experiment.id}`,
+      `${
+        getDomainFromUrl(experiment.url) + formData.urlPath
+      }?stellarMode=true&experimentId=${experiment.id}`,
       '_blank',
     );
+
+    goalCheckIntervalRef.current = setInterval(async () => {
+      const res = await fetch(
+        `http://localhost:3001/api/experiment/${experiment.id}`,
+      );
+
+      console.log('response: ', res);
+      const experimentJson = await res.json();
+      console.log('experimentJson: ', experimentJson);
+
+      if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
+        // TODO: trigger global app success toast
+        onClose();
+      }
+    }, 1000);
   }
 
   // TODO: validate the url entered
   function onSetUrl() {
     // test that formData.visitUrl is a valid url
   }
+
+  const showSetGoal =
+    (formData.goalType !== GoalTypesEnum.CLICK &&
+      goal?.type !== formData.goalType) ||
+    wantsToUpdateGoal;
 
   return (
     <section className={styles.GoalsForm}>
@@ -140,7 +166,13 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
               </div>
               <div className={styles.row}>
                 <div className={styles.domain}>{domain}</div>
-                <Input type="text" />
+                <Input
+                  type="text"
+                  value={formData.urlPath}
+                  onChange={(e) =>
+                    setFormData({ ...formData, urlPath: e.target.value })
+                  }
+                />
                 <Button onClick={onGoToUrl} disabled={false}>
                   Go
                 </Button>
@@ -153,7 +185,14 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
             <div className={styles.currentGoal}>
               <div className={styles.title}>
                 Currently tracking clicks for{' '}
-                <Link href="">specific element</Link>.
+                <a
+                  href={`${goal.page_url}?stellarMode=true&elementToHighlight=${goal.selector}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  specific element
+                </a>
+                .
               </div>
               <Button onClick={() => setWantsToUpdateGoal(true)}>
                 Set Different Element
@@ -169,11 +208,11 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
               <div className={styles.row}>
                 <div className={styles.domain}>{domain}</div>
                 <Input
-                  className={styles.visitUrlPathInput}
+                  className={styles.urlPathInput}
                   type="text"
-                  value={formData.visitUrlPath}
+                  value={formData.urlPath}
                   onChange={(e) =>
-                    setFormData({ ...formData, visitUrlPath: e.target.value })
+                    setFormData({ ...formData, urlPath: e.target.value })
                   }
                   placeholder="thank-you"
                 />
@@ -195,22 +234,21 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
             </div>
           )}
       </div>
-      {formData.goalType !== GoalTypesEnum.CLICK ||
-        (goal && wantsToUpdateGoal && (
-          <div className={styles.actions}>
-            <Button
-              className={styles.continueButton}
-              loading={submiting}
-              disabled={!canContinue() || submiting}
-              onClick={onSetGoal}
-            >
-              Set Goal
-            </Button>
-            <div className={styles.cancel} onClick={onClose}>
-              cancel
-            </div>
+      {showSetGoal && (
+        <div className={styles.actions}>
+          <Button
+            className={styles.continueButton}
+            loading={submiting}
+            disabled={!canContinue() || submiting}
+            onClick={onSetGoal}
+          >
+            Set Goal
+          </Button>
+          <div className={styles.cancel} onClick={onClose}>
+            cancel
           </div>
-        ))}
+        </div>
+      )}
     </section>
   );
 };

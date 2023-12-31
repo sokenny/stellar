@@ -10,10 +10,10 @@ const Nav = () => {
       </div>
       <ul>
         <li>
-          <Link href="/">Home</Link>
+          <Link href="/auto-journey">Auto</Link>
         </li>
         <li>
-          <Link href="/profile">Profile</Link>
+          <Link href="/account">Account</Link>
         </li>
       </ul>
     </nav>

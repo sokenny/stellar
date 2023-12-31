@@ -3,6 +3,17 @@
 
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const stellarMode = urlParams.get('stellarMode');
+
+  if (!localStorage.getItem('stellarVisitorId')) {
+    localStorage.setItem(
+      'stellarVisitorId',
+      'visitor_' + Date.now() + Math.random(),
+    );
+  }
+  const stellarVisitorId = localStorage.getItem('stellarVisitorId');
+
   function getApiKey() {
     const scriptTag = document.querySelector('script[data-stellar-api-key]');
     return scriptTag ? scriptTag.getAttribute('data-stellar-api-key') : null;
@@ -97,6 +108,8 @@
       pagesWithExperiments = storedPagesWithExperiments;
       hasFetchedExperiments = storedHasFetchedExperiments;
     }
+
+    console.log('experimentsRunou: ', experimentsRun);
   }
 
   function sendDataOnLeave() {
@@ -110,6 +123,7 @@
           idempotencyKey: sessionId,
           experimentsRun,
           visitedPages,
+          stellarVisitorId,
         };
 
         navigator.sendBeacon(
@@ -133,36 +147,62 @@
   function mountExperiments(experiments) {
     console.log('mounting experiments: ', experiments);
     const stellarData = getStellarData();
+    const currentPageUrl = window.location.href;
 
     experiments.forEach((experiment) => {
       console.log('mounting experiment: ', experiment);
       const storedVariantId = stellarData[experiment.id];
 
       const element = experiment.journey.elements.find(
-        (element) => element.id === experiment.element_id,
+        (el) => el.id === experiment.element_id,
       );
 
       let variantToUse = storedVariantId || experiment.variant_to_use;
 
       experiment.variants.forEach((variant) => {
         if (variant.id === variantToUse) {
-          console.log(
-            'element selector: ',
-            element.selector,
-            document.querySelector(element.selector),
-          );
-          document.querySelector(element.selector).innerHTML = variant.text;
+          const selectorElement = document.querySelector(element.selector);
+          console.log('element selector: ', element.selector, selectorElement);
+          if (selectorElement) {
+            selectorElement.innerHTML = variant.text;
+          }
 
           if (!storedVariantId) {
-            // Store the variant in stellarData
             stellarData[experiment.id] = variant.id;
             setStellarData(stellarData);
           }
 
-          experimentsRun.push({
-            experiment: experiment.id,
-            variant: variant.id,
-          });
+          const isExperimentInArray = experimentsRun.find(
+            (e) => e.experiment === experiment.id,
+          );
+
+          if (!isExperimentInArray) {
+            experimentsRun.push({
+              experiment: experiment.id,
+              variant: variant.id,
+              converted: false,
+              goalType: experiment.goal.type,
+              // TODO-p1 have goal page visit be contains or exact match, and page_url will be path
+              goalPageUrl: experiment.goal.page_url,
+            });
+          }
+
+          if (
+            experiment.goal.type === 'CLICK' &&
+            currentPageUrl.includes(experiment.goal.page_url)
+          ) {
+            if (selectorElement) {
+              selectorElement.addEventListener('click', function () {
+                const expRun = experimentsRun.find(
+                  (e) =>
+                    e.experiment === experiment.id && e.variant === variant.id,
+                );
+                if (expRun) {
+                  expRun.converted = true;
+                }
+              });
+            }
+          }
         }
       });
     });
@@ -194,8 +234,29 @@
     }
   }
 
+  // function checkPageVisitGoals(experiments) {
+  //   console.log('running checkPageVisitGoals');
+  //   const currentPage = window.location.href;
+
+  //   experiments.forEach((experiment) => {
+  //     if (
+  //       experiment.goal.type === 'PAGE_VISIT' &&
+  //       currentPage.includes(experiment.goal.page_url)
+  //     ) {
+  //       // Find the experimentRun entry and mark as converted
+  //       const experimentRun = experimentsRun.find(
+  //         (e) => e.experiment === experiment.id,
+  //       );
+  //       if (experimentRun) {
+  //         experimentRun.converted = true;
+  //       }
+  //     }
+  //   });
+  // }
+
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
+    console.log('fetching! ');
     const pageUrl = window.location.href;
     if (
       !pagesWithExperiments.includes(pageUrl) &&
@@ -229,7 +290,7 @@
       }
 
       const data = await response.json();
-      console.log(data);
+      console.log('datusarda: ', data);
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
@@ -237,6 +298,10 @@
       const experimentsToMount = data.filter((experiment) =>
         window.location.href.includes(experiment.url),
       );
+
+      console.log('experiments to mount: ', experimentsToMount);
+
+      // bind to trackPageVisit and call checkPageVisitGoals
 
       mountExperiments(experimentsToMount);
     } catch (error) {
@@ -247,9 +312,20 @@
   }
 
   function trackPageVisit() {
+    console.log('track page visit run! ', experimentsRun);
     const currentPage = window.location.pathname;
     visitedPages.push(currentPage);
     updateSessionStorage();
+
+    experimentsRun.forEach((experiment) => {
+      if (
+        experiment.goalType === 'PAGE_VISIT' &&
+        currentPage.includes(experiment.goalPageUrl)
+      ) {
+        console.log('page visit goal accomplished');
+        experiment.converted = true;
+      }
+    });
   }
 
   // Wrap history methods to detect SPA navigation
@@ -257,6 +333,7 @@
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
+    // TODO-p2: some websites trigger a replace state on page load which wrongly triggers a trackPageVisit. We should avoid this with a debounce mechanism or something.
     history.pushState = function () {
       originalPushState.apply(this, arguments);
       trackPageVisit();
@@ -273,6 +350,9 @@
   }
 
   function initializeScript() {
+    if (stellarMode === 'true') {
+      return;
+    }
     restoreSessionData();
     trackPageVisit();
     wrapHistoryMethods();

@@ -43,6 +43,11 @@ async function getExperimentsForClientForUser(userId: number) {
         required: true,
       },
       {
+        model: db.Goal,
+        as: 'goal',
+        required: true,
+      },
+      {
         model: db.Journey,
         as: 'journey',
         required: true,

@@ -1,60 +1,65 @@
-.Variant{
-    color: black;
-    padding: 12px 16px;
-    border: 1px solid #CB5EDC;
-    color: var(--textBody);
-    font-size: 16px;
-    width: 250px;
+.Variant .mainInfo {
+  color: black;
+  padding: 12px 16px;
+  border: 1px solid #cb5edc;
+  color: var(--textBody);
+  font-size: 16px;
+  width: 250px;
+  height: 100%;
 }
 
-.Variant.isControl{
-    border-color: var(--blue);
+.Variant.showStats .mainInfo {
+  height: auto;
 }
 
-.Variant.isControl .text{
-    color: var(--blue);
+.Variant.isControl .mainInfo {
+  border-color: var(--blue);
 }
 
-.colLeft{
-    display: flex;
-    align-items: center;
+.Variant.isControl .text {
+  color: var(--blue);
 }
 
-.original{
-    margin-left: 8px;
-    font-weight: 500;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: var(--blue);
+.colLeft {
+  display: flex;
+  align-items: center;
 }
 
-.header{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
+.original {
+  margin-left: 8px;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: var(--blue);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .edit {
-    text-transform: uppercase;
-    font-size: 13px;
-    text-decoration: underline;
-    cursor: pointer;
-    color: black;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: black;
 }
 
-.text{
-    margin-bottom: 8px;
-    color: #CB5EDC;
+.text {
+  margin-bottom: 8px;
+  color: #cb5edc;
 }
 
-.title{
-    text-transform: uppercase;
-    color: black;
-    font-weight: 400;
+.title {
+  text-transform: uppercase;
+  color: black;
+  font-weight: 400;
 }
 
-.label{
-    text-transform: uppercase;
-    color: black;
-    font-weight: 400;
+.label {
+  text-transform: uppercase;
+  color: black;
+  font-weight: 400;
 }

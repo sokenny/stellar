@@ -11,6 +11,10 @@ async function getExperiment(req, res) {
         model: db.Variant,
         as: 'variants',
       },
+      {
+        model: db.Goal,
+        as: 'goal',
+      },
     ],
   });
 

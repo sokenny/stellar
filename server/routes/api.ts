@@ -10,6 +10,7 @@ import launchJourney from '../services/launchJourney';
 import editExperiment from '../services/editExperiment';
 import editVariant from '../services/editVariant';
 import getExperiments from '../services/getExperiments';
+import getExperimentStats from '../services/getExperimentStats';
 import sendStellarJSBundle from '../services/sendStellarJSBundle';
 
 const router = express.Router();
@@ -30,6 +31,8 @@ router.get('/experiment/:id', getExperiment);
 
 router.put('/experiment/:id', editExperiment);
 
+router.get('/experiment/:id/stats', getExperimentStats);
+
 router.put('/variant/:id', editVariant);
 
 router.post('/goals', setGoal);
@@ -42,9 +45,6 @@ router.post(
   processUserSession,
 );
 
-// router.get('/clientjs', (req, res) => {
-//   res.sendFile('client_js/stellar.js', { root: 'public' });
-// });
 router.get('/clientjs', sendStellarJSBundle);
 
 router.delete('/project/:projectId', deleteProject);

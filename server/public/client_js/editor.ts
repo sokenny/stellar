@@ -122,11 +122,7 @@
       setTimeout(async () => {
         const confirmElement = confirm('Confirm element selection?');
         if (confirmElement) {
-          // TODO-p1: Send the selector to the server, and take user back to the goal setting page
-          // POST fetch request to /api/goals
           const response = await setClickGoal(selector);
-
-          // if status 200, close this page
           if (response.status === 200) {
             window.close();
           }

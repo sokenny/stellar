@@ -28,8 +28,7 @@ const LaunchButton = ({ journeyId, disabled }) => {
         throw new Error(parsedResponse.message);
       }
 
-      // redirect to dashboard with success toast
-      router.push('/dashboard');
+      router.push('/');
     } catch (e) {
       console.error(e);
     } finally {

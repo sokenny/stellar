@@ -1,19 +1,13 @@
-.main {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  text-align: center;
-}
-
-.center{
-  padding-bottom: 64px;
-}
-
-.h1 {
-  font-size: 3rem;
-  margin-bottom: 16px;
+.title {
   font-weight: 500;
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.runningExperiments {
+  margin-bottom: 64px;
+}
+
+.experiments > div:last-child {
+  border-bottom: none;
 }

@@ -10,8 +10,8 @@ async function sendStellarJSBundle(req, res) {
     const editorContent = fs.readFileSync(editorPath, 'utf8');
 
     res.type('.js');
-    // res.send(stellarContent + '\n' + editorContent);
-    res.send(editorContent);
+    res.send(stellarContent + '\n' + editorContent);
+    // res.send(editorContent);
   } catch (error) {
     console.error('Error sending files:', error);
     res.status(500).send('Internal Server Error');

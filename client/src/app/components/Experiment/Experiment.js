@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Variant from '../Variant/Variant';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
@@ -61,10 +62,35 @@ const Experiment = ({
   open = true,
   isFirst = false,
 }) => {
+  const [maxVariantHeight, setMaxVariantHeight] = useState(null);
+  const [experimentStats, setExperimentStats] = useState([]);
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
+
+  useEffect(() => {
+    const fetchExperimentStats = async () => {
+      const res = await fetch(
+        `http://localhost:3001/api/experiment/${experiment.id}/stats`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const data = await res.json();
+      setExperimentStats(data);
+    };
+
+    if (
+      experiment.status === ExperimentStatusesEnum.RUNNING ||
+      experiment.status === ExperimentStatusesEnum.COMPLETED
+    ) {
+      fetchExperimentStats();
+    }
+  }, []);
 
   const nonControlVariants = variants.filter((v) => !v.is_control);
 
@@ -96,7 +122,11 @@ const Experiment = ({
       <div className={styles.header}>
         <div className={styles.colLeft}>
           <div className={styles.order}>{order}</div>
-          <div className={styles.name}>{name}</div>
+          <div className={styles.name}>
+            <Link href={`/experiment/${experiment.id}`}>
+              {name} - {experiment.id}
+            </Link>
+          </div>
           <div
             className={styles.editExperiment}
             onClick={() => setShowEditExperimentModal(true)}
@@ -123,7 +153,7 @@ const Experiment = ({
           <div className={styles.date}>
             <div className={styles.dateLabel}>Start date:</div>
             <div className={styles.dateValue}>
-              {new Date(experiment.start_date).toLocaleDateString()}
+              {new Date(experiment.started_at).toLocaleDateString()}
             </div>
           </div>
         </div>
@@ -141,6 +171,11 @@ const Experiment = ({
                   variants={variants}
                   experimentStatus={experiment.status}
                   n={i + 1}
+                  stats={experimentStats.find(
+                    (s) => s.variant_id === variant.id,
+                  )}
+                  height={maxVariantHeight}
+                  setHeight={setMaxVariantHeight}
                 />
               ))}
             </div>
