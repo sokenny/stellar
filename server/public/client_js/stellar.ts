@@ -134,9 +134,10 @@
     });
 
     document.addEventListener('click', (e) => {
+      const target = e.target as any;
       if (
-        e.target.tagName === 'A' &&
-        e.target.hostname === window.location.hostname
+        target.tagName === 'A' &&
+        target.hostname === window.location.hostname
       ) {
         isInternalNavigation = true;
         updateSessionStorage();
@@ -182,14 +183,15 @@
               variant: variant.id,
               converted: false,
               goalType: experiment.goal.type,
-              // TODO-p1 have goal page visit be contains or exact match, and page_url will be path
-              goalPageUrl: experiment.goal.page_url,
+              goalElementUrl: experiment.goal.element_url,
+              goalUrlMatchType: experiment.goal.url_match_type,
+              goalUrlMatchValue: experiment.goal.url_match_value,
             });
           }
 
           if (
             experiment.goal.type === 'CLICK' &&
-            currentPageUrl.includes(experiment.goal.page_url)
+            currentPageUrl.includes(experiment.goal.element_url)
           ) {
             if (selectorElement) {
               selectorElement.addEventListener('click', function () {
@@ -198,6 +200,7 @@
                     e.experiment === experiment.id && e.variant === variant.id,
                 );
                 if (expRun) {
+                  console.log('converted click!');
                   expRun.converted = true;
                 }
               });
@@ -311,18 +314,37 @@
     }
   }
 
+  function hasPageVisitGoalConverted(experiment) {
+    const currentPage = window.location.href;
+    if (experiment.goalType === 'PAGE_VISIT') {
+      console.log('primer if dentro');
+      if (
+        experiment.goalUrlMatchType === 'CONTAINS' &&
+        currentPage.includes(experiment.goalUrlMatchValue)
+      ) {
+        return true;
+      }
+      if (
+        experiment.goalUrlMatchType === 'EXACT' &&
+        currentPage === experiment.goalUrlMatchValue
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function trackPageVisit() {
     console.log('track page visit run! ', experimentsRun);
     const currentPage = window.location.pathname;
     visitedPages.push(currentPage);
     updateSessionStorage();
 
+    console.log('currentPage: ', currentPage);
+
     experimentsRun.forEach((experiment) => {
-      if (
-        experiment.goalType === 'PAGE_VISIT' &&
-        currentPage.includes(experiment.goalPageUrl)
-      ) {
-        console.log('page visit goal accomplished');
+      if (hasPageVisitGoalConverted(experiment)) {
+        console.log('converted page visit!');
         experiment.converted = true;
       }
     });

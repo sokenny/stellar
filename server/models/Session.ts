@@ -6,7 +6,6 @@ class Session extends Model {
   public length!: number;
   public click_count!: number;
   public scroll_depth!: number;
-  public journey_id!: number;
   public experiments_run!: any[];
   public visited_pages!: string[];
   public created_at!: Date;
@@ -36,10 +35,6 @@ export const initializeSession = (sequelize: Sequelize): typeof Session => {
       scroll_depth: {
         type: DataTypes.INTEGER,
         allowNull: true,
-      },
-      journey_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
       },
       experiments_run: {
         type: DataTypes.JSON,

@@ -115,7 +115,8 @@
       selectedElements.forEach((element) => {
         element.classList.remove('stellar-selected');
       });
-      event.target.classList.add('stellar-selected');
+      const target = event.target as any;
+      target.classList.add('stellar-selected');
 
       const selector = getSelector(event.target);
 
@@ -127,7 +128,8 @@
             window.close();
           }
         } else {
-          event.target.classList.remove('stellar-selected');
+          const target = event.target as any;
+          target.classList.remove('stellar-selected');
         }
       }, 50);
     });

@@ -18,6 +18,7 @@ import { initializeSession } from './Session';
 import { initializeUser } from './User';
 import { initializeApiKey } from './ApiKey';
 import { initializeGoal } from './Goal';
+import { initializeSessionExperiment } from './SessionExperiment';
 
 export const db: { [key: string]: any } = {};
 
@@ -37,6 +38,7 @@ db.Session = initializeSession(sequelize);
 db.User = initializeUser(sequelize);
 db.ApiKey = initializeApiKey(sequelize);
 db.Goal = initializeGoal(sequelize);
+db.SessionExperiment = initializeSessionExperiment(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -74,10 +76,6 @@ const associateModels = () => {
     foreignKey: 'journey_id',
     as: 'journey',
   });
-  db.Session.belongsTo(db.Journey, {
-    foreignKey: 'journey_id',
-    as: 'journey',
-  });
   db.ApiKey.belongsTo(db.User, {
     foreignKey: 'user_id',
     as: 'user',
@@ -89,6 +87,32 @@ const associateModels = () => {
   db.Goal.belongsTo(db.Experiment, {
     foreignKey: 'experiment_id',
     as: 'experiment',
+  });
+  db.SessionExperiment.belongsTo(db.Session, {
+    foreignKey: 'session_id',
+    as: 'session',
+  });
+  db.Session.hasMany(db.SessionExperiment, {
+    foreignKey: 'session_id',
+    as: 'sessionExperiments',
+  });
+
+  db.SessionExperiment.belongsTo(db.Experiment, {
+    foreignKey: 'experiment_id',
+    as: 'experiment',
+  });
+  db.Experiment.hasMany(db.SessionExperiment, {
+    foreignKey: 'experiment_id',
+    as: 'sessionExperiments',
+  });
+
+  db.SessionExperiment.belongsTo(db.Variant, {
+    foreignKey: 'variant_id',
+    as: 'variant',
+  });
+  db.Variant.hasMany(db.SessionExperiment, {
+    foreignKey: 'variant_id',
+    as: 'sessionExperiments',
   });
 };
 

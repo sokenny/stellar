@@ -1,6 +1,7 @@
 'use client';
 
-import colors from '../helpers/colors';
+import colors from '../../helpers/colors';
+import styles from './Edit.module.css';
 
 const Edit = ({ width = 20, height = 20 }) => {
   return (
@@ -10,6 +11,7 @@ const Edit = ({ width = 20, height = 20 }) => {
       height={height}
       data-name="Layer 1"
       viewBox="0 0 24 24"
+      className={styles.Edit}
     >
       <defs>
         <style>

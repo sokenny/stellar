@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
 import Input from '../Input/Input';
-import styles from './EditExperimentModal.module.css';
 import Button from '../Button/Button';
+import styles from './EditExperimentModal.module.css';
 
 const EditExperimentModal = ({
   onClose,

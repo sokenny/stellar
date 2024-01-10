@@ -1,0 +1,7 @@
+.Edit {
+    opacity: .75;
+}
+
+.Edit:hover {
+    opacity: 1;
+}

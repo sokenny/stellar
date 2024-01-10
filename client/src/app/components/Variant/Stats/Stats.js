@@ -1,17 +1,15 @@
 import styles from './Stats.module.css';
 
 const statKeyToLabel = {
-  session_count: 'Total Sessions',
-  average_session_time: 'Average Session Time',
+  sessions: 'Total Sessions',
+  averageSessionTime: 'Average Session Time',
+  conversions: 'Conversions',
 };
 
 const Stats = ({ stats }) => {
-  console.log('statspaÑ ', stats);
   if (!stats) return null;
 
-  const statsToRender = Object.keys(stats).filter(
-    (key) => key !== 'variant_id',
-  );
+  const statsToRender = Object.keys(stats).filter((key) => key !== 'variantId');
 
   return (
     <div className={styles.Stats}>

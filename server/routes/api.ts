@@ -12,6 +12,7 @@ import editVariant from '../services/editVariant';
 import getExperiments from '../services/getExperiments';
 import getExperimentStats from '../services/getExperimentStats';
 import sendStellarJSBundle from '../services/sendStellarJSBundle';
+import stopExperiment from '../services/stopExperiment';
 
 const router = express.Router();
 
@@ -32,6 +33,8 @@ router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 
 router.get('/experiment/:id/stats', getExperimentStats);
+
+router.post('/experiment/:id/stop', stopExperiment);
 
 router.put('/variant/:id', editVariant);
 

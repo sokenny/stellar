@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
-import getPathAndQueryFromUrl from '../../helpers/getPathAndQueryFromUrl';
 import Link from 'next/link';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
@@ -42,16 +41,11 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
     return () => clearInterval(goalCheckIntervalRef.current);
   }, []);
 
-  function getDefaultUrlPath() {
-    if (goal?.type === GoalTypesEnum.PAGE_VISIT && goal?.page_url) {
-      return getPathAndQueryFromUrl(goal.page_url);
-    }
-    return '';
-  }
-
   const [formData, setFormData] = useState({
-    goalType: goal?.type ? goal.type : null,
-    urlPath: getDefaultUrlPath(),
+    goalType: goal?.type ? goal.type : '',
+    urlMatchType: goal?.url_match_type ? goal.url_match_type : '',
+    urlMatchValue: goal?.url_match_value ? goal.url_match_value : '',
+    elementUrl: goal?.element_url ? goal.element_url : '',
   });
 
   function canContinue() {
@@ -64,8 +58,8 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
 
     if (
       formData.goalType === GoalTypesEnum.PAGE_VISIT &&
-      formData.urlPath &&
-      formData.urlPath !== ''
+      formData.urlMatchValue &&
+      formData.urlMatchValue !== ''
     ) {
       return true;
     }
@@ -83,7 +77,9 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
           experiment_id: experiment.id,
           journey_id: journeyId,
           type: formData.goalType,
-          page_url: getDomainFromUrl(experiment.url) + formData.urlPath,
+          url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
+          url_match_value: '/' + formData.urlMatchValue,
+          element_url: '/' + formData.elementUrl,
           selector: null,
         }),
       });
@@ -106,7 +102,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
     const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
       `${
-        getDomainFromUrl(experiment.url) + formData.urlPath
+        getDomainFromUrl(experiment.url) + '/' + formData.elementUrl
       }?stellarMode=true&experimentId=${experiment.id}`,
       '_blank',
     );
@@ -116,13 +112,13 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
         `http://localhost:3001/api/experiment/${experiment.id}`,
       );
 
-      console.log('response: ', res);
       const experimentJson = await res.json();
       console.log('experimentJson: ', experimentJson);
 
       if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
         // TODO: trigger global app success toast
         onClose();
+        router.refresh();
       }
     }, 1000);
   }
@@ -165,15 +161,20 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
                 <span className={styles.link}>See how</span>.
               </div>
               <div className={styles.row}>
-                <div className={styles.domain}>{domain}</div>
+                <div className={styles.domain}>{domain}/</div>
                 <Input
+                  className={styles.input}
                   type="text"
-                  value={formData.urlPath}
+                  value={formData.elementUrl}
                   onChange={(e) =>
-                    setFormData({ ...formData, urlPath: e.target.value })
+                    setFormData({ ...formData, elementUrl: e.target.value })
                   }
                 />
-                <Button onClick={onGoToUrl} disabled={false}>
+                <Button
+                  onClick={onGoToUrl}
+                  disabled={false}
+                  className={styles.goButton}
+                >
                   Go
                 </Button>
               </div>
@@ -206,13 +207,13 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
                 Which URL visit should we track as a goal completion?
               </div>
               <div className={styles.row}>
-                <div className={styles.domain}>{domain}</div>
+                <div className={styles.domain}>{domain}/</div>
                 <Input
-                  className={styles.urlPathInput}
+                  className={styles.input}
                   type="text"
-                  value={formData.urlPath}
+                  value={formData.urlMatchValue}
                   onChange={(e) =>
-                    setFormData({ ...formData, urlPath: e.target.value })
+                    setFormData({ ...formData, urlMatchValue: e.target.value })
                   }
                   placeholder="thank-you"
                 />

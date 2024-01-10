@@ -24,7 +24,6 @@ const Variant = ({
   useEffect(() => {
     if (variantRef.current) {
       const h = variantRef.current.offsetHeight;
-      console.log('this h! ', h);
       if (h > height) {
         setHeight(h);
       }
@@ -61,7 +60,7 @@ const Variant = ({
           </div>
         </div>
         <div className={styles.text}>
-          {/* TODO-p1: make text clickable which takes you to the website with selector in url params */}
+          {/* TODO-p1: make text clickable which takes you to the website with variantToPreview in url params */}
           <span className={styles.label}>Text: </span>
           {thisVariant.text}
         </div>
@@ -86,8 +85,6 @@ const Variant = ({
           />
         )}
       </div>
-      {/* TODO-p1 hacer una seccion "stats" donde mostramos como le fue / está yendo a la variant */}
-      {/* total sessions - total conversions - conversion rate */}
       {showStats && <Stats stats={stats} />}
     </div>
   );

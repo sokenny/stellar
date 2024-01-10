@@ -2,7 +2,14 @@ import { Op } from 'sequelize';
 import db from '../models';
 
 async function setGoal(req, res) {
-  const { experiment_id, type, selector, page_url } = req.body;
+  const {
+    experiment_id,
+    type,
+    selector,
+    url_match_type,
+    url_match_value,
+    element_url,
+  } = req.body;
 
   const experiment = await db.Experiment.findOne({
     where: {
@@ -35,7 +42,9 @@ async function setGoal(req, res) {
     const updatedGoal = await experiment.goal.update({
       type,
       selector,
-      page_url,
+      url_match_type,
+      url_match_value,
+      element_url,
     });
 
     return res.json(updatedGoal);
@@ -45,7 +54,9 @@ async function setGoal(req, res) {
     experiment_id,
     type,
     selector,
-    page_url,
+    url_match_type,
+    url_match_value,
+    element_url,
   });
 
   // If this goal's experiment belongs to a journey and other experiments in that journey don't have a goal, we default them to this goal
@@ -74,7 +85,9 @@ async function setGoal(req, res) {
         experiment_id: experiment.id,
         type,
         selector,
-        page_url,
+        url_match_type,
+        url_match_value,
+        element_url,
       });
     });
   }

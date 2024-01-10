@@ -8,15 +8,26 @@ async function processUserSession(req: Request, res: Response) {
 
     console.log('payload that arrived: ', payload);
 
-    await db.Session.create({
+    const session = await db.Session.create({
       session_id: payload.sessionId,
       length: payload.timeOnPage,
       click_count: payload.clickCount,
       scroll_depth: payload.scrollDepth,
-      journey_id: 1,
-      experiments_run: payload.experimentsRun,
       visited_pages: payload.visitedPages,
     });
+
+    const sessionExperimentPromises = payload.experimentsRun.map(
+      (experiment) => {
+        return db.SessionExperiment.create({
+          session_id: session.id,
+          experiment_id: experiment.experiment,
+          variant_id: experiment.variant,
+          converted: experiment.converted,
+        });
+      },
+    );
+
+    await Promise.all(sessionExperimentPromises);
 
     res.status(204).send('OK');
   } catch (error) {

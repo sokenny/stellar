@@ -6,7 +6,9 @@ class Goal extends Model {
   public experiment_id!: number;
   public type!: keyof typeof GoalTypesEnum;
   public selector!: string;
-  public page_url!: string;
+  public url_match_type?: 'contains' | 'exact' | 'regex';
+  public url_match_value?: string;
+  public element_url?: string;
 }
 
 export const initializeGoal = (sequelize: Sequelize): typeof Goal => {
@@ -33,8 +35,16 @@ export const initializeGoal = (sequelize: Sequelize): typeof Goal => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      page_url: {
+      url_match_type: {
         type: DataTypes.STRING,
+        allowNull: true,
+      },
+      url_match_value: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      element_url: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     },

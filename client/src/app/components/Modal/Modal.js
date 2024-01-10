@@ -8,6 +8,7 @@ const Modal = ({
   className,
   onClose,
   closeOnOverlayClick = true,
+  showX = true,
 }) => {
   return (
     <div
@@ -15,9 +16,11 @@ const Modal = ({
       onClick={closeOnOverlayClick ? onClose : () => {}}
     >
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.x} onClick={onClose}>
-          <Close />
-        </div>
+        {showX && (
+          <div className={styles.x} onClick={onClose}>
+            <Close />
+          </div>
+        )}
         {children}
       </div>
       {/* <div className={styles.overlay} onClick={onClose}></div> */}

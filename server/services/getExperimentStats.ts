@@ -1,52 +1,123 @@
+import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize';
 import GoalTypesEnum from '../helpers/enums/GoalTypesEnum';
 import db from '../models';
 
 const goalFunctionMapper = {
   [GoalTypesEnum.SESSION_TIME]: getGoalSessionTimeStats,
-  [GoalTypesEnum.CLICK]: () => [],
-  [GoalTypesEnum.PAGE_VISIT]: () => [],
+  [GoalTypesEnum.CLICK]: getGoalClickAndPageVisitStats,
+  [GoalTypesEnum.PAGE_VISIT]: getGoalClickAndPageVisitStats,
 };
 
 async function getGoalSessionTimeStats(experimentId, variantIds) {
-  const query = `
-SELECT 
-    (jsonb_array_elements(experiments_run)->>'variant')::int as variant_id, 
-    COUNT(id)::int as session_count, 
-    ROUND(AVG(length), 0)::int as average_session_time
-FROM 
-    sessions
-WHERE 
-    experiments_run @> '[{"experiment": ${experimentId}}]'
-GROUP BY 
-    variant_id
-`;
-
-  const stats = await db.sequelize.query(query, {
-    type: Sequelize.QueryTypes.SELECT,
-  });
-
-  stats.forEach((variantStat) => {
-    const index = variantIds.indexOf(variantStat.variant_id);
-    if (index > -1) {
-      variantIds.splice(index, 1);
-    }
-  });
-
-  variantIds.forEach((variantId) => {
-    stats.push({
-      variant_id: variantId,
-      session_count: 0,
-      average_session_time: 0,
+  try {
+    const stats = await db.SessionExperiment.findAll({
+      where: { experiment_id: experimentId },
+      attributes: [
+        ['variant_id', 'variantId'],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.col('SessionExperiment.session_id'),
+          ),
+          'sessions',
+        ],
+        [
+          db.sequelize.fn('AVG', db.sequelize.col('session.length')),
+          'averageSessionTime',
+        ],
+      ],
+      include: [
+        {
+          model: db.Session,
+          as: 'session',
+          attributes: [],
+        },
+      ],
+      group: ['SessionExperiment.variant_id'],
+      raw: true,
     });
-  });
 
-  return stats;
+    const formattedStats = stats.map((stat) => ({
+      variantId: stat.variantId,
+      sessions: parseInt(stat.sessions, 10),
+      averageSessionTime: parseFloat(stat.averageSessionTime).toFixed(2),
+    }));
+
+    formattedStats.forEach((variantStat) => {
+      const index = variantIds.indexOf(variantStat.variantId);
+      if (index > -1) {
+        variantIds.splice(index, 1);
+      }
+    });
+
+    variantIds.forEach((variantId) => {
+      formattedStats.push({
+        variantId: variantId,
+        sessions: 0,
+        conversions: 0,
+      });
+    });
+
+    return formattedStats;
+  } catch (error) {
+    console.error('Error in getGoalSessionTimeStats:', error);
+    throw error;
+  }
+}
+
+async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
+  try {
+    const stats = await db.SessionExperiment.findAll({
+      where: {
+        experiment_id: experimentId,
+      },
+      attributes: [
+        ['variant_id', 'variantId'],
+        [db.sequelize.fn('COUNT', db.sequelize.col('session_id')), 'sessions'],
+        [
+          db.sequelize.fn(
+            'SUM',
+            db.sequelize.cast(db.sequelize.col('converted'), 'integer'),
+          ),
+          'conversions',
+        ],
+      ],
+      group: ['variant_id'],
+      raw: true,
+    });
+
+    const formattedStats = stats.map((stat) => {
+      return {
+        variantId: stat.variantId,
+        sessions: parseInt(stat.sessions, 10),
+        conversions: parseInt(stat.conversions, 10),
+      };
+    });
+
+    formattedStats.forEach((variantStat) => {
+      const index = variantIds.indexOf(variantStat.variantId);
+      if (index > -1) {
+        variantIds.splice(index, 1);
+      }
+    });
+
+    variantIds.forEach((variantId) => {
+      formattedStats.push({
+        variantId: variantId,
+        sessions: 0,
+        conversions: 0,
+      });
+    });
+
+    return formattedStats;
+  } catch (error) {
+    console.error('Error in getGoalClickAndPageVisitStats:', error);
+    throw error;
+  }
 }
 
 async function getExperimentStats(req, res) {
-  // TODO-p2 consider adding user_id or project_id key in sessions table to query faster
-  // hardcodiando un poco
   const { id } = req.params;
 
   try {
@@ -72,7 +143,6 @@ async function getExperimentStats(req, res) {
     const variantIds = experiment.variants.map((variant) => variant.id);
     const functionToCall = goalFunctionMapper[goalType];
     const variantStats = await functionToCall(id, variantIds);
-    console.log('var stats: ', variantStats);
 
     res.json(variantStats);
   } catch (error) {

@@ -4,57 +4,17 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Variant from '../Variant/Variant';
+import Goal from './Goal/Goal';
+import StopButton from '../StopButton/StopButton';
+import PlayButton from '../PlayButton/PlayButton';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
 import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
+import StopExperimentModal from '../StopExperimentModal/StopExperimentModal';
 import Button from '../Button/Button';
 import Edit from '../../icons/Edit';
 import styles from './Experiment.module.css';
 
-const Goal = ({ goal, experimentStatus, onEdit }) => {
-  const canEditAttributes =
-    experimentStatus !== ExperimentStatusesEnum.RUNNING &&
-    experimentStatus !== ExperimentStatusesEnum.COMPLETED;
-  const goalDescriptionMapper = {
-    PAGE_VISIT: (
-      <>
-        User visits to{' '}
-        <a href={goal.page_url} target="_blank" rel="noopener noreferrer">
-          {goal.page_url}
-        </a>
-        .
-      </>
-    ),
-    CLICK: (
-      <>
-        User clicks on a{' '}
-        <a
-          href={`${goal.page_url}?stellarMode=true&elementToHighlight=${goal.selector}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          specific element
-        </a>
-        .
-      </>
-    ),
-    SESSION_TIME: <>Time spent by user on the page.</>,
-  };
-
-  return (
-    <div className={styles.goal}>
-      <div className={styles.goalTitle}>Goal:</div>
-      <div className={styles.goalDescription}>
-        {goalDescriptionMapper[goal.type]}
-      </div>
-      {canEditAttributes && (
-        <div className={styles.edit} onClick={onEdit}>
-          <Edit width={17} height={17} />
-        </div>
-      )}
-    </div>
-  );
-};
-
+// TODO-p1-1 create experiment page with detailed info about experiment and stats
 const Experiment = ({
   experiment,
   journeyId,
@@ -67,6 +27,7 @@ const Experiment = ({
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
+  const [showStopExperimentModal, setShowStopExperimentModal] = useState(false);
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
 
   useEffect(() => {
@@ -140,6 +101,14 @@ const Experiment = ({
             {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
             {experiment.status}
           </div>
+          <div className={styles.action}>
+            {/* {experiment.status === ExperimentStatusesEnum.QUEUED && (
+              <PlayButton />
+            )} */}
+            {experiment.status === ExperimentStatusesEnum.RUNNING && (
+              <StopButton onClick={() => setShowStopExperimentModal(true)} />
+            )}
+          </div>
           {!isOpen && (
             <div className={styles.viewDetails} onClick={() => setIsOpen(true)}>
               View Details
@@ -148,7 +117,7 @@ const Experiment = ({
         </div>
       </div>
 
-      {experiment.started_at && (
+      {experiment.started_at && !experiment.ended_at && (
         <div className={styles.dates}>
           <div className={styles.date}>
             <div className={styles.dateLabel}>Start date:</div>
@@ -172,7 +141,7 @@ const Experiment = ({
                   experimentStatus={experiment.status}
                   n={i + 1}
                   stats={experimentStats.find(
-                    (s) => s.variant_id === variant.id,
+                    (s) => s.variantId === variant.id,
                   )}
                   height={maxVariantHeight}
                   setHeight={setMaxVariantHeight}
@@ -184,6 +153,7 @@ const Experiment = ({
             <Goal
               goal={goal}
               experimentStatus={experiment.status}
+              experimentUrl={url}
               onEdit={() => setShowSetUpGoalModal(true)}
             />
           ) : (
@@ -215,6 +185,12 @@ const Experiment = ({
           }}
           experiment={experiment}
           journeyId={journeyId}
+        />
+      )}
+      {showStopExperimentModal && (
+        <StopExperimentModal
+          onClose={() => setShowStopExperimentModal(false)}
+          experimentId={experiment.id}
         />
       )}
     </div>

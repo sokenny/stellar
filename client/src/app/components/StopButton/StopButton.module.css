@@ -1,0 +1,20 @@
+.StopButton {
+    border: 1px solid var(--blue);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    opacity: .75;
+}
+
+.StopButton:hover {
+    opacity: 1;
+}
+
+.square {
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background-color: var(--blue);
+}

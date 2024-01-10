@@ -40,6 +40,18 @@ export default async function Dashboard({ params }) {
           ))}
         </div>
       </div>
+      <div className={styles.completedExperiments}>
+        <h2 className={styles.title}>Completed Experiments</h2>
+        <div className={styles.experiments}>
+          {completedExperiments.map((experiment) => (
+            <Experiment
+              key={experiment.id}
+              experiment={experiment}
+              open={false}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

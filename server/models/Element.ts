@@ -4,7 +4,6 @@ class Element extends Model {
   public id!: number;
   public type!: string;
   public selector!: string;
-  public journey_id!: number;
   public properties!: object;
 }
 
@@ -23,14 +22,6 @@ export const initializeElement = (sequelize: Sequelize): typeof Element => {
       selector: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      journey_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'joruneys',
-          key: 'id',
-        },
       },
       properties: {
         type: DataTypes.JSONB,
