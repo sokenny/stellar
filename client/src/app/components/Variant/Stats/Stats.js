@@ -7,7 +7,12 @@ const statKeyToLabel = {
 };
 
 const Stats = ({ stats }) => {
-  if (!stats) return null;
+  if (!stats)
+    return (
+      <div className={styles.Stats} style={{ height: 57 }}>
+        Loading...
+      </div>
+    );
 
   const statsToRender = Object.keys(stats).filter((key) => key !== 'variantId');
 

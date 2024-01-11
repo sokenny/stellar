@@ -6,6 +6,8 @@
   const experimentId = urlParams.get('experimentId');
   const isSettingGoal = !!experimentId;
   const elementToHighlight = urlParams.get('elementToHighlight');
+  const modificationType = urlParams.get('modificationType');
+  const text = urlParams.get('text');
 
   if (stellarMode === 'true') {
     function getSelector(element) {
@@ -98,9 +100,13 @@
     document.onreadystatechange = () => {
       if (document.readyState === 'complete') {
         if (elementToHighlight) {
-          const element = document.querySelector(elementToHighlight);
+          const element: any = document.querySelector(elementToHighlight);
           if (element) {
             highlightElement(element);
+
+            if (modificationType === 'text') {
+              element.innerText = text;
+            }
           } else {
             console.error('Element not found:', elementToHighlight);
           }

@@ -5,21 +5,15 @@ import EditVariantModal from '../EditVariantModal/EditVariantModal';
 import Stats from './Stats/Stats';
 import styles from './Variant.module.css';
 
-const Variant = ({
-  id,
-  experimentStatus,
-  variants,
-  stats,
-  height,
-  setHeight,
-  n,
-}) => {
+const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
+  console.log('experiment fromv ar: ', experiment);
   const variantRef = useRef(null);
   const thisVariant = variants.find((v) => v.id === id);
+  console.log('this variant: ', thisVariant);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
   const showStats =
-    experimentStatus === ExperimentStatusesEnum.RUNNING ||
-    experimentStatus === ExperimentStatusesEnum.COMPLETED;
+    experiment.status === ExperimentStatusesEnum.RUNNING ||
+    experiment.status === ExperimentStatusesEnum.COMPLETED;
 
   useEffect(() => {
     if (variantRef.current) {
@@ -60,9 +54,14 @@ const Variant = ({
           </div>
         </div>
         <div className={styles.text}>
-          {/* TODO-p1: make text clickable which takes you to the website with variantToPreview in url params */}
           <span className={styles.label}>Text: </span>
-          {thisVariant.text}
+          <a
+            href={`${experiment.url}?stellarMode=true&elementToHighlight=${experiment.element.selector}&modificationType=text&text=${thisVariant.text}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {thisVariant.text}
+          </a>
         </div>
         <div className={styles.traffic}>
           <span className={styles.label}>Traffic: </span>
@@ -81,7 +80,7 @@ const Variant = ({
             }}
             variants={variants}
             id={thisVariant.id}
-            experimentStatus={experimentStatus}
+            experimentStatus={experiment.status}
           />
         )}
       </div>

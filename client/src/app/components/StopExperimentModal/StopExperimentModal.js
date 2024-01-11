@@ -9,6 +9,10 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
   const [submitting, setSubmitting] = useState(false);
 
   function handleStopExperiment() {
+    if (confirm('Are you absolutely sure?') === false) {
+      onClose();
+      return;
+    }
     setSubmitting(true);
     fetch(`http://localhost:3001/api/experiment/${experimentId}/stop`, {
       method: 'POST',
@@ -36,14 +40,14 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
         <div className={styles.actions}>
           <Button
             className={styles.save}
-            onClick={onClose}
+            onClick={handleStopExperiment}
             disabled={submitting}
             loading={submitting}
           >
-            cancel
-          </Button>
-          <div className={styles.cancel} onClick={handleStopExperiment}>
             Stop Experiment
+          </Button>
+          <div className={styles.cancel} onClick={onClose}>
+            cancel
           </div>
         </div>
       </div>

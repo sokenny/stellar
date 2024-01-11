@@ -16,6 +16,11 @@ async function getExperiments(req, res) {
         model: db.Goal,
         as: 'goal',
       },
+      {
+        model: db.Element,
+        as: 'element',
+        required: true,
+      },
     ],
     order: [['created_at', 'DESC']],
   });

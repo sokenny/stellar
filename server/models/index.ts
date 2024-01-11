@@ -60,6 +60,10 @@ const associateModels = () => {
     foreignKey: 'journey_id',
     as: 'journey',
   });
+  db.Experiment.belongsTo(db.Element, {
+    foreignKey: 'element_id',
+    as: 'element',
+  });
   db.Experiment.hasMany(db.Variant, {
     foreignKey: 'experiment_id',
     as: 'variants',

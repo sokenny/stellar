@@ -16,8 +16,12 @@
   border-color: var(--blue);
 }
 
-.Variant.isControl .text {
+.Variant.isControl .text a {
   color: var(--blue);
+}
+
+.Variant .text a {
+  color: #cb5edc;;
 }
 
 .colLeft {
@@ -49,7 +53,6 @@
 
 .text {
   margin-bottom: 8px;
-  color: #cb5edc;
 }
 
 .title {

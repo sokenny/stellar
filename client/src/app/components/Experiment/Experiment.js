@@ -14,7 +14,6 @@ import Button from '../Button/Button';
 import Edit from '../../icons/Edit';
 import styles from './Experiment.module.css';
 
-// TODO-p1-1 create experiment page with detailed info about experiment and stats
 const Experiment = ({
   experiment,
   journeyId,
@@ -92,7 +91,7 @@ const Experiment = ({
             className={styles.editExperiment}
             onClick={() => setShowEditExperimentModal(true)}
           >
-            <Edit />
+            <Edit height={18} />
           </div>
         </div>
 
@@ -138,7 +137,7 @@ const Experiment = ({
                   key={variant.id}
                   id={variant.id}
                   variants={variants}
-                  experimentStatus={experiment.status}
+                  experiment={experiment}
                   n={i + 1}
                   stats={experimentStats.find(
                     (s) => s.variantId === variant.id,

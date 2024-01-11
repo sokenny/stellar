@@ -10,7 +10,11 @@ const Goal = ({ goal, experimentUrl, experimentStatus, onEdit }) => {
     PAGE_VISIT: (
       <>
         User visits to{' '}
-        <a href={goal.page_url} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`${experimentUrl}${goal.url_match_value}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {goal.url_match_value}
         </a>
         .

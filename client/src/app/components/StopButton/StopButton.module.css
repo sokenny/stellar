@@ -1,11 +1,11 @@
 .StopButton {
-    border: 1px solid var(--blue);
+    border: 1px solid var(--error);
     display: flex;
     align-items: center;
     padding: 4px;
     border-radius: 2px;
     cursor: pointer;
-    opacity: .75;
+    opacity: .5;
 }
 
 .StopButton:hover {
@@ -16,5 +16,5 @@
     width: 6px;
     height: 6px;
     border-radius: 2px;
-    background-color: var(--blue);
+    background-color: var(--error);
 }
