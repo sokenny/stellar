@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
-import styles from './StopExperimentModal.module.css';
 import Button from '../Button/Button';
+import styles from './DeleteExperimentModal.module.css';
 
-const StopExperimentModal = ({ onClose, experimentId }) => {
+const DeleteExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
@@ -14,8 +14,8 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
       return;
     }
     setSubmitting(true);
-    fetch(`http://localhost:3001/api/experiment/${experimentId}/stop`, {
-      method: 'POST',
+    fetch(`http://localhost:3001/api/experiment/${experimentId}`, {
+      method: 'DELETE',
     })
       .then((res) => res.json())
       .then((res) => {
@@ -28,23 +28,23 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
   return (
     <Modal
       onClose={onClose}
-      className={styles.StopExperimentModal}
+      className={styles.DeleteExperimentModal}
       showX={false}
     >
       <div>
         <div className={styles.header}>
           <h3 className={styles.title}>
-            Are you sure you want to stop this experiment?
+            Are you sure you want to delete this experiment?
           </h3>
         </div>
         <div className={styles.actions}>
           <Button
-            className={styles.stopBtn}
+            className={styles.deleteBtn}
             onClick={handleStopExperiment}
             disabled={submitting}
             loading={submitting}
           >
-            Stop Experiment
+            Delete Experiment
           </Button>
           <div className={styles.cancel} onClick={onClose}>
             cancel
@@ -55,4 +55,4 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
   );
 };
 
-export default StopExperimentModal;
+export default DeleteExperimentModal;

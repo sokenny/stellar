@@ -1,0 +1,27 @@
+.DeleteExperimentModal > div {
+  max-width: 400px;
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+  justify-content: center;
+}
+
+.deleteBtn {
+  margin-right: 16px;
+}
+
+.cancel {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--textBody);
+}

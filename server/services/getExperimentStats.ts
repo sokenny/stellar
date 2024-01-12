@@ -1,5 +1,3 @@
-import { Op } from 'sequelize';
-import { Sequelize } from 'sequelize';
 import GoalTypesEnum from '../helpers/enums/GoalTypesEnum';
 import db from '../models';
 
@@ -92,6 +90,9 @@ async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
         variantId: stat.variantId,
         sessions: parseInt(stat.sessions, 10),
         conversions: parseInt(stat.conversions, 10),
+        conversionRate: parseFloat(
+          (stat.conversions / stat.sessions) * 100,
+        ).toFixed(2),
       };
     });
 
@@ -107,6 +108,7 @@ async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
         variantId: variantId,
         sessions: 0,
         conversions: 0,
+        conversionRate: 0,
       });
     });
 
@@ -117,13 +119,11 @@ async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
   }
 }
 
-async function getExperimentStats(req, res) {
-  const { id } = req.params;
-
+async function getExperimentStats(experimentId) {
   try {
     const experiment = await db.Experiment.findOne({
       where: {
-        id,
+        id: experimentId,
       },
       include: [
         {
@@ -142,12 +142,12 @@ async function getExperimentStats(req, res) {
     const goalType = experiment.goal.type;
     const variantIds = experiment.variants.map((variant) => variant.id);
     const functionToCall = goalFunctionMapper[goalType];
-    const variantStats = await functionToCall(id, variantIds);
+    const variantStats = await functionToCall(experimentId, variantIds);
 
-    res.json(variantStats);
+    return variantStats;
   } catch (error) {
     console.log('error', error);
-    res.status(500).json(error);
+    throw error;
   }
 }
 

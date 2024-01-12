@@ -1,15 +1,14 @@
 import puppeteer from 'puppeteer';
-import { Request, Response } from 'express';
 import jsdom from 'jsdom';
 
-import { MainElements } from '../../types';
-import { IElement, IVariant } from '../../types';
-import db from '../../models';
-import { getTextVariants, MAX_TOKENS } from '../gpt/getTextVariants';
-import DOMHelper from './DOMHelper';
-import tryOrReturn from '../../helpers/tryOrReturn';
+import { MainElements } from '../types';
+import { IElement, IVariant } from '../types';
+import db from '../models';
+import { getTextVariants, MAX_TOKENS } from './gpt/getTextVariants';
+import DOMHelper from './scrapper/DOMHelper';
+import tryOrReturn from '../helpers/tryOrReturn';
 
-async function initiatePage(website) {
+export async function initiatePage(website) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const response = await page.goto(website);
@@ -20,7 +19,7 @@ async function initiatePage(website) {
   return { page, browser, statusCode, window };
 }
 
-async function scrapMainElements(
+export async function scrapMainElements(
   websiteUrl: string,
   browserSession: any,
 ): Promise<MainElements | false> {
@@ -30,14 +29,14 @@ async function scrapMainElements(
   return mainElements;
 }
 
-async function getPageContext(website_url: string, browserSession: any) {
+export async function getPageContext(website_url: string, browserSession: any) {
   const domHelper = DOMHelper(browserSession.page, browserSession.window);
   const context = await domHelper.getPageContext();
   console.log('context! ', context);
   return context;
 }
 
-async function findOrCreateProject(website_url: string, transaction) {
+export async function findOrCreateProject(website_url: string, transaction) {
   const domain = website_url
     .replace('https://', '')
     .replace('http://', '')
@@ -57,7 +56,7 @@ async function findOrCreateProject(website_url: string, transaction) {
   return project[0];
 }
 
-async function createVariants(
+export async function createVariants(
   element: IElement,
   experimentId,
   pageContext,
@@ -105,7 +104,12 @@ async function createVariants(
   return variantsForThisElement;
 }
 
-async function createExperiments(elements, journey, projectId, transaction) {
+export async function createExperiments(
+  elements,
+  journey,
+  projectId,
+  transaction,
+) {
   try {
     const experiments = [];
 
@@ -139,7 +143,7 @@ async function createExperiments(elements, journey, projectId, transaction) {
   }
 }
 
-async function createElements(elements, journeyId, transaction) {
+export async function createElements(elements, journeyId, transaction) {
   const createdElements = [];
   for (const element of elements) {
     const createdElement = await db.Element.create(
@@ -170,7 +174,7 @@ async function createElements(elements, journeyId, transaction) {
   return createdElements;
 }
 
-function buildPromptFromPageContext(pageContext, element) {
+export function buildPromptFromPageContext(pageContext, element) {
   return `I am running an A/B test for a "${
     element.type
   }" element on a webpage. I need alternative text variants for this element to compare against the original text. 
@@ -190,63 +194,3 @@ Remember, only the array format is acceptable for the response. And be sure to k
     MAX_TOKENS * 4
   } characters (this should be the absolute max but this does not mean you need to use up to this amount. If you are creating variants on a short text, then a similar length will usually be suitable)!`;
 }
-
-async function onboardNewPage(req: Request, res: Response): Promise<void> {
-  const transaction = await db.sequelize.transaction();
-  try {
-    const { website_url } = req.body;
-    const project = await findOrCreateProject(website_url, transaction);
-    const browserSession = await initiatePage(website_url);
-    const mainElements = await scrapMainElements(website_url, browserSession);
-
-    const context = await getPageContext(website_url, browserSession);
-
-    const journey = await db.Journey.create(
-      {
-        name: 'Journey for ' + project.name,
-        page: website_url,
-        project_id: project.id,
-        context,
-      },
-      { transaction },
-    );
-
-    const createdElements = await createElements(
-      Object.entries(mainElements).map((element) => ({
-        domReference: element[1][0],
-        selector: element[1][1],
-        type: element[0],
-        style: element[1][2],
-      })),
-      journey.id,
-      transaction,
-    );
-
-    const createdExperiments = await createExperiments(
-      createdElements,
-      journey,
-      project.id,
-      transaction,
-    );
-
-    await journey.update(
-      {
-        experiments_order: createdExperiments.map(
-          (experiment) => experiment.id,
-        ),
-      },
-      { transaction },
-    );
-
-    await browserSession.browser.close();
-
-    await transaction.commit();
-    res.status(200).send({ project, journey });
-  } catch (error) {
-    await transaction.rollback();
-    console.error('Error during onboarding:', error);
-    res.status(500).send('An error occurred during onboarding');
-  }
-}
-
-export default onboardNewPage;

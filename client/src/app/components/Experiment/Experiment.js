@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Edit from '../../icons/Edit';
+import Trash from '../../icons/Trash';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Variant from '../Variant/Variant';
 import Goal from './Goal/Goal';
@@ -10,8 +12,8 @@ import PlayButton from '../PlayButton/PlayButton';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
 import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
 import StopExperimentModal from '../StopExperimentModal/StopExperimentModal';
+import DeleteExperimentModal from '../DeleteExperimentModal/DeleteExperimentModal';
 import Button from '../Button/Button';
-import Edit from '../../icons/Edit';
 import styles from './Experiment.module.css';
 
 const Experiment = ({
@@ -20,6 +22,7 @@ const Experiment = ({
   order = '',
   open = true,
   isFirst = false,
+  onJourneyReview = false,
 }) => {
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const [experimentStats, setExperimentStats] = useState([]);
@@ -28,6 +31,8 @@ const Experiment = ({
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [showStopExperimentModal, setShowStopExperimentModal] = useState(false);
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
+  const [showDeleteExperimentModal, setShowDeleteExperimentModal] =
+    useState(false);
 
   useEffect(() => {
     const fetchExperimentStats = async () => {
@@ -69,6 +74,11 @@ const Experiment = ({
     v.num = i + 1;
   });
 
+  const experimentTitle = name + ' - ' + experiment.id;
+
+  const showDeleteButton =
+    onJourneyReview || experiment.status === ExperimentStatusesEnum.QUEUED;
+
   return (
     <div
       className={`${styles.Experiment} ${
@@ -81,11 +91,15 @@ const Experiment = ({
     >
       <div className={styles.header}>
         <div className={styles.colLeft}>
-          <div className={styles.order}>{order}</div>
+          {onJourneyReview && <div className={styles.order}>{order}</div>}
           <div className={styles.name}>
-            <Link href={`/experiment/${experiment.id}`}>
-              {name} - {experiment.id}
-            </Link>
+            {onJourneyReview ? (
+              <div>{experimentTitle}</div>
+            ) : (
+              <Link href={`/experiment/${experiment.id}`}>
+                {experimentTitle}
+              </Link>
+            )}
           </div>
           <div
             className={styles.editExperiment}
@@ -116,16 +130,23 @@ const Experiment = ({
         </div>
       </div>
 
-      {experiment.started_at && !experiment.ended_at && (
+      <div className={styles.datesAndJourney}>
         <div className={styles.dates}>
-          <div className={styles.date}>
-            <div className={styles.dateLabel}>Start date:</div>
-            <div className={styles.dateValue}>
-              {new Date(experiment.started_at).toLocaleDateString()}
+          {experiment.started_at && !experiment.ended_at && (
+            <div className={styles.date}>
+              <div className={styles.dateLabel}>Start date:</div>
+              <div className={styles.dateValue}>
+                {new Date(experiment.started_at).toLocaleDateString()}
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+        {experiment.journey_id && (
+          <div className={styles.journey}>
+            <Link href={`/journey/${experiment.journey_id}`}>view journey</Link>
+          </div>
+        )}
+      </div>
 
       {isOpen && (
         <div>
@@ -148,25 +169,35 @@ const Experiment = ({
               ))}
             </div>
           </div>
-          {goal ? (
-            <Goal
-              goal={goal}
-              experimentStatus={experiment.status}
-              experimentUrl={url}
-              onEdit={() => setShowSetUpGoalModal(true)}
-            />
-          ) : (
-            <div>
-              <Button
-                className={styles.setUpGoalBtn}
-                onClick={() => setShowSetUpGoalModal(true)}
-              >
-                Set up goal
-              </Button>
-            </div>
-          )}
+          <div className={styles.bottomRow}>
+            {goal ? (
+              <Goal
+                goal={goal}
+                experimentStatus={experiment.status}
+                experimentUrl={url}
+                onEdit={() => setShowSetUpGoalModal(true)}
+              />
+            ) : (
+              <div>
+                <Button
+                  className={styles.setUpGoalBtn}
+                  onClick={() => setShowSetUpGoalModal(true)}
+                >
+                  Set up goal
+                </Button>
+              </div>
+            )}
+            {showDeleteButton && (
+              <div className={styles.deleteBtn}>
+                <Trash onClick={() => setShowDeleteExperimentModal(true)} />
+              </div>
+            )}
+          </div>
         </div>
       )}
+
+      {/* TODO-p1-1 add delete button around here */}
+
       {showSetUpGoalModal && (
         <GoalSetupModal
           journeyId={journeyId}
@@ -189,6 +220,12 @@ const Experiment = ({
       {showStopExperimentModal && (
         <StopExperimentModal
           onClose={() => setShowStopExperimentModal(false)}
+          experimentId={experiment.id}
+        />
+      )}
+      {showDeleteExperimentModal && (
+        <DeleteExperimentModal
+          onClose={() => setShowDeleteExperimentModal(false)}
           experimentId={experiment.id}
         />
       )}

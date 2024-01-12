@@ -1,0 +1,7 @@
+.Trash {
+  opacity: 0.15;
+}
+
+.Trash:hover {
+  opacity: .2;
+}

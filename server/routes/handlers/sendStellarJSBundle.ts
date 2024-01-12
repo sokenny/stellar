@@ -3,8 +3,11 @@ import path from 'path';
 
 async function sendStellarJSBundle(req, res) {
   try {
-    const stellarPath = path.join(__dirname, '../public/client_js/stellar.js');
-    const editorPath = path.join(__dirname, '../public/client_js/editor.js');
+    const stellarPath = path.join(
+      __dirname,
+      '../../public/client_js/stellar.js',
+    );
+    const editorPath = path.join(__dirname, '../../public/client_js/editor.js');
 
     const stellarContent = fs.readFileSync(stellarPath, 'utf8');
     const editorContent = fs.readFileSync(editorPath, 'utf8');

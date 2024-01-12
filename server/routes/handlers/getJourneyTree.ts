@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import db from '../models';
+import db from '../../models';
 
 async function getJourneyTree(req: Request, res: Response): Promise<void> {
   const journeyId = req.params.id;
@@ -14,6 +14,9 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
         model: db.Experiment,
         as: 'experiments',
         attributes: ['id', 'name', 'element_id', 'url'],
+        where: {
+          deleted_at: null,
+        },
         include: [
           {
             model: db.Variant,
@@ -23,6 +26,11 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
           {
             model: db.Goal,
             as: 'goal',
+          },
+          {
+            model: db.Element,
+            as: 'element',
+            required: true,
           },
         ],
       },

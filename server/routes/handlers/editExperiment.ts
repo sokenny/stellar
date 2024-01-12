@@ -1,4 +1,4 @@
-import db from '../models';
+import db from '../../models';
 
 async function editExperiment(req, res) {
   const { name, order, experimentId, journeyId } = req.body;

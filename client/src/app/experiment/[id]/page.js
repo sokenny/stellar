@@ -17,7 +17,6 @@ export default async function ExperimentPage({ params }) {
     <div className={styles.Experiment}>
       <h1 className={styles.title}>{experiment.name}</h1>
       <Experiment experiment={experiment} open={true} />
-      {/* TODO-p1-1: Create section about statistical significance for running experiments */}
       {/* TODO-p1-2: Create section about "this exp is part of 'this journey', and create journey view page" */}
     </div>
   );

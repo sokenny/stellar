@@ -6,10 +6,8 @@ import Stats from './Stats/Stats';
 import styles from './Variant.module.css';
 
 const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
-  console.log('experiment fromv ar: ', experiment);
   const variantRef = useRef(null);
   const thisVariant = variants.find((v) => v.id === id);
-  console.log('this variant: ', thisVariant);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
   const showStats =
     experiment.status === ExperimentStatusesEnum.RUNNING ||

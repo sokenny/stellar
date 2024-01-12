@@ -1,4 +1,4 @@
-import db from '../models';
+import db from '../../models';
 
 async function getExperiments(req, res) {
   // const { projectId } = req.query;
@@ -6,6 +6,7 @@ async function getExperiments(req, res) {
   const experiments = await db.Experiment.findAll({
     where: {
       project_id: projectId,
+      deleted_at: null,
     },
     include: [
       {

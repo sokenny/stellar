@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useState } from 'react';
 import Button from '../Button/Button';
+import Input from '../Input/Input';
 import styles from './EnterUrlForm.module.css';
 
 const EnterUrlForm = () => {
@@ -42,10 +43,11 @@ const EnterUrlForm = () => {
         }}
       >
         <div className={styles.inputAndHelpText}>
-          <input
+          <Input
             className={styles.input}
             placeholder="http://yoursite.com"
             onChange={(e) => setUrl(e.target.value)}
+            value={url}
           />
           {loading && (
             <span className={styles.helpText}>

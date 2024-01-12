@@ -4,6 +4,7 @@ const statKeyToLabel = {
   sessions: 'Total Sessions',
   averageSessionTime: 'Average Session Time',
   conversions: 'Conversions',
+  conversionRate: 'Conversion Rate',
 };
 
 const Stats = ({ stats }) => {

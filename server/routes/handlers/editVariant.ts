@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import db from '../models';
+import db from '../../models';
 
 async function editVariant(req: Request, res: Response) {
   const variantId: string = req.params.id;

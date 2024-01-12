@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import db from '../models';
+import db from '../../models';
 
 async function deleteProject(req, res) {
   const projectId = req.params.projectId;

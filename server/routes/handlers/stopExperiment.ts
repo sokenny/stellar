@@ -1,4 +1,4 @@
-import db from '../models';
+import db from '../../models';
 
 async function stopExperiment(req, res) {
   const { id } = req.params;

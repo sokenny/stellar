@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import db from '../models';
+import db from '../../models';
 
 async function getUserByApiKey(apiKey: string) {
   // lookup ApiKey and include user required true
@@ -31,6 +31,9 @@ async function getExperimentsForClientForUser(userId: number) {
             [Op.ne]: null,
           },
           ended_at: {
+            [Op.eq]: null,
+          },
+          deleted_at: {
             [Op.eq]: null,
           },
         },

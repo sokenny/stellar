@@ -20,8 +20,6 @@ export default async function ReviewJourney({ params }) {
     )
     .filter((experiment) => experiment != null);
 
-  console.log('journey.experiments_order: ', journey.experiments_order);
-
   return (
     <div className={styles.ReviewJourney}>
       <div className={styles.header}>
@@ -43,6 +41,7 @@ export default async function ReviewJourney({ params }) {
               open={order === 1}
               journeyId={joruneyId}
               order={order}
+              onJourneyReview
             />
           );
         })}

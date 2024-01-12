@@ -106,9 +106,22 @@
   color: black;
 }
 
-.dates {
+.datesAndJourney {
+  display: flex;
+  justify-content: space-between;
   text-transform: uppercase;
   margin-bottom: 32px;
+}
+
+.journey {
+  font-size: 12px;
+  margin-left: 16px;
+  text-decoration: underline;
+}
+
+.journey a {
+  color: black;
+  opacity: .4;
 }
 
 .dates > div {
@@ -157,4 +170,15 @@
 
 .setUpGoalBtn {
   margin-top: 16px;
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.deleteBtn {
+  cursor: pointer;
 }

@@ -12,6 +12,7 @@ class Experiment extends Model {
   public url!: string;
   public started_at!: Date;
   public ended_at!: Date;
+  public deleted_at!: Date;
 }
 
 export const initializeExperiment = (
@@ -66,6 +67,10 @@ export const initializeExperiment = (
         allowNull: true,
       },
       ended_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      deleted_at: {
         type: DataTypes.DATE,
         allowNull: true,
       },
