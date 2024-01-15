@@ -47,15 +47,18 @@ const EditVariantModal = ({
   const onSave = useCallback(async () => {
     try {
       setSubmitting(true);
-      const response = await fetch(`http://localhost:3001/api/variant/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...formData,
+          }),
         },
-        body: JSON.stringify({
-          ...formData,
-        }),
-      });
+      );
       const data = await response.json();
       console.log(data);
       onClose();

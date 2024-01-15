@@ -5,9 +5,12 @@ import styles from './page.module.css';
 
 export default async function Journey({ params }) {
   const journeyId = params.id;
-  const res = await fetch(`http://localhost:3001/api/journey/${journeyId}`, {
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STELLAR_API}/journey/${journeyId}`,
+    {
+      cache: 'no-store',
+    },
+  );
   const journey = await res.json();
   const experiments = journey.experiments;
 

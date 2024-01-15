@@ -68,21 +68,24 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
   async function onSetGoal() {
     try {
       setSubmiting(true);
-      const response = await fetch('http://localhost:3001/api/goals', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_STELLAR_API + '/goals',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            experiment_id: experiment.id,
+            journey_id: journeyId,
+            type: formData.goalType,
+            url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
+            url_match_value: '/' + formData.urlMatchValue,
+            element_url: '/' + formData.elementUrl,
+            selector: null,
+          }),
         },
-        body: JSON.stringify({
-          experiment_id: experiment.id,
-          journey_id: journeyId,
-          type: formData.goalType,
-          url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
-          url_match_value: '/' + formData.urlMatchValue,
-          element_url: '/' + formData.elementUrl,
-          selector: null,
-        }),
-      });
+      );
 
       if (response.status !== 200) {
         alert('Something went wrong');
@@ -109,7 +112,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
 
     goalCheckIntervalRef.current = setInterval(async () => {
       const res = await fetch(
-        `http://localhost:3001/api/experiment/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
       );
 
       const experimentJson = await res.json();

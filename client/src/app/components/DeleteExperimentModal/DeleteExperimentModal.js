@@ -14,7 +14,7 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
       return;
     }
     setSubmitting(true);
-    fetch(`http://localhost:3001/api/experiment/${experimentId}`, {
+    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())

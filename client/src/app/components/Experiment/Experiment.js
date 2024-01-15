@@ -38,7 +38,7 @@ const Experiment = ({
   useEffect(() => {
     const fetchExperimentStats = async () => {
       const res = await fetch(
-        `http://localhost:3001/api/experiment/${experiment.id}/stats`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/stats`,
         {
           method: 'GET',
           headers: {

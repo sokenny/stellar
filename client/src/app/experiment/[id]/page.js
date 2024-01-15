@@ -4,7 +4,7 @@ import styles from './page.module.css';
 export default async function ExperimentPage({ params }) {
   const experimentId = params.id;
   const res = await fetch(
-    `http://localhost:3001/api/experiment/${experimentId}`,
+    `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`,
     {
       // cache: 'force-cache',
       cache: 'no-store',

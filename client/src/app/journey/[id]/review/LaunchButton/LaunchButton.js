@@ -12,7 +12,7 @@ const LaunchButton = ({ journeyId, disabled }) => {
     try {
       setIsLaunching(true);
       const response = await fetch(
-        `http://localhost:3001/api/journey/${journeyId}/launch`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/journey/${journeyId}/launch`,
         {
           method: 'POST',
           headers: {

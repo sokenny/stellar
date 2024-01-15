@@ -19,7 +19,7 @@ const EditExperimentModal = ({
     try {
       setSubmitting(true);
       const response = await fetch(
-        `http://localhost:3001/api/experiment/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
         {
           method: 'PUT',
           headers: {
