@@ -86,13 +86,14 @@ async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
     });
 
     const formattedStats = stats.map((stat) => {
+      const conversionRate = parseFloat(
+        ((stat.conversions / stat.sessions) * 100).toFixed(2),
+      );
       return {
         variantId: stat.variantId,
         sessions: parseInt(stat.sessions, 10),
         conversions: parseInt(stat.conversions, 10),
-        conversionRate: parseFloat(
-          (stat.conversions / stat.sessions) * 100,
-        ).toFixed(2),
+        conversionRate: conversionRate,
       };
     });
 

@@ -6,7 +6,7 @@ import cors from 'cors';
 dotenv.config();
 
 const app: Express = express();
-const PORT = 3001;
+const PORT = process.env.PORT;
 
 const allowedOrigins = [
   'https://lengaswear.vercel.app',

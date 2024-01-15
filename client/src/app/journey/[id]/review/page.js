@@ -5,7 +5,6 @@ import styles from './page.module.css';
 export default async function ReviewJourney({ params }) {
   const joruneyId = params.id;
   const res = await fetch(`http://localhost:3001/api/journey/${joruneyId}`, {
-    // cache: 'force-cache',
     cache: 'no-store',
   });
   const journey = await res.json();

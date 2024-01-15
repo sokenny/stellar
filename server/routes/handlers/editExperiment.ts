@@ -2,7 +2,6 @@ import db from '../../models';
 
 async function editExperiment(req, res) {
   const { name, order, experimentId, journeyId } = req.body;
-  console.log('req.body', req.body);
 
   const experiment = await db.Experiment.update(
     { name: name },

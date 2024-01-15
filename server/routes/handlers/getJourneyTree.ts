@@ -13,7 +13,6 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
       {
         model: db.Experiment,
         as: 'experiments',
-        attributes: ['id', 'name', 'element_id', 'url'],
         where: {
           deleted_at: null,
         },

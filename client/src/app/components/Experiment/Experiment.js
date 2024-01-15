@@ -24,6 +24,7 @@ const Experiment = ({
   isFirst = false,
   onJourneyReview = false,
 }) => {
+  console.log('experiment status: ', experiment.status);
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const [experimentStats, setExperimentStats] = useState([]);
   const { name, variants, goal, url } = experiment;
@@ -129,74 +130,75 @@ const Experiment = ({
           )}
         </div>
       </div>
-
-      <div className={styles.datesAndJourney}>
-        <div className={styles.dates}>
-          {experiment.started_at && !experiment.ended_at && (
-            <div className={styles.date}>
-              <div className={styles.dateLabel}>Start date:</div>
-              <div className={styles.dateValue}>
-                {new Date(experiment.started_at).toLocaleDateString()}
-              </div>
-            </div>
-          )}
-        </div>
-        {experiment.journey_id && (
-          <div className={styles.journey}>
-            <Link href={`/journey/${experiment.journey_id}`}>view journey</Link>
-          </div>
-        )}
-      </div>
-
       {isOpen && (
-        <div>
-          <div className={styles.variants}>
-            <div className={styles.variantsTitle}>Variants</div>
-            <div className={styles.variantsContainer}>
-              {sortedVariants.map((variant, i) => (
-                <Variant
-                  key={variant.id}
-                  id={variant.id}
-                  variants={variants}
-                  experiment={experiment}
-                  n={i + 1}
-                  stats={experimentStats.find(
-                    (s) => s.variantId === variant.id,
-                  )}
-                  height={maxVariantHeight}
-                  setHeight={setMaxVariantHeight}
+        <>
+          <div className={styles.datesAndJourney}>
+            <div className={styles.dates}>
+              {experiment.started_at && !experiment.ended_at && (
+                <div className={styles.date}>
+                  <div className={styles.dateLabel}>Start date:</div>
+                  <div className={styles.dateValue}>
+                    {new Date(experiment.started_at).toLocaleDateString()}
+                  </div>
+                </div>
+              )}
+            </div>
+            {experiment.journey_id && !onJourneyReview && (
+              <div className={styles.journey}>
+                <Link href={`/journey/${experiment.journey_id}`}>
+                  view journey
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <div className={styles.variants}>
+              <div className={styles.variantsTitle}>Variants</div>
+              <div className={styles.variantsContainer}>
+                {sortedVariants.map((variant, i) => (
+                  <Variant
+                    key={variant.id}
+                    id={variant.id}
+                    variants={variants}
+                    experiment={experiment}
+                    n={i + 1}
+                    stats={experimentStats.find(
+                      (s) => s.variantId === variant.id,
+                    )}
+                    height={maxVariantHeight}
+                    setHeight={setMaxVariantHeight}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={styles.bottomRow}>
+              {goal ? (
+                <Goal
+                  goal={goal}
+                  experimentStatus={experiment.status}
+                  experimentUrl={url}
+                  onEdit={() => setShowSetUpGoalModal(true)}
                 />
-              ))}
+              ) : (
+                <div>
+                  <Button
+                    className={styles.setUpGoalBtn}
+                    onClick={() => setShowSetUpGoalModal(true)}
+                  >
+                    Set up goal
+                  </Button>
+                </div>
+              )}
+              {showDeleteButton && (
+                <div className={styles.deleteBtn}>
+                  <Trash onClick={() => setShowDeleteExperimentModal(true)} />
+                </div>
+              )}
             </div>
           </div>
-          <div className={styles.bottomRow}>
-            {goal ? (
-              <Goal
-                goal={goal}
-                experimentStatus={experiment.status}
-                experimentUrl={url}
-                onEdit={() => setShowSetUpGoalModal(true)}
-              />
-            ) : (
-              <div>
-                <Button
-                  className={styles.setUpGoalBtn}
-                  onClick={() => setShowSetUpGoalModal(true)}
-                >
-                  Set up goal
-                </Button>
-              </div>
-            )}
-            {showDeleteButton && (
-              <div className={styles.deleteBtn}>
-                <Trash onClick={() => setShowDeleteExperimentModal(true)} />
-              </div>
-            )}
-          </div>
-        </div>
+        </>
       )}
-
-      {/* TODO-p1-1 add delete button around here */}
 
       {showSetUpGoalModal && (
         <GoalSetupModal
