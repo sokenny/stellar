@@ -36,6 +36,9 @@ async function getExperimentsForClientForUser(userId: number) {
           deleted_at: {
             [Op.eq]: null,
           },
+          paused_at: {
+            [Op.eq]: null,
+          },
         },
       ],
     },

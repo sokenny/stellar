@@ -1,8 +1,8 @@
 import styles from './PlayButton.module.css';
 
-const PlayButton = () => {
+const PlayButton = ({ onClick }) => {
   return (
-    <div className={styles.PlayButton}>
+    <div className={styles.PlayButton} onClick={onClick}>
       <div className={styles.triangle} />
     </div>
   );

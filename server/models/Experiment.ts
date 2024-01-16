@@ -11,6 +11,7 @@ class Experiment extends Model {
   public project_id!: number;
   public url!: string;
   public started_at!: Date;
+  public paused_at!: Date;
   public ended_at!: Date;
   public deleted_at!: Date;
 }
@@ -66,6 +67,10 @@ export const initializeExperiment = (
         type: DataTypes.DATE,
         allowNull: true,
       },
+      paused_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       ended_at: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -79,8 +84,10 @@ export const initializeExperiment = (
         get() {
           if (this.ended_at) {
             return 'completed';
-          } else if (this.started_at) {
+          } else if (this.started_at && !this.paused_at) {
             return 'running';
+          } else if (this.paused_at) {
+            return 'paused';
           } else if (this.journey_id) {
             return 'queued';
           } else {

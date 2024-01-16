@@ -15,6 +15,8 @@ import onboardNewPage from './handlers/onboardNewPage';
 import getExperimentStatsHandler from './handlers/getExperimentStats';
 import getStatisticalSignificance from '../services/getStatisticalSignificance';
 import deleteExperiment from './handlers/deleteExperiment';
+import pauseExperiment from './handlers/pauseExperiment';
+import resumeExperiment from './handlers/resumeExperiment';
 
 const router = express.Router();
 
@@ -33,6 +35,8 @@ router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.get('/experiment/:id/stats', getExperimentStatsHandler);
 router.post('/experiment/:id/stop', stopExperiment);
+router.post('/experiment/:id/pause', pauseExperiment);
+router.post('/experiment/:id/resume', resumeExperiment);
 router.delete('/experiment/:id', deleteExperiment);
 
 router.put('/variant/:id', editVariant);

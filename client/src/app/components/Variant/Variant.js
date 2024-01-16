@@ -9,9 +9,7 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
   const variantRef = useRef(null);
   const thisVariant = variants.find((v) => v.id === id);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
-  const showStats =
-    experiment.status === ExperimentStatusesEnum.RUNNING ||
-    experiment.status === ExperimentStatusesEnum.COMPLETED;
+  const showStats = !!experiment.started_at;
 
   useEffect(() => {
     if (variantRef.current) {

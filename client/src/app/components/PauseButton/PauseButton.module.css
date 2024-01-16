@@ -1,0 +1,14 @@
+.PauseButton {
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px solid #bababa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.PauseButton:hover {
+  opacity: 1;
+}

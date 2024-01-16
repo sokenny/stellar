@@ -20,6 +20,11 @@
   color: var(--green);
 }
 
+.Experiment.paused .status {
+  color: #bababa;
+  opacity: 0.75;
+}
+
 .Experiment.queued .status {
   color: var(--yellow);
 }
@@ -117,11 +122,12 @@
   font-size: 12px;
   margin-left: 16px;
   text-decoration: underline;
+  opacity: 0.75;
 }
 
 .journey a {
   color: black;
-  opacity: .4;
+  opacity: 0.4;
 }
 
 .dates > div {
@@ -181,4 +187,13 @@
 
 .deleteBtn {
   cursor: pointer;
+}
+
+.stopPlayPauseButtons {
+  display: flex;
+  align-items: center;
+}
+
+.stopPlayPauseButtons > div:first-child {
+  margin-right: 4px;
 }

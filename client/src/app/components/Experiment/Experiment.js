@@ -9,8 +9,11 @@ import Variant from '../Variant/Variant';
 import Goal from './Goal/Goal';
 import StopButton from '../StopButton/StopButton';
 import PlayButton from '../PlayButton/PlayButton';
+import PauseButton from '../PauseButton/PauseButton';
 import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
 import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
+import PauseExperimentModal from '../PauseExperimentModal/PauseExperimentModal';
+import ResumeExperimentModal from '../ResumeExperimentModal/ResumeExperimentModal';
 import StopExperimentModal from '../StopExperimentModal/StopExperimentModal';
 import DeleteExperimentModal from '../DeleteExperimentModal/DeleteExperimentModal';
 import Button from '../Button/Button';
@@ -24,13 +27,16 @@ const Experiment = ({
   isFirst = false,
   onJourneyReview = false,
 }) => {
-  console.log('experiment status: ', experiment.status);
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const [experimentStats, setExperimentStats] = useState([]);
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [showStopExperimentModal, setShowStopExperimentModal] = useState(false);
+  const [showPauseExperimentModal, setShowPauseExperimentModal] =
+    useState(false);
+  const [showResumeExperimentModal, setShowResumeExperimentModal] =
+    useState(false);
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
   const [showDeleteExperimentModal, setShowDeleteExperimentModal] =
     useState(false);
@@ -50,10 +56,7 @@ const Experiment = ({
       setExperimentStats(data);
     };
 
-    if (
-      experiment.status === ExperimentStatusesEnum.RUNNING ||
-      experiment.status === ExperimentStatusesEnum.COMPLETED
-    ) {
+    if (experiment.started_at) {
       fetchExperimentStats();
     }
   }, []);
@@ -79,6 +82,10 @@ const Experiment = ({
 
   const showDeleteButton =
     onJourneyReview || experiment.status === ExperimentStatusesEnum.QUEUED;
+
+  const showStopPlayPauseButtons =
+    experiment.status === ExperimentStatusesEnum.RUNNING ||
+    experiment.status === ExperimentStatusesEnum.PAUSED;
 
   return (
     <div
@@ -119,8 +126,19 @@ const Experiment = ({
             {/* {experiment.status === ExperimentStatusesEnum.QUEUED && (
               <PlayButton />
             )} */}
-            {experiment.status === ExperimentStatusesEnum.RUNNING && (
-              <StopButton onClick={() => setShowStopExperimentModal(true)} />
+            {showStopPlayPauseButtons && (
+              <div className={styles.stopPlayPauseButtons}>
+                <StopButton onClick={() => setShowStopExperimentModal(true)} />
+                {experiment.status === ExperimentStatusesEnum.RUNNING ? (
+                  <PauseButton
+                    onClick={() => setShowPauseExperimentModal(true)}
+                  />
+                ) : (
+                  <PlayButton
+                    onClick={() => setShowResumeExperimentModal(true)}
+                  />
+                )}
+              </div>
             )}
           </div>
           {!isOpen && (
@@ -222,6 +240,18 @@ const Experiment = ({
       {showStopExperimentModal && (
         <StopExperimentModal
           onClose={() => setShowStopExperimentModal(false)}
+          experimentId={experiment.id}
+        />
+      )}
+      {showPauseExperimentModal && (
+        <PauseExperimentModal
+          onClose={() => setShowPauseExperimentModal(false)}
+          experimentId={experiment.id}
+        />
+      )}
+      {showResumeExperimentModal && (
+        <ResumeExperimentModal
+          onClose={() => setShowResumeExperimentModal(false)}
           experimentId={experiment.id}
         />
       )}

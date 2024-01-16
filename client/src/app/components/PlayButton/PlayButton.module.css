@@ -1,21 +1,26 @@
 .PlayButton {
-    background-color: transparent;
-    border: 1.5px solid var(--green); /* Border color of the circle */
-    border-radius: 50%; /* Makes the button round */
-    width: 18px; /* Width of the circle */
-    height: 18px; /* Height of the circle */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    outline: none;
+  background-color: transparent;
+  border: 1px solid #bababa;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  opacity: 0.75;
+}
+
+.PlayButton:hover {
+  opacity: 1;
 }
 
 .triangle {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 4px 0 4px 6px; 
-    border-color: transparent transparent transparent var(--green); 
-    transform: translateX(1px);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent #bababa;
+  transform: translateX(1px);
 }
