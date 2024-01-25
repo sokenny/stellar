@@ -9,6 +9,7 @@ class Variant extends Model {
   public experiment_id!: number;
   public is_control?: boolean;
   public traffic: number;
+  public deleted_at?: Date;
 }
 
 export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
@@ -40,6 +41,10 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
           min: 1,
           max: 99,
         },
+      },
+      deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
     },
     {

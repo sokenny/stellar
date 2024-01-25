@@ -3,6 +3,7 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
 import EditVariantModal from '../Modals/EditVariantModal/EditVariantModal';
+import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import Stats from './Stats/Stats';
 import styles from './Variant.module.css';
 
@@ -10,6 +11,7 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
   const variantRef = useRef(null);
   const thisVariant = variants.find((v) => v.id === id);
   const [showEditVariantModal, setShowEditVariantModal] = useState(false);
+  const [showDeleteVariantModal, setShowDeleteVariantModal] = useState(false);
   const showStats = !!experiment.started_at;
 
   useEffect(() => {
@@ -22,8 +24,9 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
   }, [variantRef, height, setHeight]);
 
   const canAlterVariant =
-    experiment.status === ExperimentStatusesEnum.QUEUED ||
-    experiment.status === ExperimentStatusesEnum.PENDING;
+    (experiment.status === ExperimentStatusesEnum.QUEUED ||
+      experiment.status === ExperimentStatusesEnum.PENDING) &&
+    !thisVariant.is_control;
 
   return (
     <div
@@ -49,7 +52,10 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
           </div>
           <div className={styles.actionButtons}>
             {canAlterVariant && (
-              <div className={styles.delete}>
+              <div
+                className={styles.delete}
+                onClick={() => setShowDeleteVariantModal(true)}
+              >
                 <Trash height={18} width={18} />
               </div>
             )}
@@ -89,6 +95,12 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
             variants={variants}
             id={thisVariant.id}
             experimentStatus={experiment.status}
+          />
+        )}
+        {showDeleteVariantModal && (
+          <DeleteVariantModal
+            onClose={() => setShowDeleteVariantModal(false)}
+            variantId={thisVariant.id}
           />
         )}
       </div>

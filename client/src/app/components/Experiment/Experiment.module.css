@@ -4,8 +4,14 @@
   border-bottom: 1px solid var(--whiteCardStroke);
   border-radius: 4px;
   font-weight: 300;
-  width: 800px;
+  /* width: 800px; */
   cursor: pointer;
+}
+
+.Experiment.cardLike {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.01);
+  padding: 24px 36px;
 }
 
 .Experiment.isOpen {
@@ -115,23 +121,23 @@
   color: black;
 }
 
-.datesAndJourney {
-  display: flex;
-  justify-content: space-between;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-}
-
 .journey {
   font-size: 12px;
   margin-left: 16px;
   text-decoration: underline;
   opacity: 0.75;
+  margin-right: 16px;
+  text-transform: uppercase;
 }
 
 .journey a {
   color: black;
   opacity: 0.4;
+}
+
+.dates {
+  margin-bottom: 32px;
+  text-transform: uppercase;
 }
 
 .dates > div {
@@ -161,7 +167,7 @@
 .variantsTitle {
   text-transform: uppercase;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 12px;
   margin-bottom: 12px;
 }

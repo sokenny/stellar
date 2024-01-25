@@ -2,9 +2,15 @@
 
 import colors from '../../helpers/colors';
 
-const Plus = ({ width = 30, height = 30 }) => {
+const Plus = ({ width = 30, height = 30, className }) => {
   return (
-    <svg width={width} height={height} viewBox="0 0 32 32" version="1.1">
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      viewBox="0 0 32 32"
+      version="1.1"
+    >
       <defs></defs>
       <g
         id="Page-1"

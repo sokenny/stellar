@@ -12,6 +12,9 @@ async function getExperiments(req, res) {
       {
         model: db.Variant,
         as: 'variants',
+        where: {
+          deleted_at: null,
+        },
       },
       {
         model: db.Goal,

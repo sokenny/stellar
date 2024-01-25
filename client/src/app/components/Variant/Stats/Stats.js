@@ -24,7 +24,10 @@ const Stats = ({ stats }) => {
           return (
             <div className={styles.stat} key={key}>
               <div className={styles.label}>{statKeyToLabel[key]}</div>
-              <div className={styles.value}>{stats[key]}</div>
+              <div className={styles.value}>
+                {stats[key]}
+                {key === 'conversionRate' && '%'}
+              </div>
             </div>
           );
         })}

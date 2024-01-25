@@ -2,19 +2,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
-import styles from './DeleteExperimentModal.module.css';
+import styles from './DeleteVariantModal.module.css';
 
-const DeleteExperimentModal = ({ onClose, experimentId }) => {
+const DeleteVariantModal = ({ onClose, variantId }) => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
-  function handleDeleteExperiment() {
-    if (confirm('Are you absolutely sure?') === false) {
-      onClose();
-      return;
-    }
+  function handleDeleteVariant() {
     setSubmitting(true);
-    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`, {
+    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())
@@ -28,23 +24,23 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
   return (
     <Modal
       onClose={onClose}
-      className={styles.DeleteExperimentModal}
+      className={styles.DeleteVariantModal}
       showX={false}
     >
       <div>
         <div className={styles.header}>
           <h3 className={styles.title}>
-            Are you sure you want to delete this experiment?
+            Are you sure you want to delete this variant?
           </h3>
         </div>
         <div className={styles.actions}>
           <Button
             className={styles.deleteBtn}
-            onClick={handleDeleteExperiment}
+            onClick={handleDeleteVariant}
             disabled={submitting}
             loading={submitting}
           >
-            Delete Experiment
+            Delete Variant
           </Button>
           <div className={styles.cancel} onClick={onClose}>
             cancel
@@ -55,4 +51,4 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
   );
 };
 
-export default DeleteExperimentModal;
+export default DeleteVariantModal;

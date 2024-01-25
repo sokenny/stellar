@@ -70,6 +70,7 @@
 
     const styles = `
       .stellar-selected {
+        padding: 4px 8px;
         border: 2px solid blue;
         background-color: rgba(0, 0, 255, 0.1);
       }

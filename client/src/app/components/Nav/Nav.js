@@ -6,7 +6,7 @@ const Nav = () => {
     <nav className={styles.Nav}>
       <div className={styles.id}>
         <div className={styles.logo}></div>
-        <Link href="/">STELLAR</Link>
+        <Link href="/dashboard">STELLAR</Link>
       </div>
       <ul>
         <li>

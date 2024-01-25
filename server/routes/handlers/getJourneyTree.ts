@@ -21,6 +21,9 @@ async function getJourneyTree(req: Request, res: Response): Promise<void> {
             model: db.Variant,
             as: 'variants',
             attributes: ['id', 'is_control', 'text', 'traffic'],
+            where: {
+              deleted_at: null,
+            },
           },
           {
             model: db.Goal,

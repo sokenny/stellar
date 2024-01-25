@@ -15,6 +15,7 @@ import onboardNewPage from './handlers/onboardNewPage';
 import getExperimentStatsHandler from './handlers/getExperimentStats';
 import getStatisticalSignificance from '../services/getStatisticalSignificance';
 import deleteExperiment from './handlers/deleteExperiment';
+import deleteVariant from './handlers/deleteVariant';
 import pauseExperiment from './handlers/pauseExperiment';
 import resumeExperiment from './handlers/resumeExperiment';
 
@@ -40,6 +41,7 @@ router.post('/experiment/:id/resume', resumeExperiment);
 router.delete('/experiment/:id', deleteExperiment);
 
 router.put('/variant/:id', editVariant);
+router.delete('/variant/:id', deleteVariant);
 
 router.post('/goals', setGoal);
 

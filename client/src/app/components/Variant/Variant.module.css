@@ -51,7 +51,7 @@
   right: 16px;
 }
 
-.Variant:hover .actionButtons {
+.mainInfo:hover .actionButtons {
   display: flex;
 }
 

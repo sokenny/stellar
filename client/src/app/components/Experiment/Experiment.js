@@ -26,6 +26,7 @@ const Experiment = ({
   open = true,
   isFirst = false,
   onJourneyReview = false,
+  cardLike = false,
 }) => {
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const [experimentStats, setExperimentStats] = useState([]);
@@ -78,7 +79,7 @@ const Experiment = ({
     v.num = i + 1;
   });
 
-  const experimentTitle = name + ' - ' + experiment.id;
+  const experimentTitle = name + ' - #' + experiment.id;
 
   const showDeleteButton =
     onJourneyReview || experiment.status === ExperimentStatusesEnum.QUEUED;
@@ -94,6 +95,7 @@ const Experiment = ({
       }
       ${isFirst ? styles.isFirst : ''}
       ${styles[experiment.status]}
+      ${cardLike ? styles.cardLike : ''}
       `}
       onClick={() => (!isOpen ? setIsOpen(true) : null)}
     >
@@ -118,6 +120,13 @@ const Experiment = ({
         </div>
 
         <div className={styles.colRight}>
+          {experiment.journey_id && !onJourneyReview && (
+            <div className={styles.journey}>
+              <Link href={`/journey/${experiment.journey_id}`}>
+                view journey
+              </Link>
+            </div>
+          )}
           <div className={styles.status}>
             {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
             {experiment.status}
@@ -147,25 +156,16 @@ const Experiment = ({
       </div>
       {isOpen && (
         <>
-          <div className={styles.datesAndJourney}>
+          {experiment.started_at && !experiment.ended_at && (
             <div className={styles.dates}>
-              {experiment.started_at && !experiment.ended_at && (
-                <div className={styles.date}>
-                  <div className={styles.dateLabel}>Start date:</div>
-                  <div className={styles.dateValue}>
-                    {new Date(experiment.started_at).toLocaleDateString()}
-                  </div>
+              <div className={styles.date}>
+                <div className={styles.dateLabel}>Start date:</div>
+                <div className={styles.dateValue}>
+                  {new Date(experiment.started_at).toLocaleDateString()}
                 </div>
-              )}
-            </div>
-            {experiment.journey_id && !onJourneyReview && (
-              <div className={styles.journey}>
-                <Link href={`/journey/${experiment.journey_id}`}>
-                  view journey
-                </Link>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <div>
             <div className={styles.variants}>

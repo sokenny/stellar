@@ -17,8 +17,9 @@ export default async function ExperimentPage({ params }) {
     <div className={styles.Experiment}>
       <h1 className={styles.title}>{experiment.name}</h1>
       <Experiment experiment={experiment} open={true} />
-      {/* TODO-p1-1: Work on modal right before "launch journey" that sets up the user's account & paypal sub */}
-      {/* TODO-p1-2: Allow manual creation of experiments from 'editor mode' */}
+      {/* TODO-p1-1: Allow manual creation of experiments from 'editor mode' */}
+      {/* TODO-p1-2: Work on modal right before "launch journey" that sets up the user's account & paypal sub */}
+      {/* TODO-p1-3: Implement global store */}
     </div>
   );
 }

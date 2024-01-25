@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Plus from '../../icons/Plus';
 import Experiment from '../Experiment/Experiment';
+import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
 
 const tabs = ['Running', 'Queued', 'Draft', 'Completed'];
@@ -29,7 +30,8 @@ const TabsAndExperiments = ({ experiments }) => {
     <div className={styles.TabsAndExperiments}>
       <div className={styles.navigation}>
         <div className={styles.createNewExperiment}>
-          <Plus />
+          {/* <Plus /> */}
+          <CreateButton />
         </div>
         <div className={styles.tabs}>
           {tabs.map((tab, i) => (
@@ -51,7 +53,7 @@ const TabsAndExperiments = ({ experiments }) => {
         </h2>
         <div className={styles.experiments}>
           {experimentsByTab[activeTab].map((experiment) => (
-            <Experiment key={experiment.id} experiment={experiment} />
+            <Experiment key={experiment.id} experiment={experiment} cardLike />
           ))}
         </div>
       </div>

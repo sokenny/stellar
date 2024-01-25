@@ -1,0 +1,7 @@
+.CreateButton {
+    cursor: pointer;
+}
+
+.CreateButton:hover {
+    opacity: 0.8;
+}
