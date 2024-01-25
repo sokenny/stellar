@@ -38,6 +38,7 @@
     }
 
     async function setClickGoal(selector) {
+      console.log('esto corrio');
       const pageUrl = window.location.href.split('?')[0];
       const response = await fetch(STELLAR_API_URL + '/goals', {
         method: 'POST',

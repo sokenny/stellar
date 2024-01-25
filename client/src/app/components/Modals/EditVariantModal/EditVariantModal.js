@@ -1,10 +1,10 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import isObjectEqual from '../../helpers/isObjectEqual';
-import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
-import Input from '../Input/Input';
+import isObjectEqual from '../../../helpers/isObjectEqual';
+import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
+import Input from '../../Input/Input';
 import Modal from '../Modal/Modal';
-import Button from '../Button/Button';
+import Button from '../../Button/Button';
 import styles from './EditVariantModal.module.css';
 
 const EditVariantModal = ({

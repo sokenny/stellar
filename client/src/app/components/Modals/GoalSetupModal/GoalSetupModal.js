@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import getDomainFromUrl from '../../helpers/getDomainFromUrl';
-import GoalsForm from '../GoalsForm/GoalsForm';
+import GoalsForm from '../../GoalsForm/GoalsForm';
 import Modal from '../Modal/Modal';
 import styles from './GoalSetupModal.module.css';
 

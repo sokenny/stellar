@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
-import Button from '../Button/Button';
-import styles from './PauseExperimentModal.module.css';
+import Button from '../../Button/Button';
+import styles from './StopExperimentModal.module.css';
 
-const PauseExperimentModal = ({ onClose, experimentId }) => {
+const StopExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
-  function handlePauseExperiment() {
+  function handleStopExperiment() {
+    if (confirm('Are you absolutely sure?') === false) {
+      onClose();
+      return;
+    }
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/pause`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/stop`,
       {
         method: 'POST',
       },
@@ -27,23 +31,23 @@ const PauseExperimentModal = ({ onClose, experimentId }) => {
   return (
     <Modal
       onClose={onClose}
-      className={styles.PauseExperimentModal}
+      className={styles.StopExperimentModal}
       showX={false}
     >
       <div>
         <div className={styles.header}>
           <h3 className={styles.title}>
-            Are you sure you want to pause this experiment?
+            Are you sure you want to stop this experiment?
           </h3>
         </div>
         <div className={styles.actions}>
           <Button
-            className={styles.pauseBtn}
-            onClick={handlePauseExperiment}
+            className={styles.stopBtn}
+            onClick={handleStopExperiment}
             disabled={submitting}
             loading={submitting}
           >
-            Pause Experiment
+            Stop Experiment
           </Button>
           <div className={styles.cancel} onClick={onClose}>
             cancel
@@ -54,4 +58,4 @@ const PauseExperimentModal = ({ onClose, experimentId }) => {
   );
 };
 
-export default PauseExperimentModal;
+export default StopExperimentModal;

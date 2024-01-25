@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Plus from '../../icons/Plus';
 import Experiment from '../Experiment/Experiment';
 import styles from './TabsAndExperiments.module.css';
 
@@ -25,21 +27,28 @@ const TabsAndExperiments = ({ experiments }) => {
 
   return (
     <div className={styles.TabsAndExperiments}>
-      <div className={styles.tabs}>
-        {tabs.map((tab, i) => (
-          <div
-            key={tab}
-            className={`${styles.tab} ${
-              tab === activeTab ? styles.active : ''
-            }`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </div>
-        ))}
+      <div className={styles.navigation}>
+        <div className={styles.createNewExperiment}>
+          <Plus />
+        </div>
+        <div className={styles.tabs}>
+          {tabs.map((tab, i) => (
+            <div
+              key={tab}
+              className={`${styles.tab} ${
+                tab === activeTab ? styles.active : ''
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </div>
+          ))}
+        </div>
       </div>
       <div className={styles.experiments}>
-        <h2 className={styles.title}>{activeTab} Experiments</h2>
+        <h2 className={styles.title}>
+          {activeTab} Experiments -<span onClick={signOut}>logout</span>
+        </h2>
         <div className={styles.experiments}>
           {experimentsByTab[activeTab].map((experiment) => (
             <Experiment key={experiment.id} experiment={experiment} />

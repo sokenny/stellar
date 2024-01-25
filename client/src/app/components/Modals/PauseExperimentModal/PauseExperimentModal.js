@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
-import Button from '../Button/Button';
-import styles from './DeleteExperimentModal.module.css';
+import Button from '../../Button/Button';
+import styles from './PauseExperimentModal.module.css';
 
-const DeleteExperimentModal = ({ onClose, experimentId }) => {
+const PauseExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
-  function handleStopExperiment() {
-    if (confirm('Are you absolutely sure?') === false) {
-      onClose();
-      return;
-    }
+  function handlePauseExperiment() {
     setSubmitting(true);
-    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`, {
-      method: 'DELETE',
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/pause`,
+      {
+        method: 'POST',
+      },
+    )
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);
@@ -28,23 +27,23 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
   return (
     <Modal
       onClose={onClose}
-      className={styles.DeleteExperimentModal}
+      className={styles.PauseExperimentModal}
       showX={false}
     >
       <div>
         <div className={styles.header}>
           <h3 className={styles.title}>
-            Are you sure you want to delete this experiment?
+            Are you sure you want to pause this experiment?
           </h3>
         </div>
         <div className={styles.actions}>
           <Button
-            className={styles.deleteBtn}
-            onClick={handleStopExperiment}
+            className={styles.pauseBtn}
+            onClick={handlePauseExperiment}
             disabled={submitting}
             loading={submitting}
           >
-            Delete Experiment
+            Pause Experiment
           </Button>
           <div className={styles.cancel} onClick={onClose}>
             cancel
@@ -55,4 +54,4 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
   );
 };
 
-export default DeleteExperimentModal;
+export default PauseExperimentModal;

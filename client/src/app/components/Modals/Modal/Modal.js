@@ -1,6 +1,6 @@
 'use client';
 
-import Close from '../../icons/Close';
+import Close from '../../../icons/Close';
 import styles from './Modal.module.css';
 
 const Modal = ({

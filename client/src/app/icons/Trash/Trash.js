@@ -1,11 +1,11 @@
 import styles from './Trash.module.css';
 
-const Trash = ({ onClick }) => (
+const Trash = ({ height, width, onClick }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    width="24px"
-    height="24px"
+    width={width}
+    height={height}
     className={styles.Trash}
     onClick={onClick}
   >

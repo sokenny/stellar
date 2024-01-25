@@ -11,6 +11,10 @@ async function setGoal(req, res) {
     element_url,
   } = req.body;
 
+  console.log('aca llegamos!');
+  console.log('aca llegamos!');
+  console.log('aca llegamos!');
+
   const experiment = await db.Experiment.findOne({
     where: {
       id: experiment_id,

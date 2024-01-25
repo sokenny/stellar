@@ -10,12 +10,12 @@ import Goal from './Goal/Goal';
 import StopButton from '../StopButton/StopButton';
 import PlayButton from '../PlayButton/PlayButton';
 import PauseButton from '../PauseButton/PauseButton';
-import GoalSetupModal from '../GoalSetupModal/GoalSetupModal';
-import EditExperimentModal from '../EditExperimentModal/EditExperimentModal';
-import PauseExperimentModal from '../PauseExperimentModal/PauseExperimentModal';
-import ResumeExperimentModal from '../ResumeExperimentModal/ResumeExperimentModal';
-import StopExperimentModal from '../StopExperimentModal/StopExperimentModal';
-import DeleteExperimentModal from '../DeleteExperimentModal/DeleteExperimentModal';
+import GoalSetupModal from '../Modals/GoalSetupModal/GoalSetupModal';
+import EditExperimentModal from '../Modals/EditExperimentModal/EditExperimentModal';
+import PauseExperimentModal from '../Modals/PauseExperimentModal/PauseExperimentModal';
+import ResumeExperimentModal from '../Modals/ResumeExperimentModal/ResumeExperimentModal';
+import StopExperimentModal from '../Modals/StopExperimentModal/StopExperimentModal';
+import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 import Button from '../Button/Button';
 import styles from './Experiment.module.css';
 
@@ -123,9 +123,6 @@ const Experiment = ({
             {experiment.status}
           </div>
           <div className={styles.action}>
-            {/* {experiment.status === ExperimentStatusesEnum.QUEUED && (
-              <PlayButton />
-            )} */}
             {showStopPlayPauseButtons && (
               <div className={styles.stopPlayPauseButtons}>
                 <StopButton onClick={() => setShowStopExperimentModal(true)} />

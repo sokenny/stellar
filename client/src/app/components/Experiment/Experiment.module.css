@@ -72,6 +72,10 @@
 .editExperiment {
   margin-left: 12px;
   cursor: pointer;
+  display: none;
+}
+
+.Experiment:hover .editExperiment {
   display: flex;
 }
 

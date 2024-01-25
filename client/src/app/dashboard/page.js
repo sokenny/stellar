@@ -1,4 +1,4 @@
-import TabsAndExperiments from './components/TabsAndExperiments/TabsAndExperiments';
+import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperiments';
 import styles from './page.module.css';
 
 // TODO-p2 have a main store for the app - investigate good options for next.js

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import Edit from '../../icons/Edit';
-import EditVariantModal from '../EditVariantModal/EditVariantModal';
+import Trash from '../../icons/Trash';
+import EditVariantModal from '../Modals/EditVariantModal/EditVariantModal';
 import Stats from './Stats/Stats';
 import styles from './Variant.module.css';
 
@@ -19,6 +20,10 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
       }
     }
   }, [variantRef, height, setHeight]);
+
+  const canAlterVariant =
+    experiment.status === ExperimentStatusesEnum.QUEUED ||
+    experiment.status === ExperimentStatusesEnum.PENDING;
 
   return (
     <div
@@ -42,11 +47,18 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
               <div className={styles.original}>original</div>
             )}
           </div>
-          <div
-            className={styles.edit}
-            onClick={() => setShowEditVariantModal(true)}
-          >
-            <Edit width={15} height={15} />
+          <div className={styles.actionButtons}>
+            {canAlterVariant && (
+              <div className={styles.delete}>
+                <Trash height={18} width={18} />
+              </div>
+            )}
+            <div
+              className={styles.edit}
+              onClick={() => setShowEditVariantModal(true)}
+            >
+              <Edit width={15} height={15} />
+            </div>
           </div>
         </div>
         <div className={styles.text}>

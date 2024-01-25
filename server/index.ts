@@ -17,6 +17,7 @@ const allowedOrigins = [
   'https://www.grantcardonerealestate.com',
   'https://clickup.com',
   'http://localhost:3002',
+  'http://localhost:3004',
 ];
 
 const corsOptions = {
@@ -35,7 +36,9 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/scrapper', scrapper);
+app.get('/', (req, res) => {
+  res.status(200).send('All good!');
+});
 app.use('/api', api);
 
 console.log('RUNN');

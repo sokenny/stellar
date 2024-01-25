@@ -6,7 +6,6 @@
 
 .tabs {
   display: flex;
-  margin-bottom: 64px;
 }
 
 .tab {
@@ -21,4 +20,15 @@
 
 .tab.active {
   background-color: var(--activeTab);
+}
+
+.navigation {
+  display: flex;
+  margin-bottom: 64px;
+}
+
+.navigation .createNewExperiment {
+  margin-right: 16px;
+  align-items: center;
+  display: flex;
 }
