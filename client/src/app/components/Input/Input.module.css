@@ -1,8 +1,16 @@
 .Input {
-  padding: 4px 12px;
+  padding: 6px 12px;
   outline: none;
   border: 1px solid var(--whiteCardStroke);
   background-color: var(--whiteCardBg);
   color: var(--textBody);
   font-size: 20px;
+}
+
+.Input::placeholder {
+  color: #bababa;
+}
+
+.Input:focus {
+  border: 1px solid rgba(0,0,0,0.3);
 }

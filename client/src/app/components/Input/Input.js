@@ -6,12 +6,14 @@ const Input = ({
   className,
   onChange,
   value,
+  name,
   disabled = false,
 }) => {
   return (
     <input
       className={`${styles.Input} ${className ? className : ''}`}
       type={type}
+      name={name}
       onChange={onChange}
       value={value}
       disabled={disabled}

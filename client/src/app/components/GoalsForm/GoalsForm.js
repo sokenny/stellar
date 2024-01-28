@@ -114,10 +114,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
       );
-
       const experimentJson = await res.json();
-      console.log('experimentJson: ', experimentJson);
-
       if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
         // TODO: trigger global app success toast
         onClose();

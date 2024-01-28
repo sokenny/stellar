@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import Plus from '../../icons/Plus';
 import Experiment from '../Experiment/Experiment';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
@@ -10,7 +10,9 @@ import styles from './TabsAndExperiments.module.css';
 const tabs = ['Running', 'Queued', 'Draft', 'Completed'];
 
 const TabsAndExperiments = ({ experiments }) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [showExperimentModal, setShowExperimentModal] = useState(false);
 
   const experimentsByTab = {
     [tabs[0]]: experiments.filter(
@@ -31,7 +33,7 @@ const TabsAndExperiments = ({ experiments }) => {
       <div className={styles.navigation}>
         <div className={styles.createNewExperiment}>
           {/* <Plus /> */}
-          <CreateButton />
+          <CreateButton onClick={() => router.push('/experiment/create')} />
         </div>
         <div className={styles.tabs}>
           {tabs.map((tab, i) => (

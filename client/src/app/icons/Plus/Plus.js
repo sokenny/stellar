@@ -2,9 +2,10 @@
 
 import colors from '../../helpers/colors';
 
-const Plus = ({ width = 30, height = 30, className }) => {
+const Plus = ({ width = 30, height = 30, onClick, className }) => {
   return (
     <svg
+      onClick={onClick}
       className={className}
       width={width}
       height={height}

@@ -4,6 +4,8 @@
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
+  const newExperiment = urlParams.get('newExperiment');
+  const tempId = urlParams.get('tempId');
   const isSettingGoal = !!experimentId;
   const elementToHighlight = urlParams.get('elementToHighlight');
   const modificationType = urlParams.get('modificationType');
@@ -37,7 +39,7 @@
       return path.join(' > '); //
     }
 
-    async function setClickGoal(selector) {
+    async function setClickGoal({ selector }) {
       console.log('esto corrio');
       const pageUrl = window.location.href.split('?')[0];
       const response = await fetch(STELLAR_API_URL + '/goals', {
@@ -50,6 +52,30 @@
           type: 'CLICK',
           selector,
           page_url: pageUrl,
+        }),
+      });
+
+      return { status: response.status, data: await response.json() };
+    }
+
+    async function createNewExperiment({
+      selector,
+      properties,
+      elementType,
+      tempId,
+    }) {
+      console.log('properties que mandamos: ', properties);
+      const response = await fetch(STELLAR_API_URL + '/experiments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selector,
+          properties,
+          url: window.location.href,
+          elementType,
+          tempId,
         }),
       });
 
@@ -116,30 +142,65 @@
       }
     };
 
-    document.addEventListener('contextmenu', (event) => {
-      if (!isSettingGoal) return;
-      event.preventDefault();
+    function handleElementSelection(event) {
       const selectedElements = document.querySelectorAll('.stellar-selected');
       selectedElements.forEach((element) => {
         element.classList.remove('stellar-selected');
       });
       const target = event.target as any;
       target.classList.add('stellar-selected');
+    }
 
-      const selector = getSelector(event.target);
+    document.addEventListener('contextmenu', (event) => {
+      if (!isSettingGoal && !newExperiment) return;
+      event.preventDefault();
 
-      setTimeout(async () => {
-        const confirmElement = confirm('Confirm element selection?');
-        if (confirmElement) {
-          const response = await setClickGoal(selector);
-          if (response.status === 200) {
-            window.close();
+      if (isSettingGoal) {
+        handleElementSelection(event);
+        const selector = getSelector(event.target);
+        setTimeout(async () => {
+          const confirmElement = confirm('Confirm element selection?');
+          if (confirmElement) {
+            const response = await setClickGoal({ selector });
+            if (response.status === 200) {
+              window.close();
+            }
+          } else {
+            const target = event.target as any;
+            target.classList.remove('stellar-selected');
           }
-        } else {
-          const target = event.target as any;
-          target.classList.remove('stellar-selected');
-        }
-      }, 50);
+        }, 50);
+      }
+
+      if (newExperiment) {
+        handleElementSelection(event);
+        const target: any = event.target;
+        const selector = getSelector(target);
+        const properties = {
+          color: window.getComputedStyle(target).color,
+          fontSize: window.getComputedStyle(target).fontSize,
+          fontWeight: window.getComputedStyle(target).fontWeight,
+          innerText: target.innerText,
+        };
+        setTimeout(async () => {
+          const confirmElement = confirm('Confirm element selection?');
+          if (confirmElement) {
+            const response = await createNewExperiment({
+              selector,
+              properties,
+              elementType: target.nodeName,
+              tempId,
+            });
+            console.log('la respuestaa: ', response);
+            if (response.status === 200) {
+              window.close();
+            }
+          } else {
+            const target = event.target as any;
+            target.classList.remove('stellar-selected');
+          }
+        }, 50);
+      }
     });
   }
 })();

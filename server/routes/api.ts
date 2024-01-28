@@ -18,6 +18,7 @@ import deleteExperiment from './handlers/deleteExperiment';
 import deleteVariant from './handlers/deleteVariant';
 import pauseExperiment from './handlers/pauseExperiment';
 import resumeExperiment from './handlers/resumeExperiment';
+import createExperiment from './handlers/createExperiment';
 
 const router = express.Router();
 
@@ -30,6 +31,7 @@ router.get('/journey/:id', getJourneyTree);
 router.post('/journey/:id/launch', launchJourney);
 
 // This one is used on the client side to mount experiments for users
+router.post('/experiments', createExperiment);
 router.get('/experiments/client', getExperimentsForClient);
 router.get('/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
