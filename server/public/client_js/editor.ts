@@ -6,6 +6,7 @@
   const experimentId = urlParams.get('experimentId');
   const newExperiment = urlParams.get('newExperiment');
   const tempId = urlParams.get('tempId');
+  const projectId = urlParams.get('projectId');
   const isSettingGoal = !!experimentId;
   const elementToHighlight = urlParams.get('elementToHighlight');
   const modificationType = urlParams.get('modificationType');
@@ -58,13 +59,7 @@
       return { status: response.status, data: await response.json() };
     }
 
-    async function createNewExperiment({
-      selector,
-      properties,
-      elementType,
-      tempId,
-    }) {
-      console.log('properties que mandamos: ', properties);
+    async function createNewExperiment({ selector, properties, elementType }) {
       const response = await fetch(STELLAR_API_URL + '/experiments', {
         method: 'POST',
         headers: {
@@ -76,6 +71,7 @@
           url: window.location.href,
           elementType,
           tempId,
+          projectId,
         }),
       });
 
@@ -189,7 +185,6 @@
               selector,
               properties,
               elementType: target.nodeName,
-              tempId,
             });
             console.log('la respuestaa: ', response);
             if (response.status === 200) {

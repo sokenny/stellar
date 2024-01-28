@@ -1,15 +1,13 @@
 import db from '../../models';
 
 async function createExperiment(req, res) {
-  const { selector, properties, url, elementType, tempId } = req.body;
-  const domain = url.split('/')[2];
+  const { selector, properties, url, elementType, tempId, projectId } =
+    req.body;
 
-  const project = await db.Project.findOne({
-    where: {
-      domain,
-    },
-    attributes: ['id'],
-  });
+  if (!projectId) {
+    res.status(400).json({ error: 'Project ID is required' });
+    return;
+  }
 
   const element = await db.Element.create({
     selector,
@@ -18,7 +16,7 @@ async function createExperiment(req, res) {
   });
 
   const experiment = await db.Experiment.create({
-    project_id: project.id,
+    project_id: projectId,
     element_id: element.id,
     name: elementType + ' Experiment ' + tempId,
     url,

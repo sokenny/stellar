@@ -16,7 +16,7 @@ const Plus = ({ width = 30, height = 30, onClick, className }) => {
       <g
         id="Page-1"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
         fillRule="evenodd"
       >

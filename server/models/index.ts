@@ -52,6 +52,10 @@ const associateModels = () => {
     foreignKey: 'project_id',
     as: 'journeys',
   });
+  db.Project.hasMany(db.Experiment, {
+    foreignKey: 'project_id',
+    as: 'experiments',
+  });
   db.Journey.hasMany(db.Experiment, {
     foreignKey: 'journey_id',
     as: 'experiments',

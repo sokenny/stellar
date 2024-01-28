@@ -1,7 +1,34 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import useStore from '../../store';
 import Link from 'next/link';
 import styles from './Nav.module.css';
 
 const Nav = () => {
+  const { setProjects, setCurrentProject } = useStore();
+  const initializedProjects = useRef(false);
+
+  async function initializeProjects() {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/1`,
+      {
+        cache: 'no-store',
+      },
+    );
+
+    const projects = await response.json();
+    setProjects(projects);
+    setCurrentProject(projects[0]);
+  }
+
+  useEffect(() => {
+    if (!initializedProjects.current) {
+      initializeProjects();
+      initializedProjects.current = true;
+    }
+  }, []);
+
   return (
     <nav className={styles.Nav}>
       <div className={styles.id}>

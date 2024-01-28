@@ -16,18 +16,33 @@
 }
 
 .radioGroup {
-    display: flex;
+  display: flex;
 }
 
 .radioGroup .radio {
-    margin-right: 32px;
+  margin-right: 32px;
 }
 
 .radio input {
-    margin-right: 4px;
+  margin-right: 4px;
 }
 
 .selectElementBtn {
-    margin-top: 12px;
-    width: fit-content;
+  margin-top: 12px;
+  width: fit-content;
+}
+
+.elementInfo {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.elementInfo span {
+  text-transform: uppercase;
+}
+
+.checkIcon {
+  transform: translateY(-1px);
+  margin-right: 6px;
 }

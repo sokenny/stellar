@@ -1,8 +1,7 @@
 import db from '../../models';
 
 async function getExperiments(req, res) {
-  // const { projectId } = req.query;
-  const projectId = 35;
+  const { projectId } = req.params;
   const experiments = await db.Experiment.findAll({
     where: {
       project_id: projectId,
@@ -12,6 +11,7 @@ async function getExperiments(req, res) {
       {
         model: db.Variant,
         as: 'variants',
+        required: false,
         where: {
           deleted_at: null,
         },

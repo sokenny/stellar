@@ -19,6 +19,7 @@ import deleteVariant from './handlers/deleteVariant';
 import pauseExperiment from './handlers/pauseExperiment';
 import resumeExperiment from './handlers/resumeExperiment';
 import createExperiment from './handlers/createExperiment';
+import getProjects from './handlers/getProjects';
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.post('/journey/:id/launch', launchJourney);
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
 router.get('/experiments/client', getExperimentsForClient);
-router.get('/experiments', getExperiments);
+router.get('/projects/:projectId/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.get('/experiment/:id/stats', getExperimentStatsHandler);
@@ -57,6 +58,7 @@ router.get('/clientjs', sendStellarJSBundle);
 
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
+router.get('/projects/:userId', getProjects);
 router.delete('/project/:projectId', deleteProject);
 
 export default router;
