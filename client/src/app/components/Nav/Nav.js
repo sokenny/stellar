@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { Toaster } from 'sonner';
 import useStore from '../../store';
 import Link from 'next/link';
 import styles from './Nav.module.css';
@@ -31,6 +32,7 @@ const Nav = () => {
 
   return (
     <nav className={styles.Nav}>
+      <Toaster richColors />
       <div className={styles.id}>
         <div className={styles.logo}></div>
         <Link href="/dashboard">STELLAR</Link>

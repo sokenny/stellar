@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useEffect, useState, useRef } from 'react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
@@ -91,6 +92,9 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
         alert('Something went wrong');
         throw new Error('Something went wrong');
       } else {
+        console.log('llegamo aca!!');
+        toast.success('Goal set successfully');
+        // TODO-p2: replace all router.refreshes with a refetch
         router.refresh();
         onClose();
       }

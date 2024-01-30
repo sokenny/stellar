@@ -1,7 +1,9 @@
 import Experiment from '../../components/Experiment/Experiment';
+import Notifications from '../Notifications';
 import styles from './page.module.css';
 
-export default async function ExperimentPage({ params }) {
+export default async function ExperimentPage({ params, searchParams }) {
+  console.log('searchParams: ', searchParams);
   const experimentId = params.id;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`,
@@ -15,11 +17,11 @@ export default async function ExperimentPage({ params }) {
 
   return (
     <div className={styles.Experiment}>
+      <Notifications searchParams={searchParams} />
       <h1 className={styles.title}>{experiment.name}</h1>
       <Experiment experiment={experiment} open={true} />
-      {/* TODO-p1: Implement beautiful toasts from a library */}
+      {/* stats in store as maps */}
       {/* TODO-p1-1.2 Allow manual creation of variants */}
-      {/* TODO-p1-2 Allow experiments deletion */}
       {/* TODO-p1-3: Work on modal right before "launch journey" that sets up the user's account & paypal sub */}
     </div>
   );

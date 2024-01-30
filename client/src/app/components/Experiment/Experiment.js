@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import useStore from '../../store';
 import Link from 'next/link';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
@@ -29,9 +30,8 @@ const Experiment = ({
   onJourneyReview = false,
   cardLike = false,
 }) => {
-  console.log('experiment: ', experiment);
+  const { stats, setStats } = useStore();
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
-  const [experimentStats, setExperimentStats] = useState([]);
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
@@ -56,13 +56,13 @@ const Experiment = ({
         },
       );
       const data = await res.json();
-      setExperimentStats(data);
+      setStats(experiment.id, data);
     };
 
-    if (experiment.started_at) {
+    if (experiment.started_at && !stats[experiment.id]) {
       fetchExperimentStats();
     }
-  }, []);
+  }, [stats, experiment]);
 
   const sortedVariants = getSortedVariants(variants);
 
@@ -73,7 +73,9 @@ const Experiment = ({
   const experimentTitle = name + ' - #' + experiment.id;
 
   const showDeleteButton =
-    onJourneyReview || experiment.status === ExperimentStatusesEnum.QUEUED;
+    onJourneyReview ||
+    experiment.status === ExperimentStatusesEnum.QUEUED ||
+    experiment.status === ExperimentStatusesEnum.PENDING;
 
   const showStopPlayPauseButtons =
     experiment.status === ExperimentStatusesEnum.RUNNING ||
@@ -102,11 +104,21 @@ const Experiment = ({
               </Link>
             )}
           </div>
-          <div
-            className={styles.editExperiment}
-            onClick={() => setShowEditExperimentModal(true)}
-          >
-            <Edit height={18} />
+          <div className={styles.experimentActions}>
+            {showDeleteButton && (
+              <div className={styles.deleteBtn}>
+                <Trash
+                  height={21}
+                  onClick={() => setShowDeleteExperimentModal(true)}
+                />
+              </div>
+            )}
+            <div
+              className={styles.editExperiment}
+              onClick={() => setShowEditExperimentModal(true)}
+            >
+              <Edit height={18} />
+            </div>
           </div>
         </div>
 
@@ -169,7 +181,7 @@ const Experiment = ({
                     variants={variants}
                     experiment={experiment}
                     n={i + 1}
-                    stats={experimentStats.find(
+                    stats={stats[experiment.id]?.find(
                       (s) => s.variantId === variant.id,
                     )}
                     height={maxVariantHeight}
@@ -194,11 +206,6 @@ const Experiment = ({
                   >
                     Set up goal
                   </Button>
-                </div>
-              )}
-              {showDeleteButton && (
-                <div className={styles.deleteBtn}>
-                  <Trash onClick={() => setShowDeleteExperimentModal(true)} />
                 </div>
               )}
             </div>

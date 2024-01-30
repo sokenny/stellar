@@ -1,9 +1,12 @@
+import removeUrlParams from '../../helpers/removeUrlParams';
 import db from '../../models';
 import createVariantsFromElement from '../../services/createVariantsFromElement';
 
 async function createExperiment(req, res) {
   const { selector, properties, url, elementType, tempId, projectId } =
     req.body;
+
+  const sanitizedUrl = removeUrlParams(url);
 
   if (!projectId) {
     res.status(400).json({ error: 'Project ID is required' });
@@ -20,7 +23,7 @@ async function createExperiment(req, res) {
     project_id: projectId,
     element_id: element.id,
     name: elementType + ' Experiment ' + tempId,
-    url,
+    url: sanitizedUrl,
   });
 
   await createVariantsFromElement({

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
+import { toast } from 'sonner';
 import styles from './DeleteExperimentModal.module.css';
 
 const DeleteExperimentModal = ({ onClose, experimentId }) => {
@@ -20,6 +21,7 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);
+        toast.success('Experiment deleted');
         router.refresh();
         onClose();
       });
