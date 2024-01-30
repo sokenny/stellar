@@ -15,9 +15,9 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
     const { website_url } = req.body;
     const project = await findOrCreateProject(website_url, transaction);
     const browserSession = await initiatePage(website_url);
-    const mainElements = await scrapMainElements(website_url, browserSession);
+    const mainElements = await scrapMainElements(browserSession);
 
-    const context = await getPageContext(website_url, browserSession);
+    const context = await getPageContext(browserSession);
 
     const journey = await db.Journey.create(
       {

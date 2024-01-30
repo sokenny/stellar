@@ -12,7 +12,6 @@ const tabs = ['Running', 'Queued', 'Draft', 'Completed'];
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [showExperimentModal, setShowExperimentModal] = useState(false);
 
   const experimentsByTab = {
     [tabs[0]]: experiments.filter(
@@ -49,7 +48,7 @@ const TabsAndExperiments = ({ experiments }) => {
           ))}
         </div>
       </div>
-      <div className={styles.experiments}>
+      <div>
         <h2 className={styles.title}>
           {activeTab} Experiments -<span onClick={signOut}>logout</span>
         </h2>

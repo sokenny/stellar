@@ -1,13 +1,15 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import useStore from '../../store';
 import getShortId from '../../helpers/getShortId';
 import Check from '../../icons/Check';
-import useStore from '../../store';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './CreateExperimentForm.module.css';
 
 const CreateExperimentForm = () => {
+  const router = useRouter();
   const { currentProject } = useStore();
   const loading = Object.keys(currentProject).length === 0;
   const experimentCreatedCheckInterval = useRef(null);
@@ -39,12 +41,13 @@ const CreateExperimentForm = () => {
       );
 
       if (newExperiment) {
-        // show element info in the form
-        setFormState({
-          ...formState,
-          experiment: newExperiment,
-        });
         clearInterval(experimentCreatedCheckInterval.current);
+        setFormState({ ...formState, experiment: newExperiment });
+        setTimeout(() => {
+          router.push(
+            `/experiment/${newExperiment.id}?fromCreateForm=true&aiGenerated=true`,
+          );
+        }, 3000);
       }
     }, 2000);
   }, [currentProject.id, formState]);
@@ -52,7 +55,9 @@ const CreateExperimentForm = () => {
   return (
     <div className={styles.CreateExperimentForm}>
       <div className={styles.fieldGroup}>
-        <label>Which URL is this experiment for?</label>
+        <label className={styles.stepTitle}>
+          1. Which URL is this experiment for?
+        </label>
         <Input
           type="text"
           name="url"
@@ -67,7 +72,9 @@ const CreateExperimentForm = () => {
         </span>
       </div>
       <div className={styles.fieldGroup}>
-        <label>Let's choose the element we will experiment with</label>
+        <label className={styles.stepTitle}>
+          2. Let's choose the element we will experiment with.
+        </label>
         <div className={styles.radioGroup}>
           <div className={styles.radio}>
             <input
@@ -97,7 +104,6 @@ const CreateExperimentForm = () => {
             <label htmlFor="manual_select">Select manually</label>
           </div>
         </div>
-
         {!formState.experiment ? (
           <Button
             className={styles.selectElementBtn}
@@ -107,17 +113,22 @@ const CreateExperimentForm = () => {
             Select Element
           </Button>
         ) : (
-          <div className={styles.elementInfo}>
-            <Check height={16} width={16} className={styles.checkIcon} />
-            <a
-              href={`${formState.experiment.url}?stellarMode=true&elementToHighlight=${formState.experiment.element.selector}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>Element: </span>
-              {formState.experiment.element.type} type selected
-            </a>
-          </div>
+          <>
+            <div className={styles.elementInfo}>
+              <Check height={16} width={16} className={styles.checkIcon} />
+              <a
+                href={`${formState.experiment.url}?stellarMode=true&elementToHighlight=${formState.experiment.element.selector}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Element: </span>
+                {formState.experiment.element.type} type selected
+              </a>
+            </div>
+            <div className={styles.redirecting}>
+              Redirecting to experiment page...
+            </div>
+          </>
         )}
       </div>
     </div>

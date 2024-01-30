@@ -17,6 +17,7 @@ async function getProjects(req, res) {
           {
             model: db.Variant,
             as: 'variants',
+            required: false,
             where: {
               deleted_at: null,
             },

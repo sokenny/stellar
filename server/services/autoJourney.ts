@@ -20,7 +20,6 @@ export async function initiatePage(website) {
 }
 
 export async function scrapMainElements(
-  websiteUrl: string,
   browserSession: any,
 ): Promise<MainElements | false> {
   const domHelper = DOMHelper(browserSession.page, browserSession.window);
@@ -29,7 +28,7 @@ export async function scrapMainElements(
   return mainElements;
 }
 
-export async function getPageContext(website_url: string, browserSession: any) {
+export async function getPageContext(browserSession: any) {
   const domHelper = DOMHelper(browserSession.page, browserSession.window);
   const context = await domHelper.getPageContext();
   console.log('context! ', context);

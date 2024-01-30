@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
+import getSortedVariants from '../../helpers/getSortedVariants';
 import Variant from '../Variant/Variant';
 import Goal from './Goal/Goal';
 import StopButton from '../StopButton/StopButton';
@@ -28,6 +29,7 @@ const Experiment = ({
   onJourneyReview = false,
   cardLike = false,
 }) => {
+  console.log('experiment: ', experiment);
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const [experimentStats, setExperimentStats] = useState([]);
   const { name, variants, goal, url } = experiment;
@@ -62,18 +64,7 @@ const Experiment = ({
     }
   }, []);
 
-  const nonControlVariants = variants.filter((v) => !v.is_control);
-
-  nonControlVariants.sort((a, b) => {
-    if (a.id > b.id) return -1;
-    if (a.id < b.id) return 1;
-    return 0;
-  });
-
-  const sortedVariants = [
-    variants.find((v) => v.is_control),
-    ...nonControlVariants,
-  ];
+  const sortedVariants = getSortedVariants(variants);
 
   sortedVariants.forEach((v, i) => {
     v.num = i + 1;

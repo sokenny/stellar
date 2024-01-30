@@ -32,3 +32,11 @@
   align-items: center;
   display: flex;
 }
+
+.experiments > * {
+  margin-bottom: 16px;
+}
+
+.experiments >*:last-child {
+  margin-bottom: 0;
+}

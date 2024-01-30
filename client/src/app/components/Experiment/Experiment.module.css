@@ -4,8 +4,8 @@
   border-bottom: 1px solid var(--whiteCardStroke);
   border-radius: 4px;
   font-weight: 300;
-  /* width: 800px; */
   cursor: pointer;
+  width: 800px;
 }
 
 .Experiment.cardLike {
@@ -32,6 +32,10 @@
 }
 
 .Experiment.queued .status {
+  color: var(--yellow);
+}
+
+.Experiment.pending .status {
   color: var(--yellow);
 }
 
@@ -174,6 +178,7 @@
 
 .variantsContainer {
   display: flex;
+  overflow-x: auto;
 }
 
 .variantsContainer > div {

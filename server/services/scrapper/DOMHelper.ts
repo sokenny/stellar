@@ -1,6 +1,5 @@
 import { ElementHandle } from 'puppeteer';
 import tryOrReturn from '../../helpers/tryOrReturn';
-import { MainElements } from '../../types';
 import { buttonClasses, loginCtas } from '../../utils';
 
 export default function DOMHelper(page: any, window: any) {

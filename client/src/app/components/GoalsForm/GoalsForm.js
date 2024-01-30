@@ -104,7 +104,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
   async function onGoToUrl() {
     const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
-      `${
+      `http://${
         getDomainFromUrl(experiment.url) + '/' + formData.elementUrl
       }?stellarMode=true&experimentId=${experiment.id}`,
       '_blank',
@@ -117,6 +117,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
       const experimentJson = await res.json();
       if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
         // TODO: trigger global app success toast
+        clearInterval(goalCheckIntervalRef.current);
         onClose();
         router.refresh();
       }
