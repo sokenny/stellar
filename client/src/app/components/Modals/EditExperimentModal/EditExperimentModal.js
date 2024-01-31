@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import useStore from '../../../store';
 import Modal from '../Modal/Modal';
 import Input from '../../Input/Input';
 import Button from '../../Button/Button';
@@ -12,6 +14,7 @@ const EditExperimentModal = ({
   initialValues = {},
 }) => {
   const router = useRouter();
+  const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialValues);
 
@@ -32,10 +35,11 @@ const EditExperimentModal = ({
           }),
         },
       );
-      const data = await response.json();
-      console.log(data);
-      router.refresh();
-      onClose();
+      if (response.status === 200) {
+        toast.success('Experiment updated');
+        refetchProjects();
+        onClose();
+      }
     } catch (e) {
       console.log(e);
     } finally {

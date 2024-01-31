@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import useStore from '../../../store';
+import { toast } from 'sonner';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import styles from './DeleteVariantModal.module.css';
 
 const DeleteVariantModal = ({ onClose, variantId }) => {
-  const router = useRouter();
+  const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteVariant() {
@@ -15,9 +16,12 @@ const DeleteVariantModal = ({ onClose, variantId }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setSubmitting(false);
-        router.refresh();
-        onClose();
+        if (res.success) {
+          setSubmitting(false);
+          toast.success('Variant deleted successfully');
+          refetchProjects();
+          onClose();
+        }
       });
   }
 

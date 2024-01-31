@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useStore from '../../../store';
 import { useRouter } from 'next/navigation';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
@@ -7,6 +8,7 @@ import styles from './DeleteExperimentModal.module.css';
 
 const DeleteExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
+  const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteExperiment() {
@@ -22,7 +24,7 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => {
         setSubmitting(false);
         toast.success('Experiment deleted');
-        router.refresh();
+        refetchProjects();
         onClose();
       });
   }

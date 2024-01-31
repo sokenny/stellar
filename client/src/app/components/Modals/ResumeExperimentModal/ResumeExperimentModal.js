@@ -1,11 +1,14 @@
+import useStore from '../../../store';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import styles from './ResumeExperimentModal.module.css';
 
 const ResumeExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
+  const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleResumeExperiment() {
@@ -19,7 +22,8 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);
-        router.refresh();
+        refetchProjects();
+        toast.success('Experiment resumed');
         onClose();
       });
   }

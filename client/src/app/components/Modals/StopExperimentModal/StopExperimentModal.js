@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import useStore from '../../../store';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import styles from './StopExperimentModal.module.css';
 
 const StopExperimentModal = ({ onClose, experimentId }) => {
-  const router = useRouter();
+  const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleStopExperiment() {
@@ -23,7 +24,8 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);
-        router.refresh();
+        toast.success('Experiment stopped');
+        refetchProjects();
         onClose();
       });
   }

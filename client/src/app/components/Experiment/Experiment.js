@@ -178,7 +178,9 @@ const Experiment = ({
           <div>
             <div className={styles.variants}>
               <div className={styles.variantsHeader}>
-                <div className={styles.variantsTitle}>Variants</div>
+                <div className={styles.variantsTitle}>
+                  Variants ({variants.length})
+                </div>
                 {isAlterable && (
                   <CreateButton
                     height={18}
@@ -191,9 +193,8 @@ const Experiment = ({
                   <Variant
                     key={variant.id}
                     id={variant.id}
-                    variants={variants}
+                    variants={sortedVariants}
                     experiment={experiment}
-                    n={i + 1}
                     stats={stats[experiment.id]?.find(
                       (s) => s.variantId === variant.id,
                     )}

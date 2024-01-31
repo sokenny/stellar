@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import useStore from '../../../store';
 import isObjectEqual from '../../../helpers/isObjectEqual';
 import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
 import Input from '../../Input/Input';
@@ -19,6 +20,7 @@ const VariantModal = ({
   },
 }) => {
   const router = useRouter();
+  const { refetchProjects } = useStore();
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
@@ -65,14 +67,12 @@ const VariantModal = ({
           }),
         },
       );
-      const data = await response.json();
-      // if sttus code is 200
       if (response.status === 200) {
+        refetchProjects();
         toast.success(
           `Variant ${isEditing ? 'updated' : 'created'} successfully`,
         );
         onClose();
-        router.refresh();
       }
     } catch (e) {
       console.log(e);

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import useStore from '../../store';
 import { useEffect, useState, useRef } from 'react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
@@ -32,6 +33,7 @@ const goals = [
 ];
 
 const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
+  const { refetchProjects } = useStore();
   const domain = getDomainFromUrl(experiment.url);
   const router = useRouter();
   const goalCheckIntervalRef = useRef(null);
@@ -88,15 +90,13 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
         },
       );
 
-      if (response.status !== 200) {
+      if (response.status === 200) {
+        await refetchProjects();
+        toast.success('Goal set successfully');
+        onClose();
+      } else {
         alert('Something went wrong');
         throw new Error('Something went wrong');
-      } else {
-        console.log('llegamo aca!!');
-        toast.success('Goal set successfully');
-        // TODO-p2: replace all router.refreshes with a refetch
-        router.refresh();
-        onClose();
       }
     } catch (e) {
       console.log(e);
@@ -123,7 +123,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
         // TODO: trigger global app success toast
         clearInterval(goalCheckIntervalRef.current);
         onClose();
-        router.refresh();
+        refetchProjects();
       }
     }, 1000);
   }
@@ -232,7 +232,7 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
             <div className={styles.currentGoal}>
               <div className={styles.title}>
                 Currently tracking user visits to{' '}
-                <Link href="">{goal?.page_url}</Link>.
+                <Link href="">{goal?.url_match_value}</Link>.
               </div>
               <Button onClick={() => setWantsToUpdateGoal(true)}>
                 Set Different Url

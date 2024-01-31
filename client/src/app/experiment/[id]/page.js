@@ -20,8 +20,6 @@ export default async function ExperimentPage({ params, searchParams }) {
       <Notifications searchParams={searchParams} />
       <h1 className={styles.title}>{experiment.name}</h1>
       <Experiment experiment={experiment} open={true} />
-      {/* stats in store as maps */}
-      {/* TODO-p1-1.2 Allow manual creation of variants */}
       {/* TODO-p1-3: Work on modal right before "launch journey" that sets up the user's account & paypal sub */}
     </div>
   );

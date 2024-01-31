@@ -4,8 +4,8 @@ function getSortedVariants(variants) {
   const nonControlVariants = variants.filter((v) => !v.is_control);
 
   nonControlVariants.sort((a, b) => {
-    if (a.id > b.id) return -1;
-    if (a.id < b.id) return 1;
+    if (a.id < b.id) return -1;
+    if (a.id > b.id) return 1;
     return 0;
   });
 
