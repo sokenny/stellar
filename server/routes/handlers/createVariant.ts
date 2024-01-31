@@ -2,37 +2,24 @@ import { Request, Response } from 'express';
 import validateTraffic from '../../helpers/validateTraffic';
 import db from '../../models';
 
-async function editVariant(req: Request, res: Response) {
+async function createVariant(req: Request, res: Response) {
   const variantId: string = req.params.id;
-  const { text } = req.body;
-
+  const { text, experimentId } = req.body;
   const trafficObj = validateTraffic(req.body);
 
   if (trafficObj instanceof Error) {
     return res.status(400).send(trafficObj.message);
   }
 
-  const variant = await db.Variant.findOne({
-    where: { id: variantId },
-    include: [{ model: db.Experiment, as: 'experiment', required: true }],
+  const variant = await db.Variant.create({
+    text,
+    // TODO: later on we will have to set default fontSize, color, etc here
+    traffic: trafficObj[variantId],
+    experiment_id: experimentId,
   });
 
-  if (!variant) {
-    return res.status(404).send('Variant not found.');
-  }
-
-  const valuesToSet = {
-    traffic: trafficObj[variantId],
-  };
-
-  if (variant.experiment.started_at === null) {
-    valuesToSet['text'] = text;
-  }
-
-  const updatedVariant = await variant.update(valuesToSet);
-
   const variantIdsToUpdate = Object.keys(trafficObj).filter(
-    (id) => id !== variant.id.toString(),
+    (id) => id !== variant.id.toString() && id !== 'undefined',
   );
 
   await Promise.all(
@@ -44,7 +31,7 @@ async function editVariant(req: Request, res: Response) {
     ),
   );
 
-  res.json(updatedVariant);
+  res.json(variant);
 }
 
-export default editVariant;
+export default createVariant;

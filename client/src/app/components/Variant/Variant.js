@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
+import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
-import EditVariantModal from '../Modals/EditVariantModal/EditVariantModal';
+import VariantModal from '../Modals/VariantModal/VariantModal';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import Stats from './Stats/Stats';
 import styles from './Variant.module.css';
@@ -83,18 +84,15 @@ const Variant = ({ id, experiment, variants, stats, height, setHeight, n }) => {
         </div>
         <div className={styles.description}>{thisVariant.description}</div>
         {showEditVariantModal && (
-          <EditVariantModal
+          <VariantModal
             onClose={() => setShowEditVariantModal(false)}
             initialValues={{
               text: thisVariant.text,
-              ...variants.reduce((acc, v) => {
-                acc[`traffic_${v.id}`] = v.traffic;
-                return acc;
-              }, {}),
+              ...getVariantsTrafficInitialValues(variants),
             }}
             variants={variants}
             id={thisVariant.id}
-            experimentStatus={experiment.status}
+            experiment={experiment}
           />
         )}
         {showDeleteVariantModal && (

@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import isObjectEqual from '../../../helpers/isObjectEqual';
@@ -5,14 +6,17 @@ import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnu
 import Input from '../../Input/Input';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
-import styles from './EditVariantModal.module.css';
+import styles from './VariantModal.module.css';
 
-const EditVariantModal = ({
+const VariantModal = ({
+  isEditing = true,
   onClose,
   id,
-  experimentStatus,
+  experiment,
   variants,
-  initialValues = {},
+  initialValues = {
+    text: '',
+  },
 }) => {
   const router = useRouter();
   const initialValuesRef = useRef(initialValues);
@@ -20,12 +24,12 @@ const EditVariantModal = ({
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
-  const thisVariant = variants.find((v) => v.id === id);
+  const thisVariant = isEditing ? variants.find((v) => v.id === id) : {};
   const otherVariants = variants.filter((v) => v.id !== id);
 
   const canEditAttributes =
-    experimentStatus !== ExperimentStatusesEnum.RUNNING &&
-    experimentStatus !== ExperimentStatusesEnum.COMPLETED &&
+    experiment.status !== ExperimentStatusesEnum.RUNNING &&
+    experiment.status !== ExperimentStatusesEnum.COMPLETED &&
     !thisVariant.is_control;
 
   useEffect(() => {
@@ -47,22 +51,29 @@ const EditVariantModal = ({
   const onSave = useCallback(async () => {
     try {
       setSubmitting(true);
+      const apiPath = isEditing ? `/variant/${id}` : '/variant';
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}${apiPath}`,
         {
-          method: 'PUT',
+          method: isEditing ? 'PUT' : 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             ...formData,
+            ...(!isEditing && { experimentId: experiment.id }),
           }),
         },
       );
       const data = await response.json();
-      console.log(data);
-      onClose();
-      router.refresh();
+      // if sttus code is 200
+      if (response.status === 200) {
+        toast.success(
+          `Variant ${isEditing ? 'updated' : 'created'} successfully`,
+        );
+        onClose();
+        router.refresh();
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -73,7 +84,9 @@ const EditVariantModal = ({
   return (
     <Modal onClose={onClose}>
       <div className={styles.header}>
-        <h3 className={styles.title}>Edit Variant {thisVariant.num}</h3>
+        <h3 className={styles.title}>
+          {isEditing ? 'Edit' : 'Create'} Variant {thisVariant.num}
+        </h3>
       </div>
       <div className={styles.fields}>
         <div className={styles.fieldGroup}>
@@ -141,4 +154,4 @@ const EditVariantModal = ({
   );
 };
 
-export default EditVariantModal;
+export default VariantModal;

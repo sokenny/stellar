@@ -20,6 +20,7 @@ import pauseExperiment from './handlers/pauseExperiment';
 import resumeExperiment from './handlers/resumeExperiment';
 import createExperiment from './handlers/createExperiment';
 import getProjects from './handlers/getProjects';
+import createVariant from './handlers/createVariant';
 
 const router = express.Router();
 
@@ -44,6 +45,7 @@ router.post('/experiment/:id/resume', resumeExperiment);
 router.delete('/experiment/:id', deleteExperiment);
 
 router.put('/variant/:id', editVariant);
+router.post('/variant', createVariant);
 router.delete('/variant/:id', deleteVariant);
 
 router.post('/goals', setGoal);

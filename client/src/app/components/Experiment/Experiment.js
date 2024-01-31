@@ -6,12 +6,14 @@ import Link from 'next/link';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
+import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import getSortedVariants from '../../helpers/getSortedVariants';
 import Variant from '../Variant/Variant';
 import Goal from './Goal/Goal';
 import StopButton from '../StopButton/StopButton';
 import PlayButton from '../PlayButton/PlayButton';
 import PauseButton from '../PauseButton/PauseButton';
+import VariantModal from '../Modals/VariantModal/VariantModal';
 import GoalSetupModal from '../Modals/GoalSetupModal/GoalSetupModal';
 import EditExperimentModal from '../Modals/EditExperimentModal/EditExperimentModal';
 import PauseExperimentModal from '../Modals/PauseExperimentModal/PauseExperimentModal';
@@ -20,6 +22,8 @@ import StopExperimentModal from '../Modals/StopExperimentModal/StopExperimentMod
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 import Button from '../Button/Button';
 import styles from './Experiment.module.css';
+import Plus from '../../icons/Plus';
+import CreateButton from '../CreateButton';
 
 const Experiment = ({
   experiment,
@@ -43,6 +47,7 @@ const Experiment = ({
   const [showEditExperimentModal, setShowEditExperimentModal] = useState(false);
   const [showDeleteExperimentModal, setShowDeleteExperimentModal] =
     useState(false);
+  const [showCreateVariantModal, setShowCreateVariantModal] = useState(false);
 
   useEffect(() => {
     const fetchExperimentStats = async () => {
@@ -72,7 +77,7 @@ const Experiment = ({
 
   const experimentTitle = name + ' - #' + experiment.id;
 
-  const showDeleteButton =
+  const isAlterable =
     onJourneyReview ||
     experiment.status === ExperimentStatusesEnum.QUEUED ||
     experiment.status === ExperimentStatusesEnum.PENDING;
@@ -105,7 +110,7 @@ const Experiment = ({
             )}
           </div>
           <div className={styles.experimentActions}>
-            {showDeleteButton && (
+            {isAlterable && (
               <div className={styles.deleteBtn}>
                 <Trash
                   height={21}
@@ -172,7 +177,15 @@ const Experiment = ({
 
           <div>
             <div className={styles.variants}>
-              <div className={styles.variantsTitle}>Variants</div>
+              <div className={styles.variantsHeader}>
+                <div className={styles.variantsTitle}>Variants</div>
+                {isAlterable && (
+                  <CreateButton
+                    height={18}
+                    onClick={() => setShowCreateVariantModal(true)}
+                  />
+                )}
+              </div>
               <div className={styles.variantsContainer}>
                 {sortedVariants.map((variant, i) => (
                   <Variant
@@ -254,6 +267,17 @@ const Experiment = ({
         <DeleteExperimentModal
           onClose={() => setShowDeleteExperimentModal(false)}
           experimentId={experiment.id}
+        />
+      )}
+      {showCreateVariantModal && (
+        <VariantModal
+          onClose={() => setShowCreateVariantModal(false)}
+          experiment={experiment}
+          variants={variants}
+          isEditing={false}
+          initialValues={{
+            ...getVariantsTrafficInitialValues(variants),
+          }}
         />
       )}
     </div>
