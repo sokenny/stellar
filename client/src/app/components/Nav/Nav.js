@@ -32,7 +32,7 @@ const Nav = () => {
 
   return (
     <nav className={styles.Nav}>
-      <Toaster richColors />
+      <Toaster richColors position="top-center" />
       <div className={styles.id}>
         <div className={styles.logo}></div>
         <Link href="/dashboard">STELLAR</Link>

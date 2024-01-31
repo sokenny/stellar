@@ -1,22 +1,17 @@
+import { Button as NextUIButton } from '@nextui-org/react';
 import styles from './Button.module.css';
 
 const Button = ({ children, className, onClick, disabled, loading }) => {
-  function handleClick() {
-    if (disabled) {
-      return;
-    }
-    onClick && onClick();
-  }
   return (
-    <button
-      className={`${styles.Button} ${className}
-    ${disabled ? styles.disabled : ''}
-    ${loading ? styles.loading : ''}
-    `}
-      onClick={handleClick}
+    <NextUIButton
+      className={`${styles.Button} ${className}`}
+      onClick={onClick}
+      isDisabled={disabled}
+      isLoading={loading}
+      color="primary"
     >
       {children}
-    </button>
+    </NextUIButton>
   );
 };
 

@@ -5,6 +5,7 @@
   background-color: var(--whiteCardBg);
   color: var(--textBody);
   font-size: 20px;
+  border-radius: 4px;
 }
 
 .Input::placeholder {

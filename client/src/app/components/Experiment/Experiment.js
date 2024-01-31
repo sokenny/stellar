@@ -78,7 +78,6 @@ const Experiment = ({
   const experimentTitle = name + ' - #' + experiment.id;
 
   const isAlterable =
-    onJourneyReview ||
     experiment.status === ExperimentStatusesEnum.QUEUED ||
     experiment.status === ExperimentStatusesEnum.PENDING;
 

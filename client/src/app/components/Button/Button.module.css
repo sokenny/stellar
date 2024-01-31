@@ -1,20 +1,4 @@
-.Button{
-    padding: 12px 20px;
-    outline: none;
-    border: none;
-    cursor: pointer;
+.Button {
+    border-radius: 4px;
     background-color: var(--blue);
-    color: white;
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 14px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.Button.loading, .Button.disabled{
-    opacity: 0.5;
-    cursor: initial;
 }

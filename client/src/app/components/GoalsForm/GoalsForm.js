@@ -120,10 +120,10 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
       );
       const experimentJson = await res.json();
       if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
-        // TODO: trigger global app success toast
         clearInterval(goalCheckIntervalRef.current);
         onClose();
         refetchProjects();
+        toast.success('Goal set successfully');
       }
     }, 1000);
   }

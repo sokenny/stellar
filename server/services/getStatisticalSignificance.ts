@@ -2,7 +2,6 @@ import db from '../models';
 import jStat from 'jstat';
 import getExperimentStats from './getExperimentStats';
 
-// TODO-p2: This needs to be revisited and finished. We need a service and a handle btw. For now both are her
 function getStatisticalSignificance(variants) {
   let results = [];
 
