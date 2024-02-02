@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import useStore from '../../store';
 import { useEffect, useState, useRef } from 'react';
@@ -35,8 +34,8 @@ const goals = [
 const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
   const { refetchProjects } = useStore();
   const domain = getDomainFromUrl(experiment.url);
-  const router = useRouter();
   const goalCheckIntervalRef = useRef(null);
+  const toastSuccessCalledRef = useRef(false);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
   const [submiting, setSubmiting] = useState(false);
 
@@ -92,7 +91,11 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
 
       if (response.status === 200) {
         await refetchProjects();
-        toast.success('Goal set successfully');
+        console.log('caca1');
+        if (!toastSuccessCalledRef.current) {
+          toast.success('Goal set successfully');
+          toastSuccessCalledRef.current = true;
+        }
         onClose();
       } else {
         alert('Something went wrong');
@@ -123,7 +126,11 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
         clearInterval(goalCheckIntervalRef.current);
         onClose();
         refetchProjects();
-        toast.success('Goal set successfully');
+        console.log('caca2');
+        if (!toastSuccessCalledRef.current) {
+          toast.success('Goal set successfully');
+          toastSuccessCalledRef.current = true;
+        }
       }
     }, 1000);
   }

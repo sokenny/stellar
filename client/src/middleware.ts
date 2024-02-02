@@ -3,15 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export { default } from 'next-auth/middleware';
 
 export const config = {
-  matcher: [
-    '/',
-    // '/experiment/:path*',
-  ],
+  matcher: ['/dashboard', '/experiment/:path*'],
 };
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
   if (!token && process.env.NEXTAUTH_URL) {
-    return NextResponse.redirect(process.env.NEXTAUTH_URL + '/login');
+    return NextResponse.redirect(process.env.NEXTAUTH_URL);
   }
 }

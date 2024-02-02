@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
@@ -11,31 +12,64 @@ const EnterUrlForm = () => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
+  console.log('loading. ', loading);
+
   const onSubmit = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_STELLAR_API + '/onboard',
-        {
+
+      // Display the "Scrapping main elements..." toast
+      toast.promise(
+        fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/onboard', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ website_url: url }),
+        }),
+        {
+          loading: 'Scrapping main elements...',
+          success: async (response) => {
+            const parsedResponse = await response.json();
+            console.log('parsedResponse', parsedResponse);
+
+            // Redirect to the review page
+            router.push(`/journey/${parsedResponse.journey.id}/review`);
+
+            // Display the "Creating experiments..." toast
+            return toast.promise(
+              new Promise((resolve) =>
+                setTimeout(() => resolve({ name: 'Sonner' }), 2500),
+              ),
+              {
+                loading: 'Creating experiments...',
+                success: () => {
+                  // Display the "Creating AI generated variants..." toast
+                  return toast.promise(
+                    new Promise((resolve) =>
+                      setTimeout(() => resolve({ name: 'Sonner' }), 2500),
+                    ),
+                    {
+                      loading: 'Creating AI generated variants...',
+                      success: () => 'Variants created',
+                    },
+                  );
+                },
+              },
+            );
+          },
+          error: (error) => {
+            console.error('Fetch error:', error);
+            throw error;
+          },
         },
       );
-
-      const parsedResponse = await response.json();
-
-      console.log('parsedResponse', parsedResponse);
-
-      router.push(`/journey/${parsedResponse.journey.id}/review`);
     } catch (err) {
       console.log(err);
-    } finally {
       setLoading(false);
     }
-  }, [url]);
+  }, [url, router]);
+
   return (
     <div className={styles.EnterUrlForm}>
       <form
@@ -52,14 +86,14 @@ const EnterUrlForm = () => {
             onChange={(e) => setUrl(e.target.value)}
             value={url}
           />
-          {loading && (
-            <span className={styles.helpText}>
-              analyzing page and fetching experiments...
-            </span>
-          )}
         </div>
-        <Button disabled={loading} loading={loading}>
-          go stellar
+        <Button
+          disabled={loading}
+          loading={loading}
+          className={styles.button}
+          type="submit"
+        >
+          Go Stellar
         </Button>
       </form>
     </div>

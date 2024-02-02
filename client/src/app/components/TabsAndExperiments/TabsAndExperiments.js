@@ -31,7 +31,6 @@ const TabsAndExperiments = ({ experiments }) => {
     <div className={styles.TabsAndExperiments}>
       <div className={styles.navigation}>
         <div className={styles.createNewExperiment}>
-          {/* <Plus /> */}
           <CreateButton onClick={() => router.push('/experiment/create')} />
         </div>
         <div className={styles.tabs}>

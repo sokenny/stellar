@@ -15,12 +15,13 @@
     background-color: white;
     min-width: 400px;
     max-width: 800px;
-    max-height: 80vh;
+    max-height: 90vh;
     border-radius: 5px;
     padding: 32px;
     box-sizing: border-box;
     position: relative;
     border: 1px solid var(--whiteCardStroke);
+    overflow-y: auto;
 }
 
 .x{

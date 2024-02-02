@@ -3,6 +3,7 @@ import Edit from '../../../icons/Edit';
 import styles from './Goal.module.css';
 
 const Goal = ({ goal, experimentUrl, experimentStatus, onEdit }) => {
+  console.log('experimentUrl: ', experimentUrl);
   const canEditAttributes =
     experimentStatus !== ExperimentStatusesEnum.RUNNING &&
     experimentStatus !== ExperimentStatusesEnum.COMPLETED;
@@ -25,7 +26,9 @@ const Goal = ({ goal, experimentUrl, experimentStatus, onEdit }) => {
         User clicks on a{' '}
         <a
           href={`${
-            experimentUrl + goal.element_url
+            experimentUrl + typeof goal.element_url === 'string'
+              ? goal.element_url
+              : ''
           }?stellarMode=true&elementToHighlight=${goal.selector}`}
           target="_blank"
           rel="noopener noreferrer"

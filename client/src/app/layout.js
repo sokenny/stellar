@@ -17,8 +17,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${styles.layout}`}>
-        <Nav />
         <Providers>
+          <Nav />
           <div className={styles.pageContent}>{children}</div>
         </Providers>
       </body>

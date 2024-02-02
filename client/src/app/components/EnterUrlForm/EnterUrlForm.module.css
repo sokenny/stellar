@@ -1,27 +1,21 @@
-.EnterUrlForm{
+.EnterUrlForm {
   text-align: center;
-  padding-bottom: 80px;
 }
 
-.form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.form {
+  display: flex;
+  align-items: center;
 }
 
-.inputAndHelpText{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 16px;
-}
-
-.helpText{
-    font-size: 14px;
+.inputAndHelpText {
+  display: flex;
+  flex-direction: column;
 }
 
 .input {
+  margin-right: 8px;
   padding: 4px 8px;
-  width: 400px;
+  width: 300px;
   font-size: 18px;
   border-radius: 8px;
   -webkit-appearance: none;
@@ -29,12 +23,11 @@
   appearance: none;
   border: 1px solid #ccc;
   outline: none;
-  margin-bottom: 4px;
+  height: 40px;
 }
 
 .button {
-  padding: 8px 16px;
-  text-transform: uppercase;
-  font-size: 12px;
-  cursor: pointer;
+  height: 40px;
+
 }
+

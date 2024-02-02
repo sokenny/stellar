@@ -34,6 +34,7 @@ const Experiment = ({
   onJourneyReview = false,
   cardLike = false,
 }) => {
+  console.log('exp :', experiment);
   const { stats, setStats } = useStore();
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const { name, variants, goal, url } = experiment;
@@ -208,7 +209,7 @@ const Experiment = ({
                 <Goal
                   goal={goal}
                   experimentStatus={experiment.status}
-                  experimentUrl={url}
+                  experimentUrl={experiment.url}
                   onEdit={() => setShowSetUpGoalModal(true)}
                 />
               ) : (

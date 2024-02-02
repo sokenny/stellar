@@ -1,7 +1,7 @@
 import { Button as NextUIButton } from '@nextui-org/react';
 import styles from './Button.module.css';
 
-const Button = ({ children, className, onClick, disabled, loading }) => {
+const Button = ({ children, className, onClick, disabled, loading, type }) => {
   return (
     <NextUIButton
       className={`${styles.Button} ${className}`}
@@ -9,6 +9,7 @@ const Button = ({ children, className, onClick, disabled, loading }) => {
       isDisabled={disabled}
       isLoading={loading}
       color="primary"
+      type={type}
     >
       {children}
     </NextUIButton>

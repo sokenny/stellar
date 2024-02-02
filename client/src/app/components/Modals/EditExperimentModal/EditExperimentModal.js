@@ -64,7 +64,7 @@ const EditExperimentModal = ({
               }
             />
           </div>
-          {!experiment.started_at && (
+          {!experiment.started_at && journeyId && (
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Order:</label>
               {/* TODO: Add validation for order. min 1 and max #of experiments in journey */}
