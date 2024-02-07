@@ -60,7 +60,7 @@ router.get('/clientjs', sendStellarJSBundle);
 
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
-router.get('/projects/:userId', getProjects);
+router.get('/projects/:userEmail', getProjects);
 router.delete('/project/:projectId', deleteProject);
 
 export default router;

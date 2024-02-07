@@ -1,38 +1,48 @@
 import db from '../../models';
 
 async function getProjects(req, res) {
-  const { userId } = req.params;
-  const projects = await db.Project.findAll({
+  const { userEmail } = req.params;
+  const projects = await db.User.findOne({
     where: {
-      user_id: userId,
+      email: userEmail,
     },
     include: [
       {
-        model: db.Experiment,
-        as: 'experiments',
-        where: {
-          deleted_at: null,
-        },
+        model: db.Project,
+        as: 'projects',
+        // TODO: add deleted_at to projects and uncomment this
+        // where: {
+        //   deleted_at: null,
+        // },
         include: [
           {
-            model: db.Variant,
-            as: 'variants',
-            required: false,
+            model: db.Experiment,
+            as: 'experiments',
             where: {
               deleted_at: null,
             },
-          },
-          {
-            model: db.Goal,
-            as: 'goal',
-          },
-          {
-            model: db.Element,
-            as: 'element',
-            required: true,
+            include: [
+              {
+                model: db.Variant,
+                as: 'variants',
+                required: false,
+                where: {
+                  deleted_at: null,
+                },
+              },
+              {
+                model: db.Goal,
+                as: 'goal',
+              },
+              {
+                model: db.Element,
+                as: 'element',
+                required: true,
+              },
+            ],
+            order: [['created_at', 'DESC']],
           },
         ],
-        order: [['created_at', 'DESC']],
       },
     ],
     order: [['created_at', 'DESC']],

@@ -44,6 +44,10 @@ db.sequelize = sequelize;
 db.Sequelize = sequelize;
 
 const associateModels = () => {
+  db.User.hasMany(db.Project, {
+    foreignKey: 'user_id',
+    as: 'projects',
+  });
   db.Journey.belongsTo(db.Project, {
     foreignKey: 'project_id',
     as: 'project',

@@ -13,26 +13,25 @@ const Nav = () => {
   const { setProjects, setCurrentProject, currentProject } = useStore();
   const initializedProjects = useRef(false);
 
-  // TODO-p1-1: Only initialize projects here if a user is logged in. So that unauthflow for onboardings can setProjects with their one project (without having an acc)
   async function initializeProjects() {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/1`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${session.user.email}`,
       {
         cache: 'no-store',
       },
     );
 
-    const projects = await response.json();
-    setProjects(projects);
-    setCurrentProject(projects[0]);
+    const user = await response.json();
+    setProjects(user.projects);
+    setCurrentProject(user.projects[0]);
   }
 
   useEffect(() => {
-    if (!initializedProjects.current) {
+    if (!initializedProjects.current && session && session.user.email) {
       initializeProjects();
       initializedProjects.current = true;
     }
-  }, []);
+  }, [initializedProjects, session]);
 
   return (
     <>

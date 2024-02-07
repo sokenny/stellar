@@ -7,24 +7,15 @@ import Experiment from '../Experiment/Experiment';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
 
-const tabs = ['Running', 'Queued', 'Draft', 'Completed'];
+const tabs = ['All', 'Completed'];
 
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const experimentsByTab = {
-    [tabs[0]]: experiments.filter(
-      (experiment) =>
-        experiment.started_at !== null && experiment.ended_at === null,
-    ),
-    [tabs[1]]: experiments.filter(
-      (experiment) => experiment.started_at === null,
-    ),
-    [tabs[2]]: experiments.filter(
-      (experiment) => experiment.started_at === null,
-    ),
-    [tabs[3]]: experiments.filter((experiment) => experiment.ended_at !== null),
+    [tabs[0]]: experiments.filter((experiment) => !experiment.ended_at),
+    [tabs[1]]: experiments.filter((experiment) => experiment.ended_at),
   };
 
   return (
