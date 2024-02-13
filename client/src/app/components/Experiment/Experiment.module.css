@@ -222,3 +222,15 @@
 .stopPlayPauseButtons > div:first-child {
   margin-right: 4px;
 }
+
+.goalTooltip {
+  width: 250px;
+  text-align: center;
+  padding: 10px;
+}
+
+.downArrow {
+  margin-left: 10px;
+  cursor: pointer;
+  opacity: .3;
+}

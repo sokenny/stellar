@@ -10,9 +10,25 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn(data: any) {
-      const { user } = data;
-      console.log('User signing in:', user);
-      // create account if it doesn't exist already
+      const { user, profile } = data;
+
+      console.log('DATA! ', data);
+
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_STELLAR_API + '/create-account',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...user,
+            first_name: profile?.given_name,
+            last_name: profile?.family_name,
+          }),
+        },
+      );
+
       return true;
     },
   },

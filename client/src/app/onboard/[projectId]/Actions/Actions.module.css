@@ -1,0 +1,17 @@
+.actions {
+  margin-top: 16px;
+}
+
+.fullPageLoader {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    backdrop-filter: blur(4px);
+}

@@ -7,7 +7,7 @@ class Experiment extends Model {
   public end_date!: Date;
   public order!: number;
   public element_id!: number;
-  public journey_id!: number;
+  public page_id!: number;
   public project_id!: number;
   public url!: string;
   public started_at!: Date;
@@ -45,10 +45,10 @@ export const initializeExperiment = (
           key: 'id',
         },
       },
-      journey_id: {
+      page_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'journeys',
+          model: 'pages',
           key: 'id',
         },
       },
@@ -88,8 +88,6 @@ export const initializeExperiment = (
             return 'running';
           } else if (this.paused_at) {
             return 'paused';
-          } else if (this.journey_id) {
-            return 'queued';
           } else {
             return 'pending';
           }

@@ -57,8 +57,8 @@ async function getExperimentsForClientForUser(userId: number) {
         required: true,
       },
       {
-        model: db.Journey,
-        as: 'journey',
+        model: db.Page,
+        as: 'page',
         required: true,
         attributes: ['id'],
         include: [

@@ -3,6 +3,8 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 class User extends Model {
   public id!: number;
   public email!: string;
+  public first_name!: string;
+  public last_name!: string;
   public created_at!: Date;
   public updated_at!: Date;
 }
@@ -19,6 +21,14 @@ export const initializeUser = (sequelize: Sequelize): typeof User => {
         type: DataTypes.STRING(255),
         allowNull: false,
         unique: true,
+      },
+      first_name: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      last_name: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
       },
       created_at: {
         type: DataTypes.DATE,

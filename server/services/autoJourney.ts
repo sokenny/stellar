@@ -48,7 +48,6 @@ export async function findOrCreateProject(website_url: string, transaction) {
     defaults: {
       name: domain,
       domain,
-      user_id: 1,
     },
     transaction,
   });
@@ -105,7 +104,7 @@ export async function createVariants(
 
 export async function createExperiments(
   elements,
-  journey,
+  page,
   projectId,
   transaction,
 ) {
@@ -117,21 +116,15 @@ export async function createExperiments(
         {
           name: `${element.type} Experiment`,
           element_id: element.id,
-          journey_id: journey.id,
           project_id: projectId,
-          url: journey.page,
+          url: page.url,
         },
         {
           transaction,
         },
       );
 
-      await createVariants(
-        element,
-        experiment.id,
-        journey.context,
-        transaction,
-      );
+      await createVariants(element, experiment.id, page.context, transaction);
       experiments.push(experiment);
     }
 
@@ -142,7 +135,7 @@ export async function createExperiments(
   }
 }
 
-export async function createElements(elements, journeyId, transaction) {
+export async function createElements(elements, pageId, transaction) {
   const createdElements = [];
   for (const element of elements) {
     const createdElement = await db.Element.create(
@@ -162,7 +155,7 @@ export async function createElements(elements, journeyId, transaction) {
           ),
           ...element.style,
         },
-        journey_id: journeyId,
+        page_id: pageId,
       },
       {
         transaction,

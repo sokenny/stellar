@@ -6,26 +6,9 @@ async function stopExperiment(req, res) {
 
     await db.Experiment.update({ ended_at: new Date() }, { where: { id } });
 
-    const experiment = await db.Experiment.findByPk(id, {
-      include: [{ model: db.Journey, as: 'journey' }],
-    });
+    const experiment = await db.Experiment.findByPk(id);
 
-    if (experiment.journey) {
-      const experimentsOrder = experiment.journey.experiments_order;
-      const currentExperimentIndex = experimentsOrder.indexOf(experiment.id);
-
-      if (
-        currentExperimentIndex >= 0 &&
-        currentExperimentIndex < experimentsOrder.length - 1
-      ) {
-        const nextExperimentId = experimentsOrder[currentExperimentIndex + 1];
-
-        await db.Experiment.update(
-          { started_at: new Date() },
-          { where: { id: nextExperimentId } },
-        );
-      }
-    }
+    // TODO:p1-2: start next experiment available under this page
 
     res.json({ message: 'Experiment stopped successfully', experiment });
   } catch (error) {

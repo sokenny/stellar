@@ -9,6 +9,8 @@ export default function Dashboard() {
 
   const loading = !currentProject.id;
 
+  console.log('currentProject', currentProject);
+
   if (loading) {
     return <div>Loading...</div>;
   }

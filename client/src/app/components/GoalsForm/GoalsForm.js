@@ -31,7 +31,7 @@ const goals = [
   },
 ];
 
-const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
+const GoalsForm = ({ experiment, goal, onClose }) => {
   const { refetchProjects } = useStore();
   const domain = getDomainFromUrl(experiment.url);
   const goalCheckIntervalRef = useRef(null);
@@ -79,7 +79,6 @@ const GoalsForm = ({ experiment, journeyId, goal, onClose }) => {
           },
           body: JSON.stringify({
             experiment_id: experiment.id,
-            journey_id: journeyId,
             type: formData.goalType,
             url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
             url_match_value: '/' + formData.urlMatchValue,

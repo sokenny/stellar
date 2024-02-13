@@ -1,28 +1,34 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
-class Journey extends Model {
+class Page extends Model {
   public id!: number;
+  public url!: string;
   public name!: string;
-  public page!: string;
-  public project_id!: number;
   public context!: object;
+  public project_id!: number;
+  public created_at!: Date;
+  public updated_at!: Date;
 }
 
-export const initializeJourney = (sequelize: Sequelize): typeof Journey => {
-  Journey.init(
+export const initializePage = (sequelize: Sequelize): typeof Page => {
+  Page.init(
     {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
+      url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      page: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      context: {
+        type: DataTypes.JSONB,
+        allowNull: true,
       },
       project_id: {
         type: DataTypes.INTEGER,
@@ -32,23 +38,26 @@ export const initializeJourney = (sequelize: Sequelize): typeof Journey => {
           key: 'id',
         },
       },
-      context: {
-        type: DataTypes.JSONB,
-        allowNull: true,
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
-      experiments_order: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true,
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     },
     {
       sequelize,
-      modelName: 'Journey',
-      tableName: 'journeys',
+      modelName: 'Page',
+      tableName: 'pages',
+      timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',
     },
   );
 
-  return Journey;
+  return Page;
 };

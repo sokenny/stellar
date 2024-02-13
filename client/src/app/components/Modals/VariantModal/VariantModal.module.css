@@ -38,3 +38,13 @@
 .errors {
   color: var(--error);
 }
+
+.controlTooltip {
+  width: 250px;
+  text-align: center;
+  padding: 10px;
+}
+
+.textInput {
+  width: 100%;
+}

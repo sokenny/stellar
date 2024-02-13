@@ -28,35 +28,12 @@ const EnterUrlForm = () => {
           body: JSON.stringify({ website_url: url }),
         }),
         {
-          loading: 'Scrapping main elements...',
+          loading: 'Scrapping page & creating experiments...',
           success: async (response) => {
             const parsedResponse = await response.json();
             console.log('parsedResponse', parsedResponse);
-
-            // Redirect to the review page
-            router.push(`/journey/${parsedResponse.journey.id}/review`);
-
-            // Display the "Creating experiments..." toast
-            return toast.promise(
-              new Promise((resolve) =>
-                setTimeout(() => resolve({ name: 'Sonner' }), 2500),
-              ),
-              {
-                loading: 'Creating experiments...',
-                success: () => {
-                  // Display the "Creating AI generated variants..." toast
-                  return toast.promise(
-                    new Promise((resolve) =>
-                      setTimeout(() => resolve({ name: 'Sonner' }), 2500),
-                    ),
-                    {
-                      loading: 'Creating AI generated variants...',
-                      success: () => 'Variants created',
-                    },
-                  );
-                },
-              },
-            );
+            toast.success('Experiments created successfully');
+            router.push(`/onboard/${parsedResponse.project.id}`);
           },
           error: (error) => {
             console.error('Fetch error:', error);

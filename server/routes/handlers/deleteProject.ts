@@ -7,7 +7,7 @@ async function deleteProject(req, res) {
   const transaction = await db.sequelize.transaction();
 
   try {
-    const journeys = await db.Journey.findAll({
+    const pages = await db.Page.findAll({
       where: {
         project_id: projectId,
       },
@@ -16,8 +16,8 @@ async function deleteProject(req, res) {
 
     const experiments = await db.Experiment.findAll({
       where: {
-        journey_id: {
-          [Op.in]: journeys.map((journey) => journey.id),
+        page_id: {
+          [Op.in]: pages.map((page) => page.id),
         },
       },
       transaction,
@@ -43,8 +43,8 @@ async function deleteProject(req, res) {
 
     await db.Experiment.destroy({
       where: {
-        journey_id: {
-          [Op.in]: journeys.map((journey) => journey.id),
+        page_id: {
+          [Op.in]: pages.map((page) => page.id),
         },
       },
       transaction,
@@ -52,14 +52,14 @@ async function deleteProject(req, res) {
 
     await db.Element.destroy({
       where: {
-        journey_id: {
-          [Op.in]: journeys.map((journey) => journey.id),
+        page_id: {
+          [Op.in]: pages.map((page) => page.id),
         },
       },
       transaction,
     });
 
-    await db.Journey.destroy({
+    await db.Page.destroy({
       where: {
         project_id: projectId,
       },

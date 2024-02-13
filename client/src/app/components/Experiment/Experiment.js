@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import useStore from '../../store';
+import { Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
+import DownArrow from '../../icons/DownArrow';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import getSortedVariants from '../../helpers/getSortedVariants';
@@ -27,14 +29,12 @@ import CreateButton from '../CreateButton';
 
 const Experiment = ({
   experiment,
-  journeyId,
   order = '',
   open = true,
   isFirst = false,
-  onJourneyReview = false,
+  onReview = false,
   cardLike = false,
 }) => {
-  console.log('exp :', experiment);
   const { stats, setStats } = useStore();
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const { name, variants, goal, url } = experiment;
@@ -49,6 +49,9 @@ const Experiment = ({
   const [showDeleteExperimentModal, setShowDeleteExperimentModal] =
     useState(false);
   const [showCreateVariantModal, setShowCreateVariantModal] = useState(false);
+  const [isGoalTooltipOpen, setIsGoalTooltipOpen] = useState(false);
+
+  console.log('on review: ', onReview);
 
   useEffect(() => {
     const fetchExperimentStats = async () => {
@@ -86,6 +89,8 @@ const Experiment = ({
     experiment.status === ExperimentStatusesEnum.RUNNING ||
     experiment.status === ExperimentStatusesEnum.PAUSED;
 
+  console.log('isGoalTooltipOpen:', isGoalTooltipOpen);
+
   return (
     <div
       className={`${styles.Experiment} ${
@@ -99,9 +104,9 @@ const Experiment = ({
     >
       <div className={styles.header}>
         <div className={styles.colLeft}>
-          {onJourneyReview && <div className={styles.order}>{order}</div>}
+          {/* {onReview && <div className={styles.order}>{order}</div>} */}
           <div className={styles.name}>
-            {onJourneyReview ? (
+            {onReview ? (
               <div>{experimentTitle}</div>
             ) : (
               <Link href={`/experiment/${experiment.id}`}>
@@ -109,32 +114,34 @@ const Experiment = ({
               </Link>
             )}
           </div>
-          <div className={styles.experimentActions}>
-            {isAlterable && (
-              <div className={styles.deleteBtn}>
-                <Trash
-                  height={21}
-                  onClick={() => setShowDeleteExperimentModal(true)}
-                />
+          {isOpen && (
+            <div className={styles.experimentActions}>
+              {isAlterable && (
+                <div className={styles.deleteBtn}>
+                  <Trash
+                    height={21}
+                    onClick={() => setShowDeleteExperimentModal(true)}
+                  />
+                </div>
+              )}
+
+              <div
+                className={styles.editExperiment}
+                onClick={() => setShowEditExperimentModal(true)}
+              >
+                <Edit height={14} />
               </div>
-            )}
-            <div
-              className={styles.editExperiment}
-              onClick={() => setShowEditExperimentModal(true)}
-            >
-              <Edit height={18} />
             </div>
-          </div>
+          )}
+          {!isOpen && (
+            <div className={styles.downArrow}>
+              {' '}
+              <DownArrow width={14} />
+            </div>
+          )}
         </div>
 
         <div className={styles.colRight}>
-          {experiment.journey_id && !onJourneyReview && (
-            <div className={styles.journey}>
-              <Link href={`/journey/${experiment.journey_id}`}>
-                view journey
-              </Link>
-            </div>
-          )}
           <div className={styles.status}>
             {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
             {experiment.status}
@@ -214,12 +221,27 @@ const Experiment = ({
                 />
               ) : (
                 <div>
-                  <Button
-                    className={styles.setUpGoalBtn}
-                    onClick={() => setShowSetUpGoalModal(true)}
+                  <Tooltip
+                    isOpen={isGoalTooltipOpen}
+                    onOpenChange={(isOpen) =>
+                      setIsGoalTooltipOpen(onReview ? isOpen : false)
+                    }
+                    showArrow
+                    content="Available after installing our tracking code in your
+                    website."
+                    className={styles.goalTooltip}
+                    closeDelay={0}
+                    disableAnimation
                   >
-                    Set up goal
-                  </Button>
+                    <div className={styles.setUpGoalBtn}>
+                      <Button
+                        onClick={() => setShowSetUpGoalModal(true)}
+                        disabled={onReview}
+                      >
+                        Set up goal
+                      </Button>
+                    </div>
+                  </Tooltip>
                 </div>
               )}
             </div>
@@ -229,7 +251,6 @@ const Experiment = ({
 
       {showSetUpGoalModal && (
         <GoalSetupModal
-          journeyId={journeyId}
           experiment={experiment}
           onClose={() => setShowSetUpGoalModal(false)}
           goal={goal}
@@ -243,7 +264,6 @@ const Experiment = ({
             order,
           }}
           experiment={experiment}
-          journeyId={journeyId}
         />
       )}
       {showStopExperimentModal && (

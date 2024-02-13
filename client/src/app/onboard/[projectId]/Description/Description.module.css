@@ -1,0 +1,22 @@
+.Description {
+  max-width: 750px;
+}
+
+.Description p {
+  margin-bottom: 16px;
+}
+
+.Description p:last-child {
+  margin-bottom: 0;
+}
+
+.Description p span {
+  font-weight: 500;
+  color: var(--linkBlue);
+  cursor: default;
+}
+
+.conversionTooltip {
+    padding: 10px;
+    max-width: 250px;
+}

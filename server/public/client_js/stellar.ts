@@ -154,7 +154,7 @@
       console.log('mounting experiment: ', experiment);
       const storedVariantId = stellarData[experiment.id];
 
-      const element = experiment.journey.elements.find(
+      const element = experiment.page.elements.find(
         (el) => el.id === experiment.element_id,
       );
 

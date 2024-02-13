@@ -5,7 +5,7 @@ import GoalsForm from '../../GoalsForm/GoalsForm';
 import Modal from '../Modal/Modal';
 import styles from './GoalSetupModal.module.css';
 
-const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
+const GoalSetupModal = ({ experiment, goal, onClose }) => {
   return (
     <Modal onClose={onClose} closeOnOverlayClick={false}>
       <div>
@@ -23,12 +23,7 @@ const GoalSetupModal = ({ experiment, goal, journeyId, onClose }) => {
             experiment?
           </div>
         </div>
-        <GoalsForm
-          experiment={experiment}
-          goal={goal}
-          journeyId={journeyId}
-          onClose={onClose}
-        />
+        <GoalsForm experiment={experiment} goal={goal} onClose={onClose} />
       </div>
     </Modal>
   );

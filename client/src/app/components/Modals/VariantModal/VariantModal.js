@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
 import { useCallback, useState, useRef, useEffect } from 'react';
+import { Tooltip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import useStore from '../../../store';
 import isObjectEqual from '../../../helpers/isObjectEqual';
@@ -25,9 +26,12 @@ const VariantModal = ({
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isControlTooltipOpen, setIsControlTooltipOpen] = useState(false);
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
   const thisVariant = isEditing ? variants.find((v) => v.id === id) : {};
   const otherVariants = variants.filter((v) => v.id !== id);
+
+  console.log('isControlTooltipOpen: ', isControlTooltipOpen);
 
   const canEditAttributes =
     experiment.status !== ExperimentStatusesEnum.RUNNING &&
@@ -91,12 +95,31 @@ const VariantModal = ({
       <div className={styles.fields}>
         <div className={styles.fieldGroup}>
           <label className={styles.label}>Text:</label>
-          <Input
-            type="text"
-            value={formData?.text}
-            onChange={(e) => setFormData({ ...formData, text: e.target.value })}
-            disabled={!canEditAttributes}
-          />
+          <Tooltip
+            isOpen={isControlTooltipOpen}
+            showArrow
+            onOpenChange={(open) =>
+              setIsControlTooltipOpen(thisVariant.is_control ? open : false)
+            }
+            content="You can not edit the content of a control variant."
+            className={styles.controlTooltip}
+            closeDelay={0}
+            disableAnimation
+          >
+            <div>
+              <Input
+                type="text"
+                className={styles.textInput}
+                value={formData?.text}
+                onChange={(e) =>
+                  setFormData({ ...formData, text: e.target.value })
+                }
+                disabled={!canEditAttributes}
+                onMouseEnter={() => setIsControlTooltipOpen(true)}
+                onMouseLeave={() => setIsControlTooltipOpen(false)}
+              />
+            </div>
+          </Tooltip>
         </div>
         <div className={styles.fieldGroup}>
           <label className={styles.label}>Traffic:</label>

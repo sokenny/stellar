@@ -7,12 +7,7 @@ import Input from '../../Input/Input';
 import Button from '../../Button/Button';
 import styles from './EditExperimentModal.module.css';
 
-const EditExperimentModal = ({
-  onClose,
-  experiment,
-  journeyId = null,
-  initialValues = {},
-}) => {
+const EditExperimentModal = ({ onClose, experiment, initialValues = {} }) => {
   const router = useRouter();
   const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
@@ -31,7 +26,6 @@ const EditExperimentModal = ({
           body: JSON.stringify({
             ...formData,
             experimentId: experiment.id,
-            journeyId,
           }),
         },
       );
@@ -64,19 +58,6 @@ const EditExperimentModal = ({
               }
             />
           </div>
-          {!experiment.started_at && journeyId && (
-            <div className={styles.fieldGroup}>
-              <label className={styles.label}>Order:</label>
-              {/* TODO: Add validation for order. min 1 and max #of experiments in journey */}
-              <Input
-                type="number"
-                value={formData?.order}
-                onChange={(e) =>
-                  setFormData({ ...formData, order: e.target.value })
-                }
-              />
-            </div>
-          )}
         </div>
         <div className={styles.actions}>
           <Button

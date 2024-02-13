@@ -2,7 +2,7 @@ import db from '../../models';
 
 async function getProjects(req, res) {
   const { userEmail } = req.params;
-  const projects = await db.User.findOne({
+  const user = await db.User.findOne({
     where: {
       email: userEmail,
     },
@@ -48,7 +48,7 @@ async function getProjects(req, res) {
     order: [['created_at', 'DESC']],
   });
 
-  res.json(projects);
+  res.json(user);
 }
 
 export default getProjects;

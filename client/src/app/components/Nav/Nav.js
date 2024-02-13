@@ -1,16 +1,19 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { Toaster } from 'sonner';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import useStore from '../../store';
 import Link from 'next/link';
 import FullPageLoader from '../FullPageLoader';
 import styles from './Nav.module.css';
+import { user } from '@nextui-org/react';
 
 const Nav = () => {
-  const { data: session, status } = useSession();
-  const { setProjects, setCurrentProject, currentProject } = useStore();
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  const { setProjects, setCurrentProject, setSession, setUser } = useStore();
   const initializedProjects = useRef(false);
 
   async function initializeProjects() {
@@ -23,21 +26,30 @@ const Nav = () => {
 
     const user = await response.json();
     setProjects(user.projects);
-    setCurrentProject(user.projects[0]);
+    setCurrentProject(user.projects[0] || {});
+    setSession(session);
+    setUser(user);
   }
 
   useEffect(() => {
-    if (!initializedProjects.current && session && session.user.email) {
+    if (
+      !initializedProjects.current &&
+      session &&
+      session.user.email &&
+      !user.projects // Right now this is our flag to know if the user finished onboarding
+    ) {
       initializeProjects();
       initializedProjects.current = true;
     }
-  }, [initializedProjects, session]);
+
+    if (!user.projects) {
+      initializedProjects.current = false;
+    }
+  }, [initializedProjects, session, pathname]);
 
   return (
     <>
-      {(session === undefined || (session && !currentProject.id)) && (
-        <FullPageLoader />
-      )}
+      {session === undefined && <FullPageLoader />}
       <Toaster richColors />
       <nav className={styles.Nav}>
         <div className={styles.id}>
@@ -71,7 +83,7 @@ const Nav = () => {
               className={styles.login}
               onClick={() => {
                 signIn('google', {
-                  callbackUrl: '/dashboard',
+                  callbackUrl: '/dashboard?juanito=banana',
                 });
               }}
             >

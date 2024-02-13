@@ -23,8 +23,6 @@ async function setGoal(req, res) {
     ],
   });
 
-  const journeyId = experiment.journey_id;
-
   if (!experiment) {
     return res.status(404).json({
       error: 'Experiment not found for id ' + experiment_id,
@@ -58,39 +56,6 @@ async function setGoal(req, res) {
     url_match_value,
     element_url,
   });
-
-  // If this goal's experiment belongs to a journey and other experiments in that journey don't have a goal, we default them to this goal
-  if (journeyId) {
-    const experiments = await db.Experiment.findAll({
-      where: {
-        journey_id: journeyId,
-        id: {
-          [Op.ne]: experiment_id,
-        },
-      },
-      include: [
-        {
-          model: db.Goal,
-          as: 'goal',
-        },
-      ],
-    });
-
-    const journeyExperimentsWithNoGoal = experiments.filter(
-      (experiment) => !experiment.goal,
-    );
-
-    journeyExperimentsWithNoGoal.forEach(async (experiment) => {
-      await db.Goal.create({
-        experiment_id: experiment.id,
-        type,
-        selector,
-        url_match_type,
-        url_match_value,
-        element_url,
-      });
-    });
-  }
 
   res.json(goal);
 }

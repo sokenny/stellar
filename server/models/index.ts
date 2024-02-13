@@ -8,7 +8,7 @@ export const basename = path.basename(__filename);
 export const env = process.env.NODE_ENV || 'development';
 
 import config from '../config/config.json';
-import { initializeJourney } from './Journey';
+import { initializePage } from './Page';
 import { initializeProject } from './Project';
 import { initializeVariant } from './Variant';
 import { initializeExperiment } from './Experiment';
@@ -28,7 +28,7 @@ const DB_NAME = process.env[config[env].database];
 const DB_USER = process.env[config[env].username];
 sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, config[env]);
 
-db.Journey = initializeJourney(sequelize);
+db.Page = initializePage(sequelize);
 db.Project = initializeProject(sequelize);
 db.Variant = initializeVariant(sequelize);
 db.Experiment = initializeExperiment(sequelize);
@@ -48,25 +48,25 @@ const associateModels = () => {
     foreignKey: 'user_id',
     as: 'projects',
   });
-  db.Journey.belongsTo(db.Project, {
+  db.Page.belongsTo(db.Project, {
     foreignKey: 'project_id',
     as: 'project',
   });
-  db.Project.hasMany(db.Journey, {
+  db.Project.hasMany(db.Page, {
     foreignKey: 'project_id',
-    as: 'journeys',
+    as: 'pages',
   });
   db.Project.hasMany(db.Experiment, {
     foreignKey: 'project_id',
     as: 'experiments',
   });
-  db.Journey.hasMany(db.Experiment, {
-    foreignKey: 'journey_id',
+  db.Page.hasMany(db.Experiment, {
+    foreignKey: 'page_id',
     as: 'experiments',
   });
-  db.Experiment.belongsTo(db.Journey, {
-    foreignKey: 'journey_id',
-    as: 'journey',
+  db.Experiment.belongsTo(db.Page, {
+    foreignKey: 'page_id',
+    as: 'page',
   });
   db.Experiment.belongsTo(db.Element, {
     foreignKey: 'element_id',
@@ -80,13 +80,13 @@ const associateModels = () => {
     foreignKey: 'experiment_id',
     as: 'experiment',
   });
-  db.Journey.hasMany(db.Element, {
-    foreignKey: 'journey_id',
+  db.Page.hasMany(db.Element, {
+    foreignKey: 'page_id',
     as: 'elements',
   });
-  db.Element.belongsTo(db.Journey, {
-    foreignKey: 'journey_id',
-    as: 'journey',
+  db.Element.belongsTo(db.Page, {
+    foreignKey: 'page_id',
+    as: 'page',
   });
   db.ApiKey.belongsTo(db.User, {
     foreignKey: 'user_id',

@@ -1,11 +1,10 @@
 import express from 'express';
-import getJourneyTree from './handlers/getJourneyTree';
 import getExperimentsForClient from './handlers/getExperimentsForClient';
 import processUserSession from './handlers/processUserSession';
 import deleteProject from './handlers/deleteProject';
 import getExperiment from './handlers/getExperiment';
 import setGoal from './handlers/setGoal';
-import launchJourney from './handlers/launchJourney';
+// import launchJourney from './handlers/launchJourney';
 import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
 import getExperiments from './handlers/getExperiments';
@@ -21,6 +20,8 @@ import resumeExperiment from './handlers/resumeExperiment';
 import createExperiment from './handlers/createExperiment';
 import getProjects from './handlers/getProjects';
 import createVariant from './handlers/createVariant';
+import createAccount from './handlers/createAccount';
+import finishOnboarding from './handlers/finishOnboarding';
 
 const router = express.Router();
 
@@ -28,9 +29,9 @@ const router = express.Router();
 // are authenticated with the public api key
 
 router.post('/onboard', onboardNewPage);
+router.post('/create-account', createAccount);
 
-router.get('/journey/:id', getJourneyTree);
-router.post('/journey/:id/launch', launchJourney);
+router.post('/finish-onboarding/:projectId', finishOnboarding);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
