@@ -9,6 +9,8 @@ import Input from '../../Input/Input';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import styles from './VariantModal.module.css';
+import CloseToDelete from '../../../icons/CloseToDelete';
+import CheckToDelete from '../../../icons/CheckToDelete';
 
 const VariantModal = ({
   isEditing = true,
@@ -73,8 +75,62 @@ const VariantModal = ({
       );
       if (response.status === 200) {
         refetchProjects();
-        toast.success(
-          `Variant ${isEditing ? 'updated' : 'created'} successfully`,
+        // toast.success(
+        //   `Variant ${isEditing ? 'updated' : 'created'} successfully`,
+        // );
+        // toast(
+        //   <>
+        //     <b>juju</b>Turbotenant success toast test.
+        //   </>,
+        //   {
+        //     style: {
+        //       background: '#E6F9F4',
+        //       padding: '16px',
+        //       borderRadius: '4px',
+        //       border: 'none',
+        //       fontSize: '14px',
+        //       color: '#042238',
+        //       // fontFamily: 'Open Sans',
+        //     },
+        //     closeButton: true,
+        //   },
+        // );
+        toast.custom(
+          (id) => {
+            return (
+              <div className={styles.toastContainer}>
+                <div className={styles.left}>
+                  <div className={styles.checkIcon}>
+                    <CheckToDelete />
+                  </div>
+                  <div>This is a toast message</div>
+                </div>
+                <div className={styles.right}>
+                  <span
+                    className={styles.close}
+                    onClick={() => toast.dismiss(id)}
+                  >
+                    <CloseToDelete />
+                  </span>
+                </div>
+              </div>
+            );
+          },
+          {
+            duration: 5000,
+            style: {
+              background: '#E6F9F4',
+              padding: '16px',
+              borderRadius: '4px',
+              border: 'none',
+              fontSize: '14px',
+              color: '#042238',
+              width: '320px',
+              fontWeight: 500,
+              boxShadow: '0px 3px 6px 0px #0000000D',
+              // fontFamily: 'Open Sans',
+            },
+          },
         );
         onClose();
       }
