@@ -14,7 +14,7 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
   function handleResumeExperiment() {
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/resume`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/on`,
       {
         method: 'POST',
       },
@@ -23,7 +23,7 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => {
         setSubmitting(false);
         refetchProjects();
-        toast.success('Experiment resumed');
+        toast.success('Experiment turned on');
         onClose();
       });
   }
@@ -37,7 +37,7 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
       <div>
         <div className={styles.header}>
           <h3 className={styles.title}>
-            Are you sure you want to pause this experiment?
+            Are you sure you want to turn on this experiment?
           </h3>
         </div>
         <div className={styles.actions}>
@@ -47,7 +47,7 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
             disabled={submitting}
             loading={submitting}
           >
-            Resume Experiment
+            Turn On Experiment
           </Button>
           <div className={styles.cancel} onClick={onClose}>
             cancel

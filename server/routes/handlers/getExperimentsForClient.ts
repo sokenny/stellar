@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import db from '../../models';
 
 async function getUserByApiKey(apiKey: string) {
+  console.log('apiKey: ', apiKey);
   // lookup ApiKey and include user required true
   const keyWUser = await db.ApiKey.findOne({
     where: { key: apiKey },
@@ -18,6 +19,8 @@ async function getUserByApiKey(apiKey: string) {
   if (!keyWUser) {
     return null;
   }
+
+  console.log('llegamo aca: ', keyWUser.user);
 
   return keyWUser.user;
 }
@@ -112,6 +115,8 @@ async function getExperimentsForClient(req, res) {
   }
 
   const experiments = await getExperimentsForClientForUser(user.id);
+
+  console.log('exps que vamos a mandar: ', experiments);
 
   res.json(experiments);
 }

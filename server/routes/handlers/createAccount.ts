@@ -1,6 +1,4 @@
-import removeUrlParams from '../../helpers/removeUrlParams';
 import db from '../../models';
-import createVariantsFromElement from '../../services/createVariantsFromElement';
 
 async function createAccount(req, res) {
   // get user from body
@@ -13,6 +11,8 @@ async function createAccount(req, res) {
     first_name: user.first_name,
     last_name: user.last_name,
   });
+
+  // TODO-p1: create api key for user. Use transaction for these operations
 
   res.status(200).json({ user: newUser });
 }

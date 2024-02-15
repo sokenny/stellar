@@ -87,7 +87,8 @@ const Experiment = ({
 
   const showStopPlayPauseButtons =
     experiment.status === ExperimentStatusesEnum.RUNNING ||
-    experiment.status === ExperimentStatusesEnum.PAUSED;
+    experiment.status === ExperimentStatusesEnum.PAUSED ||
+    experiment.status === ExperimentStatusesEnum.PENDING;
 
   console.log('isGoalTooltipOpen:', isGoalTooltipOpen);
 
@@ -129,7 +130,7 @@ const Experiment = ({
                 className={styles.editExperiment}
                 onClick={() => setShowEditExperimentModal(true)}
               >
-                <Edit height={14} />
+                <Edit height={17} />
               </div>
             </div>
           )}
@@ -149,7 +150,11 @@ const Experiment = ({
           <div className={styles.action}>
             {showStopPlayPauseButtons && (
               <div className={styles.stopPlayPauseButtons}>
-                <StopButton onClick={() => setShowStopExperimentModal(true)} />
+                {experiment.status !== ExperimentStatusesEnum.PENDING && (
+                  <StopButton
+                    onClick={() => setShowStopExperimentModal(true)}
+                  />
+                )}
                 {experiment.status === ExperimentStatusesEnum.RUNNING ? (
                   <PauseButton
                     onClick={() => setShowPauseExperimentModal(true)}

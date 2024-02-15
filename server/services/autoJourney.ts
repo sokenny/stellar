@@ -117,6 +117,7 @@ export async function createExperiments(
           name: `${element.type} Experiment`,
           element_id: element.id,
           project_id: projectId,
+          page_id: page.id,
           url: page.url,
         },
         {
