@@ -29,6 +29,10 @@ const handler = NextAuth({
         },
       );
 
+      if (response.status === 401) {
+        console.log('User already exists');
+      }
+
       return true;
     },
   },

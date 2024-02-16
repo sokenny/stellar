@@ -1,13 +1,14 @@
 (function () {
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
+  // TODO-p1: Add a prefix "__" to global vars
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
   const newExperiment = urlParams.get('newExperiment');
   const tempId = urlParams.get('tempId');
   const projectId = urlParams.get('projectId');
-  const isSettingGoal = !!experimentId;
+  const isSettingGoal = urlParams.get('isSettingGoal');
   const elementToHighlight = urlParams.get('elementToHighlight');
   const modificationType = urlParams.get('modificationType');
   const text = urlParams.get('text');
@@ -17,6 +18,8 @@
   let editedElements = [];
   let elementsPristineState = {};
   let selectedElement = null;
+  let loadingVariantCreation = false;
+  let variantCreated = false;
 
   if (stellarMode === 'true') {
     function getSelector(element) {
@@ -142,8 +145,8 @@
           }
         }
 
-        if (visualEditorOn === 'true') {
-          console.log('We at home baby!');
+        if (visualEditorOn === 'true' && experimentId) {
+          let customCssText: any = '';
           const styles = `.stellar-variant-editor { 
             position: fixed;
             background-color: white;
@@ -235,8 +238,21 @@
           }
 
           #sve-save-variant {
-            background-color: #3c92e2;
+            background-color: rgba(60, 146, 226, 1);
             color: white;
+          }
+
+          #sve-save-variant.sve-disabled {
+            background-color: rgba(60, 146, 226, .5);
+            cursor: default;
+          }
+
+          #sve-save-variant:hover {
+            background-color: rgba(60, 146, 226, .85);
+          }
+
+          #sve-save-variant.sve-disabled:hover {
+            background-color: rgba(60, 146, 226, .5);
           }
 
           .sve-actions button:last-child {
@@ -291,6 +307,16 @@
           }
           `;
 
+          function actionsComponent() {
+            const isSaveDisabled =
+              editedElements.length === 0 || loadingVariantCreation;
+            return `<div class="sve-actions">
+                  <button id="sve-save-variant" class="${
+                    isSaveDisabled ? 'sve-disabled' : ''
+                  }"">Save And Finish</button>
+                </div>`;
+          }
+
           function editedElementsComponent() {
             let editedElementsMarkup = '';
             for (let i = 0; i < editedElements.length; i++) {
@@ -322,13 +348,20 @@
             const backgroundColor = style ? style.backgroundColor : '';
             const isHidden = style ? style.display === 'none' : false;
 
-            console.log('edited elements!! ', editedElements);
-
             if (editedElements.length === 0 && element === null) {
               return `<div class="stellar-variant-editor sve-empty-state">
                 <div>
                   <div class="sve-identity">STELLAR</div>
                   <div class="sve-instructions">Click on an element to start editing this page variant.</div>
+                </div>
+              </div>`;
+            }
+
+            if (variantCreated) {
+              return `<div class="stellar-variant-editor sve-empty-state">
+                <div>
+                  <div class="sve-identity">STELLAR</div>
+                  <div class="sve-instructions">Variant created! You can close this tab :)</div>
                 </div>
               </div>`;
             }
@@ -369,45 +402,118 @@
                   </div>
                   <div id="sve-edited-elements-entry-point"></div>
                 </div>
-                <div class="sve-actions">
-                  <button id="sve-save-variant">Save</button>
-                  <button id="sve-cancel-variant">Cancel</button>
-                </div>
+                <div id="sve-actions-entry-point"></div>
               </div>
             </div>`;
           }
 
           function renderEditor({ element = null }) {
-            const editor = document.querySelector('.stellar-variant-editor');
+            const editor: any = document.querySelector(
+              '.stellar-variant-editor',
+            );
+            let editorPosition = null;
+
             if (editor) {
+              editorPosition = {
+                top: editor.style.top,
+                left: editor.style.left,
+              };
               editor.remove();
             }
+
             document.body.innerHTML += editorComponent(element);
             renderEditedElements();
-            attachEditorFieldsListeners();
+            renderActions();
+            attachEditorListeners();
+
+            if (editorPosition) {
+              const newEditor: any = document.querySelector(
+                '.stellar-variant-editor',
+              );
+              if (newEditor) {
+                newEditor.style.top = editorPosition.top;
+                newEditor.style.left = editorPosition.left;
+              }
+            }
           }
 
           function renderEditedElements() {
-            const editedElementsComponentMarkup = editedElementsComponent();
             const entryPoint = document.getElementById(
               'sve-edited-elements-entry-point',
             );
             if (entryPoint) {
-              entryPoint.innerHTML = editedElementsComponentMarkup;
+              entryPoint.innerHTML = editedElementsComponent();
             }
             attachEditedElementsListeners();
           }
 
+          function renderActions() {
+            const entryPoint = document.getElementById(
+              'sve-actions-entry-point',
+            );
+            if (entryPoint) {
+              entryPoint.innerHTML = actionsComponent();
+            }
+            attachActionsListeners();
+          }
+
           function handleDeleteEditedElement(selector) {
-            // make style changes
             const el = document.querySelector(selector);
             el.innerText = elementsPristineState[selector].innerText;
             const index = editedElements.indexOf(selector);
             if (index > -1) {
               editedElements.splice(index, 1);
             }
+            Object.assign(el.style, elementsPristineState[selector].style);
             elementsPristineState[selector] = null;
             renderEditor({ element: selectedElement });
+          }
+
+          async function handleSaveAndFinishVariant() {
+            loadingVariantCreation = true;
+            renderActions();
+            const modifications = [];
+            for (let i = 0; i < editedElements.length; i++) {
+              const el: any = document.querySelector(editedElements[i]);
+              const newStyle = {
+                selector: editedElements[i],
+                cssText: el.style.cssText,
+                innerText: el.innerText,
+              };
+              modifications.push(newStyle);
+            }
+            console.log('modifications: ', modifications);
+            confirm('Are you sure you want to save this variant?');
+            const response = await fetch(STELLAR_API_URL + '/variant', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                modifications,
+                experimentId,
+              }),
+            });
+
+            if (response.status === 200) {
+              window.close();
+            }
+
+            // Sometimes the window won't close so we perform the handling below
+            loadingVariantCreation = false;
+            variantCreated = true;
+            renderEditor({ element: selectedElement });
+          }
+
+          function attachActionsListeners() {
+            const saveVariant = document.getElementById('sve-save-variant');
+            if (saveVariant) {
+              saveVariant.addEventListener('click', function () {
+                if (!this.classList.contains('sve-disabled')) {
+                  handleSaveAndFinishVariant();
+                }
+              });
+            }
           }
 
           function attachEditedElementsListeners() {
@@ -442,9 +548,30 @@
               editedElements.push(selectedElement);
             }
             renderEditedElements();
+            renderActions();
           }
 
-          function attachEditorFieldsListeners() {
+          function attachEditorListeners() {
+            const el: any = document.querySelector('.stellar-variant-editor');
+            el.addEventListener('mousedown', function (e) {
+              var offsetX =
+                e.clientX - parseInt(window.getComputedStyle(this).left);
+              var offsetY =
+                e.clientY - parseInt(window.getComputedStyle(this).top);
+
+              function mouseMoveHandler(e) {
+                el.style.top = e.clientY - offsetY + 'px';
+                el.style.left = e.clientX - offsetX + 'px';
+              }
+
+              function reset() {
+                window.removeEventListener('mousemove', mouseMoveHandler);
+                window.removeEventListener('mouseup', reset);
+              }
+              window.addEventListener('mousemove', mouseMoveHandler);
+              window.addEventListener('mouseup', reset);
+            });
+
             const textarea = document.getElementById('stellar-element-content');
             if (textarea) {
               textarea.addEventListener('input', function () {
@@ -511,11 +638,25 @@
             const customCssInput =
               document.getElementById('stellar-custom-css');
             if (customCssInput) {
+              // This function handles not resetting the css set with individual style input fields
+              function applyStylesToElement(selector) {
+                const element = document.querySelector(selector);
+                if (!element) return;
+                element.style.color =
+                  document.getElementById('stellar-color').value;
+                element.style.fontSize =
+                  document.getElementById('stellar-font-size').value + 'px';
+                element.style.cssText += ';' + customCssText;
+              }
+
               customCssInput.addEventListener('input', function () {
                 if (selectedElement) {
                   handleElementMutation();
-                  document.querySelector(selectedElement).style.cssText =
-                    this.value;
+                  customCssText =
+                    document.getElementById('stellar-custom-css').value;
+                  if (selectedElement) {
+                    applyStylesToElement(selectedElement);
+                  }
                 }
               });
             }
@@ -588,29 +729,6 @@
           }
 
           handleClickBehaviour();
-
-          const el: any = document.querySelector('.stellar-variant-editor');
-          // Allow freely moving editor
-          el.addEventListener('mousedown', function (e) {
-            console.log('mousedown');
-            var offsetX =
-              e.clientX - parseInt(window.getComputedStyle(this).left);
-            var offsetY =
-              e.clientY - parseInt(window.getComputedStyle(this).top);
-
-            function mouseMoveHandler(e) {
-              el.style.top = e.clientY - offsetY + 'px';
-              el.style.left = e.clientX - offsetX + 'px';
-            }
-
-            function reset() {
-              window.removeEventListener('mousemove', mouseMoveHandler);
-              window.removeEventListener('mouseup', reset);
-            }
-
-            window.addEventListener('mousemove', mouseMoveHandler);
-            window.addEventListener('mouseup', reset);
-          });
         }
       }
     };

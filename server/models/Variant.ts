@@ -8,6 +8,7 @@ class Variant extends Model {
   public background_color?: string;
   public experiment_id!: number;
   public is_control?: boolean;
+  public modifications?: any;
   public traffic: number;
   public deleted_at?: Date;
 }
@@ -33,6 +34,7 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
         },
       },
       is_control: DataTypes.BOOLEAN,
+      modifications: DataTypes.JSONB,
       traffic: {
         type: DataTypes.INTEGER,
         allowNull: false,
