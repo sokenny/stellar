@@ -193,18 +193,18 @@
             experiment.goal.type === 'CLICK' &&
             currentPageUrl.includes(experiment.goal.element_url)
           ) {
-            if (selectorElement) {
-              selectorElement.addEventListener('click', function () {
-                const expRun = experimentsRun.find(
-                  (e) =>
-                    e.experiment === experiment.id && e.variant === variant.id,
-                );
-                if (expRun) {
-                  console.log('converted click!');
-                  expRun.converted = true;
-                }
-              });
-            }
+            // if (selectorElement) {
+            //   selectorElement.addEventListener('click', function () {
+            //     const expRun = experimentsRun.find(
+            //       (e) =>
+            //         e.experiment === experiment.id && e.variant === variant.id,
+            //     );
+            //     if (expRun) {
+            //       console.log('converted click!');
+            //       expRun.converted = true;
+            //     }
+            //   });
+            // }
           }
         }
       });

@@ -1,10 +1,11 @@
 (function () {
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
-  // TODO-p1: Add a prefix "__" to global vars
+  // TODO-p3: Add a prefix "__" to global vars
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
+  const variantId = urlParams.get('variantId');
   const newExperiment = urlParams.get('newExperiment');
   const tempId = urlParams.get('tempId');
   const projectId = urlParams.get('projectId');
@@ -20,6 +21,32 @@
   let selectedElement = null;
   let loadingVariantCreation = false;
   let variantCreated = false;
+
+  function showLoadingState(text) {
+    const loadingElement = document.createElement('div');
+    loadingElement.id = 'stellar-loading';
+    loadingElement.textContent = text;
+    loadingElement.style.position = 'fixed';
+    loadingElement.style.top = '0';
+    loadingElement.style.left = '0';
+    loadingElement.style.height = '100%';
+    loadingElement.style.width = '100%';
+    loadingElement.style.backgroundColor = 'black';
+    loadingElement.style.zIndex = '9999';
+    loadingElement.style.display = 'flex';
+    loadingElement.style.justifyContent = 'center';
+    loadingElement.style.alignItems = 'center';
+    loadingElement.style.fontSize = '1.2rem';
+    loadingElement.style.color = '#fff';
+    document.body.appendChild(loadingElement);
+  }
+
+  function hideLoadingState() {
+    const loadingElement = document.getElementById('stellar-loading');
+    if (loadingElement) {
+      loadingElement.remove();
+    }
+  }
 
   if (stellarMode === 'true') {
     function getSelector(element) {
@@ -130,7 +157,7 @@
 
     injectStyles(styles);
 
-    document.onreadystatechange = () => {
+    document.onreadystatechange = async () => {
       if (document.readyState === 'complete') {
         if (elementToHighlight) {
           const element: any = document.querySelector(elementToHighlight);
@@ -146,6 +173,32 @@
         }
 
         if (visualEditorOn === 'true' && experimentId) {
+          let fetchingVariant = false;
+          if (variantId) {
+            showLoadingState('Fetching variant...');
+            fetchingVariant = true;
+            const response = await fetch(
+              `${STELLAR_API_URL}/variant/${variantId}`,
+            );
+            const variant = await response.json();
+
+            function initializeEditedElements(variant) {
+              variant.modifications.forEach((mod) => {
+                const element = document.querySelector(mod.selector);
+                if (element) {
+                  elementsPristineState[mod.selector] = element.cloneNode(true);
+                  element.innerText = mod.innerText;
+                  element.style.cssText = mod.cssText;
+                  editedElements.push(mod.selector);
+                } else {
+                  console.error('Element not found:', mod.selector);
+                }
+              });
+            }
+
+            initializeEditedElements(variant);
+            hideLoadingState();
+          }
           let customCssText: any = '';
           const styles = `.stellar-variant-editor { 
             position: fixed;
@@ -470,6 +523,7 @@
           }
 
           async function handleSaveAndFinishVariant() {
+            console.log('edited! ', editedElements);
             loadingVariantCreation = true;
             renderActions();
             const modifications = [];
@@ -484,16 +538,19 @@
             }
             console.log('modifications: ', modifications);
             confirm('Are you sure you want to save this variant?');
-            const response = await fetch(STELLAR_API_URL + '/variant', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
+            const response = await fetch(
+              `${STELLAR_API_URL}/variant/${variantId}/modifications`,
+              {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  modifications,
+                  experimentId, // NOTE: we might not need experimentId
+                }),
               },
-              body: JSON.stringify({
-                modifications,
-                experimentId,
-              }),
-            });
+            );
 
             if (response.status === 200) {
               window.close();

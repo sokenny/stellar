@@ -2,6 +2,7 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Variant extends Model {
   public id!: number;
+  public name!: string;
   public text?: string;
   public font_size?: string;
   public color?: string;
@@ -21,6 +22,10 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
         autoIncrement: true,
         primaryKey: true,
       },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       text: DataTypes.STRING,
       font_size: DataTypes.STRING,
       color: DataTypes.STRING,
@@ -34,7 +39,10 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
         },
       },
       is_control: DataTypes.BOOLEAN,
-      modifications: DataTypes.JSONB,
+      modifications: {
+        type: DataTypes.JSONB,
+        defaultValue: [],
+      },
       traffic: {
         type: DataTypes.INTEGER,
         allowNull: false,

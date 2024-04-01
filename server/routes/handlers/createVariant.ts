@@ -3,14 +3,10 @@ import validateTraffic from '../../helpers/validateTraffic';
 import db from '../../models';
 
 async function createVariant(req: Request, res: Response) {
-  const variantId: string = req.params.id;
-  const {
-    // text should soon be removed since it will come inside modifications
-    text,
-    experimentId,
-    modifications,
-  } = req.body;
-  console.log('modifs! ', modifications);
+  const experimentId: string = req.params.experimentId;
+  const { name } = req.body;
+  console.log('name! ', name);
+  // console.log('modifs! ', modifications);
   console.log('experimentId: ', experimentId);
   // const trafficObj = validateTraffic(req.body);
 
@@ -18,14 +14,21 @@ async function createVariant(req: Request, res: Response) {
   //   return res.status(400).send(trafficObj.message);
   // }
 
-  // TODO-p1: Add check to make sure that the associated experiment has not started yet
+  const experiment = await db.Experiment.findByPk(experimentId);
+  if (!experiment) {
+    return res.status(404).send('Experiment not found');
+  }
+
+  if (experiment.started_at) {
+    return res.status(400).send('Experiment has already started');
+  }
 
   const variant = await db.Variant.create({
-    text,
     // traffic: trafficObj[variantId],
-    traffic: 1,
+    name,
+    traffic: 50,
     experiment_id: experimentId,
-    modifications,
+    // modifications,
   });
 
   // const variantIdsToUpdate = Object.keys(trafficObj).filter(

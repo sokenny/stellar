@@ -1,36 +1,18 @@
 import db from '../models';
 
-async function createVariantsFromElement({ element, experimentId }) {
-  const { properties } = element;
-  const innerText = properties.innerText;
-
+async function createVariantsFromElement({ experimentId }) {
   const variants = await db.Variant.bulkCreate([
     {
       experiment_id: experimentId,
-      color: properties.color,
-      background_color: properties.backgroundColor,
-      font_size: properties.fontSize,
-      text: innerText,
       is_control: true,
-      traffic: 34,
+      traffic: 50,
+      name: 'Variant A (Control)',
     },
     {
       experiment_id: experimentId,
-      color: properties.color,
-      background_color: properties.backgroundColor,
-      font_size: properties.fontSize,
-      text: innerText + ' Variant',
       is_control: false,
-      traffic: 33,
-    },
-    {
-      experiment_id: experimentId,
-      color: properties.color,
-      background_color: properties.backgroundColor,
-      font_size: properties.fontSize,
-      text: innerText + ' Variant 2',
-      is_control: false,
-      traffic: 33,
+      traffic: 50,
+      name: 'Variant B',
     },
   ]);
 

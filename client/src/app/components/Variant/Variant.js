@@ -87,7 +87,7 @@ const Variant = ({
         <div className={styles.text}>
           <span className={styles.label}>Text: </span>
           <a
-            href={`${experiment.url}?stellarMode=true&elementToHighlight=${experiment.element.selector}&modificationType=text&text=${thisVariant.text}`}
+            href={`${experiment.url}?stellarMode=true&modificationType=text&text=${thisVariant.text}`}
             target="_blank"
             rel="noopener noreferrer"
           >

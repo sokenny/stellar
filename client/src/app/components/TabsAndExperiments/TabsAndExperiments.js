@@ -22,7 +22,7 @@ const TabsAndExperiments = ({ experiments }) => {
     <div className={styles.TabsAndExperiments}>
       <div className={styles.navigation}>
         <div className={styles.createNewExperiment}>
-          <CreateButton onClick={() => router.push('/experiment/create')} />
+          <CreateButton onClick={() => router.push('/experiment/create/new')} />
         </div>
         <div className={styles.tabs}>
           {tabs.map((tab, i) => (

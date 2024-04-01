@@ -4,7 +4,7 @@ async function turnOnExperiment(req, res) {
   try {
     const { id } = req.params;
 
-    // TODO-p1: Add check to make sure that there is not another experiment running for this same page
+    // TODO-p2: Add check to make sure that there is not another experiment running for this same page
 
     await db.Experiment.update(
       {

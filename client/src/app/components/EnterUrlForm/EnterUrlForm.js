@@ -32,8 +32,8 @@ const EnterUrlForm = () => {
           success: async (response) => {
             const parsedResponse = await response.json();
             console.log('parsedResponse', parsedResponse);
-            toast.success('Experiments created successfully');
             router.push(`/onboard/${parsedResponse.project.id}`);
+            return 'Experiments created successfully';
           },
           error: (error) => {
             console.error('Fetch error:', error);
