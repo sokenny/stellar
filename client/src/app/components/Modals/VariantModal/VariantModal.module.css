@@ -48,3 +48,22 @@
 .textInput {
   width: 100%;
 }
+
+.toastContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.checkIcon {
+  margin-right: 8px;
+}

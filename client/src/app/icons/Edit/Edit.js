@@ -1,30 +1,41 @@
-'use client';
+import React from 'react';
 
-import colors from '../../helpers/colors';
-import styles from './Edit.module.css';
-
-const Edit = ({ width = 20, height = 20 }) => {
-  return (
-    <svg
-      id="Layer_1"
-      width={width}
-      height={height}
-      data-name="Layer 1"
-      viewBox="0 0 24 24"
-      className={styles.Edit}
-    >
-      <defs>
-        <style>
-          {`.cls-1 { fill:none; stroke:${colors.lightGray}; stroke-miterlimit:10; stroke-width:1.91px; }`}
-        </style>
-      </defs>
-      <path d="M20.59 12v10.5H1.5V3.41h11.46" className="cls-1" />
-      <path
-        d="m12 15.82-4.77.95.95-4.77 9.71-9.71a2.69 2.69 0 0 1 1.91-.79 2.7 2.7 0 0 1 2.7 2.7 2.69 2.69 0 0 1-.79 1.91Z"
-        className="cls-1"
-      />
-    </svg>
-  );
-};
+const Edit = (props) => (
+  <svg
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    height="1em"
+    role="presentation"
+    viewBox="0 0 20 20"
+    width="1em"
+    {...props}
+  >
+    <path
+      d="M11.05 3.00002L4.20835 10.2417C3.95002 10.5167 3.70002 11.0584 3.65002 11.4334L3.34169 14.1334C3.23335 15.1084 3.93335 15.775 4.90002 15.6084L7.58335 15.15C7.95835 15.0834 8.48335 14.8084 8.74168 14.525L15.5834 7.28335C16.7667 6.03335 17.3 4.60835 15.4583 2.86668C13.625 1.14168 12.2334 1.75002 11.05 3.00002Z"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+    />
+    <path
+      d="M9.90833 4.20831C10.2667 6.50831 12.1333 8.26665 14.45 8.49998"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+    />
+    <path
+      d="M2.5 18.3333H17.5"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+    />
+  </svg>
+);
 
 export default Edit;

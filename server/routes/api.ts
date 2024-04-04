@@ -7,6 +7,8 @@ import setGoal from './handlers/setGoal';
 // import launchJourney from './handlers/launchJourney';
 import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
+import getVariant from './handlers/getVariant';
+import setVariantModifications from './handlers/setVariantModifications';
 import getExperiments from './handlers/getExperiments';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import stopExperiment from './handlers/stopExperiment';
@@ -45,9 +47,11 @@ router.post('/experiment/:id/pause', pauseExperiment);
 router.post('/experiment/:id/on', turnOnExperiment);
 router.delete('/experiment/:id', deleteExperiment);
 
+router.get('/variant/:id', getVariant);
 router.put('/variant/:id', editVariant);
-router.post('/variant', createVariant);
+router.put('/variant/:id/modifications', setVariantModifications);
 router.delete('/variant/:id', deleteVariant);
+router.post('/variant/:experimentId', createVariant);
 
 router.post('/goals', setGoal);
 

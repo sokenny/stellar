@@ -3,8 +3,7 @@ import db from '../../models';
 import createVariantsFromElement from '../../services/createVariantsFromElement';
 
 async function createExperiment(req, res) {
-  const { selector, properties, url, elementType, tempId, projectId } =
-    req.body;
+  const { name, url, projectId } = req.body;
 
   const sanitizedUrl = removeUrlParams(url);
 
@@ -13,25 +12,20 @@ async function createExperiment(req, res) {
     return;
   }
 
-  const element = await db.Element.create({
-    selector,
-    properties,
-    type: elementType,
-  });
-
   const experiment = await db.Experiment.create({
     project_id: projectId,
-    element_id: element.id,
-    name: elementType + ' Experiment ' + tempId,
     url: sanitizedUrl,
+    name,
   });
 
-  await createVariantsFromElement({
+  const variants = await createVariantsFromElement({
     experimentId: experiment.id,
-    element,
   });
 
-  res.json(experiment);
+  res.json({
+    ...experiment.dataValues,
+    variants,
+  });
 }
 
 export default createExperiment;

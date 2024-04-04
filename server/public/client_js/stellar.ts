@@ -146,26 +146,26 @@
   }
 
   function mountExperiments(experiments) {
-    console.log('mounting experiments: ', experiments);
     const stellarData = getStellarData();
     const currentPageUrl = window.location.href;
 
     experiments.forEach((experiment) => {
-      console.log('mounting experiment: ', experiment);
       const storedVariantId = stellarData[experiment.id];
-
-      const element = experiment.page.elements.find(
-        (el) => el.id === experiment.element_id,
-      );
 
       let variantToUse = storedVariantId || experiment.variant_to_use;
 
       experiment.variants.forEach((variant) => {
         if (variant.id === variantToUse) {
-          const selectorElement = document.querySelector(element.selector);
-          console.log('element selector: ', element.selector, selectorElement);
-          if (selectorElement) {
-            selectorElement.innerHTML = variant.text;
+          if (variant?.modifications?.length > 0) {
+            variant.modifications.forEach((modification) => {
+              const targetElement = document.querySelector(
+                modification.selector,
+              );
+              if (targetElement) {
+                targetElement.innerText = modification.innerText;
+                targetElement.style.cssText = modification.cssText;
+              }
+            });
           }
 
           if (!storedVariantId) {
@@ -193,18 +193,18 @@
             experiment.goal.type === 'CLICK' &&
             currentPageUrl.includes(experiment.goal.element_url)
           ) {
-            if (selectorElement) {
-              selectorElement.addEventListener('click', function () {
-                const expRun = experimentsRun.find(
-                  (e) =>
-                    e.experiment === experiment.id && e.variant === variant.id,
-                );
-                if (expRun) {
-                  console.log('converted click!');
-                  expRun.converted = true;
-                }
-              });
-            }
+            // if (selectorElement) {
+            //   selectorElement.addEventListener('click', function () {
+            //     const expRun = experimentsRun.find(
+            //       (e) =>
+            //         e.experiment === experiment.id && e.variant === variant.id,
+            //     );
+            //     if (expRun) {
+            //       console.log('converted click!');
+            //       expRun.converted = true;
+            //     }
+            //   });
+            // }
           }
         }
       });
@@ -293,7 +293,6 @@
       }
 
       const data = await response.json();
-      console.log('datusarda: ', data);
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
@@ -301,10 +300,6 @@
       const experimentsToMount = data.filter((experiment) =>
         window.location.href.includes(experiment.url),
       );
-
-      console.log('experiments to mount: ', experimentsToMount);
-
-      // bind to trackPageVisit and call checkPageVisitGoals
 
       mountExperiments(experimentsToMount);
     } catch (error) {

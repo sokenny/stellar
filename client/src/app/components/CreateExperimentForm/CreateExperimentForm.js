@@ -1,136 +1,237 @@
-'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import useStore from '../../store';
 import getShortId from '../../helpers/getShortId';
-import Check from '../../icons/Check';
 import Button from '../Button/Button';
+import Delete from '../../icons/Delete';
+import { Button as NextUIButton } from '@nextui-org/react';
 import Input from '../Input/Input';
 import styles from './CreateExperimentForm.module.css';
 
-const CreateExperimentForm = () => {
+const CreateExperimentForm = ({ experiment }) => {
   const router = useRouter();
-  const { currentProject } = useStore();
+  const variantsCheckIntervalRef = useRef(null);
+  const pristineExperiment = useRef(experiment);
+  const { currentProject, refetchProjects } = useStore();
   const loading = Object.keys(currentProject).length === 0;
-  const experimentCreatedCheckInterval = useRef(null);
+  const [createExperimentLoading, setCreateExperimentLoading] = useState(false);
+  const [addVariantLoading, setAddVariantLoading] = useState(false);
   const [formState, setFormState] = useState({
-    elementUrl: '',
-    query_selector: '',
-    selection: 'manual_select',
-    experiment: null,
+    experimentUrl: currentProject.domain
+      ? 'https://' + currentProject.domain
+      : '',
+    experiment,
   });
 
   useEffect(() => {
-    return () => clearInterval(experimentCreatedCheckInterval.current);
+    return () => clearInterval(variantsCheckIntervalRef.current);
   }, []);
 
-  const handleSelectElement = useCallback(() => {
-    const tempId = getShortId();
-    window.open(
-      `${formState.elementUrl}?stellarMode=true&newExperiment=true&tempId=${tempId}&projectId=${currentProject.id}`,
-      '_blank',
+  async function handleConfirmUrl() {
+    setCreateExperimentLoading(true);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiments`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectId: currentProject.id,
+          name: `Experiment for ${formState.experimentUrl}`,
+          url: formState.experimentUrl,
+        }),
+      },
     );
 
-    experimentCreatedCheckInterval.current = setInterval(async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${currentProject.id}/experiments`,
-      );
-      const experiments = await response.json();
-      const newExperiment = experiments.find((experiment) =>
-        experiment.name.includes(tempId),
-      );
+    const experiment = await response.json();
+    toast.success('Experiment created successfully');
+    await refetchProjects();
+    router.push(`/experiment/create/${experiment.id}`);
+    setCreateExperimentLoading(false);
+  }
 
-      if (newExperiment) {
-        clearInterval(experimentCreatedCheckInterval.current);
-        setFormState({ ...formState, experiment: newExperiment });
-        setTimeout(() => {
-          router.push(
-            `/experiment/${newExperiment.id}?fromCreateForm=true&aiGenerated=true`,
-          );
-        }, 3000);
+  function handleEditVariant(variantId) {
+    window.open(
+      `${formState.experiment.url}?stellarMode=true&experimentId=${formState.experiment.id}&variantId=${variantId}&visualEditorOn=true`,
+      '_blank',
+    );
+    variantsCheckIntervalRef.current = setInterval(async () => {
+      console.log('interval iter');
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
+      );
+      const experimentJson = await res.json();
+      const variant = experimentJson.variants.find(
+        (variant) => variant.id == variantId,
+      );
+      const prevVariant = pristineExperiment.current.variants.find(
+        (v) => v.id === variantId,
+      );
+      const variantModified = prevVariant.updated_at !== variant.updated_at;
+      if (variantModified) {
+        setFormState({
+          ...formState,
+          experiment: experimentJson,
+        });
+        clearInterval(variantsCheckIntervalRef.current);
+        toast.success('Variant modified successfully!');
       }
-    }, 2000);
-  }, [currentProject.id, formState]);
+    }, 1500);
+  }
+
+  async function handleAddVariant() {
+    setAddVariantLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${experiment.id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: `Variant ${getShortId()}`,
+          }),
+        },
+      );
+      const variant = await response.json();
+      setFormState({
+        ...formState,
+        experiment: {
+          ...formState.experiment,
+          variants: [...formState.experiment.variants, variant],
+        },
+      });
+      console.log(variant);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to add variant');
+    }
+    setAddVariantLoading(false);
+  }
+
+  function handleDeleteVariant(variantId) {
+    toast.promise(
+      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}`, {
+        method: 'DELETE',
+      }),
+      {
+        loading: 'Deleting variant...',
+        success: async () => {
+          setFormState({
+            ...formState,
+            experiment: {
+              ...formState.experiment,
+              variants: formState.experiment.variants.filter(
+                (variant) => variant.id !== variantId,
+              ),
+            },
+          });
+          return 'Variant deleted';
+        },
+      },
+    );
+  }
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className={styles.CreateExperimentForm}>
-      <div className={styles.fieldGroup}>
+      <div className={`${styles.fieldGroup} ${styles.step}`}>
         <label className={styles.stepTitle}>
           1. Which URL is this experiment for?
         </label>
         <Input
+          className={styles.urlInput}
           type="text"
           name="url"
           placeholder={`https://${currentProject.domain}/your-url`}
-          value={formState.elementUrl}
+          value={formState.experimentUrl || experiment.url}
           onChange={(e) =>
-            setFormState({ ...formState, elementUrl: e.target.value })
+            setFormState({ ...formState, experimentUrl: e.target.value })
           }
+          disabled={formState.experiment}
         />
         <span className={styles.hint}>
           Must be part of {currentProject.domain}
         </span>
-      </div>
-      <div className={styles.fieldGroup}>
-        <label className={styles.stepTitle}>
-          2. Let's choose the element we will experiment with.
-        </label>
-        <div className={styles.radioGroup}>
-          <div className={styles.radio}>
-            <input
-              checked={formState.selection === 'query_selector'}
-              disabled
-              type="radio"
-              id="query_selector"
-              name="selection"
-              value={formState.selection}
-              onChange={(e) =>
-                setFormState({ ...formState, selection: e.target.value })
-              }
-            />
-            <label htmlFor="query_selector">Provide query selector</label>
+        {!formState.experiment && (
+          <div className={styles.urlAction}>
+            <Button
+              onClick={handleConfirmUrl}
+              loading={createExperimentLoading}
+            >
+              Confirm URL
+            </Button>
           </div>
-          <div className={styles.radio}>
-            <input
-              checked={formState.selection === 'manual_select'}
-              type="radio"
-              id="manual_select"
-              name="selection"
-              value={formState.selection}
-              onChange={(e) =>
-                setFormState({ ...formState, selection: e.target.value })
-              }
-            />
-            <label htmlFor="manual_select">Select manually</label>
-          </div>
-        </div>
-        {!formState.experiment ? (
-          <Button
-            className={styles.selectElementBtn}
-            onClick={handleSelectElement}
-            disabled={loading}
-          >
-            Select Element
-          </Button>
-        ) : (
-          <>
-            <div className={styles.elementInfo}>
-              <Check height={16} width={16} className={styles.checkIcon} />
-              <a
-                href={`${formState.experiment.url}?stellarMode=true&elementToHighlight=${formState.experiment.element.selector}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>Element: </span>
-                {formState.experiment.element.type} type selected
-              </a>
-            </div>
-            <div className={styles.redirecting}>
-              Redirecting to experiment page...
-            </div>
-          </>
         )}
       </div>
+      {formState.experiment && (
+        <div>
+          <div className={`${styles.variants} ${styles.step}`}>
+            <div className={styles.stepTitle}>2. Edit your variants</div>
+            <div>
+              {formState.experiment.variants.map((variant) => (
+                <div className={styles.variant} key={variant.id}>
+                  <div className={styles.cell}>{variant.name}</div>
+                  <div className={styles.cell}>Weight: {variant.traffic}%</div>
+                  <div className={styles.cell}>
+                    {!variant.is_control && (
+                      <span className={styles.changes}>
+                        Changes:{' '}
+                        <span>{variant.modifications?.length || 0}</span>
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.cell}>
+                    {!variant.is_control && (
+                      <div className={styles.actions}>
+                        <NextUIButton
+                          size="sm"
+                          className={styles.editButton}
+                          variant="flat"
+                          color="primary"
+                          onPress={() => handleEditVariant(variant.id)}
+                        >
+                          Edit variant
+                        </NextUIButton>
+                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                          <Delete
+                            onClick={() => handleDeleteVariant(variant.id)}
+                          />
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div className={styles.addVariant}>
+                <NextUIButton
+                  size="sm"
+                  variant="flat"
+                  className={styles.addVariantButton}
+                  onPress={handleAddVariant}
+                  isLoading={addVariantLoading}
+                  isDisabled={addVariantLoading}
+                >
+                  Add Another Variant
+                </NextUIButton>
+              </div>
+            </div>
+          </div>
+          <div className={styles.actions}>
+            <Button
+              onClick={() =>
+                router.push(`/experiment/${formState.experiment.id}`)
+              }
+            >
+              Go to Experiment
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

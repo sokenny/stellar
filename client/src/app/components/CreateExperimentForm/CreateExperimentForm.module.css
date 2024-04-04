@@ -1,7 +1,6 @@
 .fieldGroup {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
   margin-bottom: 32px;
 }
 
@@ -49,4 +48,68 @@
 
 .redirecting {
   margin-top: 8px;
+}
+
+.urlInput {
+  max-width: 500px;
+}
+
+.urlAction {
+  margin-top: 16px;
+}
+
+.variant {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.variant:last-child {
+  border-bottom: none;
+}
+
+.cell:first-child {
+  width: 150px;
+}
+
+.cell {
+  font-size: 14px;
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step {
+  /* width: 500px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: rgba(0,0,0,0.02);
+  padding: 16px 32px; */
+
+  width: 500px;
+  margin-bottom: 46px;
+}
+
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.editButton {
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.addVariant {
+  margin-top: 16px;
+}
+
+.addVariantButton {
+  border-radius: 4px;
+}
+
+.changes span {
+  color: var(--linkBlue);
 }

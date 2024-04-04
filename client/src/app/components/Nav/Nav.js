@@ -50,7 +50,7 @@ const Nav = () => {
   return (
     <>
       {session === undefined && <FullPageLoader />}
-      <Toaster richColors />
+      <Toaster richColors position="bottom-right" />
       <nav className={styles.Nav}>
         <div className={styles.id}>
           <div className={styles.logo}></div>
