@@ -17,6 +17,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles.Dashboard}>
+      {/* TODO-p1: Redo this component using a table for experiments and Tabs component from NextUI */}
       <TabsAndExperiments experiments={currentProject.experiments} />
     </div>
   );

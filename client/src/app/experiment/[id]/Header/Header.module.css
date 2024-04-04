@@ -1,0 +1,22 @@
+.container {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chip {
+    border-radius: 6px;
+    margin-right: 8px;
+    color: white;
+    /* 0a5906 */
+}
+
+.colRight {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-size: 32px;
+}
