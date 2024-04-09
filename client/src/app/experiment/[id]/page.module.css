@@ -8,3 +8,17 @@
     font-weight: 500;
     margin-bottom: 32px;
 }
+
+.setGoalCard {
+    margin-bottom: 8px;
+}
+
+.cardBody {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.infoSection {
+    margin-bottom: 16px;
+}

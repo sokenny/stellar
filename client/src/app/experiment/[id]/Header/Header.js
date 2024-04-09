@@ -3,40 +3,17 @@
 import React from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../store';
-import { Switch, Chip } from '@nextui-org/react';
+import { Switch, Chip, Tooltip } from '@nextui-org/react';
 import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
+import Button from '../../../components/Button';
+import StatusChip from '../../../components/StatusChip';
+import colors from '../../../helpers/colors';
 import styles from './Header.module.css';
 
 const Header = ({ experiment }) => {
   const { refetchProjects } = useStore();
-  function getExperimentStatusChip(status) {
-    if (status === ExperimentStatusesEnum.RUNNING) {
-      return (
-        <Chip className={styles.chip} color="success">
-          Running
-        </Chip>
-      );
-    }
-    if (status === ExperimentStatusesEnum.PAUSED) {
-      return (
-        <Chip className={styles.chip} color="warning">
-          Paused
-        </Chip>
-      );
-    }
-    if (status === ExperimentStatusesEnum.PENDING) {
-      return (
-        <Chip className={styles.chip} color="warning">
-          Pending
-        </Chip>
-      );
-    }
-    return <></>;
-  }
 
   function handleSwitchChange(isSelected) {
-    console.log('switch changed');
-
     if (!isSelected) {
       return toast.promise(
         fetch(
@@ -73,15 +50,49 @@ const Header = ({ experiment }) => {
     );
   }
 
+  function getSwitchTooltipCopy() {
+    if (!experiment.goal) {
+      return 'Set up a goal before launching your experiment';
+    }
+    return 'Caca';
+  }
+
+  const hasGoal = experiment.goal;
+  const hasCeroChanges = experiment.variants.every(
+    (variant) => variant.modifications?.length === 0,
+  );
+  const canLaunchExperiment = hasGoal && !hasCeroChanges;
+  const showSwitch = experiment.started_at && !experiment.ended_at;
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{experiment.name}</h1>
+      <div className={styles.colLeft}>
+        <h1 className={styles.title}>{experiment.name}</h1>
+        <StatusChip status={experiment.status} size="md" />
+      </div>
       <div className={styles.colRight}>
-        {getExperimentStatusChip(experiment.status)}
-        <Switch
-          defaultSelected={experiment.status === ExperimentStatusesEnum.RUNNING}
-          onValueChange={handleSwitchChange}
-        />
+        {showSwitch && (
+          <Switch
+            defaultSelected={
+              experiment.status === ExperimentStatusesEnum.RUNNING
+            }
+            onValueChange={handleSwitchChange}
+            isDisabled={!experiment.goal}
+          />
+        )}
+        {!experiment.started_at && (
+          <Tooltip
+            content={getSwitchTooltipCopy()}
+            isDisabled={canLaunchExperiment}
+            showArrow
+            className={styles.tooltip}
+            closeDelay={200}
+          >
+            <span>
+              <Button disabled={!canLaunchExperiment}>Launch Experiment</Button>
+            </span>
+          </Tooltip>
+        )}
       </div>
     </div>
   );

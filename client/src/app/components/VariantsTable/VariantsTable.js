@@ -119,6 +119,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
                         className={styles.tooltip}
                         closeDelay={200}
                       >
+                        {/* TODO-p1: Poder editar una variant desde experiment page */}
                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                           <EditIcon className={styles.editIcon} />
                         </span>
@@ -130,6 +131,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
                         className={styles.tooltip}
                         closeDelay={200}
                       >
+                        {/* TODO-p1: Poder borrar variants desde aca */}
                         <span className="text-lg text-danger cursor-pointer active:opacity-50">
                           <DeleteIcon className={styles.deleteIcon} />
                         </span>

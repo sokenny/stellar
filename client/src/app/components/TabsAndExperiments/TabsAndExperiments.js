@@ -4,19 +4,30 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Experiment from '../Experiment/Experiment';
+import ExperimentsTable from '../ExperimentsTable';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
 
-const tabs = ['All', 'Completed'];
+const tabs = ['All', 'Running', 'Draft', 'Ended'];
 
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const experimentsByTab = {
-    [tabs[0]]: experiments.filter((experiment) => !experiment.ended_at),
-    [tabs[1]]: experiments.filter((experiment) => experiment.ended_at),
+    [tabs[0]]: experiments,
+    [tabs[1]]: experiments.filter(
+      (experiment) => experiment.started_at && !experiment.ended_at,
+    ),
+    [tabs[2]]: experiments.filter(
+      (experiment) => !experiment.ended_at && !experiment.started_at,
+    ),
+    [tabs[3]]: experiments.filter(
+      (experiment) => experiment.ended_at && experiment.started_at,
+    ),
   };
+
+  console.log('experimentsByTab', experimentsByTab);
 
   return (
     <div className={styles.TabsAndExperiments}>
@@ -39,13 +50,12 @@ const TabsAndExperiments = ({ experiments }) => {
         </div>
       </div>
       <div>
-        <h2 className={styles.title}>
-          {activeTab} Experiments -<span onClick={signOut}>logout</span>
-        </h2>
+        <h2 className={styles.title}>{activeTab} Experiments</h2>
         <div className={styles.experiments}>
-          {experimentsByTab[activeTab].map((experiment) => (
+          {/* {experimentsByTab[activeTab].map((experiment) => (
             <Experiment key={experiment.id} experiment={experiment} cardLike />
-          ))}
+          ))} */}
+          <ExperimentsTable experiments={experimentsByTab[activeTab]} />
         </div>
       </div>
     </div>

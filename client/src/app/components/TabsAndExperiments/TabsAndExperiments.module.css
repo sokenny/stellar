@@ -1,7 +1,7 @@
 .title {
   font-weight: 400;
   font-size: 32px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .tabs {
@@ -24,7 +24,7 @@
 
 .navigation {
   display: flex;
-  margin-bottom: 64px;
+  margin-bottom: 32px;
 }
 
 .navigation .createNewExperiment {

@@ -5,11 +5,9 @@
     align-items: center;
 }
 
-.chip {
-    border-radius: 6px;
-    margin-right: 8px;
-    color: white;
-    /* 0a5906 */
+.colLeft {
+    display: flex;
+    align-items: center;
 }
 
 .colRight {
@@ -18,5 +16,12 @@
 }
 
 .title {
-    font-size: 32px;
+    font-size: 26px;
+    margin-right: 10px;
+}
+
+.tooltip {
+    padding: 12px;
+    max-width: 250px;
+    text-align: center;
 }
