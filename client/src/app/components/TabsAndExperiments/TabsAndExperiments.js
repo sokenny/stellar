@@ -50,7 +50,9 @@ const TabsAndExperiments = ({ experiments }) => {
         </div>
       </div>
       <div>
-        <h2 className={styles.title}>{activeTab} Experiments</h2>
+        <h2 className={styles.title}>
+          {activeTab} Experiments ({experimentsByTab[activeTab].length})
+        </h2>
         <div className={styles.experiments}>
           {/* {experimentsByTab[activeTab].map((experiment) => (
             <Experiment key={experiment.id} experiment={experiment} cardLike />

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   projects: [],
   isOnboarding: false,
   setIsOnboarding: (isOnboarding) => set({ isOnboarding }),
@@ -8,6 +8,7 @@ const useStore = create((set) => ({
   currentProject: {},
   setCurrentProject: (currentProject) => set({ currentProject }),
   stats: {},
+  lastCallTimestamps: {}, // Track the last call timestamp for each experiment ID
   setStats: (experimentId, experimentStats) =>
     set((state) => ({
       stats: {
@@ -15,6 +16,50 @@ const useStore = create((set) => ({
         [experimentId]: experimentStats,
       },
     })),
+  getExperimentStats: async (experimentId) => {
+    const state = get();
+    const now = Date.now();
+    const lastCallTimestamp = state.lastCallTimestamps[experimentId] || 0;
+
+    if (now - lastCallTimestamp < 2000) {
+      console.log(
+        `Debounce active for experiment ${experimentId}, skipping fetch.`,
+      );
+      return state.stats[experimentId];
+    }
+
+    set((state) => ({
+      lastCallTimestamps: {
+        ...state.lastCallTimestamps,
+        [experimentId]: now,
+      },
+    }));
+
+    if (!state.stats[experimentId]) {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/stats`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await res.json();
+        state.setStats(experimentId, data);
+        return data;
+      } catch (error) {
+        console.error(
+          `Failed to fetch stats for experiment ${experimentId}:`,
+          error,
+        );
+        throw new Error('Failed to fetch experiment stats.');
+      }
+    } else {
+      return state.stats[experimentId];
+    }
+  },
   session: null,
   setSession: (session) => set({ session }),
   refetchProjects: async () => {

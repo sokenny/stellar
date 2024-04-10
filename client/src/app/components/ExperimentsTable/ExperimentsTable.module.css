@@ -34,7 +34,11 @@
 }
 
 .tooltip {
-    padding: 12px;
-    max-width: 250px;
-    text-align: center;
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.row.hasStarted .deleteIcon {
+  opacity: 0.25;
 }

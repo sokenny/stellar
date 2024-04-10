@@ -143,6 +143,10 @@ async function getExperimentStats(experimentId) {
       ],
     });
 
+    if (!experiment) {
+      throw new Error('Experiment not found');
+    }
+
     const goalType = experiment.goal.type;
     const variantIds = experiment.variants.map((variant) => variant.id);
     const functionToCall = goalFunctionMapper[goalType];

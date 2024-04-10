@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -19,16 +19,25 @@ import EditIcon from '../../icons/Edit/Edit';
 import EyeIcon from '../../icons/Eye/Eye';
 import styles from './VariantsTable.module.css';
 import useStore from '../../store';
+import DeleteVariantModal from '../Modals/DeleteVariantModal';
 
 const VariantsTable = ({ variants = [], experiment }) => {
   const router = useRouter();
+  const [variantToDelete, setVariantToDelete] = useState(null);
   const [page, setPage] = React.useState(1);
   const hasStarted = experiment.started_at;
-  const { stats } = useStore();
+  const { stats, getExperimentStats } = useStore();
   const thisStats = stats[experiment.id];
+
+  useEffect(() => {
+    if (hasStarted) {
+      getExperimentStats(experiment.id);
+    }
+  }, [hasStarted, getExperimentStats]);
 
   function getVariantsRows(variants, hasStarted) {
     return variants.map((variant) => {
+      console.log('thisStats: ', thisStats);
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
       return {
         id: variant.id,
@@ -54,98 +63,115 @@ const VariantsTable = ({ variants = [], experiment }) => {
   }
 
   return (
-    <Table
-      className={`${styles.table} ${rows.length ? '' : styles.empty} ${
-        hasStarted ? styles.hasStarted : ''
-      }`}
-      bottomContent={
-        pages > 1 ? (
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
-              size="sm"
-            />
-          </div>
-        ) : null
-      }
-    >
-      <TableHeader className={styles.tableHeader}>
-        <TableColumn key="name" className={styles.th}>
-          Name
-        </TableColumn>
-        <TableColumn key="traffic" className={styles.th}>
-          Traffic
-        </TableColumn>
-        <TableColumn key="changes" className={styles.th}>
-          Changes
-        </TableColumn>
-        <TableColumn key="sessions" className={styles.th}>
-          Sessions
-        </TableColumn>
-        <TableColumn key="conversions" className={styles.th}>
-          Conversions
-        </TableColumn>
-        <TableColumn key="conversion_rate" className={styles.th}>
-          Conversion Rate
-        </TableColumn>
-        <TableColumn key="actions" className={styles.th}>
-          Actions
-        </TableColumn>
-      </TableHeader>
-      <TableBody items={rows ?? []} loadingContent={<Spinner />}>
-        {(item) => (
-          <TableRow key={item?.id} className={styles.row}>
-            {(columnKey) => {
-              if (columnKey === 'actions') {
-                return (
-                  <TableCell>
-                    <div className="relative flex items-center gap-2">
-                      <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                        <EyeIcon
-                          className={styles.eyeIcon}
-                          onClick={() => handleOnView(item.id)}
-                        />
-                      </span>
-                      <Tooltip
-                        content="Can not edit a variant after the experiment has started."
-                        isDisabled={!hasStarted}
-                        showArrow
-                        className={styles.tooltip}
-                        closeDelay={200}
-                      >
-                        {/* TODO-p1: Poder editar una variant desde experiment page */}
+    <>
+      <Table
+        className={`${styles.table} ${rows.length ? '' : styles.empty} ${
+          hasStarted ? styles.hasStarted : ''
+        }`}
+        bottomContent={
+          pages > 1 ? (
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+                size="sm"
+              />
+            </div>
+          ) : null
+        }
+      >
+        <TableHeader className={styles.tableHeader}>
+          <TableColumn key="name" className={styles.th}>
+            Name
+          </TableColumn>
+          <TableColumn key="traffic" className={styles.th}>
+            Traffic
+          </TableColumn>
+          <TableColumn key="changes" className={styles.th}>
+            Changes
+          </TableColumn>
+          <TableColumn key="sessions" className={styles.th}>
+            Sessions
+          </TableColumn>
+          <TableColumn key="conversions" className={styles.th}>
+            Conversions
+          </TableColumn>
+          <TableColumn key="conversion_rate" className={styles.th}>
+            Conversion Rate
+          </TableColumn>
+          <TableColumn key="actions" className={styles.th}>
+            Actions
+          </TableColumn>
+        </TableHeader>
+        <TableBody
+          items={rows.slice((page - 1) * rowsPerPage, page * rowsPerPage) ?? []}
+          loadingContent={<Spinner />}
+        >
+          {(item) => (
+            <TableRow key={item?.id} className={styles.row}>
+              {(columnKey) => {
+                if (columnKey === 'actions') {
+                  return (
+                    <TableCell>
+                      <div className="relative flex items-center gap-2">
                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                          <EditIcon className={styles.editIcon} />
+                          <EyeIcon
+                            className={styles.eyeIcon}
+                            onClick={() => handleOnView(item.id)}
+                          />
                         </span>
-                      </Tooltip>
-                      <Tooltip
-                        content="Can not delete a variant after the experiment has started."
-                        isDisabled={!hasStarted}
-                        showArrow
-                        className={styles.tooltip}
-                        closeDelay={200}
-                      >
-                        {/* TODO-p1: Poder borrar variants desde aca */}
-                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <DeleteIcon className={styles.deleteIcon} />
-                        </span>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                );
-              }
-              return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
-            }}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+                        <Tooltip
+                          content="Can not edit a variant after the experiment has started."
+                          isDisabled={!hasStarted}
+                          showArrow
+                          className={styles.tooltip}
+                          closeDelay={200}
+                        >
+                          {/* TODO-p1: Poder editar una variant desde experiment page */}
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                            <EditIcon className={styles.editIcon} />
+                          </span>
+                        </Tooltip>
+                        <Tooltip
+                          content="Can not delete a variant after the experiment has started."
+                          isDisabled={!hasStarted}
+                          showArrow
+                          className={styles.tooltip}
+                          closeDelay={200}
+                        >
+                          <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                            <DeleteIcon
+                              className={styles.deleteIcon}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (hasStarted) return;
+                                setVariantToDelete(item.id);
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  );
+                }
+                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+              }}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {variantToDelete && (
+        <DeleteVariantModal
+          onClose={() => setVariantToDelete(null)}
+          variantId={variantToDelete}
+        />
+      )}
+    </>
   );
 };
 

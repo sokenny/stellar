@@ -7,15 +7,10 @@ import { toast } from 'sonner';
 import styles from './DeleteExperimentModal.module.css';
 
 const DeleteExperimentModal = ({ onClose, experimentId }) => {
-  const router = useRouter();
   const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteExperiment() {
-    if (confirm('Are you absolutely sure?') === false) {
-      onClose();
-      return;
-    }
     setSubmitting(true);
     fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`, {
       method: 'DELETE',
