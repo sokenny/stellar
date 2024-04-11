@@ -9,6 +9,10 @@ async function turnOnExperiment(req, res) {
     await db.Experiment.update(
       {
         paused_at: null,
+        /**
+         * NOTE: We are doing this because this endpoint was used both for launching, and resuming
+         * experiments. But we will create a new handler and endpoint specifically for launching.
+         */
         started_at: db.Sequelize.literal(
           'CASE WHEN started_at IS NULL THEN NOW() ELSE started_at END',
         ),
@@ -16,7 +20,7 @@ async function turnOnExperiment(req, res) {
       { where: { id, deleted_at: null, ended_at: null } },
     );
 
-    res.json({ message: 'Experiment resumed successfully' });
+    res.json({ message: 'Experiment turned on successfully' });
   } catch (error) {
     console.error('Error in turnOnExperiment:', error);
     res.status(500).json({ message: 'Error pausing experiment', error });

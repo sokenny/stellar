@@ -25,3 +25,7 @@
     max-width: 250px;
     text-align: center;
 }
+
+.launchButton {
+    margin-right: 8px;
+}

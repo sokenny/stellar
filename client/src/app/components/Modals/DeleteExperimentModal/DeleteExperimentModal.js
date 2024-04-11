@@ -6,7 +6,7 @@ import Button from '../../Button/Button';
 import { toast } from 'sonner';
 import styles from './DeleteExperimentModal.module.css';
 
-const DeleteExperimentModal = ({ onClose, experimentId }) => {
+const DeleteExperimentModal = ({ onClose, experimentId, onComplete }) => {
   const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
@@ -21,6 +21,7 @@ const DeleteExperimentModal = ({ onClose, experimentId }) => {
         toast.success('Experiment deleted');
         refetchProjects();
         onClose();
+        onComplete && onComplete();
       });
   }
 

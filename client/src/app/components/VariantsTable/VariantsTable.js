@@ -14,6 +14,7 @@ import {
   getKeyValue,
   Tooltip,
 } from '@nextui-org/react';
+import useVariantEditor from '../../helpers/useVariantEditor';
 import DeleteIcon from '../../icons/Delete/Delete';
 import EditIcon from '../../icons/Edit/Edit';
 import EyeIcon from '../../icons/Eye/Eye';
@@ -28,6 +29,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
   const hasStarted = experiment.started_at;
   const { stats, getExperimentStats } = useStore();
   const thisStats = stats[experiment.id];
+  const { handleEditVariant } = useVariantEditor({ experiment });
 
   useEffect(() => {
     if (hasStarted) {
@@ -37,7 +39,6 @@ const VariantsTable = ({ variants = [], experiment }) => {
 
   function getVariantsRows(variants, hasStarted) {
     return variants.map((variant) => {
-      console.log('thisStats: ', thisStats);
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
       return {
         id: variant.id,
@@ -47,6 +48,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
         sessions: hasStarted ? variantStats?.sessions : '-',
         conversions: hasStarted ? variantStats?.conversions : '-',
         conversion_rate: '-',
+        _isControl: variant.is_control,
       };
     });
   }
@@ -125,36 +127,46 @@ const VariantsTable = ({ variants = [], experiment }) => {
                             onClick={() => handleOnView(item.id)}
                           />
                         </span>
-                        <Tooltip
-                          content="Can not edit a variant after the experiment has started."
-                          isDisabled={!hasStarted}
-                          showArrow
-                          className={styles.tooltip}
-                          closeDelay={200}
-                        >
-                          {/* TODO-p1: Poder editar una variant desde experiment page */}
-                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                            <EditIcon className={styles.editIcon} />
-                          </span>
-                        </Tooltip>
-                        <Tooltip
-                          content="Can not delete a variant after the experiment has started."
-                          isDisabled={!hasStarted}
-                          showArrow
-                          className={styles.tooltip}
-                          closeDelay={200}
-                        >
-                          <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                            <DeleteIcon
-                              className={styles.deleteIcon}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (hasStarted) return;
-                                setVariantToDelete(item.id);
-                              }}
-                            />
-                          </span>
-                        </Tooltip>
+                        {!item._isControl && (
+                          <>
+                            <Tooltip
+                              content="Can not edit a variant after the experiment has started."
+                              isDisabled={!hasStarted}
+                              showArrow
+                              className={styles.tooltip}
+                              closeDelay={200}
+                            >
+                              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <EditIcon
+                                  className={styles.editIcon}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (hasStarted) return;
+                                    handleEditVariant(item.id);
+                                  }}
+                                />
+                              </span>
+                            </Tooltip>
+                            <Tooltip
+                              content="Can not delete a variant after the experiment has started."
+                              isDisabled={!hasStarted}
+                              showArrow
+                              className={styles.tooltip}
+                              closeDelay={200}
+                            >
+                              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                <DeleteIcon
+                                  className={styles.deleteIcon}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (hasStarted) return;
+                                    setVariantToDelete(item.id);
+                                  }}
+                                />
+                              </span>
+                            </Tooltip>
+                          </>
+                        )}
                       </div>
                     </TableCell>
                   );

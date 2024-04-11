@@ -1,0 +1,54 @@
+.container {
+  position: relative;
+}
+
+.listBoxWrapper {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  width: 225px;
+  margin-top: 8px;
+}
+
+.stopButton {
+  border-color: black;
+  margin-right: 4px;
+}
+
+.stopButton > div {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.stopButton {
+  border-radius: 4px;
+}
+
+.dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 6px;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.05);
+    height: auto;
+}
+
+.dots:hover {
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.dots div {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 1px;
+    line-height: 0;
+    transform: translateY(-7px);
+    color: rgba(0,0,0,0.5);
+}
+
+.listbox {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}

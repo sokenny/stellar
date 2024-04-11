@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import useStore from '../../store';
 import getShortId from '../../helpers/getShortId';
+import useVariantEditor from '../../helpers/useVariantEditor';
 import Button from '../Button/Button';
 import Delete from '../../icons/Delete';
 import { Button as NextUIButton } from '@nextui-org/react';
@@ -52,34 +53,14 @@ const CreateExperimentForm = ({ experiment }) => {
     setCreateExperimentLoading(false);
   }
 
-  function handleEditVariant(variantId) {
-    window.open(
-      `${formState.experiment.url}?stellarMode=true&experimentId=${formState.experiment.id}&variantId=${variantId}&visualEditorOn=true`,
-      '_blank',
-    );
-    variantsCheckIntervalRef.current = setInterval(async () => {
-      console.log('interval iter');
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
-      );
-      const experimentJson = await res.json();
-      const variant = experimentJson.variants.find(
-        (variant) => variant.id == variantId,
-      );
-      const prevVariant = pristineExperiment.current.variants.find(
-        (v) => v.id === variantId,
-      );
-      const variantModified = prevVariant.updated_at !== variant.updated_at;
-      if (variantModified) {
-        setFormState({
-          ...formState,
-          experiment: experimentJson,
-        });
-        clearInterval(variantsCheckIntervalRef.current);
-        toast.success('Variant modified successfully!');
-      }
-    }, 1500);
-  }
+  const { handleEditVariant } = useVariantEditor({ experiment });
+
+  const onVariantModified = (experiment) => {
+    setFormState({
+      ...formState,
+      experiment,
+    });
+  };
 
   async function handleAddVariant() {
     setAddVariantLoading(true);
@@ -193,7 +174,9 @@ const CreateExperimentForm = ({ experiment }) => {
                           className={styles.editButton}
                           variant="flat"
                           color="primary"
-                          onPress={() => handleEditVariant(variant.id)}
+                          onPress={() =>
+                            handleEditVariant(variant.id, onVariantModified)
+                          }
                         >
                           Edit variant
                         </NextUIButton>

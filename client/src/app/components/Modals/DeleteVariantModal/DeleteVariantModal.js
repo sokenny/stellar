@@ -18,7 +18,7 @@ const DeleteVariantModal = ({ onClose, variantId }) => {
       .then((res) => {
         if (res.success) {
           setSubmitting(false);
-          toast.success('Variant deleted successfully');
+          toast.success('Variant deleted');
           refetchProjects();
           onClose();
         }

@@ -1,8 +1,8 @@
 import styles from './StopButton.module.css';
 
-const StopButton = ({ onClick }) => {
+const StopButton = ({ onClick, className }) => {
   return (
-    <div className={styles.StopButton} onClick={onClick}>
+    <div className={`${styles.StopButton} ${className}`} onClick={onClick}>
       <div className={styles.square} />
     </div>
   );

@@ -76,7 +76,7 @@ async function deleteProject(req, res) {
     await transaction.commit();
 
     return res.status(200).json({
-      message: 'Project deleted successfully',
+      message: 'Project deleted',
     });
   } catch (e) {
     await transaction.rollback();

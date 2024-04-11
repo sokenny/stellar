@@ -19,6 +19,7 @@ import deleteExperiment from './handlers/deleteExperiment';
 import deleteVariant from './handlers/deleteVariant';
 import pauseExperiment from './handlers/pauseExperiment';
 import turnOnExperiment from './handlers/turnOnExperiment';
+import launchExperiment from './handlers/launchExperiment';
 import createExperiment from './handlers/createExperiment';
 import getProjects from './handlers/getProjects';
 import createVariant from './handlers/createVariant';
@@ -45,6 +46,7 @@ router.get('/experiment/:id/stats', getExperimentStatsHandler);
 router.post('/experiment/:id/stop', stopExperiment);
 router.post('/experiment/:id/pause', pauseExperiment);
 router.post('/experiment/:id/on', turnOnExperiment);
+router.post('/experiment/:id/launch', launchExperiment);
 router.delete('/experiment/:id', deleteExperiment);
 
 router.get('/variant/:id', getVariant);

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -17,7 +16,6 @@ import {
 } from '@nextui-org/react';
 import DeleteIcon from '../../icons/Delete/Delete';
 import EditIcon from '../../icons/Edit/Edit';
-import EyeIcon from '../../icons/Eye/Eye';
 import useStore from '../../store';
 import styles from './ExperimentsTable.module.css';
 import StatusChip from '../StatusChip';
@@ -25,6 +23,8 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 
 const ExperimentsTable = ({ experiments = [] }) => {
+  // TODO-p1: create status chip for completed experiments
+  // TODO-p1: improve ui of chip statuses (uppercase, color of text, etc)
   const router = useRouter();
   const [page, setPage] = React.useState(1);
   const { stats, getExperimentStats } = useStore();
@@ -145,17 +145,11 @@ const ExperimentsTable = ({ experiments = [] }) => {
                     <TableCell>
                       <div className="relative flex items-center gap-2">
                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                          <EyeIcon
-                            className={styles.eyeIcon}
-                            onClick={() => handleOnView(item.id)}
-                          />
-                        </span>
-                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                           <EditIcon className={styles.editIcon} />
                         </span>
                         <span className="text-lg text-danger cursor-pointer active:opacity-50">
                           <Tooltip
-                            content="Can not delete an experiment that has started."
+                            content="Can not delete an experiment that has already started."
                             isDisabled={
                               item._status === ExperimentStatusesEnum.PENDING
                             }

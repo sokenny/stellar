@@ -1,24 +1,57 @@
 .Experiment {
-    max-width: 850px;
+  max-width: 850px;
 }
 
-.title{
-    font-size: 32px;
-    font-weight: 600;
-    font-weight: 500;
-    margin-bottom: 32px;
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  font-weight: 500;
+  margin-bottom: 32px;
 }
 
 .setGoalCard {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.setGoalCard:last-child {
+  margin-bottom: 0;
 }
 
 .cardBody {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .infoSection {
-    margin-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.tableTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tooltip {
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.tooltipInner {
+  display: flex;
+}
+
+.createButton {
+  margin-left: -4px;
+}
+
+.goalCard {
+  margin-bottom: 8px;
 }

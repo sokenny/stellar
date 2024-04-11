@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Tooltip } from '@nextui-org/react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import Experiment from '../Experiment/Experiment';
 import ExperimentsTable from '../ExperimentsTable';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
@@ -32,9 +32,18 @@ const TabsAndExperiments = ({ experiments }) => {
   return (
     <div className={styles.TabsAndExperiments}>
       <div className={styles.navigation}>
-        <div className={styles.createNewExperiment}>
-          <CreateButton onClick={() => router.push('/experiment/create/new')} />
-        </div>
+        <Tooltip
+          content={'Create new experiment'}
+          showArrow
+          className={styles.tooltip}
+          closeDelay={0}
+        >
+          <div className={styles.createNewExperiment}>
+            <CreateButton
+              onClick={() => router.push('/experiment/create/new')}
+            />
+          </div>
+        </Tooltip>
         <div className={styles.tabs}>
           {tabs.map((tab, i) => (
             <div

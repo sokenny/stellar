@@ -1,18 +1,25 @@
 'use client';
 import React, { useState } from 'react';
+import { Spacer } from '@nextui-org/react';
+import { Tooltip, Spinner } from '@nextui-org/react';
+import { toast } from 'sonner';
+import getShortId from '../../helpers/getShortId';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
 import useStore from '../../store';
 import Notifications from '../Notifications';
 import GoalSetupModal from '../../components/Modals/GoalSetupModal/GoalSetupModal';
 import InfoCard from '../../components/InfoCard';
+import Goal from '../../components/Goal';
 import Button from '../../components/Button';
 import Header from './Header';
+import CreateButton from '../../components/CreateButton';
 import styles from './page.module.css';
 
 export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
+  const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
-  const { currentProject } = useStore();
+  const { currentProject, refetchProjects } = useStore();
   const loading = Object.keys(currentProject).length === 0;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
@@ -22,10 +29,40 @@ export default function ExperimentPage({ params, searchParams }) {
     return <div>Loading...</div>;
   }
 
+  if (!experiment) {
+    return <div>Experiment not found</div>;
+  }
+
   const { goal } = experiment;
   const hasCeroChanges = experiment.variants.every(
     (variant) => variant.modifications?.length === 0,
   );
+
+  async function handleCreateVariant() {
+    setCreatingVariant(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${experiment.id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: `Variant ${getShortId()}`,
+          }),
+        },
+      );
+      const variant = await response.json();
+      toast.success('Variant created');
+      refetchProjects();
+      console.log(variant);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to add variant');
+    }
+    setCreatingVariant(false);
+  }
 
   console.log('hasCeroChanges: ', hasCeroChanges);
 
@@ -33,6 +70,7 @@ export default function ExperimentPage({ params, searchParams }) {
     <div className={styles.Experiment}>
       <Notifications searchParams={searchParams} />
       <Header experiment={experiment} className={styles.header} />
+      {/* <Spacer y={2} /> */}
       <div className={styles.infoSection}>
         {!experiment.goal && (
           <InfoCard className={styles.setGoalCard}>
@@ -60,8 +98,38 @@ export default function ExperimentPage({ params, searchParams }) {
           </InfoCard>
         )}
       </div>
+      {experiment.goal && (
+        <div className={styles.goal}>
+          <Goal
+            className={styles.goalCard}
+            experiment={experiment}
+            onEdit={() => setShowSetUpGoalModal(true)}
+          />
+        </div>
+      )}
       <section>
-        {/* <h3 className={styles.sectionTitle}>Variants</h3> */}
+        <div className={styles.tableTitle}>
+          <h3 className={styles.sectionTitle}>Variants</h3>
+          {/* TODO-p1: Have disabled state for create variant if experiment is not pending */}
+          <Tooltip
+            content={'Create a new variant'}
+            showArrow
+            className={styles.tooltip}
+            closeDelay={0}
+          >
+            <span className={styles.tooltipInner}>
+              {creatingVariant ? (
+                <Spinner size={'sm'} />
+              ) : (
+                <CreateButton
+                  height={20}
+                  className={styles.createButton}
+                  onClick={handleCreateVariant}
+                />
+              )}
+            </span>
+          </Tooltip>
+        </div>
         <VariantsTable variants={experiment.variants} experiment={experiment} />
       </section>
       {showSetUpGoalModal && (
