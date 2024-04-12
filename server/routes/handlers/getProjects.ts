@@ -35,9 +35,9 @@ async function getProjects(req, res) {
                 as: 'goal',
               },
             ],
-            order: [['created_at', 'DESC']],
           },
         ],
+        order: [[db.Experiment, 'id', 'DESC']], // Esta mierda creo que no esta funcando
       },
     ],
     order: [['created_at', 'DESC']],

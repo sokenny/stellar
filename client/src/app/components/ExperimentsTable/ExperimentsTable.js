@@ -23,8 +23,7 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 
 const ExperimentsTable = ({ experiments = [] }) => {
-  // TODO-p1: create status chip for completed experiments
-  // TODO-p1: improve ui of chip statuses (uppercase, color of text, etc)
+  // TODO-p2: improve ui of chip statuses
   const router = useRouter();
   const [page, setPage] = React.useState(1);
   const { stats, getExperimentStats } = useStore();
@@ -51,9 +50,6 @@ const ExperimentsTable = ({ experiments = [] }) => {
               )
             : '';
 
-        if (experiment.id == 171) {
-          console.log('STATs ahora: ', experimentStats);
-        }
         return {
           id: experiment.id,
           name: experiment.name,

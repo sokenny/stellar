@@ -3,16 +3,31 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../store';
-import { Switch, ListboxItem, Listbox, Tooltip, cn } from '@nextui-org/react';
+import {
+  Switch,
+  ListboxItem,
+  Listbox,
+  Tooltip,
+  cn,
+  useDisclosure,
+} from '@nextui-org/react';
 import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
 import Button from '../../../components/Button';
+import LaunchExperimentModal from '../../../components/Modals/LaunchExperimentModal';
 import ThreeDotActions from './ThreeDotActions';
 import StatusChip from '../../../components/StatusChip';
 import styles from './Header.module.css';
 
 const Header = ({ experiment }) => {
   const { refetchProjects } = useStore();
+
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
+  const {
+    isOpen: isLaunchModalOpen,
+    onOpen: onOpenLaunchModal,
+    onOpenChange: onOpenLaunchModalChange,
+  } = useDisclosure();
+  // const [showLaunchModal, setShowLaunchModal] = useState(true);
 
   function handleLaunchExperiment() {
     setLaunchingExperiment(true);
@@ -105,13 +120,26 @@ const Header = ({ experiment }) => {
       </div>
       <div className={styles.colRight}>
         {showSwitch && (
-          <Switch
-            defaultSelected={
+          <Tooltip
+            showArrow
+            content={
               experiment.status === ExperimentStatusesEnum.RUNNING
+                ? 'Pause Experiment'
+                : 'Resume Experiment'
             }
-            onValueChange={handleSwitchChange}
-            isDisabled={!experiment.goal}
-          />
+            className={styles.goalTooltip}
+            closeDelay={0}
+          >
+            <span>
+              <Switch
+                defaultSelected={
+                  experiment.status === ExperimentStatusesEnum.RUNNING
+                }
+                onValueChange={handleSwitchChange}
+                isDisabled={!experiment.goal}
+              />
+            </span>
+          </Tooltip>
         )}
         {!experiment.started_at && (
           <Tooltip
@@ -124,7 +152,7 @@ const Header = ({ experiment }) => {
             <span>
               <Button
                 disabled={!canLaunchExperiment}
-                onClick={handleLaunchExperiment}
+                onClick={canLaunchExperiment ? onOpenLaunchModal : () => {}}
                 loading={launchingExperiment}
                 className={styles.launchButton}
               >
@@ -133,10 +161,14 @@ const Header = ({ experiment }) => {
             </span>
           </Tooltip>
         )}
-
         <ThreeDotActions
           experimentId={experiment.id}
           status={experiment.status}
+        />
+        <LaunchExperimentModal
+          isOpen={isLaunchModalOpen}
+          onOpenChange={onOpenLaunchModalChange}
+          onLaunch={handleLaunchExperiment}
         />
       </div>
     </div>

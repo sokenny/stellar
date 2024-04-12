@@ -14,6 +14,10 @@ const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
+  experiments.sort((a, b) => {
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+
   const experimentsByTab = {
     [tabs[0]]: experiments,
     [tabs[1]]: experiments.filter(
@@ -31,37 +35,41 @@ const TabsAndExperiments = ({ experiments }) => {
 
   return (
     <div className={styles.TabsAndExperiments}>
-      <div className={styles.navigation}>
-        <Tooltip
-          content={'Create new experiment'}
-          showArrow
-          className={styles.tooltip}
-          closeDelay={0}
-        >
-          <div className={styles.createNewExperiment}>
-            <CreateButton
-              onClick={() => router.push('/experiment/create/new')}
-            />
-          </div>
-        </Tooltip>
-        <div className={styles.tabs}>
-          {tabs.map((tab, i) => (
-            <div
-              key={tab}
-              className={`${styles.tab} ${
-                tab === activeTab ? styles.active : ''
-              }`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </div>
-          ))}
-        </div>
-      </div>
       <div>
-        <h2 className={styles.title}>
-          {activeTab} Experiments ({experimentsByTab[activeTab].length})
-        </h2>
+        <div className={styles.tableHeader}>
+          <div className={styles.colLeft}>
+            <h2 className={styles.title}>
+              {activeTab} Experiments ({experimentsByTab[activeTab].length})
+            </h2>
+            <Tooltip
+              content={'Create new experiment'}
+              showArrow
+              className={styles.tooltip}
+              closeDelay={0}
+            >
+              <div className={styles.createNewExperiment}>
+                <CreateButton
+                  onClick={() => router.push('/experiment/create/new')}
+                />
+              </div>
+            </Tooltip>
+          </div>
+          <div className={styles.navigation}>
+            <div className={styles.tabs}>
+              {tabs.map((tab, i) => (
+                <div
+                  key={tab}
+                  className={`${styles.tab} ${
+                    tab === activeTab ? styles.active : ''
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
         <div className={styles.experiments}>
           {/* {experimentsByTab[activeTab].map((experiment) => (
             <Experiment key={experiment.id} experiment={experiment} cardLike />

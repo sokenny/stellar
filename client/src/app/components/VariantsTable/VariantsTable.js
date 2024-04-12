@@ -59,10 +59,12 @@ const VariantsTable = ({ variants = [], experiment }) => {
 
   function handleOnView(variantId) {
     window.open(
-      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true`,
+      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true`,
       '_blank',
     );
   }
+
+  // TODO-p1: Allow editing variant name and traffic
 
   return (
     <>

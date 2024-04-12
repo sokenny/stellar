@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 import Header from './Header';
 import CreateButton from '../../components/CreateButton';
 import styles from './page.module.css';
+import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 
 export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
@@ -64,7 +65,7 @@ export default function ExperimentPage({ params, searchParams }) {
     setCreatingVariant(false);
   }
 
-  console.log('hasCeroChanges: ', hasCeroChanges);
+  const hasStarted = experiment.status !== ExperimentStatusesEnum.PENDING;
 
   return (
     <div className={styles.Experiment}>
@@ -110,9 +111,12 @@ export default function ExperimentPage({ params, searchParams }) {
       <section>
         <div className={styles.tableTitle}>
           <h3 className={styles.sectionTitle}>Variants</h3>
-          {/* TODO-p1: Have disabled state for create variant if experiment is not pending */}
           <Tooltip
-            content={'Create a new variant'}
+            content={
+              hasStarted
+                ? 'You can not add new variants to an experiment that has already started.'
+                : 'Create a new variant'
+            }
             showArrow
             className={styles.tooltip}
             closeDelay={0}
@@ -125,6 +129,7 @@ export default function ExperimentPage({ params, searchParams }) {
                   height={20}
                   className={styles.createButton}
                   onClick={handleCreateVariant}
+                  isDisabled={hasStarted}
                 />
               )}
             </span>

@@ -24,6 +24,15 @@ const StatusChip = ({ status, size = 'sm' }) => {
       </Chip>
     );
   }
+
+  if (status === ExperimentStatusesEnum.COMPLETED) {
+    return (
+      <Chip className={styles.container} color="secondary" size={size}>
+        Completed
+      </Chip>
+    );
+  }
+
   return <></>;
 };
 

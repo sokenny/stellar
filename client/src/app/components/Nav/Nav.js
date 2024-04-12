@@ -10,6 +10,7 @@ import FullPageLoader from '../FullPageLoader';
 import styles from './Nav.module.css';
 import { user } from '@nextui-org/react';
 
+// TODO-p1: Add nextui Nav
 const Nav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();

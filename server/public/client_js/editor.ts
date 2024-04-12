@@ -14,6 +14,7 @@
   const modificationType = urlParams.get('modificationType');
   const text = urlParams.get('text');
   const visualEditorOn = urlParams.get('visualEditorOn');
+  const previewMode = urlParams.get('previewMode');
   console.log('visualEditorOn: ', visualEditorOn);
 
   let editedElements = [];
@@ -172,7 +173,10 @@
           }
         }
 
-        if (visualEditorOn === 'true' && experimentId) {
+        if (
+          (visualEditorOn === 'true' && experimentId) ||
+          (previewMode === 'true' && experimentId)
+        ) {
           let fetchingVariant = false;
           if (variantId) {
             showLoadingState('Fetching variant...');
@@ -723,7 +727,10 @@
           style.type = 'text/css';
           style.appendChild(document.createTextNode(styles));
           document.head.appendChild(style);
-          renderEditor({});
+
+          if (visualEditorOn === 'true') {
+            renderEditor({});
+          }
 
           function addoverStyles() {
             document.addEventListener('mouseover', function (e) {
@@ -757,7 +764,10 @@
               }
             });
           }
-          addoverStyles();
+
+          if (visualEditorOn === 'true') {
+            addoverStyles();
+          }
 
           function handleClickBehaviour() {
             document.addEventListener(
@@ -785,7 +795,9 @@
             );
           }
 
-          handleClickBehaviour();
+          if (visualEditorOn === 'true') {
+            handleClickBehaviour();
+          }
         }
       }
     };
