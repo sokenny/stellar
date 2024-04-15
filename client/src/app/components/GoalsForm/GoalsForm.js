@@ -112,7 +112,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     window.open(
       `http://${
         getDomainFromUrl(experiment.url) + '/' + formData.elementUrl
-      }?stellarMode=true&experimentId=${experiment.id}`,
+      }?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true`,
       '_blank',
     );
 
@@ -196,9 +196,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           !wantsToUpdateGoal && (
             <div className={styles.currentGoal}>
               <div className={styles.title}>
+                {' '}
                 Currently tracking clicks for{' '}
                 <a
-                  href={`${goal.page_url}?stellarMode=true&elementToHighlight=${goal.selector}`}
+                  href={`${goal.url_match_value}?stellarMode=true&elementToHighlight=${goal.selector}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

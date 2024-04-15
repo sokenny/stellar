@@ -1,19 +1,16 @@
 import { toast } from 'sonner';
 import { useCallback, useState, useRef, useEffect } from 'react';
-import { Tooltip } from '@nextui-org/react';
+import { Button as NextUIButton, Divider } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import useStore from '../../../store';
 import isObjectEqual from '../../../helpers/isObjectEqual';
-import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
 import Input from '../../Input/Input';
 import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
+import useVariantEditor from '../../../helpers/useVariantEditor';
 import styles from './VariantModal.module.css';
-import CloseToDelete from '../../../icons/CloseToDelete';
-import CheckToDelete from '../../../icons/CheckToDelete';
 
 const VariantModal = ({
-  isEditing = true,
   onClose,
   id,
   experiment,
@@ -30,15 +27,9 @@ const VariantModal = ({
   const [errors, setErrors] = useState([]);
   const [isControlTooltipOpen, setIsControlTooltipOpen] = useState(false);
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
-  const thisVariant = isEditing ? variants.find((v) => v.id === id) : {};
+  const thisVariant = variants.find((v) => v.id === id);
   const otherVariants = variants.filter((v) => v.id !== id);
-
-  console.log('isControlTooltipOpen: ', isControlTooltipOpen);
-
-  const canEditAttributes =
-    experiment.status !== ExperimentStatusesEnum.RUNNING &&
-    experiment.status !== ExperimentStatusesEnum.COMPLETED &&
-    !thisVariant.is_control;
+  const { handleEditVariant } = useVariantEditor({ experiment });
 
   useEffect(() => {
     const totalTraffic = Object.keys(formData).reduce((acc, key) => {
@@ -59,79 +50,24 @@ const VariantModal = ({
   const onSave = useCallback(async () => {
     try {
       setSubmitting(true);
-      const apiPath = isEditing ? `/variant/${id}` : '/variant';
+      const apiPath = `/variant/${id}`;
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}${apiPath}`,
         {
-          method: isEditing ? 'PUT' : 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             ...formData,
-            ...(!isEditing && { experimentId: experiment.id }),
           }),
         },
       );
+      console.log('response', response);
       if (response.status === 200) {
+        console.log('SI PA');
         refetchProjects();
-        // toast.success(
-        //   `Variant ${isEditing ? 'updated' : 'created'} successfully`,
-        // );
-        // toast(
-        //   <>
-        //     <b>juju</b>Turbotenant success toast test.
-        //   </>,
-        //   {
-        //     style: {
-        //       background: '#E6F9F4',
-        //       padding: '16px',
-        //       borderRadius: '4px',
-        //       border: 'none',
-        //       fontSize: '14px',
-        //       color: '#042238',
-        //       // fontFamily: 'Open Sans',
-        //     },
-        //     closeButton: true,
-        //   },
-        // );
-        toast.custom(
-          (id) => {
-            return (
-              <div className={styles.toastContainer}>
-                <div className={styles.left}>
-                  <div className={styles.checkIcon}>
-                    <CheckToDelete />
-                  </div>
-                  <div>This is a toast message</div>
-                </div>
-                <div className={styles.right}>
-                  <span
-                    className={styles.close}
-                    onClick={() => toast.dismiss(id)}
-                  >
-                    <CloseToDelete />
-                  </span>
-                </div>
-              </div>
-            );
-          },
-          {
-            duration: 5000,
-            style: {
-              background: '#E6F9F4',
-              padding: '16px',
-              borderRadius: '4px',
-              border: 'none',
-              fontSize: '14px',
-              color: '#042238',
-              width: '320px',
-              fontWeight: 500,
-              boxShadow: '0px 3px 6px 0px #0000000D',
-              // fontFamily: 'Open Sans',
-            },
-          },
-        );
+        toast.success(`Variant updated`);
         onClose();
       }
     } catch (e) {
@@ -144,39 +80,44 @@ const VariantModal = ({
   return (
     <Modal onClose={onClose}>
       <div className={styles.header}>
-        <h3 className={styles.title}>
-          {isEditing ? 'Edit' : 'Create'} Variant {thisVariant.num}
-        </h3>
+        <h3 className={styles.title}>Edit Variant {thisVariant.num}</h3>
       </div>
       <div className={styles.fields}>
-        <div className={styles.fieldGroup}>
-          <label className={styles.label}>Text:</label>
-          <Tooltip
-            isOpen={isControlTooltipOpen}
-            showArrow
-            onOpenChange={(open) =>
-              setIsControlTooltipOpen(thisVariant.is_control ? open : false)
-            }
-            content="You can not edit the content of a control variant."
-            className={styles.controlTooltip}
-            closeDelay={0}
-            disableAnimation
-          >
+        {!thisVariant.is_control && (
+          <div className={styles.fieldGroup}>
+            <label className={`${styles.label} ${styles.changes}`}>
+              Changes: <span>({thisVariant.modifications.length})</span>
+            </label>
             <div>
-              <Input
-                type="text"
-                className={styles.textInput}
-                value={formData?.text}
-                onChange={(e) =>
-                  setFormData({ ...formData, text: e.target.value })
-                }
-                disabled={!canEditAttributes}
-                onMouseEnter={() => setIsControlTooltipOpen(true)}
-                onMouseLeave={() => setIsControlTooltipOpen(false)}
-              />
+              <NextUIButton
+                size="sm"
+                className={styles.editOnWeb}
+                variant="flat"
+                color="primary"
+                onPress={() => handleEditVariant(thisVariant.id)}
+              >
+                Edit on website
+              </NextUIButton>
             </div>
-          </Tooltip>
+          </div>
+        )}
+        <div className={styles.fieldGroup}>
+          <label className={styles.label}>Name:</label>
+
+          <div>
+            <Input
+              type="text"
+              className={styles.textInput}
+              value={formData?.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              onMouseEnter={() => setIsControlTooltipOpen(true)}
+              onMouseLeave={() => setIsControlTooltipOpen(false)}
+            />
+          </div>
         </div>
+
         <div className={styles.fieldGroup}>
           <label className={styles.label}>Traffic:</label>
           <Input
@@ -190,9 +131,10 @@ const VariantModal = ({
             }
           />
         </div>
+        <Divider className="my-4" />
         {otherVariants.map((v) => (
           <div className={styles.fieldGroup} key={v.id}>
-            <label className={styles.label}>Variant {v.num} Traffic:</label>
+            <label className={styles.label}>{v.name} Traffic:</label>
             <Input
               type="number"
               value={formData?.[`traffic_${v.id}`]}

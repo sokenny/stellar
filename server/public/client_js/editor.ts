@@ -89,7 +89,8 @@
           experiment_id: experimentId,
           type: 'CLICK',
           selector,
-          page_url: pageUrl,
+          // TODO-p1: Make sure this is only the path
+          url_match_value: pageUrl,
         }),
       });
 
@@ -540,7 +541,6 @@
               };
               modifications.push(newStyle);
             }
-            console.log('modifications: ', modifications);
             confirm('Are you sure you want to save this variant?');
             const response = await fetch(
               `${STELLAR_API_URL}/variant/${variantId}/modifications`,

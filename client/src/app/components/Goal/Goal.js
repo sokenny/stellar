@@ -25,7 +25,7 @@ const Goal = ({ experiment, onEdit, className }) => {
         User clicks on a{' '}
         <a
           href={`${url}${
-            typeof goal.element_url === 'string' ? goal.element_url : ''
+            typeof goal.url_match_value === 'string' ? goal.url_match_value : ''
           }?stellarMode=true&elementToHighlight=${goal.selector}`}
           target="_blank"
           rel="noopener noreferrer"

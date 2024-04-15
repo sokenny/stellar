@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -13,23 +13,36 @@ import {
   Spinner,
   getKeyValue,
   Tooltip,
+  Input,
+  Button as NextUIButton,
 } from '@nextui-org/react';
-import useVariantEditor from '../../helpers/useVariantEditor';
+import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import DeleteIcon from '../../icons/Delete/Delete';
 import EditIcon from '../../icons/Edit/Edit';
 import EyeIcon from '../../icons/Eye/Eye';
 import styles from './VariantsTable.module.css';
 import useStore from '../../store';
+import VariantModal from '../Modals/VariantModal';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
 
+function getConversionRate(variantStats) {
+  // TODO-p2: Add handling for scenarios where goal is session time
+  if (!variantStats || !variantStats.sessions) {
+    return '-';
+  }
+  return (
+    ((variantStats.conversions / variantStats.sessions) * 100).toFixed(2) + '%'
+  );
+}
+
 const VariantsTable = ({ variants = [], experiment }) => {
-  const router = useRouter();
+  variants.sort((a, b) => a.id - b.id);
+  const [variantToEdit, setVariantToEdit] = useState(null);
   const [variantToDelete, setVariantToDelete] = useState(null);
   const [page, setPage] = React.useState(1);
   const hasStarted = experiment.started_at;
   const { stats, getExperimentStats } = useStore();
   const thisStats = stats[experiment.id];
-  const { handleEditVariant } = useVariantEditor({ experiment });
 
   useEffect(() => {
     if (hasStarted) {
@@ -42,12 +55,13 @@ const VariantsTable = ({ variants = [], experiment }) => {
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
       return {
         id: variant.id,
+        // name: variant.name,
         name: variant.name,
         traffic: <>{variant.traffic + '%'}</>,
         changes: variant?.modifications?.length,
         sessions: hasStarted ? variantStats?.sessions : '-',
         conversions: hasStarted ? variantStats?.conversions : '-',
-        conversion_rate: '-',
+        conversion_rate: hasStarted ? getConversionRate(variantStats) : '-',
         _isControl: variant.is_control,
       };
     });
@@ -64,10 +78,21 @@ const VariantsTable = ({ variants = [], experiment }) => {
     );
   }
 
-  // TODO-p1: Allow editing variant name and traffic
-
   return (
     <>
+      {variantToEdit && (
+        <VariantModal
+          isEditingTrue
+          onClose={() => setVariantToEdit(null)}
+          experiment={experiment}
+          id={variantToEdit}
+          variants={variants}
+          initialValues={{
+            name: variants.find((v) => v.id === variantToEdit).name,
+            ...getVariantsTrafficInitialValues(variants),
+          }}
+        />
+      )}
       <Table
         className={`${styles.table} ${rows.length ? '' : styles.empty} ${
           hasStarted ? styles.hasStarted : ''
@@ -129,45 +154,45 @@ const VariantsTable = ({ variants = [], experiment }) => {
                             onClick={() => handleOnView(item.id)}
                           />
                         </span>
+                        <Tooltip
+                          content={
+                            'Can not edit a variant after the experiment has started.'
+                          }
+                          isDisabled={!hasStarted}
+                          showArrow
+                          className={styles.tooltip}
+                          closeDelay={200}
+                        >
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                            <EditIcon
+                              className={styles.editIcon}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (hasStarted) return;
+                                setVariantToEdit(item.id);
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
                         {!item._isControl && (
-                          <>
-                            <Tooltip
-                              content="Can not edit a variant after the experiment has started."
-                              isDisabled={!hasStarted}
-                              showArrow
-                              className={styles.tooltip}
-                              closeDelay={200}
-                            >
-                              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EditIcon
-                                  className={styles.editIcon}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (hasStarted) return;
-                                    handleEditVariant(item.id);
-                                  }}
-                                />
-                              </span>
-                            </Tooltip>
-                            <Tooltip
-                              content="Can not delete a variant after the experiment has started."
-                              isDisabled={!hasStarted}
-                              showArrow
-                              className={styles.tooltip}
-                              closeDelay={200}
-                            >
-                              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <DeleteIcon
-                                  className={styles.deleteIcon}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (hasStarted) return;
-                                    setVariantToDelete(item.id);
-                                  }}
-                                />
-                              </span>
-                            </Tooltip>
-                          </>
+                          <Tooltip
+                            content="Can not delete a variant after the experiment has started."
+                            isDisabled={!hasStarted}
+                            showArrow
+                            className={styles.tooltip}
+                            closeDelay={200}
+                          >
+                            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                              <DeleteIcon
+                                className={styles.deleteIcon}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (hasStarted) return;
+                                  setVariantToDelete(item.id);
+                                }}
+                              />
+                            </span>
+                          </Tooltip>
                         )}
                       </div>
                     </TableCell>
@@ -190,3 +215,55 @@ const VariantsTable = ({ variants = [], experiment }) => {
 };
 
 export default VariantsTable;
+
+// Esto  capaz lo implementemos mas adelante
+// const NameCell = ({ name }) => {
+//   const [value, setValue] = useState(name);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [saving, setSaving] = useState(false);
+//   const textRef = useRef(null); // Reference to the div element
+
+//   console.log('is editing: ', isEditing);
+
+//   async function handleSave(data) {
+//     setSaving(true);
+//     setIsEditing(false);
+//     console.log('saving...', data);
+//   }
+
+//   return (
+//     <div
+//       className={styles.nameCell}
+//       onClick={() => setIsEditing(true)}
+//       contentEditable={isEditing}
+//       ref={textRef}
+//       suppressContentEditableWarning={true}
+//     >
+//       {isEditing ? (
+//         <Input
+//           focus
+//           size={'sm'}
+//           type="text"
+//           value={value}
+//           onChange={(e) => setValue(e.target.value)}
+//           onBlur={handleSave}
+//         />
+//       ) : (
+//         <>
+//           <div>{name}</div>
+//           {!saving && (
+//             <div className={styles.edit}>
+//               <EditIcon />
+//             </div>
+//           )}
+//         </>
+//       )}
+
+//       {saving && (
+//         <div className={`flex gap-4 ${styles.spinner}`}>
+//           <Spinner size="sm" />
+//         </div>
+//       )}
+//     </div>
+//   );
+// };

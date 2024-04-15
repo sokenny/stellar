@@ -67,3 +67,11 @@
 .checkIcon {
   margin-right: 8px;
 }
+
+.editOnWeb {
+  border-radius: 4px;
+}
+
+.changes span {
+  color: var(--linkBlue);
+}

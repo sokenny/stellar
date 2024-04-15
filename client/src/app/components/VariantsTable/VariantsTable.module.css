@@ -25,12 +25,42 @@
   font-size: 12px;
 }
 
-.hasStarted .editIcon, .hasStarted .deleteIcon {
-  opacity: .25;
+.hasStarted .editIcon,
+.hasStarted .deleteIcon {
+  opacity: 0.25;
 }
 
 .tooltip {
-    padding: 12px;
-    max-width: 250px;
-    text-align: center;
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  padding-left: 0;
+}
+
+.edit {
+  display: none;
+  position: absolute;
+  right: 0;
+  opacity: 0.25;
+  cursor: pointer;
+}
+
+.nameCell:hover .edit {
+  display: block;
+}
+
+.spinner {
+  position: absolute;
+  right: 0;
+}
+
+.nameCell:hover {
+  /* text-decoration: underline; */
 }

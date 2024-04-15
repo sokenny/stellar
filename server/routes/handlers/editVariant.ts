@@ -4,7 +4,7 @@ import db from '../../models';
 
 async function editVariant(req: Request, res: Response) {
   const variantId: string = req.params.id;
-  const { text } = req.body;
+  const { name } = req.body;
 
   const trafficObj = validateTraffic(req.body);
 
@@ -26,7 +26,7 @@ async function editVariant(req: Request, res: Response) {
   };
 
   if (variant.experiment.started_at === null) {
-    valuesToSet['text'] = text;
+    valuesToSet['name'] = name;
   }
 
   const updatedVariant = await variant.update(valuesToSet);

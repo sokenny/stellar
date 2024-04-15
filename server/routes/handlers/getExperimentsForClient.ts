@@ -74,12 +74,6 @@ async function getExperimentsForClientForUser(userId: number) {
               user_id: userId,
             },
           },
-          {
-            model: db.Element,
-            as: 'elements',
-            required: true,
-            attributes: ['id', 'type', 'selector'],
-          },
         ],
       },
     ],
@@ -98,6 +92,8 @@ async function getExperimentsForClientForUser(userId: number) {
     return experimentJson;
   });
 
+  console.log('experimentInstances: ', experimentInstances);
+
   return experiments;
 }
 
@@ -113,6 +109,8 @@ async function getExperimentsForClient(req, res) {
   if (!user) {
     return res.status(401).send('Invalid API key');
   }
+
+  console.log('user!: ', user);
 
   const experiments = await getExperimentsForClientForUser(user.id);
 

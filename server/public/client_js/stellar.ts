@@ -109,7 +109,7 @@
       hasFetchedExperiments = storedHasFetchedExperiments;
     }
 
-    console.log('experimentsRunou: ', experimentsRun);
+    console.log('experimentsRun!: ', experimentsRun);
   }
 
   function sendDataOnLeave() {
@@ -183,7 +183,7 @@
               variant: variant.id,
               converted: false,
               goalType: experiment.goal.type,
-              goalElementUrl: experiment.goal.element_url,
+              goalElementUrl: experiment.goal.url_match_value,
               goalUrlMatchType: experiment.goal.url_match_type,
               goalUrlMatchValue: experiment.goal.url_match_value,
             });
@@ -191,20 +191,23 @@
 
           if (
             experiment.goal.type === 'CLICK' &&
-            currentPageUrl.includes(experiment.goal.element_url)
+            currentPageUrl.includes(experiment.goal.url_match_value)
           ) {
-            // if (selectorElement) {
-            //   selectorElement.addEventListener('click', function () {
-            //     const expRun = experimentsRun.find(
-            //       (e) =>
-            //         e.experiment === experiment.id && e.variant === variant.id,
-            //     );
-            //     if (expRun) {
-            //       console.log('converted click!');
-            //       expRun.converted = true;
-            //     }
-            //   });
-            // }
+            console.log('click aquiiii!!!');
+            const selectorElement = document.querySelector(
+              experiment.goal.selector,
+            );
+            if (selectorElement) {
+              selectorElement.addEventListener('click', function () {
+                const expRun = experimentsRun.find(
+                  (e) =>
+                    e.experiment === experiment.id && e.variant === variant.id,
+                );
+                if (expRun) {
+                  expRun.converted = true;
+                }
+              });
+            }
           }
         }
       });
@@ -270,6 +273,8 @@
       return;
     }
 
+    console.log('pageUrl: ', pageUrl);
+
     showLoadingState();
 
     const apiKey = getApiKey();
@@ -293,6 +298,8 @@
       }
 
       const data = await response.json();
+
+      console.log('Datusarda: ', data);
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
