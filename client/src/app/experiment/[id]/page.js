@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import { Spacer } from '@nextui-org/react';
 import { Tooltip, Spinner } from '@nextui-org/react';
 import { toast } from 'sonner';
 import getShortId from '../../helpers/getShortId';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
+// import Cacota from './cacota/cacota';
 import useStore from '../../store';
 import Notifications from '../Notifications';
 import GoalSetupModal from '../../components/Modals/GoalSetupModal/GoalSetupModal';
@@ -13,8 +13,8 @@ import Goal from '../../components/Goal';
 import Button from '../../components/Button';
 import Header from './Header';
 import CreateButton from '../../components/CreateButton';
-import styles from './page.module.css';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
+import styles from './page.module.css';
 
 export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
@@ -69,6 +69,7 @@ export default function ExperimentPage({ params, searchParams }) {
 
   return (
     <div className={styles.Experiment}>
+      {/* <Cacota /> */}
       <Notifications searchParams={searchParams} />
       <Header experiment={experiment} className={styles.header} />
       {/* <Spacer y={2} /> */}

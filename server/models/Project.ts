@@ -5,6 +5,7 @@ class Project extends Model {
   public name!: string;
   public domain!: string;
   public user_id!: number;
+  public snippet_status!: number;
 }
 
 export const initializeProject = (sequelize: Sequelize): typeof Project => {
@@ -30,6 +31,10 @@ export const initializeProject = (sequelize: Sequelize): typeof Project => {
           model: 'users',
           key: 'id',
         },
+      },
+      snippet_status: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
     },
     {

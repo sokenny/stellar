@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import db from '../../models';
 
 async function turnOnExperiment(req, res) {
@@ -22,6 +23,24 @@ async function turnOnExperiment(req, res) {
 
     if (experiment.ended_at) {
       return res.status(400).json({ message: 'Experiment has already ended' });
+    }
+
+    const inPageExperiment = await db.Experiment.findOne({
+      where: {
+        page_id: experiment.page_id,
+        deleted_at: null,
+        ended_at: null,
+        started_at: {
+          [Op.ne]: null,
+        },
+      },
+    });
+
+    if (inPageExperiment) {
+      return res.status(404).json({
+        message:
+          'The targeted page has an active experiment. Please finish all experiments on this page before launching a new one.',
+      });
     }
 
     const updatedExperiment = await db.Experiment.update(

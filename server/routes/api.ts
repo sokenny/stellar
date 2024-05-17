@@ -25,6 +25,7 @@ import getProjects from './handlers/getProjects';
 import createVariant from './handlers/createVariant';
 import createAccount from './handlers/createAccount';
 import finishOnboarding from './handlers/finishOnboarding';
+import checkSnippet from './handlers/checkSnippet';
 
 const router = express.Router();
 
@@ -69,5 +70,7 @@ router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
 router.get('/projects/:userEmail', getProjects);
 router.delete('/project/:projectId', deleteProject);
+// router.post('/projects/check-snippet', checkSnippet);
+router.post('/check-snippet', checkSnippet);
 
 export default router;

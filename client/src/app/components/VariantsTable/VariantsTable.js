@@ -55,7 +55,6 @@ const VariantsTable = ({ variants = [], experiment }) => {
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
       return {
         id: variant.id,
-        // name: variant.name,
         name: variant.name,
         traffic: <>{variant.traffic + '%'}</>,
         changes: variant?.modifications?.length,
@@ -198,7 +197,15 @@ const VariantsTable = ({ variants = [], experiment }) => {
                     </TableCell>
                   );
                 }
-                return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+                return (
+                  <TableCell
+                    className={`${styles['cell-' + columnKey]} ${
+                      item._isControl ? styles['cell-control'] : ''
+                    }`}
+                  >
+                    {getKeyValue(item, columnKey)}
+                  </TableCell>
+                );
               }}
             </TableRow>
           )}

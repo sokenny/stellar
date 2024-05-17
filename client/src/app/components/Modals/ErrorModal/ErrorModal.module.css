@@ -1,0 +1,31 @@
+.modal {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.title {
+  font-weight: 600;
+  display: flex;
+  font-size: 32px;
+  color: var(--error);
+}
+
+.body span {
+  color: var(--linkBlue);
+}
+
+.button {
+  border-radius: 4px;
+}
+
+.body .items > div {
+  margin-bottom: 8px;
+}
+
+.tutorial {
+  margin-top: 8px;
+}
+
+.tutorial a {
+  color: var(--linkBlue);
+}

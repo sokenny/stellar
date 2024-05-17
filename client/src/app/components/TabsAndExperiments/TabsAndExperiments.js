@@ -31,8 +31,6 @@ const TabsAndExperiments = ({ experiments }) => {
     ),
   };
 
-  console.log('experimentsByTab', experimentsByTab);
-
   return (
     <div className={styles.TabsAndExperiments}>
       <div>
@@ -71,9 +69,6 @@ const TabsAndExperiments = ({ experiments }) => {
           </div>
         </div>
         <div className={styles.experiments}>
-          {/* {experimentsByTab[activeTab].map((experiment) => (
-            <Experiment key={experiment.id} experiment={experiment} cardLike />
-          ))} */}
           <ExperimentsTable experiments={experimentsByTab[activeTab]} />
         </div>
       </div>

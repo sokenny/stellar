@@ -1,0 +1,30 @@
+
+.container {
+    margin-bottom: 32px;
+}
+
+.container .cardBody {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container .cardTitle {
+    font-weight: 600;
+}
+
+.container .cardSnippet {
+    border-radius: 6px;
+    margin-top: 8px;
+    padding: 2px 6px 2px 12px;
+    font-size: 12px;
+}
+
+.cardActions {
+    margin-top: 12px;
+}
+
+.cardActions .seeHowBtn {
+    border-radius: 4px;
+    margin-right: 8px;
+}

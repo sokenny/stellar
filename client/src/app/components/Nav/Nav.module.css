@@ -1,54 +1,22 @@
-.Nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
+.container {
   justify-content: space-between;
-  width: 100%;
-  padding: 14px 10vw;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  color: var(--textBody);
-  background-color: white;
-  z-index: 1;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+.identity a, .navItem, .navItem * {
   font-size: 14px;
 }
 
-.id {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  background-color: #000000;
-  margin-right: 8px;
-}
-
-.Nav ul {
-  display: flex;
-  text-decoration: none;
-  list-style: none;
-}
-
-.Nav ul li {
-  margin-right: 32px;
-}
-
-.Nav ul li:hover a, .access div:hover {
-  color: var(--blue);
-}
-
-.Nav ul li:last-child {
-  margin-right: 0;
-}
-
-.Nav a {
-  text-decoration: none;
-  color: var(--textBody);
-}
-
-.access div {
+.identity, .container li {
   cursor: pointer;
+}
+
+.active {
+  color: var(--linkBlue);
+}
+
+.navItem a {
+  color: black;
 }

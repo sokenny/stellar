@@ -22,9 +22,6 @@ const useStore = create((set, get) => ({
     const lastCallTimestamp = state.lastCallTimestamps[experimentId] || 0;
 
     if (now - lastCallTimestamp < 2000) {
-      console.log(
-        `Debounce active for experiment ${experimentId}, skipping fetch.`,
-      );
       return state.stats[experimentId];
     }
 
@@ -81,6 +78,8 @@ const useStore = create((set, get) => ({
   },
   user: null,
   setUser: (user) => set({ user }),
+  errorModal: null,
+  setErrorModal: (errorModal) => set({ errorModal }),
 }));
 
 export default useStore;

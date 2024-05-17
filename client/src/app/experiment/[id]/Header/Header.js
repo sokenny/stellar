@@ -19,7 +19,7 @@ import StatusChip from '../../../components/StatusChip';
 import styles from './Header.module.css';
 
 const Header = ({ experiment }) => {
-  const { refetchProjects } = useStore();
+  const { refetchProjects, setErrorModal } = useStore();
 
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
   const {
@@ -33,12 +33,29 @@ const Header = ({ experiment }) => {
     setLaunchingExperiment(true);
     try {
       toast.promise(
-        fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
-          {
-            method: 'POST',
-          },
-        ),
+        // fetch(
+        //   `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
+        //   {
+        //     method: 'POST',
+        //   },
+        // ),
+        async () => {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
+            {
+              method: 'POST',
+            },
+          );
+
+          // Check if the response was not ok (e.g., status code 400 or 500)
+          if (!response.ok) {
+            const errorData = await response.json(); // Assuming the server sends JSON with an error message
+            throw new Error(errorData.message || 'Something went wrong');
+          }
+
+          // If everything is okay, process and return the response
+          return response.json();
+        },
         {
           loading: 'Launching experiment...',
           success: async () => {
@@ -46,14 +63,17 @@ const Header = ({ experiment }) => {
             setLaunchingExperiment(false);
             return 'Experiment launched successfully';
           },
-          error: async () => {
+          error: async (e) => {
+            console.log('E! ', e);
             setLaunchingExperiment(false);
+            setErrorModal(e?.message || 'Something went wrong');
             return 'Failed to launch experiment';
           },
         },
       );
     } catch (e) {
       console.error(e);
+      setErrorModal(e.message || 'Something went wrong');
     }
   }
 

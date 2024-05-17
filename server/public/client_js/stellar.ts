@@ -5,6 +5,27 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
+  const checkingSnippet = urlParams.get('checkingSnippet');
+
+  if (checkingSnippet === 'true') {
+    console.log('checkingSnippet!!');
+    fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: window.location.origin + window.location.pathname,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('checkingSnippet data: ', data);
+      })
+      .catch((error) => {
+        console.error('Error checkingSnippet:', error);
+      });
+  }
 
   if (!localStorage.getItem('stellarVisitorId')) {
     localStorage.setItem(
