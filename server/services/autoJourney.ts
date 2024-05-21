@@ -55,16 +55,18 @@ export async function findOrCreateProject(website_url: string, transaction) {
 }
 
 export async function createVariants(
-  element: IElement,
+  element,
   experimentId,
   pageContext,
   transaction,
 ) {
   const variantsForThisElement = [];
-  const text = element.properties.innerText;
-  const color = element.properties.color;
+  console.log('prev text');
+  const text = await element.domReference.evaluate((el: any) => el.innerText);
+  console.log('post text: ', text);
+  // const color = element.domReference.evaluate((el: any) => el.style.color);
 
-  const prompt = buildPromptFromPageContext(pageContext, element);
+  const prompt = buildPromptFromPageContext(pageContext, element, text);
   const variants = await getTextVariants({ prompt });
   const variantCount = 1 + variants.length; // Including control variant
   const baseTraffic = Math.floor(100 / variantCount);
@@ -80,16 +82,24 @@ export async function createVariants(
       residualTraffic = 0; // Reset residual traffic after assigning
     }
 
+    // const modifications is array of shape [{"cssText": "", "selector": "html > body:nth-child(2) > div:nth-child(3) > div > div:nth-child(2) > section > div > h1:nth-child(2)", "innerText": "artesanales de papu"}]
+    const modifications = [
+      {
+        cssText: element.style.cssText || '',
+        selector: element.selector,
+        innerText: isControl ? text : variants[i - 1],
+      },
+    ];
+
+    console.log('modifications! ', modifications);
+
     const variant: IVariant = await db.Variant.create(
       {
         is_control: isControl,
-        element_id: element.id,
-        text: isControl ? text : variants[i - 1],
-        font_size: null,
-        color,
-        background_color: null,
         experiment_id: experimentId,
-        traffic: traffic,
+        traffic,
+        modifications,
+        name: isControl ? 'Control' : `Variant ${i}`,
       },
       {
         transaction,
@@ -102,12 +112,53 @@ export async function createVariants(
   return variantsForThisElement;
 }
 
+// export async function createExperiments(
+//   elements,
+//   page,
+//   projectId,
+//   transaction,
+// ) {
+//   try {
+//     const experiments = [];
+
+//     for (const element of elements) {
+//       const experiment = await db.Experiment.create(
+//         {
+//           name: `${element.type} Experiment`,
+//           element_id: element.id,
+//           project_id: projectId,
+//           page_id: page.id,
+//           url: page.url,
+//         },
+//         {
+//           transaction,
+//         },
+//       );
+
+//       await createVariants(element, experiment.id, page.context, transaction);
+//       experiments.push(experiment);
+//     }
+
+//     return experiments;
+//   } catch (error) {
+//     console.error('Error creating experiments:', error);
+//     throw error;
+//   }
+// }
+
 export async function createExperiments(
-  elements,
+  mainElementsObject,
   page,
   projectId,
   transaction,
 ) {
+  const elements = Object.entries(mainElementsObject).map((element) => ({
+    domReference: element[1][0],
+    selector: element[1][1],
+    style: element[1][2],
+    type: element[0],
+  }));
+
   try {
     const experiments = [];
 
@@ -115,7 +166,6 @@ export async function createExperiments(
       const experiment = await db.Experiment.create(
         {
           name: `${element.type} Experiment`,
-          element_id: element.id,
           project_id: projectId,
           page_id: page.id,
           url: page.url,
@@ -167,12 +217,12 @@ export async function createElements(elements, pageId, transaction) {
   return createdElements;
 }
 
-export function buildPromptFromPageContext(pageContext, element) {
+export function buildPromptFromPageContext(pageContext, element, text) {
   return `I am running an A/B test for a "${
     element.type
   }" element on a webpage. I need alternative text variants for this element to compare against the original text. 
 
-Original Text: "${element.properties.innerText}"
+Original Text: "${text}"
 
 Please provide 2 additional text variants specifically in an array format, aiming to enhance page interaction and conversion rates. For instance, the response should be structured like this:
 

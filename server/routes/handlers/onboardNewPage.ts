@@ -19,16 +19,6 @@ async function onboardNewPage(req: Request, res: Response): Promise<void> {
 
     const context = await getPageContext(browserSession);
 
-    // const journey = await db.Journey.create(
-    //   {
-    //     name: 'Journey for ' + project.name,
-    //     page: website_url,
-    //     project_id: project.id,
-    //     context,
-    //   },
-    //   { transaction },
-    // );
-
     const page = await db.Page.create(
       {
         name: 'Page sample name',

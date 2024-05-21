@@ -8,3 +8,21 @@
 .experiments > div:last-child {
   border-bottom: none;
 }
+
+.experiment {
+  margin-top: 32px;
+}
+
+.experimentTitle {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.variants {
+  display: flex;
+}
+
+.variant {
+  margin-right: 8px;
+  
+}

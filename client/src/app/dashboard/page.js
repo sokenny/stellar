@@ -11,15 +11,13 @@ export default function Dashboard() {
   const loading = !currentProject.id;
   const missingSnippet = currentProject.snippet_status !== 1;
 
-  console.log('Current project: ', currentProject);
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.Dashboard}>
-      {missingSnippet && <SnippetMissing />}
+      {missingSnippet && <SnippetMissing className={styles.snippet} />}
       <TabsAndExperiments experiments={currentProject.experiments} />
     </div>
   );

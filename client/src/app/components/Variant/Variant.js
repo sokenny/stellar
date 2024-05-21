@@ -1,8 +1,12 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
+import Edit2 from '../../icons/Edit2';
 import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
+import Delete2 from '../../icons/Delete2';
 import VariantModal from '../Modals/VariantModal/VariantModal';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import Stats from './Stats/Stats';
@@ -15,6 +19,7 @@ const Variant = ({
   stats,
   height,
   setHeight,
+  className,
   // num,
 }) => {
   const variantRef = useRef(null);
@@ -23,11 +28,8 @@ const Variant = ({
   const [showDeleteVariantModal, setShowDeleteVariantModal] = useState(false);
   const showStats = !!experiment.started_at;
 
-  // function getSortedVariants(variants) {
-  //   return variants.sort((a, b) => a.id - b.id);
-  // }
-  // const sortedVariants = getSortedVariants(variants);
-  // const num = sortedVariants.findIndex((v) => v.id === id) + 1;
+  // text of thisVariant needs to be lookedup in thisVariant.modifications where innerText has some text
+  const text = thisVariant.modifications.find((m) => m.innerText).innerText;
 
   const num = variants.findIndex((v) => v.id === id) + 1;
 
@@ -50,6 +52,7 @@ const Variant = ({
       className={`${styles.Variant} 
       ${thisVariant.is_control ? styles.isControl : ''}
       ${showStats ? styles.showStats : ''}
+      ${className}
       `}
     >
       <div
@@ -91,7 +94,7 @@ const Variant = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            {thisVariant.text}
+            {text}
           </a>
         </div>
         <div className={styles.traffic}>

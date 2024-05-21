@@ -15,6 +15,7 @@ import {
   Tooltip,
   Input,
   Button as NextUIButton,
+  useDisclosure,
 } from '@nextui-org/react';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import DeleteIcon from '../../icons/Delete/Delete';
@@ -24,6 +25,7 @@ import styles from './VariantsTable.module.css';
 import useStore from '../../store';
 import VariantModal from '../Modals/VariantModal';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
+import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 
 function getConversionRate(variantStats) {
   // TODO-p2: Add handling for scenarios where goal is session time
@@ -41,8 +43,14 @@ const VariantsTable = ({ variants = [], experiment }) => {
   const [variantToDelete, setVariantToDelete] = useState(null);
   const [page, setPage] = React.useState(1);
   const hasStarted = experiment.started_at;
-  const { stats, getExperimentStats } = useStore();
+  const { stats, getExperimentStats, currentProject } = useStore();
+  const missingSnippet = currentProject.snippet_status !== 1;
   const thisStats = stats[experiment.id];
+  const {
+    isOpen: isSnippetModalOpen,
+    onOpen: onOpenSnippetModal,
+    onOpenChange: onOpenSnippetModalChange,
+  } = useDisclosure();
 
   useEffect(() => {
     if (hasStarted) {
@@ -79,6 +87,10 @@ const VariantsTable = ({ variants = [], experiment }) => {
 
   return (
     <>
+      <SnippetInstallationModal
+        isOpen={isSnippetModalOpen}
+        onOpenChange={onOpenSnippetModalChange}
+      />
       {variantToEdit && (
         <VariantModal
           isEditingTrue
@@ -150,7 +162,11 @@ const VariantsTable = ({ variants = [], experiment }) => {
                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                           <EyeIcon
                             className={styles.eyeIcon}
-                            onClick={() => handleOnView(item.id)}
+                            onClick={() =>
+                              missingSnippet
+                                ? onOpenSnippetModal()
+                                : handleOnView(item.id)
+                            }
                           />
                         </span>
                         <Tooltip

@@ -11,7 +11,7 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import getSortedVariants from '../../helpers/getSortedVariants';
 import Variant from '../Variant/Variant';
-import Goal from './Goal/Goal';
+import Goal from '../Goal/Goal';
 import StopButton from '../StopButton/StopButton';
 import PlayButton from '../PlayButton/PlayButton';
 import PauseButton from '../PauseButton/PauseButton';
@@ -86,11 +86,10 @@ const Experiment = ({
     experiment.status === ExperimentStatusesEnum.PENDING;
 
   const showStopPlayPauseButtons =
-    experiment.status === ExperimentStatusesEnum.RUNNING ||
-    experiment.status === ExperimentStatusesEnum.PAUSED ||
-    experiment.status === ExperimentStatusesEnum.PENDING;
-
-  console.log('isGoalTooltipOpen:', isGoalTooltipOpen);
+    (experiment.status === ExperimentStatusesEnum.RUNNING ||
+      experiment.status === ExperimentStatusesEnum.PAUSED ||
+      experiment.status === ExperimentStatusesEnum.PENDING) &&
+    !onReview;
 
   return (
     <div
@@ -126,12 +125,12 @@ const Experiment = ({
                 </div>
               )}
 
-              <div
+              {/* <div
                 className={styles.editExperiment}
                 onClick={() => setShowEditExperimentModal(true)}
               >
                 <Edit height={17} />
-              </div>
+              </div> */}
             </div>
           )}
           {!isOpen && (
@@ -193,12 +192,12 @@ const Experiment = ({
                 <div className={styles.variantsTitle}>
                   Variants ({variants.length})
                 </div>
-                {isAlterable && (
+                {/* {isAlterable && (
                   <CreateButton
                     height={18}
                     onClick={() => setShowCreateVariantModal(true)}
                   />
-                )}
+                )} */}
               </div>
               <div className={styles.variantsContainer}>
                 {sortedVariants.map((variant, i) => (

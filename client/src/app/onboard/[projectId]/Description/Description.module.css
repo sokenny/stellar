@@ -1,9 +1,9 @@
 .Description {
-  max-width: 750px;
+  max-width: 850px;
 }
 
 .Description p {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .Description p:last-child {

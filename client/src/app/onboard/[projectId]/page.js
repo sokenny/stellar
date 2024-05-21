@@ -1,14 +1,12 @@
-import { signIn } from 'next-auth/react';
+// import { signIn } from 'next-auth/react';
 import Actions from './Actions';
 import Description from './Description';
-import Experiment from '../../components/Experiment';
+import Experiment from '../../components/Experiment/Experiment';
 import styles from './page.module.css';
 
 export default async function OnboardPage({ params, searchParams }) {
   const projectId = params.projectId;
-  // get authenticated from query params
   const authenticated = searchParams.authenticated === 'true';
-  console.log('authenticated', authenticated);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${projectId}/experiments`,
     {
@@ -24,13 +22,9 @@ export default async function OnboardPage({ params, searchParams }) {
       <Description />
       <div className={styles.content}>
         <div className={styles.experiments}>
+          {/* TODO-p1: Have puppeteer screenshot of element that has been targetted */}
           {experiments.map((experiment, i) => (
-            <Experiment
-              experiment={experiment}
-              key={experiment.id}
-              onReview
-              open={i === 0}
-            />
+            <Experiment experiment={experiment} key={experiment.id} onReview />
           ))}
         </div>
       </div>

@@ -26,14 +26,18 @@ import createVariant from './handlers/createVariant';
 import createAccount from './handlers/createAccount';
 import finishOnboarding from './handlers/finishOnboarding';
 import checkSnippet from './handlers/checkSnippet';
+import autoGenerate from './handlers/autoGenerate';
 
 const router = express.Router();
 
 // TODO: add Rate Limiting to prevent abuse. mainly for the endpoints exposed to the client that
 // are authenticated with the public api key
 
-router.post('/onboard', onboardNewPage);
+// router.post('/onboard', onboardNewPage);
 router.post('/create-account', createAccount);
+
+router.post('/onboard', autoGenerate);
+// router.post('/auto-generate', autoGenerate);
 
 router.post('/finish-onboarding/:projectId', finishOnboarding);
 

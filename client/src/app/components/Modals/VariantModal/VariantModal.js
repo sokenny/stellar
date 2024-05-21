@@ -1,6 +1,10 @@
 import { toast } from 'sonner';
 import { useCallback, useState, useRef, useEffect } from 'react';
-import { Button as NextUIButton, Divider } from '@nextui-org/react';
+import {
+  Button as NextUIButton,
+  Divider,
+  useDisclosure,
+} from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import useStore from '../../../store';
 import isObjectEqual from '../../../helpers/isObjectEqual';
@@ -9,6 +13,7 @@ import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import useVariantEditor from '../../../helpers/useVariantEditor';
 import styles from './VariantModal.module.css';
+import SnippetInstallationModal from '../SnippetInstallationModal';
 
 const VariantModal = ({
   onClose,
@@ -20,7 +25,8 @@ const VariantModal = ({
   },
 }) => {
   const router = useRouter();
-  const { refetchProjects } = useStore();
+  const { refetchProjects, currentProject } = useStore();
+  const missingSnippet = currentProject.snippet_status !== 1;
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
@@ -30,6 +36,11 @@ const VariantModal = ({
   const thisVariant = variants.find((v) => v.id === id);
   const otherVariants = variants.filter((v) => v.id !== id);
   const { handleEditVariant } = useVariantEditor({ experiment });
+  const {
+    isOpen: isSnippetModalOpen,
+    onOpen: onOpenSnippetModal,
+    onOpenChange: onOpenSnippetModalChange,
+  } = useDisclosure();
 
   useEffect(() => {
     const totalTraffic = Object.keys(formData).reduce((acc, key) => {
@@ -78,100 +89,110 @@ const VariantModal = ({
   }, [formData, id, router]);
 
   return (
-    <Modal onClose={onClose}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>Edit Variant {thisVariant.num}</h3>
-      </div>
-      <div className={styles.fields}>
-        {!thisVariant.is_control && (
+    <>
+      <SnippetInstallationModal
+        isOpen={isSnippetModalOpen}
+        onOpenChange={onOpenSnippetModalChange}
+      />
+      <Modal onClose={onClose}>
+        <div className={styles.header}>
+          <h3 className={styles.title}>Edit Variant {thisVariant.num}</h3>
+        </div>
+        <div className={styles.fields}>
+          {!thisVariant.is_control && (
+            <div className={styles.fieldGroup}>
+              <label className={`${styles.label} ${styles.changes}`}>
+                Changes: <span>({thisVariant.modifications.length})</span>
+              </label>
+              <div>
+                <NextUIButton
+                  size="sm"
+                  className={styles.editOnWeb}
+                  variant="flat"
+                  color="primary"
+                  onPress={() =>
+                    missingSnippet
+                      ? onOpenSnippetModal()
+                      : handleEditVariant(thisVariant.id)
+                  }
+                >
+                  Edit on website
+                </NextUIButton>
+              </div>
+            </div>
+          )}
           <div className={styles.fieldGroup}>
-            <label className={`${styles.label} ${styles.changes}`}>
-              Changes: <span>({thisVariant.modifications.length})</span>
-            </label>
+            <label className={styles.label}>Name:</label>
+
             <div>
-              <NextUIButton
-                size="sm"
-                className={styles.editOnWeb}
-                variant="flat"
-                color="primary"
-                onPress={() => handleEditVariant(thisVariant.id)}
-              >
-                Edit on website
-              </NextUIButton>
+              <Input
+                type="text"
+                className={styles.textInput}
+                value={formData?.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                onMouseEnter={() => setIsControlTooltipOpen(true)}
+                onMouseLeave={() => setIsControlTooltipOpen(false)}
+              />
             </div>
           </div>
-        )}
-        <div className={styles.fieldGroup}>
-          <label className={styles.label}>Name:</label>
 
-          <div>
-            <Input
-              type="text"
-              className={styles.textInput}
-              value={formData?.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              onMouseEnter={() => setIsControlTooltipOpen(true)}
-              onMouseLeave={() => setIsControlTooltipOpen(false)}
-            />
-          </div>
-        </div>
-
-        <div className={styles.fieldGroup}>
-          <label className={styles.label}>Traffic:</label>
-          <Input
-            type="number"
-            value={formData?.[`traffic_${thisVariant.id}`]}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                [`traffic_${thisVariant.id}`]: e.target.value,
-              })
-            }
-          />
-        </div>
-        <Divider className="my-4" />
-        {otherVariants.map((v) => (
-          <div className={styles.fieldGroup} key={v.id}>
-            <label className={styles.label}>{v.name} Traffic:</label>
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>Traffic:</label>
             <Input
               type="number"
-              value={formData?.[`traffic_${v.id}`]}
+              value={formData?.[`traffic_${thisVariant.id}`]}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  [`traffic_${v.id}`]: e.target.value,
+                  [`traffic_${thisVariant.id}`]: e.target.value,
                 })
               }
             />
           </div>
-        ))}
+          <Divider className="my-4" />
+          {otherVariants.map((v) => (
+            <div className={styles.fieldGroup} key={v.id}>
+              <label className={styles.label}>{v.name} Traffic:</label>
+              <Input
+                type="number"
+                value={formData?.[`traffic_${v.id}`]}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    [`traffic_${v.id}`]: e.target.value,
+                  })
+                }
+              />
+            </div>
+          ))}
 
-        {errors.length > 0 && (
-          <div className={styles.errors}>
-            {errors.map((e) => (
-              <div className={styles.error} key={e}>
-                {e}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className={styles.actions}>
-        <Button
-          className={styles.save}
-          onClick={onSave}
-          disabled={isFormPristine || submitting || errors.length > 0}
-          loading={submitting}
-        >
-          Save
-        </Button>
-        <div className={styles.cancel} onClick={onClose}>
-          cancel
+          {errors.length > 0 && (
+            <div className={styles.errors}>
+              {errors.map((e) => (
+                <div className={styles.error} key={e}>
+                  {e}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-    </Modal>
+        <div className={styles.actions}>
+          <Button
+            className={styles.save}
+            onClick={onSave}
+            disabled={isFormPristine || submitting || errors.length > 0}
+            loading={submitting}
+          >
+            Save
+          </Button>
+          <div className={styles.cancel} onClick={onClose}>
+            cancel
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 

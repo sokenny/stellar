@@ -1,3 +1,7 @@
 .Dashboard {
     max-width: 930px;
 }
+
+.snippet {
+    margin-bottom: 32px;
+}

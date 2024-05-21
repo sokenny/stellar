@@ -7,6 +7,7 @@
   width: 230px;
   height: 100%;
   position: relative;
+  border-radius: 4px;
 }
 
 .Variant.showStats .mainInfo {
@@ -65,7 +66,11 @@
   font-size: 13px;
   text-decoration: underline;
   cursor: pointer;
-  color: black;
+  opacity: .6;
+}
+
+.edit:hover {
+  opacity: .75;
 }
 
 .text {

@@ -4,17 +4,18 @@ import { useRouter } from 'next/navigation';
 import useStore from '../../store';
 import getShortId from '../../helpers/getShortId';
 import useVariantEditor from '../../helpers/useVariantEditor';
+import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 import Button from '../Button/Button';
 import Delete from '../../icons/Delete';
-import { Button as NextUIButton } from '@nextui-org/react';
+import { Button as NextUIButton, useDisclosure } from '@nextui-org/react';
 import Input from '../Input/Input';
 import styles from './CreateExperimentForm.module.css';
 
 const CreateExperimentForm = ({ experiment }) => {
   const router = useRouter();
   const variantsCheckIntervalRef = useRef(null);
-  const pristineExperiment = useRef(experiment);
   const { currentProject, refetchProjects } = useStore();
+  const missingSnippet = currentProject.snippet_status !== 1;
   const loading = Object.keys(currentProject).length === 0;
   const [createExperimentLoading, setCreateExperimentLoading] = useState(false);
   const [addVariantLoading, setAddVariantLoading] = useState(false);
@@ -24,6 +25,11 @@ const CreateExperimentForm = ({ experiment }) => {
       : '',
     experiment,
   });
+  const {
+    isOpen: isSnippetModalOpen,
+    onOpen: onOpenSnippetModal,
+    onOpenChange: onOpenSnippetModalChange,
+  } = useDisclosure();
 
   useEffect(() => {
     return () => clearInterval(variantsCheckIntervalRef.current);
@@ -119,103 +125,116 @@ const CreateExperimentForm = ({ experiment }) => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className={styles.CreateExperimentForm}>
-      <div className={`${styles.fieldGroup} ${styles.step}`}>
-        <label className={styles.stepTitle}>
-          1. Which URL is this experiment for?
-        </label>
-        <Input
-          className={styles.urlInput}
-          type="text"
-          name="url"
-          placeholder={`https://${currentProject.domain}/your-url`}
-          value={formState.experimentUrl || experiment.url}
-          onChange={(e) =>
-            setFormState({ ...formState, experimentUrl: e.target.value })
-          }
-          disabled={formState.experiment}
-        />
-        <span className={styles.hint}>
-          Must be part of {currentProject.domain}
-        </span>
-        {!formState.experiment && (
-          <div className={styles.urlAction}>
-            <Button
-              onClick={handleConfirmUrl}
-              loading={createExperimentLoading}
-            >
-              Confirm URL
-            </Button>
+    <>
+      <SnippetInstallationModal
+        isOpen={isSnippetModalOpen}
+        onOpenChange={onOpenSnippetModalChange}
+      />
+      <div className={styles.CreateExperimentForm}>
+        <div className={`${styles.fieldGroup} ${styles.step}`}>
+          <label className={styles.stepTitle}>
+            1. Which URL is this experiment for?
+          </label>
+          <Input
+            className={styles.urlInput}
+            type="text"
+            name="url"
+            placeholder={`https://${currentProject.domain}/your-url`}
+            value={formState.experimentUrl || experiment.url}
+            onChange={(e) =>
+              setFormState({ ...formState, experimentUrl: e.target.value })
+            }
+            disabled={formState.experiment}
+          />
+          <span className={styles.hint}>
+            Must be part of {currentProject.domain}
+          </span>
+          {!formState.experiment && (
+            <div className={styles.urlAction}>
+              <Button
+                onClick={handleConfirmUrl}
+                loading={createExperimentLoading}
+              >
+                Confirm URL
+              </Button>
+            </div>
+          )}
+        </div>
+        {formState.experiment && (
+          <div>
+            <div className={`${styles.variants} ${styles.step}`}>
+              <div className={styles.stepTitle}>2. Edit your variants</div>
+              <div>
+                {formState.experiment.variants.map((variant) => (
+                  <div className={styles.variant} key={variant.id}>
+                    <div className={styles.cell}>{variant.name}</div>
+                    <div className={styles.cell}>
+                      Weight: {variant.traffic}%
+                    </div>
+                    <div className={styles.cell}>
+                      {!variant.is_control && (
+                        <span className={styles.changes}>
+                          Changes:{' '}
+                          <span>{variant.modifications?.length || 0}</span>
+                        </span>
+                      )}
+                    </div>
+                    <div className={styles.cell}>
+                      {!variant.is_control && (
+                        <div className={styles.actions}>
+                          <NextUIButton
+                            size="sm"
+                            className={styles.editButton}
+                            variant="flat"
+                            color="primary"
+                            onPress={() =>
+                              missingSnippet
+                                ? onOpenSnippetModal()
+                                : handleEditVariant(
+                                    variant.id,
+                                    onVariantModified,
+                                  )
+                            }
+                          >
+                            Edit variant
+                          </NextUIButton>
+                          <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                            <Delete
+                              onClick={() => handleDeleteVariant(variant.id)}
+                            />
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                <div className={styles.addVariant}>
+                  <NextUIButton
+                    size="sm"
+                    variant="flat"
+                    className={styles.addVariantButton}
+                    onPress={handleAddVariant}
+                    isLoading={addVariantLoading}
+                    isDisabled={addVariantLoading}
+                  >
+                    Add Another Variant
+                  </NextUIButton>
+                </div>
+              </div>
+            </div>
+            <div className={styles.actions}>
+              <Button
+                onClick={() =>
+                  router.push(`/experiment/${formState.experiment.id}`)
+                }
+              >
+                Go to Experiment
+              </Button>
+            </div>
           </div>
         )}
       </div>
-      {formState.experiment && (
-        <div>
-          <div className={`${styles.variants} ${styles.step}`}>
-            <div className={styles.stepTitle}>2. Edit your variants</div>
-            <div>
-              {formState.experiment.variants.map((variant) => (
-                <div className={styles.variant} key={variant.id}>
-                  <div className={styles.cell}>{variant.name}</div>
-                  <div className={styles.cell}>Weight: {variant.traffic}%</div>
-                  <div className={styles.cell}>
-                    {!variant.is_control && (
-                      <span className={styles.changes}>
-                        Changes:{' '}
-                        <span>{variant.modifications?.length || 0}</span>
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.cell}>
-                    {!variant.is_control && (
-                      <div className={styles.actions}>
-                        <NextUIButton
-                          size="sm"
-                          className={styles.editButton}
-                          variant="flat"
-                          color="primary"
-                          onPress={() =>
-                            handleEditVariant(variant.id, onVariantModified)
-                          }
-                        >
-                          Edit variant
-                        </NextUIButton>
-                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <Delete
-                            onClick={() => handleDeleteVariant(variant.id)}
-                          />
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              <div className={styles.addVariant}>
-                <NextUIButton
-                  size="sm"
-                  variant="flat"
-                  className={styles.addVariantButton}
-                  onPress={handleAddVariant}
-                  isLoading={addVariantLoading}
-                  isDisabled={addVariantLoading}
-                >
-                  Add Another Variant
-                </NextUIButton>
-              </div>
-            </div>
-          </div>
-          <div className={styles.actions}>
-            <Button
-              onClick={() =>
-                router.push(`/experiment/${formState.experiment.id}`)
-              }
-            >
-              Go to Experiment
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import Button from '../Button';
 import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
 
-const SnippetMissing = () => {
+const SnippetMissing = ({ className }) => {
   const [loading, setLoading] = useState(false);
   const { refetchProjects, currentProject } = useStore();
   function handleSnippetCheck() {
@@ -33,14 +33,14 @@ const SnippetMissing = () => {
   }
 
   return (
-    <InfoCard className={styles.container}>
+    <InfoCard className={`${styles.container} ${className}`}>
       {
         <div className={styles.cardBody}>
           <div>
             <div className={styles.cardTitle}>Snippet missing</div>
             <div>
-              Install your code snippet so we can start tracking and running
-              your experiments:
+              Place this snippet in the {'<head>'} tag of your website to start
+              tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
               {

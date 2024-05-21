@@ -22,7 +22,6 @@ export default function CreateExperimentPage({ params }) {
   return (
     <div className={styles.CreateExperiment}>
       <h1 className={styles.title}>
-        {/* TODO-p1: Set page_id when experiment is created */}
         {isNew ? 'Create Experiment' : experiment.name}
       </h1>
       <CreateExperimentForm experiment={experiment} />

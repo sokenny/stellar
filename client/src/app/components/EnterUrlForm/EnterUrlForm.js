@@ -25,7 +25,7 @@ const EnterUrlForm = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ website_url: url }),
+          body: JSON.stringify({ url }),
         }),
         {
           loading: 'Scrapping page & creating experiments...',

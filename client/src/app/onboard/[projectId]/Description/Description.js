@@ -8,9 +8,9 @@ const Description = () => {
   const [isConversionTooltipOpen, setIsConversionTooltipOpen] = useState(false);
   return (
     <div className={styles.Description}>
-      <p>Here are some experiments generated from your main text elements.</p>
       <p>
-        We estimate a potential{' '}
+        Here are some experiments generated from your main text elements. We
+        estimate a potential{' '}
         <Tooltip
           isOpen={isConversionTooltipOpen}
           showArrow
@@ -25,11 +25,8 @@ const Description = () => {
         solely from copy tweaks in these main elements.
       </p>
       <p>
-        You can create more sophisticated variants with different styles inside
-        our visual builder once your account has been setup.
-      </p>
-      <p>
-        Feel free to proceed with current settings and modify them later on.
+        You can further edit these variants after creating an account at the end
+        of this step.
       </p>
     </div>
   );

@@ -18,9 +18,8 @@ import {
 } from '@nextui-org/react';
 import styles from './Nav.module.css';
 
-// TODO-p1: Add breadcrumb to experiment/:id page
-// TODO-p1: Brainstorm snippet installation process
 // TODO-p1: Start working again with onboarding / auto-generating experiments
+// TODO-p1: Add breadcrumb to experiment/:id page
 const Nav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();

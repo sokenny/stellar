@@ -1,0 +1,10 @@
+.modal {
+    max-width: 950px;
+    padding-bottom: 16px;
+    border-radius: 5px;
+}
+
+.title {
+    padding-bottom: 0;
+    margin-bottom: 4px;
+}

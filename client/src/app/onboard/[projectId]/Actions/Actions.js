@@ -50,6 +50,10 @@ const Actions = ({ projectId, authenticated }) => {
           >
             Create Account with Experiments
           </Button>
+          <div className={styles.disclaimer}>
+            You can further edit your experiments and variants after creating
+            your account.
+          </div>
         </div>
       )}
     </>

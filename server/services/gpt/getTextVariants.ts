@@ -11,7 +11,7 @@ export const MAX_TOKENS = 200;
 export const getTextVariants = async ({ prompt }) => {
   try {
     const openaiResponse = await openai.createChatCompletion({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-3.5-turbo-0125',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.5,
       max_tokens: MAX_TOKENS,
