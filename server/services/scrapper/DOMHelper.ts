@@ -147,8 +147,9 @@ export default function DOMHelper(page: any, window: any) {
       const secondBiggestText =
         await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
 
-      // TODO-p2: Tambien guardar el 'biggestText' porque muchas veces difiere del h1
-      const chosenH1 = h1 || biggestText;
+      // TODO-p1: Tambien guardar el 'biggestText' porque muchas veces difiere del h1
+      const chosenH1 = h1;
+      const chosenBiggestText = biggestText;
       const chosenDescription = h2 || secondBiggestText;
 
       const h1Styles = await tryOrReturn(
@@ -163,16 +164,24 @@ export default function DOMHelper(page: any, window: any) {
         async () => await this.getBasicStyles(cta),
         {},
       );
+      const biggestTextStyles = await tryOrReturn(
+        async () => await this.getBasicStyles(chosenBiggestText),
+        {},
+      );
 
       const chosenH1Selector = await this.getSelector(chosenH1);
       const chosenDescriptionSelector = await this.getSelector(
         chosenDescription,
       );
       const chosenCtaSelector = await this.getSelector(cta);
+      const chosenBiggestTextSelector = await this.getSelector(
+        chosenBiggestText,
+      );
 
       console.log('chosenH1Selector:', chosenH1Selector);
       console.log('chosenDescriptionSelector:', chosenDescriptionSelector);
       console.log('chosenCtaSelector:', chosenCtaSelector);
+      console.log('chosenBiggestTextSelector:', chosenBiggestTextSelector);
 
       if (chosenH1 && chosenH1Selector) {
         mainElements.h1 = [chosenH1, chosenH1Selector, h1Styles];
@@ -186,6 +195,13 @@ export default function DOMHelper(page: any, window: any) {
       }
       if (cta && chosenCtaSelector) {
         mainElements.cta = [cta, chosenCtaSelector, ctaStyles];
+      }
+      if (chosenBiggestText && chosenBiggestTextSelector) {
+        mainElements.biggestText = [
+          chosenBiggestText,
+          chosenBiggestTextSelector,
+          biggestTextStyles,
+        ];
       }
       return mainElements;
     },

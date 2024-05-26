@@ -165,7 +165,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
         {formData.goalType === GoalTypesEnum.CLICK &&
           (goal?.type !== GoalTypesEnum.CLICK || wantsToUpdateGoal) && (
             <div className={styles.clickData}>
-              {/* TODO-p2: Provide an option where the user can just provide a querySelector for the element */}
+              {/* TODO-p1: Provide an option where the user can just provide a querySelector for the element */}
               <div className={styles.title}>Which URL is the element at?</div>
               <div className={styles.subTitle}>
                 After typing in your URL, we'll take you there so you can select

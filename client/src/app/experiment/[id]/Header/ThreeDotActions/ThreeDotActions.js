@@ -70,7 +70,7 @@ const ThreeDotActions = ({ experimentId, status }) => {
                   description="Edit experiment settings"
                   startContent={<Edit2 className={iconClasses} />}
                 >
-                  {/* TODO-p2: Have things like scheduled end date, auto finalize, start after X, etc */}
+                  {/* TODO-p1: Have things like scheduled end date, auto finalize, start after X, etc */}
                   Settings
                 </ListboxItem>
                 {status === ExperimentStatusesEnum.PENDING && (

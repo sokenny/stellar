@@ -8,7 +8,6 @@
   const checkingSnippet = urlParams.get('checkingSnippet');
 
   if (checkingSnippet === 'true') {
-    console.log('checkingSnippet!!');
     fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
       method: 'POST',
       headers: {
@@ -19,9 +18,7 @@
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log('checkingSnippet data: ', data);
-      })
+      .then((data) => {})
       .catch((error) => {
         console.error('Error checkingSnippet:', error);
       });
@@ -129,8 +126,6 @@
       pagesWithExperiments = storedPagesWithExperiments;
       hasFetchedExperiments = storedHasFetchedExperiments;
     }
-
-    console.log('experimentsRun!: ', experimentsRun);
   }
 
   function sendDataOnLeave() {
@@ -214,7 +209,6 @@
             experiment.goal.type === 'CLICK' &&
             currentPageUrl.includes(experiment.goal.url_match_value)
           ) {
-            console.log('click aquiiii!!!');
             const selectorElement = document.querySelector(
               experiment.goal.selector,
             );
@@ -262,7 +256,6 @@
   }
 
   // function checkPageVisitGoals(experiments) {
-  //   console.log('running checkPageVisitGoals');
   //   const currentPage = window.location.href;
 
   //   experiments.forEach((experiment) => {
@@ -293,8 +286,6 @@
       console.log('we do not have experiments for this page');
       return;
     }
-
-    console.log('pageUrl: ', pageUrl);
 
     showLoadingState();
 
@@ -362,6 +353,9 @@
   function trackPageVisit() {
     console.log('track page visit run! ', experimentsRun);
     const currentPage = window.location.pathname;
+    if (visitedPages.length === 1 && visitedPages[0] === currentPage) {
+      return;
+    }
     visitedPages.push(currentPage);
     updateSessionStorage();
 
@@ -380,7 +374,6 @@
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    // TODO-p2: some websites trigger a replace state on page load which wrongly triggers a trackPageVisit. We should avoid this with a debounce mechanism or something.
     history.pushState = function () {
       originalPushState.apply(this, arguments);
       trackPageVisit();
