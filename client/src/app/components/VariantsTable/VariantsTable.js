@@ -30,20 +30,18 @@ import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 const NameCell = ({ name, variantId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const textRef = useRef(null); // Reference to the div element
+  const [editedName, setEditedName] = useState(name);
+  const inputRef = useRef(null); // Reference to the input element
 
-  console.log('is editing: ', isEditing);
-
-  async function handleSave() {
-    const newName = textRef.current.textContent;
-    if (newName === name) {
+  const handleSave = async () => {
+    if (editedName === name) {
       console.log('No changes made.');
       setIsEditing(false);
       return;
     }
 
     setSaving(true);
-    console.log('saving...', newName);
+    console.log('saving...', editedName);
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
@@ -52,7 +50,7 @@ const NameCell = ({ name, variantId }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: newName }),
+          body: JSON.stringify({ name: editedName }),
         },
       );
       console.log('Save successful');
@@ -61,28 +59,30 @@ const NameCell = ({ name, variantId }) => {
     }
     setSaving(false);
     setIsEditing(false);
-  }
+  };
 
   return (
-    <div
-      className={styles.nameCell}
-      onClick={() => setIsEditing(true)}
-      ref={textRef}
-    >
-      <div
-        contentEditable={true}
-        suppressContentEditableWarning={true}
-        onBlur={handleSave}
-        className={styles.nameContainer}
-      >
-        {name}
-      </div>
+    <div className={styles.nameCell} onClick={() => setIsEditing(true)}>
+      {isEditing ? (
+        <input
+          type="text"
+          ref={inputRef}
+          value={editedName}
+          onChange={(e) => setEditedName(e.target.value)}
+          onBlur={handleSave}
+          autoFocus
+          className={styles.nameInput}
+        />
+      ) : (
+        <div className={styles.nameContainer}>{editedName}</div>
+      )}
 
-      {/* {saving && (
+      {/* Optional: Show spinner when saving */}
+      {saving && (
         <div className={`flex gap-4 ${styles.spinner}`}>
           <Spinner size="sm" />
         </div>
-      )} */}
+      )}
     </div>
   );
 };
@@ -186,7 +186,6 @@ const VariantsTable = ({ variants = [], experiment }) => {
         }
       >
         <TableHeader className={styles.tableHeader}>
-          {/* TODO-p1: Poder editar el variant name desde acá */}
           <TableColumn key="name" className={styles.th}>
             Name
           </TableColumn>

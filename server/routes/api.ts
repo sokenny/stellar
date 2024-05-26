@@ -28,6 +28,7 @@ import finishOnboarding from './handlers/finishOnboarding';
 import checkSnippet from './handlers/checkSnippet';
 import autoGenerate from './handlers/autoGenerate';
 import updateVariantName from './handlers/updateVariantName';
+import updateExperimentName from './handlers/updateExperimentName';
 
 const router = express.Router();
 
@@ -48,6 +49,7 @@ router.get('/experiments/client', getExperimentsForClient);
 router.get('/projects/:projectId/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
+router.put('/experiment/:id/name', updateExperimentName);
 router.get('/experiment/:id/stats', getExperimentStatsHandler);
 router.post('/experiment/:id/stop', stopExperiment);
 router.post('/experiment/:id/pause', pauseExperiment);

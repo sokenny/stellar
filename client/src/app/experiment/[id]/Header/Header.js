@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../store';
 import {
@@ -15,30 +15,23 @@ import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnu
 import Button from '../../../components/Button';
 import LaunchExperimentModal from '../../../components/Modals/LaunchExperimentModal';
 import ThreeDotActions from './ThreeDotActions';
+import ExperimentName from './ExperimentName';
 import StatusChip from '../../../components/StatusChip';
 import styles from './Header.module.css';
 
 const Header = ({ experiment }) => {
   const { refetchProjects, setErrorModal } = useStore();
-
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
   const {
     isOpen: isLaunchModalOpen,
     onOpen: onOpenLaunchModal,
     onOpenChange: onOpenLaunchModalChange,
   } = useDisclosure();
-  // const [showLaunchModal, setShowLaunchModal] = useState(true);
 
   function handleLaunchExperiment() {
     setLaunchingExperiment(true);
     try {
       toast.promise(
-        // fetch(
-        //   `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
-        //   {
-        //     method: 'POST',
-        //   },
-        // ),
         async () => {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
@@ -47,13 +40,11 @@ const Header = ({ experiment }) => {
             },
           );
 
-          // Check if the response was not ok (e.g., status code 400 or 500)
           if (!response.ok) {
             const errorData = await response.json(); // Assuming the server sends JSON with an error message
             throw new Error(errorData.message || 'Something went wrong');
           }
 
-          // If everything is okay, process and return the response
           return response.json();
         },
         {
@@ -135,8 +126,7 @@ const Header = ({ experiment }) => {
   return (
     <div className={styles.container}>
       <div className={styles.colLeft}>
-        {/* TODO-p1: Poder editar el experiment name desde acá */}
-        <h1 className={styles.title}>{experiment.name}</h1>
+        <ExperimentName name={experiment.name} experimentId={experiment.id} />
         <StatusChip status={experiment.status} size="md" />
       </div>
       <div className={styles.colRight}>
