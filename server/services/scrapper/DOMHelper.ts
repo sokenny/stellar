@@ -8,7 +8,7 @@ export default function DOMHelper(page: any, window: any) {
       const bodyText = await tryOrReturn<string, string>(async () => {
         const body = await page.$('body');
         return body
-          ? await page.evaluate((body) => body.innerText, body)
+          ? await page?.evaluate((body) => body.innerText, body)
           : null;
       }, null);
 

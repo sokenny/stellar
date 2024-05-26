@@ -29,7 +29,7 @@ const Variant = ({
   const showStats = !!experiment.started_at;
 
   // text of thisVariant needs to be lookedup in thisVariant.modifications where innerText has some text
-  const text = thisVariant.modifications.find((m) => m.innerText).innerText;
+  const text = thisVariant.modifications.find((m) => m.innerText)?.innerText;
 
   const num = variants.findIndex((v) => v.id === id) + 1;
 

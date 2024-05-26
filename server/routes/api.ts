@@ -27,6 +27,7 @@ import createAccount from './handlers/createAccount';
 import finishOnboarding from './handlers/finishOnboarding';
 import checkSnippet from './handlers/checkSnippet';
 import autoGenerate from './handlers/autoGenerate';
+import updateVariantName from './handlers/updateVariantName';
 
 const router = express.Router();
 
@@ -59,6 +60,8 @@ router.put('/variant/:id', editVariant);
 router.put('/variant/:id/modifications', setVariantModifications);
 router.delete('/variant/:id', deleteVariant);
 router.post('/variant/:experimentId', createVariant);
+// endpoint to set variant's name
+router.put('/variant/:id/name', updateVariantName);
 
 router.post('/goals', setGoal);
 

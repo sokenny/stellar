@@ -329,6 +329,8 @@
         window.location.href.includes(experiment.url),
       );
 
+      console.log('experimentsToMount', experimentsToMount);
+
       mountExperiments(experimentsToMount);
     } catch (error) {
       console.error('Error fetching experiments:', error);

@@ -22,7 +22,7 @@ export default async function OnboardPage({ params, searchParams }) {
       <Description />
       <div className={styles.content}>
         <div className={styles.experiments}>
-          {/* TODO-p1: Have puppeteer screenshot of element that has been targetted */}
+          {/* TODO-p2: Have puppeteer screenshot of element that has been targetted */}
           {experiments.map((experiment, i) => (
             <Experiment experiment={experiment} key={experiment.id} onReview />
           ))}

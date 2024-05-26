@@ -81,10 +81,8 @@ export default function ExperimentPage({ params, searchParams }) {
         onOpenChange={onOpenSnippetModalChange}
       />
       <div className={styles.Experiment}>
-        {/* <Cacota /> */}
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
-        {/* <Spacer y={2} /> */}
         <div className={styles.infoSection}>
           {!experiment.goal && (
             <InfoCard className={styles.setGoalCard}>

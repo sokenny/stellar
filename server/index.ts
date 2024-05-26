@@ -18,6 +18,7 @@ const allowedOrigins = [
   'https://clickup.com',
   'http://localhost:3002',
   'http://localhost:3004',
+  'http://localhost:3003',
 ];
 
 const corsOptions = {

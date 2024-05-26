@@ -28,6 +28,10 @@ const SnippetMissing = ({ className }) => {
           refetchProjects();
           return 'Snippet installation confirmed';
         },
+        error: async () => {
+          setLoading(false);
+          return 'Error checking snippet - not found';
+        },
       },
     );
   }

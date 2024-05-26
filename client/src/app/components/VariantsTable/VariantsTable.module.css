@@ -52,8 +52,8 @@
   cursor: pointer;
 }
 
-.nameCell:hover .edit {
-  display: block;
+.row:hover {
+  background-color: #fafafa;
 }
 
 .spinner {
@@ -61,10 +61,16 @@
   right: 0;
 }
 
-.nameCell:hover {
-  /* text-decoration: underline; */
-}
 
 .cell-name.cell-control {
   color: var(--linkBlue);
+}
+
+.cell-name {
+  text-decoration: dotted;
+}
+
+.nameContainer {
+  padding: 2px 4px 2px 2px;
+  white-space: pre-wrap;
 }

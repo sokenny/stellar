@@ -126,7 +126,7 @@ const Header = ({ experiment }) => {
     if (hasCeroChanges) {
       return 'Add at least one change to your experiment before launching';
     }
-    return 'Caca';
+    return '';
   }
 
   const canLaunchExperiment = hasGoal && !hasCeroChanges;
@@ -135,6 +135,7 @@ const Header = ({ experiment }) => {
   return (
     <div className={styles.container}>
       <div className={styles.colLeft}>
+        {/* TODO-p1: Poder editar el experiment name desde acá */}
         <h1 className={styles.title}>{experiment.name}</h1>
         <StatusChip status={experiment.status} size="md" />
       </div>

@@ -27,6 +27,66 @@ import VariantModal from '../Modals/VariantModal';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 
+const NameCell = ({ name, variantId }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const textRef = useRef(null); // Reference to the div element
+
+  console.log('is editing: ', isEditing);
+
+  async function handleSave() {
+    const newName = textRef.current.textContent;
+    if (newName === name) {
+      console.log('No changes made.');
+      setIsEditing(false);
+      return;
+    }
+
+    setSaving(true);
+    console.log('saving...', newName);
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: newName }),
+        },
+      );
+      console.log('Save successful');
+    } catch (error) {
+      console.error('Save failed:', error);
+    }
+    setSaving(false);
+    setIsEditing(false);
+  }
+
+  return (
+    <div
+      className={styles.nameCell}
+      onClick={() => setIsEditing(true)}
+      ref={textRef}
+    >
+      <div
+        contentEditable={true}
+        suppressContentEditableWarning={true}
+        onBlur={handleSave}
+        className={styles.nameContainer}
+      >
+        {name}
+      </div>
+
+      {/* {saving && (
+        <div className={`flex gap-4 ${styles.spinner}`}>
+          <Spinner size="sm" />
+        </div>
+      )} */}
+    </div>
+  );
+};
+
 function getConversionRate(variantStats) {
   // TODO-p2: Add handling for scenarios where goal is session time
   if (!variantStats || !variantStats.sessions) {
@@ -126,6 +186,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
         }
       >
         <TableHeader className={styles.tableHeader}>
+          {/* TODO-p1: Poder editar el variant name desde acá */}
           <TableColumn key="name" className={styles.th}>
             Name
           </TableColumn>
@@ -213,6 +274,18 @@ const VariantsTable = ({ variants = [], experiment }) => {
                     </TableCell>
                   );
                 }
+                // if column key is name return
+                if (columnKey === 'name') {
+                  return (
+                    <TableCell
+                      className={`${styles['cell-' + columnKey]} ${
+                        item._isControl ? styles['cell-control'] : ''
+                      }`}
+                    >
+                      <NameCell name={item.name} variantId={item.id} />
+                    </TableCell>
+                  );
+                }
                 return (
                   <TableCell
                     className={`${styles['cell-' + columnKey]} ${
@@ -238,55 +311,3 @@ const VariantsTable = ({ variants = [], experiment }) => {
 };
 
 export default VariantsTable;
-
-// Esto  capaz lo implementemos mas adelante
-// const NameCell = ({ name }) => {
-//   const [value, setValue] = useState(name);
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [saving, setSaving] = useState(false);
-//   const textRef = useRef(null); // Reference to the div element
-
-//   console.log('is editing: ', isEditing);
-
-//   async function handleSave(data) {
-//     setSaving(true);
-//     setIsEditing(false);
-//     console.log('saving...', data);
-//   }
-
-//   return (
-//     <div
-//       className={styles.nameCell}
-//       onClick={() => setIsEditing(true)}
-//       contentEditable={isEditing}
-//       ref={textRef}
-//       suppressContentEditableWarning={true}
-//     >
-//       {isEditing ? (
-//         <Input
-//           focus
-//           size={'sm'}
-//           type="text"
-//           value={value}
-//           onChange={(e) => setValue(e.target.value)}
-//           onBlur={handleSave}
-//         />
-//       ) : (
-//         <>
-//           <div>{name}</div>
-//           {!saving && (
-//             <div className={styles.edit}>
-//               <EditIcon />
-//             </div>
-//           )}
-//         </>
-//       )}
-
-//       {saving && (
-//         <div className={`flex gap-4 ${styles.spinner}`}>
-//           <Spinner size="sm" />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
