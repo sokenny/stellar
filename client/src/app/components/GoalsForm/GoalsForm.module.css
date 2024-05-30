@@ -135,3 +135,19 @@
 .input {
   padding: 4px;
 }
+
+.radioGroup {
+  margin-bottom: 8px;
+}
+
+.querySelectorInput {
+  width: 300px;
+}
+
+.querySelectorInput div {
+  border-radius: 4px;
+}
+
+.querySelect .subTitle {
+  margin-bottom: 12px;
+}

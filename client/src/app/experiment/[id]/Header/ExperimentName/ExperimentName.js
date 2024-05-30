@@ -30,28 +30,27 @@ const ExperimentName = ({ name, experimentId }) => {
     }
 
     try {
-      console.log('We try');
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/name`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
+      toast.promise(
+        fetch(
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/name`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: newName }),
           },
-          body: JSON.stringify({ name: newName }),
+        ),
+        {
+          loading: 'Updating experiment name...',
+          success: async () => 'Experiment name updated',
+          error: async () => `Failed to update experiment name`,
         },
       );
-
-      if (!response.ok) {
-        throw new Error('Failed to update experiment name');
-      }
-
-      toast.success('Experiment name updated');
       setIsEditingName(false);
       refetchProjects();
     } catch (error) {
       console.error('Save failed:', error);
-      toast.error('Failed to update experiment name');
       nameRef.current.textContent = name;
     }
   };

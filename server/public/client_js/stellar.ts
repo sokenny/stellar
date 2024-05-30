@@ -207,7 +207,8 @@
 
           if (
             experiment.goal.type === 'CLICK' &&
-            currentPageUrl.includes(experiment.goal.url_match_value)
+            (currentPageUrl.includes(experiment.goal.url_match_value) ||
+              experiment.goal.url_match_value === '*')
           ) {
             const selectorElement = document.querySelector(
               experiment.goal.selector,

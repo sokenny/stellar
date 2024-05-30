@@ -3,6 +3,7 @@
 import { toast } from 'sonner';
 import useStore from '../../store';
 import { useEffect, useState, useRef } from 'react';
+import { RadioGroup, Radio, Input as NInput } from '@nextui-org/react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import Link from 'next/link';
@@ -38,6 +39,8 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   const toastSuccessCalledRef = useRef(false);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
   const [submiting, setSubmiting] = useState(false);
+  const [selectedClickOption, setSelectedClickOption] = useState('manual');
+  const [querySelector, setQuerySelector] = useState('');
 
   useEffect(() => {
     return () => clearInterval(goalCheckIntervalRef.current);
@@ -65,10 +68,22 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     ) {
       return true;
     }
+
+    if (
+      formData.goalType === GoalTypesEnum.CLICK &&
+      selectedClickOption === 'query-selector' &&
+      querySelector !== ''
+    ) {
+      return true;
+    }
   }
 
   async function onSetGoal() {
     try {
+      const isQuerySelector =
+        selectedClickOption === 'query-selector' &&
+        formData.goalType === GoalTypesEnum.CLICK;
+
       setSubmiting(true);
       const response = await fetch(
         process.env.NEXT_PUBLIC_STELLAR_API + '/goals',
@@ -81,9 +96,11 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             experiment_id: experiment.id,
             type: formData.goalType,
             url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
-            url_match_value: '/' + formData.urlMatchValue,
+            url_match_value: isQuerySelector
+              ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
+              : '/' + formData.urlMatchValue,
             element_url: '/' + formData.elementUrl,
-            selector: null,
+            selector: isQuerySelector ? querySelector : null,
           }),
         },
       );
@@ -139,9 +156,12 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     // test that formData.visitUrl is a valid url
   }
 
+  const isClickAndManualSelect =
+    formData.goalType === GoalTypesEnum.CLICK &&
+    selectedClickOption === 'manual';
+
   const showSetGoal =
-    (formData.goalType !== GoalTypesEnum.CLICK &&
-      goal?.type !== formData.goalType) ||
+    (!isClickAndManualSelect && goal?.type !== formData.goalType) ||
     wantsToUpdateGoal;
 
   return (
@@ -165,31 +185,65 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
         {formData.goalType === GoalTypesEnum.CLICK &&
           (goal?.type !== GoalTypesEnum.CLICK || wantsToUpdateGoal) && (
             <div className={styles.clickData}>
-              {/* TODO-p1: Provide an option where the user can just provide a querySelector for the element */}
-              <div className={styles.title}>Which URL is the element at?</div>
-              <div className={styles.subTitle}>
-                After typing in your URL, we'll take you there so you can select
-                this element for us to track.{' '}
-                <span className={styles.link}>See how</span>.
-              </div>
-              <div className={styles.row}>
-                <div className={styles.domain}>{domain}/</div>
-                <Input
-                  className={styles.input}
-                  type="text"
-                  value={formData.elementUrl}
-                  onChange={(e) =>
-                    setFormData({ ...formData, elementUrl: e.target.value })
-                  }
-                />
-                <Button
-                  onClick={onGoToUrl}
-                  disabled={false}
-                  className={styles.goButton}
-                >
-                  Go
-                </Button>
-              </div>
+              <RadioGroup
+                color="primary"
+                orientation="horizontal"
+                className={styles.radioGroup}
+                value={selectedClickOption}
+                onValueChange={setSelectedClickOption}
+              >
+                <Radio value="manual">Manual select</Radio>
+                <Radio value="query-selector">Query selector</Radio>
+              </RadioGroup>
+              {selectedClickOption === 'query-selector' && (
+                <div className={styles.querySelect}>
+                  <div className={styles.title}>
+                    Provide a valid query selector for the element.
+                  </div>
+                  <div className={styles.subTitle}>
+                    A conversion will be triggered once a user clicks on this
+                    element.
+                  </div>
+                  <NInput
+                    size="sm"
+                    type="text"
+                    placeholder="#subscribe-button"
+                    className={styles.querySelectorInput}
+                    onValueChange={setQuerySelector}
+                    value={querySelector}
+                  />
+                </div>
+              )}
+              {selectedClickOption === 'manual' && (
+                <div className={styles.manualSelect}>
+                  <div className={styles.title}>
+                    Which URL is the element at?
+                  </div>
+                  <div className={styles.subTitle}>
+                    After typing in your URL, we'll take you there so you can
+                    select this element for us to track.{' '}
+                    <span className={styles.link}>See how</span>.
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.domain}>{domain}/</div>
+                    <Input
+                      className={styles.input}
+                      type="text"
+                      value={formData.elementUrl}
+                      onChange={(e) =>
+                        setFormData({ ...formData, elementUrl: e.target.value })
+                      }
+                    />
+                    <Button
+                      onClick={onGoToUrl}
+                      disabled={false}
+                      className={styles.goButton}
+                    >
+                      Go
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         {formData.goalType === GoalTypesEnum.CLICK &&

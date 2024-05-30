@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -13,7 +14,6 @@ import {
   Spinner,
   getKeyValue,
   Tooltip,
-  Input,
   Button as NextUIButton,
   useDisclosure,
 } from '@nextui-org/react';
@@ -29,7 +29,6 @@ import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 
 const NameCell = ({ name, variantId }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const inputRef = useRef(null); // Reference to the input element
 
@@ -39,25 +38,27 @@ const NameCell = ({ name, variantId }) => {
       setIsEditing(false);
       return;
     }
-
-    setSaving(true);
-    console.log('saving...', editedName);
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
+      toast.promise(
+        fetch(
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: editedName }),
           },
-          body: JSON.stringify({ name: editedName }),
+        ),
+        {
+          loading: 'Updating variant name...',
+          success: async () => 'Variant name updated',
+          error: async () => `Failed to update variant name`,
         },
       );
-      console.log('Save successful');
     } catch (error) {
       console.error('Save failed:', error);
     }
-    setSaving(false);
     setIsEditing(false);
   };
 
@@ -78,11 +79,11 @@ const NameCell = ({ name, variantId }) => {
       )}
 
       {/* Optional: Show spinner when saving */}
-      {saving && (
+      {/* {saving && (
         <div className={`flex gap-4 ${styles.spinner}`}>
           <Spinner size="sm" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -134,6 +134,7 @@ export default function DOMHelper(page: any, window: any) {
       let cta = await page.$('button');
       const elements = await page.$$('*');
       const relevantElements = await this.getRelevantElementsToScan(elements);
+
       for (const element of relevantElements) {
         if (await this.isImportantCtaButton(element)) {
           cta = element;
@@ -147,7 +148,6 @@ export default function DOMHelper(page: any, window: any) {
       const secondBiggestText =
         await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
 
-      // TODO-p1: Tambien guardar el 'biggestText' porque muchas veces difiere del h1
       const chosenH1 = h1;
       const chosenBiggestText = biggestText;
       const chosenDescription = h2 || secondBiggestText;
@@ -196,13 +196,21 @@ export default function DOMHelper(page: any, window: any) {
       if (cta && chosenCtaSelector) {
         mainElements.cta = [cta, chosenCtaSelector, ctaStyles];
       }
-      if (chosenBiggestText && chosenBiggestTextSelector) {
+      // Only add biggestText if it is not the same as h1, h2, or cta
+      if (
+        chosenBiggestText &&
+        chosenBiggestTextSelector &&
+        chosenBiggestTextSelector !== chosenH1Selector &&
+        chosenBiggestTextSelector !== chosenDescriptionSelector &&
+        chosenBiggestTextSelector !== chosenCtaSelector
+      ) {
         mainElements.biggestText = [
           chosenBiggestText,
           chosenBiggestTextSelector,
           biggestTextStyles,
         ];
       }
+
       return mainElements;
     },
     printAppTitle: async function () {

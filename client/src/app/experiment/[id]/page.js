@@ -157,6 +157,7 @@ export default function ExperimentPage({ params, searchParams }) {
             variants={experiment.variants}
             experiment={experiment}
           />
+          {/* TODO-p2: Have a line chart with sessions and conversions. Be able to filter by variant if needed */}
         </section>
         {showSetUpGoalModal && (
           <GoalSetupModal

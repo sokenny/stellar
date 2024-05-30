@@ -3,6 +3,17 @@ import { Tooltip } from '@nextui-org/react';
 import Edit from '../../icons/Edit';
 import styles from './Goal.module.css';
 
+// TODO-p1: Auto-adjust traffic when creating a new variant
+// TODO-p1: Throw error if experiment is attempted to be launched with traffic not adding up to 100
+
+// TODO-p1-general: Tengo que poder entrar a una HomePage.
+// Entender de que trata el producto.
+// Atravesar un onboarding de forma seamless que me brinda experimentos creados en modo borrador.
+//   Este onboarding también tiene que crearme mi api key. Las requests de esta api key tienen que validarse acorde al origin del sitio
+// Instalar el snippet con una guia en caso de que la necesite.
+// Poner a correr experimentos con cualquiera de los 3 goals actuales.
+// Tener informacion de conversiones para determinar cual es el ganador.
+
 const Goal = ({ experiment, onEdit, className }) => {
   const { goal, url, status } = experiment;
   const canEditGoal = status === ExperimentStatusesEnum.PENDING;
@@ -23,15 +34,23 @@ const Goal = ({ experiment, onEdit, className }) => {
     CLICK: (
       <>
         User clicks on a{' '}
-        <a
-          href={`${url}${
-            typeof goal.url_match_value === 'string' ? goal.url_match_value : ''
-          }?stellarMode=true&elementToHighlight=${goal.selector}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          specific element
-        </a>
+        {goal.url_match_value === '*' ? (
+          <>
+            specific element: <span>{goal.selector}</span>
+          </>
+        ) : (
+          <a
+            href={`${url}${
+              typeof goal.url_match_value === 'string'
+                ? goal.url_match_value
+                : ''
+            }?stellarMode=true&elementToHighlight=${goal.selector}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            specific element
+          </a>
+        )}
         .
       </>
     ),
