@@ -8,6 +8,7 @@ dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT;
 
+// TODO-p1: Dynamically bring allowed origins from db
 const allowedOrigins = [
   'https://lengaswear.vercel.app',
   'https://www.lengaswear.vercel.app',
@@ -19,6 +20,7 @@ const allowedOrigins = [
   'http://localhost:3002',
   'http://localhost:3004',
   'http://localhost:3003',
+  'http://localhost:3005',
 ];
 
 const corsOptions = {

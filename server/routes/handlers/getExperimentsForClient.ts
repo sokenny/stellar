@@ -83,6 +83,7 @@ async function getExperimentsForClientForUser(userId: number) {
     const experimentJson = experiment.toJSON();
     const variantIds = experimentJson.variants.map((variant) => variant.id);
     let selectedVariantId = null;
+    // TODO-p1: Have variant_to_use weigh in the traffic allocation in the algorithm that assigns variants
     if (variantIds.length > 0) {
       const randomIndex = Math.floor(Math.random() * variantIds.length);
       selectedVariantId = variantIds[randomIndex];

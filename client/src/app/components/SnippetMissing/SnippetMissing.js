@@ -43,12 +43,13 @@ const SnippetMissing = ({ className }) => {
           <div>
             <div className={styles.cardTitle}>Snippet missing</div>
             <div>
+              {/* TODO-p1: Have this snippet show the actual public api key of the user */}
               Place this snippet in the {'<head>'} tag of your website to start
               tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
               {
-                '<script async src="http://localhost:3001/api/clientjs" data-stellar-api-key="your_api_public_key"></script>'
+                '<script async src="http://localhost:3001/api/clientjs" data-stellar-api-key="77d55f47-6439-4c60-ae3e-1a52a09d0a53"></script>'
               }
             </Snippet>
             <div className={styles.cardActions}>

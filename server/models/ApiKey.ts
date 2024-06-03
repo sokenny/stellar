@@ -39,6 +39,9 @@ export const initializeApiKey = (sequelize: Sequelize): typeof ApiKey => {
       sequelize,
       modelName: 'ApiKey',
       tableName: 'api_keys',
+      createdAt: 'created_at',
+      updatedAt: false,
+      timestamps: true,
     },
   );
 

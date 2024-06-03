@@ -6,6 +6,7 @@
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const checkingSnippet = urlParams.get('checkingSnippet');
+  const sessionIssues = [];
 
   if (checkingSnippet === 'true') {
     fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
@@ -140,6 +141,8 @@
           experimentsRun,
           visitedPages,
           stellarVisitorId,
+          // TODO-p2: Store session issues in the database, and perhaps do not count these sessions as valid. Or raise an issue on the FE of the exp about it
+          sessionIssues,
         };
 
         navigator.sendBeacon(
@@ -170,16 +173,38 @@
 
       let variantToUse = storedVariantId || experiment.variant_to_use;
 
+      console.log(
+        'variantToUse - storedVariantId || experiment.variant_to_use: ',
+        variantToUse,
+      );
+
       experiment.variants.forEach((variant) => {
         if (variant.id === variantToUse) {
+          console.log(
+            'variant.id === variantToUse: ',
+            variant.id,
+            variantToUse,
+          );
           if (variant?.modifications?.length > 0) {
             variant.modifications.forEach((modification) => {
+              console.log('modification: ', modification);
               const targetElement = document.querySelector(
                 modification.selector,
               );
+              console.log('targetElement: ', targetElement);
               if (targetElement) {
+                console.log(
+                  'targetElement.innerText: ',
+                  targetElement.innerText,
+                );
+
                 targetElement.innerText = modification.innerText;
                 targetElement.style.cssText = modification.cssText;
+              } else {
+                sessionIssues.push({
+                  type: 'MODIFICATION',
+                  message: `Element not found for selector: ${modification.selector}`,
+                });
               }
             });
           }
@@ -256,25 +281,6 @@
     }
   }
 
-  // function checkPageVisitGoals(experiments) {
-  //   const currentPage = window.location.href;
-
-  //   experiments.forEach((experiment) => {
-  //     if (
-  //       experiment.goal.type === 'PAGE_VISIT' &&
-  //       currentPage.includes(experiment.goal.page_url)
-  //     ) {
-  //       // Find the experimentRun entry and mark as converted
-  //       const experimentRun = experimentsRun.find(
-  //         (e) => e.experiment === experiment.id,
-  //       );
-  //       if (experimentRun) {
-  //         experimentRun.converted = true;
-  //       }
-  //     }
-  //   });
-  // }
-
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
     console.log('fetching! ');
@@ -287,8 +293,6 @@
       console.log('we do not have experiments for this page');
       return;
     }
-
-    showLoadingState();
 
     const apiKey = getApiKey();
 
@@ -394,14 +398,17 @@
     if (stellarMode === 'true') {
       return;
     }
-    restoreSessionData();
-    trackPageVisit();
-    wrapHistoryMethods();
-    startTimeTracking();
-    trackClicks();
-    trackScrollDepth();
-    sendDataOnLeave();
-    fetchExperiments();
+    showLoadingState();
+    document.addEventListener('DOMContentLoaded', () => {
+      restoreSessionData();
+      trackPageVisit();
+      wrapHistoryMethods();
+      startTimeTracking();
+      trackClicks();
+      trackScrollDepth();
+      sendDataOnLeave();
+      fetchExperiments();
+    });
   }
 
   initializeScript();

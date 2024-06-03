@@ -9,6 +9,8 @@ const Actions = ({ projectId, authenticated }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  console.log('session: ', session);
+
   useEffect(() => {
     async function finishOnboarding() {
       const response = await fetch(

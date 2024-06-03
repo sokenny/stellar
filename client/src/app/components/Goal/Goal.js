@@ -3,8 +3,7 @@ import { Tooltip } from '@nextui-org/react';
 import Edit from '../../icons/Edit';
 import styles from './Goal.module.css';
 
-// TODO-p1: Auto-adjust traffic when creating a new variant
-// TODO-p1: Throw error if experiment is attempted to be launched with traffic not adding up to 100
+// TODO-p1!!: Add imgs to automated variants
 
 // TODO-p1-general: Tengo que poder entrar a una HomePage.
 // Entender de que trata el producto.
