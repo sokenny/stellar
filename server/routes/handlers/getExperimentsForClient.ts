@@ -29,20 +29,10 @@ async function getExperimentsForClientForUser(userId: number) {
   const experimentInstances = await db.Experiment.findAll({
     where: {
       [Op.and]: [
-        {
-          started_at: {
-            [Op.ne]: null,
-          },
-          ended_at: {
-            [Op.eq]: null,
-          },
-          deleted_at: {
-            [Op.eq]: null,
-          },
-          paused_at: {
-            [Op.eq]: null,
-          },
-        },
+        { started_at: { [Op.ne]: null } },
+        { ended_at: { [Op.eq]: null } },
+        { deleted_at: { [Op.eq]: null } },
+        { paused_at: { [Op.eq]: null } },
       ],
     },
     include: [
@@ -50,9 +40,8 @@ async function getExperimentsForClientForUser(userId: number) {
         model: db.Variant,
         as: 'variants',
         required: true,
-        where: {
-          deleted_at: null,
-        },
+        where: { deleted_at: null },
+        attributes: ['id', 'traffic'], // Include the traffic attribute
       },
       {
         model: db.Goal,
@@ -70,9 +59,7 @@ async function getExperimentsForClientForUser(userId: number) {
             as: 'project',
             required: true,
             attributes: ['id'],
-            where: {
-              user_id: userId,
-            },
+            where: { user_id: userId },
           },
         ],
       },
@@ -81,21 +68,28 @@ async function getExperimentsForClientForUser(userId: number) {
 
   const experiments = experimentInstances.map((experiment) => {
     const experimentJson = experiment.toJSON();
-    const variantIds = experimentJson.variants.map((variant) => variant.id);
-    let selectedVariantId = null;
-    // TODO-p1: Have variant_to_use weigh in the traffic allocation in the algorithm that assigns variants
-    if (variantIds.length > 0) {
-      const randomIndex = Math.floor(Math.random() * variantIds.length);
-      selectedVariantId = variantIds[randomIndex];
-    }
-    // NOTE: If the client already has a variant in localStorage, it will use that one instead of the one we select here
+    // Implement weighted selection based on traffic percentages
+    let selectedVariantId = weightedRandomSelection(experimentJson.variants);
     experimentJson.variant_to_use = selectedVariantId;
     return experimentJson;
   });
 
-  console.log('experimentInstances: ', experimentInstances);
-
   return experiments;
+}
+
+function weightedRandomSelection(variants) {
+  const totalWeight = variants.reduce(
+    (acc, variant) => acc + variant.traffic,
+    0,
+  );
+  let randomNum = Math.random() * totalWeight;
+  for (let i = 0; i < variants.length; i++) {
+    randomNum -= variants[i].traffic;
+    if (randomNum <= 0) {
+      return variants[i].id;
+    }
+  }
+  return null; // Fallback if something goes wrong
 }
 
 async function getExperimentsForClient(req, res) {
@@ -111,11 +105,7 @@ async function getExperimentsForClient(req, res) {
     return res.status(401).send('Invalid API key');
   }
 
-  console.log('user!: ', user);
-
   const experiments = await getExperimentsForClientForUser(user.id);
-
-  console.log('exps que vamos a mandar: ', experiments);
 
   res.json(experiments);
 }

@@ -7,6 +7,7 @@ import {
   initiatePage,
   scrapMainElements,
 } from '../../services/autoJourney';
+import highlightAndCapture from '../../helpers/highlightAndCapture';
 
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const transaction = await db.sequelize.transaction();
@@ -16,6 +17,12 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     const project = await findOrCreateProject(url, transaction);
     const browserSession = await initiatePage(url);
     const mainElements = await scrapMainElements(browserSession);
+
+    await highlightAndCapture(
+      browserSession,
+      mainElements,
+      `page-screenshot-${project.id}-${Date.now()}.png`,
+    );
     const context = await getPageContext(browserSession);
 
     let page = await db.Page.findOne({
@@ -33,7 +40,6 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
         { transaction },
       );
     }
-
     await createExperiments(mainElements, page, project.id, transaction);
     await browserSession.browser.close();
 
