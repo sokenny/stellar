@@ -8,30 +8,36 @@ async function applyStyle(elementHandle, styleObject) {
   }
 }
 
-async function highlightAndCapture(browserSession, mainElements, fileName) {
-  const { page } = browserSession;
+async function highlightAndCapture(
+  session,
+  selector: string,
+  fileName: string,
+) {
+  const { page } = session;
   const dir = path.join(__dirname, '..', 'public', 'snapshots');
   console.log('dir!!:', dir);
+
+  // Attempt to find the element using the passed selector
+  // Select element from selector
+  const element = await page.$(selector);
+  if (!element) {
+    throw new Error(
+      `Element with selector "${selector}" not found on the page.`,
+    );
+  }
 
   const highlightStyle = {
     border: '2px solid red',
     backgroundColor: 'rgba(255, 0, 0, 0.1)',
   };
 
-  if (mainElements.h1[0]) {
-    await applyStyle(mainElements.h1[0], highlightStyle);
-  }
-  if (mainElements.description[0]) {
-    await applyStyle(mainElements.description[0], highlightStyle);
-  }
-  if (mainElements.cta[0]) {
-    await applyStyle(mainElements.cta[0], highlightStyle);
-  }
+  await applyStyle(element, highlightStyle);
 
   const viewport = await page.viewport();
+  const destination = path.join(dir, fileName);
 
   await page.screenshot({
-    path: path.join(dir, fileName),
+    path: destination,
     clip: {
       x: 0,
       y: 0,
@@ -39,6 +45,8 @@ async function highlightAndCapture(browserSession, mainElements, fileName) {
       height: viewport.height,
     },
   });
+
+  return destination;
 }
 
 export default highlightAndCapture;

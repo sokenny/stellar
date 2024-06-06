@@ -3,8 +3,6 @@ import { Tooltip } from '@nextui-org/react';
 import Edit from '../../icons/Edit';
 import styles from './Goal.module.css';
 
-// TODO-p1!!: Add imgs to automated variants
-
 // TODO-p1-general: Tengo que poder entrar a una HomePage.
 // Entender de que trata el producto.
 // Atravesar un onboarding de forma seamless que me brinda experimentos creados en modo borrador.
@@ -14,6 +12,8 @@ import styles from './Goal.module.css';
 // Tener informacion de conversiones para determinar cual es el ganador.
 
 const Goal = ({ experiment, onEdit, className }) => {
+  if (!experiment) return;
+
   const { goal, url, status } = experiment;
   const canEditGoal = status === ExperimentStatusesEnum.PENDING;
   const goalDescriptionMapper = {

@@ -184,6 +184,7 @@
             'variant.id === variantToUse: ',
             variant.id,
             variantToUse,
+            variant,
           );
           if (variant?.modifications?.length > 0) {
             variant.modifications.forEach((modification) => {

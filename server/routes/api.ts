@@ -29,6 +29,7 @@ import checkSnippet from './handlers/checkSnippet';
 import autoGenerate from './handlers/autoGenerate';
 import updateVariantName from './handlers/updateVariantName';
 import updateExperimentName from './handlers/updateExperimentName';
+import getVariantScreenshot from './handlers/getVariantScreenshot';
 
 const router = express.Router();
 
@@ -81,5 +82,7 @@ router.get('/projects/:userEmail', getProjects);
 router.delete('/project/:projectId', deleteProject);
 // router.post('/projects/check-snippet', checkSnippet);
 router.post('/check-snippet', checkSnippet);
+
+router.get('/experiment/:id/snapshot', getVariantScreenshot);
 
 export default router;

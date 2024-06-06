@@ -92,6 +92,10 @@ const associateModels = () => {
     foreignKey: 'user_id',
     as: 'user',
   });
+  db.User.hasMany(db.ApiKey, {
+    foreignKey: 'user_id',
+    as: 'api_keys',
+  });
   db.Experiment.hasOne(db.Goal, {
     foreignKey: 'experiment_id',
     as: 'goal',

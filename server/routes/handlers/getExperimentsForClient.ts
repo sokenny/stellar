@@ -41,7 +41,6 @@ async function getExperimentsForClientForUser(userId: number) {
         as: 'variants',
         required: true,
         where: { deleted_at: null },
-        attributes: ['id', 'traffic'], // Include the traffic attribute
       },
       {
         model: db.Goal,

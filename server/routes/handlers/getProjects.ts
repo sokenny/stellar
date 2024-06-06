@@ -10,7 +10,7 @@ async function getProjects(req, res) {
       {
         model: db.Project,
         as: 'projects',
-        // TODO: add deleted_at to projects and uncomment this
+        // TODO-p2: add deleted_at to projects and uncomment this
         // where: {
         //   deleted_at: null,
         // },
@@ -38,6 +38,11 @@ async function getProjects(req, res) {
           },
         ],
         order: [[db.Experiment, 'id', 'DESC']], // Esta mierda creo que no esta funcando
+      },
+      // also include api_key
+      {
+        model: db.ApiKey,
+        as: 'api_keys',
       },
     ],
     order: [['created_at', 'DESC']],

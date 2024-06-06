@@ -173,6 +173,10 @@ const Experiment = ({
           )}
         </div>
       </div>
+      <img
+        src={`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/snapshot`}
+        className={styles.targetElementImage}
+      />
       {isOpen && (
         <>
           {experiment.started_at && !experiment.ended_at && (

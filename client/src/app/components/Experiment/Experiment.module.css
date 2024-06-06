@@ -234,3 +234,9 @@
   cursor: pointer;
   opacity: .3;
 }
+
+.targetElementImage {
+  margin-bottom: 12px;
+  border-radius: 4px;
+  width: 350px;
+}

@@ -11,6 +11,10 @@ import tryOrReturn from '../helpers/tryOrReturn';
 export async function initiatePage(website) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  await page.setViewport({
+    width: 1260,
+    height: 770,
+  });
   const response = await page.goto(website);
   const statusCode = response.status();
   const html = await page.content();

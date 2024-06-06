@@ -8,7 +8,9 @@ import styles from './SnippetMissing.module.css';
 
 const SnippetMissing = ({ className }) => {
   const [loading, setLoading] = useState(false);
-  const { refetchProjects, currentProject } = useStore();
+  const { user, refetchProjects, currentProject } = useStore();
+  const apiKey = user?.api_keys?.[0].key;
+
   function handleSnippetCheck() {
     setLoading(true);
     toast.promise(
@@ -43,14 +45,13 @@ const SnippetMissing = ({ className }) => {
           <div>
             <div className={styles.cardTitle}>Snippet missing</div>
             <div>
-              {/* TODO-p1: Have this snippet show the actual public api key of the user */}
               Place this snippet in the {'<head>'} tag of your website to start
               tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
-              {
-                '<script async src="http://localhost:3001/api/clientjs" data-stellar-api-key="77d55f47-6439-4c60-ae3e-1a52a09d0a53"></script>'
-              }
+              {'<script async src="http://localhost:3001/api/clientjs" data-stellar-api-key="' +
+                apiKey +
+                '"></script>'}
             </Snippet>
             <div className={styles.cardActions}>
               <NextUIButton
