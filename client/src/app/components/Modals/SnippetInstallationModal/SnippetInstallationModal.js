@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Button,
 } from '@nextui-org/react';
+// TODO-p1: Explore the idea of making the check of the snippet missing just check a 1 in snippet status. This 1 should be set by the snippet itself when it is installed, by sending the api_key to the server. And maybe we will want 1 api key per project
 import SnippetMissing from '../../SnippetMissing';
 import styles from './SnippetInstallationModal.module.css';
 

@@ -3,32 +3,33 @@ import bodyParser from 'body-parser';
 import api from './routes/api';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import getAllowedOrigins from './services/getAllowedOrigins'; // Import the service you created
+
+const UPDATE_ORIGINS_EVERY = 300000 / 10; // This is 5 min divided by 10. On prod it could be like 5 min
+
 dotenv.config();
 
 const app: Express = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
-// TODO-p1: Dynamically bring allowed origins from db
-const allowedOrigins = [
-  'https://lengaswear.vercel.app',
-  'https://www.lengaswear.vercel.app',
-  'https://anotherdomain.com' /* other domains you want to allow */,
-  'http://localhost:3000',
-  'https://incubadora.bluehackers.com',
-  'https://www.grantcardonerealestate.com',
-  'https://clickup.com',
-  'http://localhost:3002',
-  'http://localhost:3004',
-  'http://localhost:3003',
-  'http://localhost:3005',
-  'http://localhost:3006',
-  'http://localhost:3007',
-];
+let allowedOrigins: string[] = [];
+
+async function updateAllowedOrigins() {
+  console.log('---- UPDATING ORIGINS ----');
+  try {
+    const updatedAllowedOrigins = await getAllowedOrigins();
+    allowedOrigins = updatedAllowedOrigins;
+  } catch (error) {
+    console.error('Failed to fetch origins from database:', error);
+  }
+}
+
+updateAllowedOrigins();
+setInterval(updateAllowedOrigins, UPDATE_ORIGINS_EVERY);
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log('origin que llega: ', origin);
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -46,8 +47,6 @@ app.get('/', (req, res) => {
 });
 app.use('/api', api);
 
-console.log('RUNN');
-
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
 process.once('SIGUSR2', function () {
@@ -55,6 +54,5 @@ process.once('SIGUSR2', function () {
 });
 
 process.on('SIGINT', function () {
-  // this is only called on ctrl+c, not restart
   process.kill(process.pid, 'SIGINT');
 });

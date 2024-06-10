@@ -23,6 +23,15 @@ async function deleteProject(req, res) {
       transaction,
     });
 
+    await db.SessionExperiment.destroy({
+      where: {
+        experiment_id: {
+          [Op.in]: experiments.map((experiment) => experiment.id),
+        },
+      },
+      transaction,
+    });
+
     await db.Variant.destroy({
       where: {
         experiment_id: {

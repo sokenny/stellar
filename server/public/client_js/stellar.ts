@@ -7,6 +7,7 @@
   const stellarMode = urlParams.get('stellarMode');
   const checkingSnippet = urlParams.get('checkingSnippet');
   const sessionIssues = [];
+  let global__experimentsToMount = null;
 
   if (checkingSnippet === 'true') {
     fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
@@ -165,40 +166,32 @@
   }
 
   function mountExperiments(experiments) {
+    console.log('Running mountExperiments');
     const stellarData = getStellarData();
     const currentPageUrl = window.location.href;
 
-    experiments.forEach((experiment) => {
-      const storedVariantId = stellarData[experiment.id];
+    // Function to process experiments and apply modifications
+    function processExperiments() {
+      experiments.forEach((experiment) => {
+        const storedVariantId = stellarData[experiment.id];
+        let variantToUse = storedVariantId || experiment.variant_to_use;
 
-      let variantToUse = storedVariantId || experiment.variant_to_use;
+        console.log(
+          'Variant to use - storedVariantId || experiment.variant_to_use: ',
+          variantToUse,
+        );
 
-      console.log(
-        'variantToUse - storedVariantId || experiment.variant_to_use: ',
-        variantToUse,
-      );
+        experiment.variants.forEach((variant) => {
+          if (variant.id === variantToUse) {
+            console.log('Matching variant found: ', variant);
 
-      experiment.variants.forEach((variant) => {
-        if (variant.id === variantToUse) {
-          console.log(
-            'variant.id === variantToUse: ',
-            variant.id,
-            variantToUse,
-            variant,
-          );
-          if (variant?.modifications?.length > 0) {
             variant.modifications.forEach((modification) => {
-              console.log('modification: ', modification);
               const targetElement = document.querySelector(
                 modification.selector,
               );
-              console.log('targetElement: ', targetElement);
-              if (targetElement) {
-                console.log(
-                  'targetElement.innerText: ',
-                  targetElement.innerText,
-                );
+              console.log('Modification target element: ', targetElement);
 
+              if (targetElement) {
                 targetElement.innerText = modification.innerText;
                 targetElement.style.cssText = modification.cssText;
               } else {
@@ -208,52 +201,70 @@
                 });
               }
             });
-          }
 
-          if (!storedVariantId) {
-            stellarData[experiment.id] = variant.id;
-            setStellarData(stellarData);
-          }
+            if (!storedVariantId) {
+              stellarData[experiment.id] = variant.id;
+              setStellarData(stellarData);
+            }
 
-          const isExperimentInArray = experimentsRun.find(
-            (e) => e.experiment === experiment.id,
-          );
-
-          if (!isExperimentInArray) {
-            experimentsRun.push({
-              experiment: experiment.id,
-              variant: variant.id,
-              converted: false,
-              goalType: experiment.goal.type,
-              goalElementUrl: experiment.goal.url_match_value,
-              goalUrlMatchType: experiment.goal.url_match_type,
-              goalUrlMatchValue: experiment.goal.url_match_value,
-            });
-          }
-
-          if (
-            experiment.goal.type === 'CLICK' &&
-            (currentPageUrl.includes(experiment.goal.url_match_value) ||
-              experiment.goal.url_match_value === '*')
-          ) {
-            const selectorElement = document.querySelector(
-              experiment.goal.selector,
+            const isExperimentInArray = experimentsRun.find(
+              (e) => e.experiment === experiment.id,
             );
-            if (selectorElement) {
-              selectorElement.addEventListener('click', function () {
-                const expRun = experimentsRun.find(
-                  (e) =>
-                    e.experiment === experiment.id && e.variant === variant.id,
-                );
-                if (expRun) {
-                  expRun.converted = true;
-                }
+
+            if (!isExperimentInArray) {
+              experimentsRun.push({
+                experiment: experiment.id,
+                variant: variant.id,
+                converted: false,
+                goalType: experiment.goal.type,
+                goalElementUrl: experiment.goal.url_match_value,
+                goalUrlMatchType: experiment.goal.url_match_type,
+                goalUrlMatchValue: experiment.goal.url_match_value,
               });
             }
+
+            if (
+              experiment.goal.type === 'CLICK' &&
+              (currentPageUrl.includes(experiment.goal.url_match_value) ||
+                experiment.goal.url_match_value === '*')
+            ) {
+              const selectorElement = document.querySelector(
+                experiment.goal.selector,
+              );
+
+              if (selectorElement) {
+                selectorElement.addEventListener('click', function () {
+                  const expRun = experimentsRun.find(
+                    (e) =>
+                      e.experiment === experiment.id &&
+                      e.variant === variant.id,
+                  );
+                  if (expRun) {
+                    expRun.converted = true;
+                  }
+                });
+              }
+            }
           }
+        });
+      });
+    }
+
+    // Initialize the observer to monitor changes in the body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+          processExperiments();
         }
       });
     });
+
+    // Configuration for the observer
+    const config = { childList: true, subtree: true };
+    observer.observe(document.body, config);
+
+    // Initial processing of experiments
+    processExperiments();
   }
 
   function showLoadingState() {
@@ -322,13 +333,13 @@
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
       // TODO: This filtering should be done on the server. fetchexperiments could send the domain, and we can then retrieve experiments for projects with this domain
-      const experimentsToMount = data.filter((experiment) =>
+      global__experimentsToMount = data.filter((experiment) =>
         window.location.href.includes(experiment.url),
       );
 
-      console.log('experimentsToMount', experimentsToMount);
+      console.log('global__experimentsToMount', global__experimentsToMount);
 
-      mountExperiments(experimentsToMount);
+      mountExperiments(global__experimentsToMount);
     } catch (error) {
       console.error('Error fetching experiments:', error);
     } finally {
@@ -383,6 +394,9 @@
     history.pushState = function () {
       originalPushState.apply(this, arguments);
       trackPageVisit();
+      if (global__experimentsToMount) {
+        mountExperiments(global__experimentsToMount);
+      }
     };
 
     history.replaceState = function () {

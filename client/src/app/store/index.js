@@ -69,7 +69,6 @@ const useStore = create((set, get) => ({
         },
       );
       const user = await response.json();
-      console.log('projectardos: ', user.projects);
       // TODO-p1: Deprecar projects y setProjects / refetchProjects y que sea user y setUser, refetchUser
       set({ projects: user.projects, currentProject: user.projects[0] });
     } catch (error) {
