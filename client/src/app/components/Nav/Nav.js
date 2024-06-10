@@ -18,7 +18,6 @@ import {
 } from '@nextui-org/react';
 import styles from './Nav.module.css';
 
-// TODO-p2: Add breadcrumb to experiment/:id page
 const Nav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();

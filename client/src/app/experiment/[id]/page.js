@@ -1,10 +1,16 @@
 'use client';
 import React, { useState } from 'react';
-import { Tooltip, Spinner, useDisclosure } from '@nextui-org/react';
+import {
+  Tooltip,
+  Spinner,
+  useDisclosure,
+  BreadcrumbItem,
+  Breadcrumbs,
+} from '@nextui-org/react';
 import { toast } from 'sonner';
 import getShortId from '../../helpers/getShortId';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
-// import Cacota from './cacota/cacota';
+import { useRouter } from 'next/navigation';
 import useStore from '../../store';
 import Notifications from '../Notifications';
 import GoalSetupModal from '../../components/Modals/GoalSetupModal/GoalSetupModal';
@@ -18,6 +24,7 @@ import SnippetInstallationModal from '../../components/Modals/SnippetInstallatio
 import styles from './page.module.css';
 
 export default function ExperimentPage({ params, searchParams }) {
+  const router = useRouter();
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
@@ -80,6 +87,12 @@ export default function ExperimentPage({ params, searchParams }) {
         isOpen={isSnippetModalOpen}
         onOpenChange={onOpenSnippetModalChange}
       />
+      <Breadcrumbs className={styles.breadCrumbs}>
+        <BreadcrumbItem onClick={() => router.push('/dashboard')}>
+          Experiments
+        </BreadcrumbItem>
+        <BreadcrumbItem>{experiment.name}</BreadcrumbItem>
+      </Breadcrumbs>
       <div className={styles.Experiment}>
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
@@ -167,7 +180,6 @@ export default function ExperimentPage({ params, searchParams }) {
           />
         )}
         {/* <Experiment experiment={experiment} open={true} /> */}
-        {/* TODO-p2: Work on modal right before "launch journey" that sets up the user's account & paypal sub */}
       </div>
     </>
   );

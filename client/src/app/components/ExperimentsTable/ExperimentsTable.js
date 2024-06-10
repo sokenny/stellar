@@ -23,7 +23,6 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 
 const ExperimentsTable = ({ experiments = [] }) => {
-  // TODO-p2: improve ui of chip statuses
   const router = useRouter();
   const [page, setPage] = React.useState(1);
   const { stats, getExperimentStats } = useStore();

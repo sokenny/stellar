@@ -24,6 +24,10 @@ async function getGoalSessionTimeStats(experimentId, variantIds) {
           db.sequelize.fn('AVG', db.sequelize.col('session.length')),
           'averageSessionTime',
         ],
+        [
+          db.sequelize.fn('SUM', db.sequelize.col('session.length')),
+          'totalSessionTime',
+        ],
       ],
       include: [
         {
@@ -40,6 +44,7 @@ async function getGoalSessionTimeStats(experimentId, variantIds) {
       variantId: stat.variantId,
       sessions: parseInt(stat.sessions, 10),
       averageSessionTime: parseFloat(stat.averageSessionTime).toFixed(2),
+      totalSessionTime: parseFloat(stat.totalSessionTime).toFixed(2), // Adding total session time
     }));
 
     formattedStats.forEach((variantStat) => {
@@ -53,7 +58,8 @@ async function getGoalSessionTimeStats(experimentId, variantIds) {
       formattedStats.push({
         variantId: variantId,
         sessions: 0,
-        conversions: 0,
+        averageSessionTime: '0.00',
+        totalSessionTime: '0.00',
       });
     });
 

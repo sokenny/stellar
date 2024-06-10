@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import {
   Table,
   TableHeader,
@@ -14,82 +12,21 @@ import {
   Spinner,
   getKeyValue,
   Tooltip,
-  Button as NextUIButton,
   useDisclosure,
 } from '@nextui-org/react';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import DeleteIcon from '../../icons/Delete/Delete';
 import EditIcon from '../../icons/Edit/Edit';
 import EyeIcon from '../../icons/Eye/Eye';
-import styles from './VariantsTable.module.css';
 import useStore from '../../store';
 import VariantModal from '../Modals/VariantModal';
+import VariantName from './VariantName';
 import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
-
-const NameCell = ({ name, variantId }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(name);
-  const inputRef = useRef(null); // Reference to the input element
-
-  const handleSave = async () => {
-    if (editedName === name) {
-      console.log('No changes made.');
-      setIsEditing(false);
-      return;
-    }
-    try {
-      toast.promise(
-        fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: editedName }),
-          },
-        ),
-        {
-          loading: 'Updating variant name...',
-          success: async () => 'Variant name updated',
-          error: async () => `Failed to update variant name`,
-        },
-      );
-    } catch (error) {
-      console.error('Save failed:', error);
-    }
-    setIsEditing(false);
-  };
-
-  return (
-    <div className={styles.nameCell} onClick={() => setIsEditing(true)}>
-      {isEditing ? (
-        <input
-          type="text"
-          ref={inputRef}
-          value={editedName}
-          onChange={(e) => setEditedName(e.target.value)}
-          onBlur={handleSave}
-          autoFocus
-          className={styles.nameInput}
-        />
-      ) : (
-        <div className={styles.nameContainer}>{editedName}</div>
-      )}
-
-      {/* Optional: Show spinner when saving */}
-      {/* {saving && (
-        <div className={`flex gap-4 ${styles.spinner}`}>
-          <Spinner size="sm" />
-        </div>
-      )} */}
-    </div>
-  );
-};
+import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
+import styles from './VariantsTable.module.css';
 
 function getConversionRate(variantStats) {
-  // TODO-p2: Add handling for scenarios where goal is session time
   if (!variantStats || !variantStats.sessions) {
     return '-';
   }
@@ -97,6 +34,79 @@ function getConversionRate(variantStats) {
     ((variantStats.conversions / variantStats.sessions) * 100).toFixed(2) + '%'
   );
 }
+
+const columns = [
+  {
+    key: 'name',
+    label: 'Name',
+    goalTypes: [
+      GoalTypesEnum.CLICK,
+      GoalTypesEnum.PAGE_VISIT,
+      GoalTypesEnum.SESSION_TIME,
+      undefined,
+    ],
+  },
+  {
+    key: 'traffic',
+    label: 'Traffic',
+    goalTypes: [
+      GoalTypesEnum.CLICK,
+      GoalTypesEnum.PAGE_VISIT,
+      GoalTypesEnum.SESSION_TIME,
+      undefined,
+    ],
+  },
+  {
+    key: 'changes',
+    label: 'Changes',
+    goalTypes: [
+      GoalTypesEnum.CLICK,
+      GoalTypesEnum.PAGE_VISIT,
+      GoalTypesEnum.SESSION_TIME,
+      undefined,
+    ],
+  },
+  {
+    key: 'sessions',
+    label: 'Sessions',
+    goalTypes: [
+      GoalTypesEnum.CLICK,
+      GoalTypesEnum.PAGE_VISIT,
+      GoalTypesEnum.SESSION_TIME,
+      undefined,
+    ],
+  },
+  {
+    key: 'conversions',
+    label: 'Conversions',
+    goalTypes: [GoalTypesEnum.CLICK, GoalTypesEnum.PAGE_VISIT, undefined],
+  },
+  {
+    key: 'conversion_rate',
+    label: 'Conversion Rate',
+    goalTypes: [GoalTypesEnum.CLICK, GoalTypesEnum.PAGE_VISIT, undefined],
+  },
+  {
+    key: 'average_session_time',
+    label: 'Avg. Session Time',
+    goalTypes: [GoalTypesEnum.SESSION_TIME],
+  },
+  {
+    key: 'total_session_time',
+    label: 'Total Session Time',
+    goalTypes: [GoalTypesEnum.SESSION_TIME],
+  },
+  {
+    key: 'actions',
+    label: 'Actions',
+    goalTypes: [
+      GoalTypesEnum.CLICK,
+      GoalTypesEnum.PAGE_VISIT,
+      GoalTypesEnum.SESSION_TIME,
+      undefined,
+    ],
+  },
+];
 
 const VariantsTable = ({ variants = [], experiment }) => {
   variants.sort((a, b) => a.id - b.id);
@@ -130,6 +140,10 @@ const VariantsTable = ({ variants = [], experiment }) => {
         sessions: hasStarted ? variantStats?.sessions : '-',
         conversions: hasStarted ? variantStats?.conversions : '-',
         conversion_rate: hasStarted ? getConversionRate(variantStats) : '-',
+        average_session_time: hasStarted
+          ? variantStats?.averageSessionTime
+          : '-',
+        total_session_time: hasStarted ? variantStats?.totalSessionTime : '-',
         _isControl: variant.is_control,
       };
     });
@@ -187,27 +201,15 @@ const VariantsTable = ({ variants = [], experiment }) => {
         }
       >
         <TableHeader className={styles.tableHeader}>
-          <TableColumn key="name" className={styles.th}>
-            Name
-          </TableColumn>
-          <TableColumn key="traffic" className={styles.th}>
-            Traffic
-          </TableColumn>
-          <TableColumn key="changes" className={styles.th}>
-            Changes
-          </TableColumn>
-          <TableColumn key="sessions" className={styles.th}>
-            Sessions
-          </TableColumn>
-          <TableColumn key="conversions" className={styles.th}>
-            Conversions
-          </TableColumn>
-          <TableColumn key="conversion_rate" className={styles.th}>
-            Conversion Rate
-          </TableColumn>
-          <TableColumn key="actions" className={styles.th}>
-            Actions
-          </TableColumn>
+          {columns
+            .filter((col) => col.goalTypes.includes(experiment?.goal?.type))
+            .map((column) => {
+              return (
+                <TableColumn key={column.key} className={styles.th}>
+                  {column.label}
+                </TableColumn>
+              );
+            })}
         </TableHeader>
         <TableBody
           items={rows.slice((page - 1) * rowsPerPage, page * rowsPerPage) ?? []}
@@ -274,7 +276,6 @@ const VariantsTable = ({ variants = [], experiment }) => {
                     </TableCell>
                   );
                 }
-                // if column key is name return
                 if (columnKey === 'name') {
                   return (
                     <TableCell
@@ -282,7 +283,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
                         item._isControl ? styles['cell-control'] : ''
                       }`}
                     >
-                      <NameCell name={item.name} variantId={item.id} />
+                      <VariantName name={item.name} variantId={item.id} />
                     </TableCell>
                   );
                 }

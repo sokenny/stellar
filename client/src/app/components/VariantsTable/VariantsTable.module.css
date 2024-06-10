@@ -36,14 +36,6 @@
   text-align: center;
 }
 
-.nameCell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px;
-  padding-left: 0;
-}
-
 .edit {
   display: none;
   position: absolute;
@@ -61,20 +53,10 @@
   right: 0;
 }
 
-
 .cell-name.cell-control {
   color: var(--linkBlue);
 }
 
 .cell-name {
   text-decoration: dotted;
-}
-
-.nameContainer {
-  padding: 2px 4px 2px 2px;
-  white-space: pre-wrap;
-}
-
-.nameInput {
-  padding: 2px 4px 2px 2px;
 }

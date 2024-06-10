@@ -272,6 +272,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             <div className={styles.clickData}>
               <div className={styles.title}>
                 Which URL visit should we track as a goal completion?
+                {/* TODO-p1: Tener match type 'contains' o 'exact' */}
               </div>
               <div className={styles.row}>
                 <div className={styles.domain}>{domain}/</div>

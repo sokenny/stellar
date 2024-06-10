@@ -170,7 +170,6 @@
     const stellarData = getStellarData();
     const currentPageUrl = window.location.href;
 
-    // Function to process experiments and apply modifications
     function processExperiments() {
       experiments.forEach((experiment) => {
         const storedVariantId = stellarData[experiment.id];
@@ -231,7 +230,6 @@
               const selectorElement = document.querySelector(
                 experiment.goal.selector,
               );
-
               if (selectorElement) {
                 selectorElement.addEventListener('click', function () {
                   const expRun = experimentsRun.find(
@@ -250,20 +248,25 @@
       });
     }
 
-    // Initialize the observer to monitor changes in the body
+    let debounceTimer;
+    function debounceProcessExperiments() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        processExperiments();
+      }, 100);
+    }
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
-          processExperiments();
+          debounceProcessExperiments();
         }
       });
     });
 
-    // Configuration for the observer
     const config = { childList: true, subtree: true };
     observer.observe(document.body, config);
 
-    // Initial processing of experiments
     processExperiments();
   }
 
