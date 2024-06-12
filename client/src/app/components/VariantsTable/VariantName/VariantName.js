@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import styles from './VariantName.module.css';
 
@@ -6,6 +6,12 @@ const VariantName = ({ name, variantId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleSave = async () => {
     if (editedName === name) {
@@ -27,14 +33,20 @@ const VariantName = ({ name, variantId }) => {
         ),
         {
           loading: 'Updating variant name...',
-          success: async () => 'Variant name updated',
-          error: async () => `Failed to update variant name`,
+          success: 'Variant name updated',
+          error: 'Failed to update variant name',
         },
       );
     } catch (error) {
       console.error('Save failed:', error);
     }
     setIsEditing(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.stopPropagation();
+    }
   };
 
   return (
@@ -46,6 +58,7 @@ const VariantName = ({ name, variantId }) => {
           value={editedName}
           onChange={(e) => setEditedName(e.target.value)}
           onBlur={handleSave}
+          onKeyDown={handleKeyDown}
           autoFocus
           className={styles.nameInput}
         />

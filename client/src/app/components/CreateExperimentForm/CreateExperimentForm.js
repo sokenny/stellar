@@ -139,7 +139,9 @@ const CreateExperimentForm = ({ experiment }) => {
             className={styles.urlInput}
             type="text"
             name="url"
-            placeholder={`https://${currentProject.domain}/your-url`}
+            placeholder={`${
+              process.env.NODE_ENV === 'development' ? 'http' : 'https'
+            }://${currentProject.domain}/your-url`}
             value={formState.experimentUrl || experiment.url}
             onChange={(e) =>
               setFormState({ ...formState, experimentUrl: e.target.value })

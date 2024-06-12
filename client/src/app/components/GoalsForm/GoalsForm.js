@@ -3,13 +3,25 @@
 import { toast } from 'sonner';
 import useStore from '../../store';
 import { useEffect, useState, useRef } from 'react';
-import { RadioGroup, Radio, Input as NInput } from '@nextui-org/react';
+import {
+  RadioGroup,
+  Radio,
+  Input as NInput,
+  Select,
+  SelectItem,
+} from '@nextui-org/react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
+import UrlMatchTypesEnum from '../../helpers/enums/UrlMatchTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import Link from 'next/link';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
+
+const matchTypes = [
+  { key: UrlMatchTypesEnum.CONTAINS, label: 'Contains' },
+  { key: UrlMatchTypesEnum.EXACT, label: 'Exact' },
+];
 
 const goals = [
   {
@@ -41,6 +53,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   const [submiting, setSubmiting] = useState(false);
   const [selectedClickOption, setSelectedClickOption] = useState('manual');
   const [querySelector, setQuerySelector] = useState('');
+  const [matchType, setMatchType] = useState(UrlMatchTypesEnum.CONTAINS);
 
   useEffect(() => {
     return () => clearInterval(goalCheckIntervalRef.current);
@@ -95,7 +108,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           body: JSON.stringify({
             experiment_id: experiment.id,
             type: formData.goalType,
-            url_match_type: 'CONTAINS', // for now we hardcode this to be 'contains'
+            url_match_type:
+              formData.goalType === GoalTypesEnum.SESSION_TIME
+                ? matchType
+                : UrlMatchTypesEnum.CONTAINS,
             url_match_value: isQuerySelector
               ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
               : '/' + formData.urlMatchValue,
@@ -269,23 +285,43 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           )}
         {formData.goalType === GoalTypesEnum.PAGE_VISIT &&
           (goal?.type !== GoalTypesEnum.PAGE_VISIT || wantsToUpdateGoal) && (
-            <div className={styles.clickData}>
+            <div className={styles.pageVisitData}>
               <div className={styles.title}>
                 Which URL visit should we track as a goal completion?
-                {/* TODO-p1: Tener match type 'contains' o 'exact' */}
               </div>
-              <div className={styles.row}>
-                <div className={styles.domain}>{domain}/</div>
-                <Input
-                  className={styles.input}
-                  type="text"
-                  value={formData.urlMatchValue}
-                  onChange={(e) =>
-                    setFormData({ ...formData, urlMatchValue: e.target.value })
-                  }
-                  placeholder="thank-you"
-                />
-                {/* <Button onClick={onSetUrl}>Set Url</Button> */}
+
+              <div className={styles.pageVisitUrlContainer}>
+                <div>
+                  <Select
+                    label="Match type"
+                    radius="none"
+                    className={styles.matchTypeSelect}
+                    defaultSelectedKeys={[matchType]}
+                    onSelectionChange={(val) => setMatchType(val.currentKey)}
+                  >
+                    {matchTypes.map((animal) => (
+                      <SelectItem key={animal.key}>{animal.label}</SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className={styles.row}>
+                  {matchType === UrlMatchTypesEnum.EXACT && (
+                    <div className={styles.domain}>{domain}/</div>
+                  )}
+                  <Input
+                    className={styles.input}
+                    type="text"
+                    value={formData.urlMatchValue}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        urlMatchValue: e.target.value,
+                      })
+                    }
+                    placeholder="thank-you"
+                  />
+                  {/* <Button onClick={onSetUrl}>Set Url</Button> */}
+                </div>
               </div>
             </div>
           )}
@@ -294,6 +330,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           !wantsToUpdateGoal && (
             <div className={styles.currentGoal}>
               <div className={styles.title}>
+                {/* TODO-p1-3: Aclarar el match type aca tambien */}
                 Currently tracking user visits to{' '}
                 <Link href="">{goal?.url_match_value}</Link>.
               </div>

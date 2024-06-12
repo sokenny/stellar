@@ -1,7 +1,11 @@
 (function () {
   const STELLAR_API_URL = 'http://localhost:3001/api';
 
-  // TODO-p3: Add a prefix "__" to global vars
+  // TODO-p1-2: Based on this chat with gpt, develop a functionality that allows to create copy variants from an initial widget.
+  // https://chatgpt.com/c/d46cdac3-e1c5-4e2e-9833-b0e8bc50c24a
+  // You enter 'create experiment flow' then enter the visual builder. Here you can select a card, hero section, etc. And we will send its html to gpt, have gpt send us variants and the selectors for these elements. From here the user can continue to make edits or save changes
+
+  // TODO-p3: Add a prefix "global__" to global vars
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');

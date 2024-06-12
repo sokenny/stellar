@@ -63,6 +63,10 @@
   margin-bottom: 4px;
 }
 
+.pageVisitData .title {
+  margin-bottom: 10px;
+}
+
 .title a {
   cursor: pointer;
 }
@@ -150,4 +154,21 @@
 
 .querySelect .subTitle {
   margin-bottom: 12px;
+}
+
+.matchTypeSelect {
+  width: 150px;
+}
+
+.pageVisitUrlContainer {
+  display: flex;
+  align-items: center;
+}
+
+.pageVisitUrlContainer .row {
+  margin-top: 0;
+}
+
+.matchTypeSelect {
+  margin-right: 8px;
 }

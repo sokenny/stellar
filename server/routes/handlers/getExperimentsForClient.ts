@@ -20,8 +20,6 @@ async function getUserByApiKey(apiKey: string) {
     return null;
   }
 
-  console.log('llegamo aca: ', keyWUser.user);
-
   return keyWUser.user;
 }
 

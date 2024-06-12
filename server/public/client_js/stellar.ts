@@ -8,6 +8,7 @@
   const checkingSnippet = urlParams.get('checkingSnippet');
   const sessionIssues = [];
   let global__experimentsToMount = null;
+  let global_observer = null;
 
   if (checkingSnippet === 'true') {
     fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
@@ -172,6 +173,13 @@
 
     function processExperiments() {
       experiments.forEach((experiment) => {
+        // if (!window.location.href.includes(experiment.url)) {
+        //   console.log(
+        //     "We skip mounting this experiment because it's not for this page",
+        //     experiment,
+        //   );
+        //   return;
+        // }
         const storedVariantId = stellarData[experiment.id];
         let variantToUse = storedVariantId || experiment.variant_to_use;
 
@@ -248,15 +256,19 @@
       });
     }
 
+    const config = { childList: true, subtree: true };
+
     let debounceTimer;
     function debounceProcessExperiments() {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
+        global_observer.disconnect(); // Disconnect observer before processing
         processExperiments();
+        global_observer.observe(document.body, config); // Reconnect observer after processing
       }, 100);
     }
 
-    const observer = new MutationObserver((mutations) => {
+    global_observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
           debounceProcessExperiments();
@@ -264,10 +276,10 @@
       });
     });
 
-    const config = { childList: true, subtree: true };
-    observer.observe(document.body, config);
+    global_observer.observe(document.body, config);
 
-    processExperiments();
+    // processExperiments();
+    debounceProcessExperiments();
   }
 
   function showLoadingState() {
@@ -298,16 +310,17 @@
 
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
-    console.log('fetching! ');
+    console.log('fetchExperiments run!');
+    // TODO-p1-1: Currently we are only fetching the experiments for this page. But we should fetch all experiments for this domain (project). And as user navigates to a new page that might need these experiment changes, he will already have them available and all we do is mount them.
     const pageUrl = window.location.href;
     if (
-      !pagesWithExperiments.includes(pageUrl) &&
+      !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
       visitedPages.length > 1 &&
       hasFetchedExperiments
     ) {
-      console.log('we do not have experiments for this page');
       return;
     }
+    console.log('fetching!');
 
     const apiKey = getApiKey();
 
@@ -336,9 +349,10 @@
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
       // TODO: This filtering should be done on the server. fetchexperiments could send the domain, and we can then retrieve experiments for projects with this domain
-      global__experimentsToMount = data.filter((experiment) =>
-        window.location.href.includes(experiment.url),
-      );
+      // global__experimentsToMount = data.filter((experiment) =>
+      //   window.location.href.includes(experiment.url),
+      // );
+      global__experimentsToMount = data;
 
       console.log('global__experimentsToMount', global__experimentsToMount);
 

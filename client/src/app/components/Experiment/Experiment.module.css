@@ -239,4 +239,5 @@
   margin-bottom: 12px;
   border-radius: 4px;
   width: 350px;
+  border: 1px solid rgba(0,0,0,0.1);
 }
