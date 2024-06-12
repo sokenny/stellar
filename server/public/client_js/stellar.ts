@@ -8,7 +8,8 @@
   const checkingSnippet = urlParams.get('checkingSnippet');
   const sessionIssues = [];
   let global__experimentsToMount = null;
-  let global_observer = null;
+  let global__observer = null;
+  let global__mountedOnThisPageLoad = {};
 
   if (checkingSnippet === 'true') {
     fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
@@ -173,13 +174,19 @@
 
     function processExperiments() {
       experiments.forEach((experiment) => {
-        // if (!window.location.href.includes(experiment.url)) {
-        //   console.log(
-        //     "We skip mounting this experiment because it's not for this page",
-        //     experiment,
-        //   );
-        //   return;
-        // }
+        if (global__mountedOnThisPageLoad[experiment.id]) {
+          console.log(`Skipping already mounted experiment: ${experiment.id}`);
+          return;
+        }
+
+        if (!window.location.href.includes(experiment.url)) {
+          console.log(
+            'Skipping experiment as it is not for this page: ',
+            experiment,
+          );
+          return;
+        }
+
         const storedVariantId = stellarData[experiment.id];
         let variantToUse = storedVariantId || experiment.variant_to_use;
 
@@ -251,6 +258,8 @@
                 });
               }
             }
+
+            global__mountedOnThisPageLoad[experiment.id] = true;
           }
         });
       });
@@ -262,13 +271,11 @@
     function debounceProcessExperiments() {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        global_observer.disconnect(); // Disconnect observer before processing
         processExperiments();
-        global_observer.observe(document.body, config); // Reconnect observer after processing
-      }, 100);
+      }, 10);
     }
 
-    global_observer = new MutationObserver((mutations) => {
+    global__observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
           debounceProcessExperiments();
@@ -276,9 +283,8 @@
       });
     });
 
-    global_observer.observe(document.body, config);
+    global__observer.observe(document.body, config);
 
-    // processExperiments();
     debounceProcessExperiments();
   }
 
@@ -409,6 +415,8 @@
     const originalReplaceState = history.replaceState;
 
     history.pushState = function () {
+      // We need to flush these on every page navigation
+      global__mountedOnThisPageLoad = {};
       originalPushState.apply(this, arguments);
       trackPageVisit();
       if (global__experimentsToMount) {
