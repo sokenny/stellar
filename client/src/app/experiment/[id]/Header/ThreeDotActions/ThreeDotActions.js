@@ -69,6 +69,9 @@ const ThreeDotActions = ({ experimentId, status }) => {
                   showDivider
                   description="Edit experiment settings"
                   startContent={<Edit2 className={iconClasses} />}
+                  onPress={() =>
+                    router.push(`/experiment/${experimentId}/settings`)
+                  }
                 >
                   {/* TODO-p1: Create settings page w/ settings like: */}
                   {/* -Scheduled end date */}

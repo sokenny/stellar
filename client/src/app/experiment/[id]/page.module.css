@@ -52,10 +52,28 @@
   margin-left: -4px;
 }
 
-.goalCard {
-  margin-bottom: 8px;
+.goalCard,
+.startDate,
+.targetPage {
+  margin-bottom: 4px;
+}
+
+.startDate span,
+.targetPage span {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 300;
 }
 
 .breadCrumbs {
   margin-bottom: 8px;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+}
+
+.generalInfoSection {
+  font-size: 14px;
+  margin-bottom: 16px;
 }

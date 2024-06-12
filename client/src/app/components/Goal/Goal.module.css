@@ -12,9 +12,8 @@
 }
 
 .title {
-  margin-right: 8px;
+  margin-right: 5px;
   font-weight: 400;
-  font-size: 18px;
 }
 
 .edit {
@@ -22,6 +21,11 @@
   color: gray;
   cursor: pointer;
   line-height: 0;
+}
+
+.goalDescription {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 300;
 }
 
 .goalDescription a {

@@ -317,7 +317,6 @@
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
     console.log('fetchExperiments run!');
-    // TODO-p1-1: Currently we are only fetching the experiments for this page. But we should fetch all experiments for this domain (project). And as user navigates to a new page that might need these experiment changes, he will already have them available and all we do is mount them.
     const pageUrl = window.location.href;
     if (
       !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.

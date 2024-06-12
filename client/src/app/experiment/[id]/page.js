@@ -96,49 +96,62 @@ export default function ExperimentPage({ params, searchParams }) {
       <div className={styles.Experiment}>
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
-        <div className={styles.infoSection}>
-          {!experiment.goal && (
-            <InfoCard className={styles.setGoalCard}>
-              {
-                <div className={styles.cardBody}>
-                  <div>Set up a goal before launching your experiment.</div>
-                  <div>
-                    <Button
-                      onClick={() =>
-                        missingSnippet
-                          ? onOpenSnippetModal()
-                          : setShowSetUpGoalModal(true)
-                      }
-                    >
-                      Set Up Goal
-                    </Button>
-                  </div>
-                </div>
-              }
-            </InfoCard>
+        {!experiment.goal ||
+          (hasCeroChanges && (
+            <div className={styles.infoSection}>
+              {!experiment.goal && (
+                <InfoCard className={styles.setGoalCard}>
+                  {
+                    <div className={styles.cardBody}>
+                      <div>Set up a goal before launching your experiment.</div>
+                      <div>
+                        <Button
+                          onClick={() =>
+                            missingSnippet
+                              ? onOpenSnippetModal()
+                              : setShowSetUpGoalModal(true)
+                          }
+                        >
+                          Set Up Goal
+                        </Button>
+                      </div>
+                    </div>
+                  }
+                </InfoCard>
+              )}
+              {hasCeroChanges && (
+                <InfoCard className={styles.setGoalCard}>
+                  {
+                    <div className={styles.cardBody}>
+                      <div>
+                        Modify at least one variant before launching your
+                        experiment.
+                      </div>
+                    </div>
+                  }
+                </InfoCard>
+              )}
+            </div>
+          ))}
+        <div className={styles.generalInfoSection}>
+          {experiment.goal && (
+            <div className={styles.goal}>
+              <Goal
+                className={styles.goalCard}
+                experiment={experiment}
+                onEdit={() => setShowSetUpGoalModal(true)}
+              />
+            </div>
           )}
-          {hasCeroChanges && (
-            <InfoCard className={styles.setGoalCard}>
-              {
-                <div className={styles.cardBody}>
-                  <div>
-                    Modify at least one variant before launching your
-                    experiment.
-                  </div>
-                </div>
-              }
-            </InfoCard>
+          {experiment.started_at && (
+            <div className={styles.startDate}>
+              Started at: <span>{experiment.started_at}</span>
+            </div>
           )}
-        </div>
-        {experiment.goal && (
-          <div className={styles.goal}>
-            <Goal
-              className={styles.goalCard}
-              experiment={experiment}
-              onEdit={() => setShowSetUpGoalModal(true)}
-            />
+          <div className={styles.targetPage}>
+            Target page: <span>{experiment.url}</span>
           </div>
-        )}
+        </div>
         <section>
           <div className={styles.tableTitle}>
             <h3 className={styles.sectionTitle}>Variants</h3>
