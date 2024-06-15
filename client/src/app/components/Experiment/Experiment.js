@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import useStore from '../../store';
 import { Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
-import Edit from '../../icons/Edit';
 import Trash from '../../icons/Trash';
 import DownArrow from '../../icons/DownArrow';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
@@ -24,8 +23,6 @@ import StopExperimentModal from '../Modals/StopExperimentModal/StopExperimentMod
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
 import Button from '../Button/Button';
 import styles from './Experiment.module.css';
-import Plus from '../../icons/Plus';
-import CreateButton from '../CreateButton';
 
 const Experiment = ({
   experiment,
@@ -215,6 +212,7 @@ const Experiment = ({
                     )}
                     height={maxVariantHeight}
                     setHeight={setMaxVariantHeight}
+                    onReview={onReview}
                   />
                 ))}
               </div>
@@ -239,7 +237,6 @@ const Experiment = ({
                     website."
                     className={styles.goalTooltip}
                     closeDelay={0}
-                    disableAnimation
                   >
                     <div className={styles.setUpGoalBtn}>
                       <Button
@@ -296,6 +293,7 @@ const Experiment = ({
         <DeleteExperimentModal
           onClose={() => setShowDeleteExperimentModal(false)}
           experimentId={experiment.id}
+          onComplete={() => (onReview ? location.reload() : null)}
         />
       )}
       {showCreateVariantModal && (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { Tooltip } from '@nextui-org/react';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import Edit2 from '../../icons/Edit2';
@@ -20,6 +21,7 @@ const Variant = ({
   height,
   setHeight,
   className,
+  onReview,
   // num,
 }) => {
   const variantRef = useRef(null);
@@ -79,12 +81,22 @@ const Variant = ({
                 <Trash height={18} width={18} />
               </div>
             )}
-            <div
-              className={styles.edit}
-              onClick={() => setShowEditVariantModal(true)}
+            <Tooltip
+              content={
+                'You can edit this variant once your account has been created.'
+              }
+              showArrow
+              className={styles.tooltip}
+              closeDelay={0}
+              isDisabled={!onReview}
             >
-              <Edit width={15} height={15} />
-            </div>
+              <div
+                className={`${styles.edit} ${onReview ? styles.disabled : ''}`}
+                onClick={() => !onReview && setShowEditVariantModal(true)}
+              >
+                <Edit width={15} height={15} />
+              </div>
+            </Tooltip>
           </div>
         </div>
         <div className={styles.text}>

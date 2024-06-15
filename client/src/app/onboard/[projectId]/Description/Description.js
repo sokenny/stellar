@@ -18,7 +18,6 @@ const Description = () => {
           content="This estimate is based on what we consider as a 'conversion', which in this case, refers to clicks on the main CTA on the page."
           className={styles.conversionTooltip}
           closeDelay={0}
-          disableAnimation
         >
           <span>34% increase in your page conversion rate</span>
         </Tooltip>{' '}

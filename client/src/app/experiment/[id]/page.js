@@ -148,6 +148,11 @@ export default function ExperimentPage({ params, searchParams }) {
               Started at: <span>{experiment.started_at}</span>
             </div>
           )}
+          {experiment.ended_at && (
+            <div className={styles.endDate}>
+              Ended at: <span>{experiment.ended_at}</span>
+            </div>
+          )}
           <div className={styles.targetPage}>
             Target page: <span>{experiment.url}</span>
           </div>

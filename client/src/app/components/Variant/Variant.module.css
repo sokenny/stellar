@@ -88,3 +88,14 @@
   color: black;
   font-weight: 400;
 }
+
+.tooltip {
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.edit.disabled {
+  cursor: initial;
+  opacity: .25;
+}
