@@ -1,0 +1,38 @@
+.container {
+  max-width: 500px;
+}
+
+.input div {
+  border-radius: 4px;
+  width: 300px;
+}
+
+.select {
+  width: 300px;
+}
+
+.select button {
+  border-radius: 4px;
+}
+
+.settingItem {
+  margin: 26px 0;
+  margin-top: 52px;
+}
+
+.settingItem.autoFinalizeContainer {
+  margin-top: 0;
+  margin-bottom: 26px;
+}
+
+.tooltip {
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.detail {
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.4);
+}

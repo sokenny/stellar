@@ -299,8 +299,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                     defaultSelectedKeys={[matchType]}
                     onSelectionChange={(val) => setMatchType(val.currentKey)}
                   >
-                    {matchTypes.map((animal) => (
-                      <SelectItem key={animal.key}>{animal.label}</SelectItem>
+                    {matchTypes.map((matchType) => (
+                      <SelectItem key={matchType.key}>
+                        {matchType.label}
+                      </SelectItem>
                     ))}
                   </Select>
                 </div>

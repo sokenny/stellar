@@ -14,6 +14,10 @@ class Experiment extends Model {
   public paused_at!: Date;
   public ended_at!: Date;
   public deleted_at!: Date;
+  public scheduled_start_date!: Date;
+  public scheduled_end_date!: Date;
+  public allow_parallel!: boolean;
+  public queue_after!: number;
 }
 
 export const initializeExperiment = (
@@ -78,6 +82,28 @@ export const initializeExperiment = (
       deleted_at: {
         type: DataTypes.DATE,
         allowNull: true,
+      },
+      scheduled_start_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      scheduled_end_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      allow_parallel: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      queue_after: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      auto_finalize: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       status: {
         type: DataTypes.VIRTUAL,

@@ -9,6 +9,7 @@ import {
 } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import useStore from '../../../store';
+import SettingsForm from './SettingsForm';
 import styles from './page.module.css';
 
 export default function SettingsPage({ params }) {
@@ -37,8 +38,9 @@ export default function SettingsPage({ params }) {
         </BreadcrumbItem>
         <BreadcrumbItem>settings</BreadcrumbItem>
       </Breadcrumbs>
-      <pre>{JSON.stringify(experiment)}</pre>
-      <h1>LCDTM!</h1>
+      {/* <pre>{JSON.stringify(experiment)}</pre> */}
+      <h1 className={styles.title}>Settings</h1>
+      <SettingsForm experiment={experiment} />
     </>
   );
 }

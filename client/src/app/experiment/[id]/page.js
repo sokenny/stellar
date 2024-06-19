@@ -80,6 +80,7 @@ export default function ExperimentPage({ params, searchParams }) {
   }
 
   const hasStarted = experiment.status !== ExperimentStatusesEnum.PENDING;
+  const noGoalOrZeroChanges = !experiment.goal || hasCeroChanges;
 
   return (
     <>
@@ -96,43 +97,42 @@ export default function ExperimentPage({ params, searchParams }) {
       <div className={styles.Experiment}>
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
-        {!experiment.goal ||
-          (hasCeroChanges && (
-            <div className={styles.infoSection}>
-              {!experiment.goal && (
-                <InfoCard className={styles.setGoalCard}>
-                  {
-                    <div className={styles.cardBody}>
-                      <div>Set up a goal before launching your experiment.</div>
-                      <div>
-                        <Button
-                          onClick={() =>
-                            missingSnippet
-                              ? onOpenSnippetModal()
-                              : setShowSetUpGoalModal(true)
-                          }
-                        >
-                          Set Up Goal
-                        </Button>
-                      </div>
+        {noGoalOrZeroChanges && (
+          <div className={styles.infoSection}>
+            {!experiment.goal && (
+              <InfoCard className={styles.setGoalCard}>
+                {
+                  <div className={styles.cardBody}>
+                    <div>Set up a goal before launching your experiment.</div>
+                    <div>
+                      <Button
+                        onClick={() =>
+                          missingSnippet
+                            ? onOpenSnippetModal()
+                            : setShowSetUpGoalModal(true)
+                        }
+                      >
+                        Set Up Goal
+                      </Button>
                     </div>
-                  }
-                </InfoCard>
-              )}
-              {hasCeroChanges && (
-                <InfoCard className={styles.setGoalCard}>
-                  {
-                    <div className={styles.cardBody}>
-                      <div>
-                        Modify at least one variant before launching your
-                        experiment.
-                      </div>
+                  </div>
+                }
+              </InfoCard>
+            )}
+            {hasCeroChanges && (
+              <InfoCard className={styles.setGoalCard}>
+                {
+                  <div className={styles.cardBody}>
+                    <div>
+                      Modify at least one variant before launching your
+                      experiment.
                     </div>
-                  }
-                </InfoCard>
-              )}
-            </div>
-          ))}
+                  </div>
+                }
+              </InfoCard>
+            )}
+          </div>
+        )}
         <div className={styles.generalInfoSection}>
           {experiment.goal && (
             <div className={styles.goal}>
