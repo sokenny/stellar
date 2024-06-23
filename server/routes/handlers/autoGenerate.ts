@@ -9,6 +9,8 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
+// TODO-p1: Have autoGenerate create experiments with a queue_after value defined for queued exps
+
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const transaction = await db.sequelize.transaction();
   try {

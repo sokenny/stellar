@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import styles from './VariantName.module.css';
 
+// TODO-p1: Disallow editing name for control variant
 const VariantName = ({ name, variantId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);

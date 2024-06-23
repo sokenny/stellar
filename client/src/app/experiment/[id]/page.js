@@ -133,6 +133,7 @@ export default function ExperimentPage({ params, searchParams }) {
             )}
           </div>
         )}
+        {/* TODO-p1: Neatly arrange this info along with newly created settings fields */}
         <div className={styles.generalInfoSection}>
           {experiment.goal && (
             <div className={styles.goal}>

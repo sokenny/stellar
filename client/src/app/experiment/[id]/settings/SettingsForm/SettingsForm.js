@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { toast } from 'sonner';
 import { Input, Switch, Tooltip, Select, SelectItem } from '@nextui-org/react';
 import Button from '../../../../components/Button';
 import useStore from '../../../../store';
@@ -57,8 +58,7 @@ function getEndTriggerType(experiment) {
 }
 
 const SettingsForm = ({ experiment }) => {
-  console.log('zma, ', experiment);
-  const { currentProject } = useStore();
+  const { currentProject, refetchProjects } = useStore();
   const otherNonEndedExperiments = currentProject.experiments.filter((exp) => {
     return exp.id !== experiment.id && !exp.ended_at;
   });
@@ -99,10 +99,28 @@ const SettingsForm = ({ experiment }) => {
 
   function onSubmit() {
     setSubmitting(true);
-    console.log('Submitting settings form', settingsForm);
-    setSubmitting(false);
+    fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/settings`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settingsForm),
+      },
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        pristineFormState.current = settingsForm;
+        setSubmitting(false);
+        toast.success('Settings saved');
+        refetchProjects();
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        toast.error('Failed to save settings');
+      });
   }
-  console.log('settingsForm', settingsForm);
 
   return (
     <div className={styles.container}>
@@ -124,7 +142,7 @@ const SettingsForm = ({ experiment }) => {
           radius="none"
           className={styles.select}
           labelPlacement="outside"
-          defaultSelectedKeys={['manual']}
+          defaultSelectedKeys={[settingsForm.start_trigger_type || 'manual']}
           onSelectionChange={(val) =>
             setSettingsForm({
               ...settingsForm,
@@ -166,13 +184,17 @@ const SettingsForm = ({ experiment }) => {
             placeholder="something"
             labelPlacement="outside"
             className={styles.input}
+            value={
+              settingsForm.scheduled_start_date
+                ? settingsForm.scheduled_start_date.split('T')[0]
+                : ''
+            }
             onChange={(e) =>
               setSettingsForm({
                 ...settingsForm,
                 scheduled_start_date: e.target.value,
               })
             }
-            // add validation so only future dates are allowed
             isInvalid={
               settingsForm.scheduled_start_date < new Date().toISOString()
             }
@@ -188,7 +210,7 @@ const SettingsForm = ({ experiment }) => {
             radius="none"
             className={styles.select}
             labelPlacement="outside"
-            defaultSelectedKeys={[]}
+            defaultSelectedKeys={[settingsForm.queue_after?.toString()]}
             placeholder="Select an experiment to queue after"
             onSelectionChange={(val) =>
               setSettingsForm({
@@ -220,7 +242,7 @@ const SettingsForm = ({ experiment }) => {
           radius="none"
           className={styles.select}
           labelPlacement="outside"
-          defaultSelectedKeys={['manual']}
+          defaultSelectedKeys={[settingsForm.end_trigger_type || 'manual']}
           onSelectionChange={(val) =>
             setSettingsForm({
               ...settingsForm,
@@ -267,8 +289,13 @@ const SettingsForm = ({ experiment }) => {
             onChange={(e) =>
               setSettingsForm({
                 ...settingsForm,
-                end_date: e.target.value,
+                scheduled_end_date: e.target.value,
               })
+            }
+            value={
+              settingsForm.scheduled_end_date
+                ? settingsForm.scheduled_end_date.split('T')[0]
+                : ''
             }
             isInvalid={settingsForm.end_date < new Date().toISOString()}
             min={new Date().toISOString().split('T')[0]}
@@ -290,8 +317,8 @@ const SettingsForm = ({ experiment }) => {
             <div>Allow parallel experiments</div>
           </Switch>
           <div className={styles.detail}>
-            By enabling this option, you allow multiple experiments to run in
-            parallel on a same page (not recommended).
+            By enabling this option, you allow other experiments to run along
+            side this one on a same page (not recommended).
           </div>
         </div>
       </div>

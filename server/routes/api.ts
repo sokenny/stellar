@@ -30,6 +30,7 @@ import autoGenerate from './handlers/autoGenerate';
 import updateVariantName from './handlers/updateVariantName';
 import updateExperimentName from './handlers/updateExperimentName';
 import getVariantScreenshot from './handlers/getVariantScreenshot';
+import updateExperimentSettings from './handlers/updateExperimentSettings';
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.post('/experiment/:id/stop', stopExperiment);
 router.post('/experiment/:id/pause', pauseExperiment);
 router.post('/experiment/:id/on', turnOnExperiment);
 router.post('/experiment/:id/launch', launchExperiment);
+router.put('/experiment/:id/settings', updateExperimentSettings);
 router.delete('/experiment/:id', deleteExperiment);
 
 router.get('/variant/:id', getVariant);
