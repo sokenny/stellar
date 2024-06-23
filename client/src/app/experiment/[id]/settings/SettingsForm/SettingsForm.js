@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Input, Switch, Tooltip, Select, SelectItem } from '@nextui-org/react';
 import Button from '../../../../components/Button';
@@ -58,6 +59,7 @@ function getEndTriggerType(experiment) {
 }
 
 const SettingsForm = ({ experiment }) => {
+  const router = useRouter();
   const { currentProject, refetchProjects } = useStore();
   const otherNonEndedExperiments = currentProject.experiments.filter((exp) => {
     return exp.id !== experiment.id && !exp.ended_at;
@@ -115,6 +117,7 @@ const SettingsForm = ({ experiment }) => {
         setSubmitting(false);
         toast.success('Settings saved');
         refetchProjects();
+        router.push(`/experiment/${experiment.id}`);
       })
       .catch((err) => {
         setSubmitting(false);

@@ -9,6 +9,9 @@ import {
 } from '@nextui-org/react';
 import { toast } from 'sonner';
 import getShortId from '../../helpers/getShortId';
+import GoalIcon from '../../icons/Goal';
+import Calendar from '../../icons/Calendar';
+import Page from '../../icons/Page';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
 import { useRouter } from 'next/navigation';
 import useStore from '../../store';
@@ -94,6 +97,7 @@ export default function ExperimentPage({ params, searchParams }) {
         </BreadcrumbItem>
         <BreadcrumbItem>{experiment.name}</BreadcrumbItem>
       </Breadcrumbs>
+      {/* TODO-p2: If experiment has less than 5 days before it ends due to a shceduled end date, show an info card announcing this */}
       <div className={styles.Experiment}>
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
@@ -133,10 +137,12 @@ export default function ExperimentPage({ params, searchParams }) {
             )}
           </div>
         )}
-        {/* TODO-p1: Neatly arrange this info along with newly created settings fields */}
         <div className={styles.generalInfoSection}>
           {experiment.goal && (
             <div className={styles.goal}>
+              <div className={styles.icon}>
+                <GoalIcon width={15} height={15} />
+              </div>
               <Goal
                 className={styles.goalCard}
                 experiment={experiment}
@@ -144,17 +150,36 @@ export default function ExperimentPage({ params, searchParams }) {
               />
             </div>
           )}
-          {experiment.started_at && (
-            <div className={styles.startDate}>
-              Started at: <span>{experiment.started_at}</span>
+          <div className={styles.datesData}>
+            <div className={styles.icon}>
+              <Calendar width={15} height={15} />
             </div>
-          )}
-          {experiment.ended_at && (
-            <div className={styles.endDate}>
-              Ended at: <span>{experiment.ended_at}</span>
-            </div>
-          )}
+            {experiment.started_at && (
+              <div className={styles.startDate}>
+                Started at: <span>{experiment.started_at}</span>
+              </div>
+            )}
+            {!experiment.started_at && experiment.scheduled_start_date && (
+              <div className={styles.startDate}>
+                Scheduled start date:{' '}
+                <span>{experiment.scheduled_start_date}</span>
+              </div>
+            )}
+            {experiment.ended_at && (
+              <div className={styles.endDate}>
+                Ended at: <span>{experiment.ended_at}</span>
+              </div>
+            )}
+            {!experiment.ended_at && experiment.scheduled_end_date && (
+              <div className={styles.endDate}>
+                Scheduled end date: <span>{experiment.scheduled_end_date}</span>
+              </div>
+            )}
+          </div>
           <div className={styles.targetPage}>
+            <div className={styles.icon}>
+              <Page width={15} height={15} />
+            </div>
             Target page: <span>{experiment.url}</span>
           </div>
         </div>

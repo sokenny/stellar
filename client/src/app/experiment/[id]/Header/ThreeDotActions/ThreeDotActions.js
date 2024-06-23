@@ -73,11 +73,6 @@ const ThreeDotActions = ({ experimentId, status }) => {
                     router.push(`/experiment/${experimentId}/settings`)
                   }
                 >
-                  {/* TODO-p1: Create settings page w/ settings like: */}
-                  {/* -Scheduled end date */}
-                  {/* -Auto finalize */}
-                  {/* -Start after X finishes (queue) */}
-                  {/* -Block other experiments from launching in the page this exp runs */}
                   Settings
                 </ListboxItem>
                 {status === ExperimentStatusesEnum.PENDING && (

@@ -23,18 +23,16 @@ async function turnOnExperiment(req, res) {
       return res.status(400).json({ message: 'Experiment has already ended' });
     }
 
-    // Check if there's an active experiment on the same page
     const inPageExperiment = await db.Experiment.findOne({
       where: {
         page_id: experiment.page_id,
         deleted_at: null,
         ended_at: null,
         started_at: { [Op.ne]: null },
-        project_id: experiment.project_id, // Just to be extra careful
+        project_id: experiment.project_id,
+        allow_parallel: { [Op.not]: true },
       },
     });
-
-    console.log('inPageExperiment!', inPageExperiment);
 
     if (inPageExperiment) {
       return res.status(400).json({
