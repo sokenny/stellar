@@ -8,17 +8,11 @@ async function applyStyle(elementHandle, styleObject) {
   }
 }
 
-async function highlightAndCapture(
-  session,
-  selector: string,
-  fileName: string,
-) {
+async function highlightAndCapture({ session, selector, fileName }) {
   const { page } = session;
   const dir = path.join(__dirname, '..', 'public', 'snapshots');
   console.log('dir!!:', dir);
 
-  // Attempt to find the element using the passed selector
-  // Select element from selector
   const element = await page.$(selector);
   if (!element) {
     throw new Error(
@@ -26,24 +20,38 @@ async function highlightAndCapture(
     );
   }
 
+  await element.evaluate((node) =>
+    node.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    }),
+  );
+
   const highlightStyle = {
     border: '2px solid red',
     backgroundColor: 'rgba(255, 0, 0, 0.1)',
   };
-
   await applyStyle(element, highlightStyle);
 
-  const viewport = await page.viewport();
+  const boundingBox = await element.boundingBox();
+  if (!boundingBox) {
+    throw new Error('Failed to calculate the bounding box of the element.');
+  }
+
+  const padding = 200;
+  const clipRegion = {
+    x: Math.max(0, boundingBox.x - padding),
+    y: Math.max(0, boundingBox.y - padding),
+    width: boundingBox.width + 2 * padding,
+    height: boundingBox.height + 2 * padding,
+  };
+
   const destination = path.join(dir, fileName);
 
   await page.screenshot({
     path: destination,
-    clip: {
-      x: 0,
-      y: 0,
-      width: viewport.width,
-      height: viewport.height,
-    },
+    clip: clipRegion,
   });
 
   return destination;

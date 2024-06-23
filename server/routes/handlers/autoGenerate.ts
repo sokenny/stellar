@@ -9,7 +9,9 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
-// TODO-p1: Have autoGenerate create experiments with a queue_after value defined for queued exps
+// TODO-p1-1: Have autoGenerate create experiments with a queue_after value defined for queued exps
+// TODO-p1-2: Make puppeter scroll to element before taking screenshot
+// TODO-p1-3: Prevent exps with duplicated innerText from being created (usually happens when biggestText matches h1 text)
 
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const transaction = await db.sequelize.transaction();
@@ -54,11 +56,11 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
         );
         const snapshotBrowserSession = await initiatePage(url);
         const selector = mainElements[key][1];
-        await highlightAndCapture(
-          snapshotBrowserSession,
+        await highlightAndCapture({
+          session: snapshotBrowserSession,
           selector,
-          `experiment-${thisExperiment.id}.png`,
-        );
+          fileName: `experiment-${thisExperiment.id}.png`,
+        });
       }),
     );
 
