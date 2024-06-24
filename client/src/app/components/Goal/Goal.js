@@ -19,7 +19,6 @@ const Goal = ({ experiment, onEdit, className }) => {
         >
           {goal.url_match_value}
         </a>
-        .
       </>
     ),
     CLICK: (

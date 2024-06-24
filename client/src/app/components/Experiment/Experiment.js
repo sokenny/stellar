@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useStore from '../../store';
 import { Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
@@ -9,6 +9,7 @@ import DownArrow from '../../icons/DownArrow';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import getSortedVariants from '../../helpers/getSortedVariants';
+import getRandomConversionRate from '../../helpers/getRandomConversionRate';
 import Variant from '../Variant/Variant';
 import Goal from '../Goal/Goal';
 import StopButton from '../StopButton/StopButton';
@@ -24,6 +25,8 @@ import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperim
 import Button from '../Button/Button';
 import styles from './Experiment.module.css';
 
+// TODO-p1-1: Simplify data shown for the experiment and the variant
+
 const Experiment = ({
   experiment,
   order = '',
@@ -32,6 +35,7 @@ const Experiment = ({
   onReview = false,
   cardLike = false,
 }) => {
+  const hoverTimeoutId = useRef(null);
   const { stats, setStats } = useStore();
   const [variantHovered, setVariantHovered] = useState(null);
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
@@ -50,13 +54,20 @@ const Experiment = ({
   const [isGoalTooltipOpen, setIsGoalTooltipOpen] = useState(false);
 
   function getImageTargetUrl() {
-    if (!variantHovered) {
+    const isControl = experiment.variants.find(
+      (v) => v.is_control && v.id === variantHovered,
+    );
+    if (isControl || !variantHovered) {
       return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/snapshot`;
     }
     return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/${variantHovered}/snapshot`;
   }
 
-  console.log('on review: ', onReview);
+  useEffect(() => {
+    return () => {
+      hoverTimeoutId.current && clearTimeout(hoverTimeoutId.current);
+    };
+  }, [hoverTimeoutId.current]);
 
   useEffect(() => {
     const fetchExperimentStats = async () => {
@@ -108,76 +119,93 @@ const Experiment = ({
       onClick={() => (!isOpen ? setIsOpen(true) : null)}
     >
       <div className={styles.header}>
-        <div className={styles.colLeft}>
-          {/* {onReview && <div className={styles.order}>{order}</div>} */}
-          <div className={styles.name}>
-            {onReview ? (
-              <div>{experimentTitle}</div>
-            ) : (
-              <Link href={`/experiment/${experiment.id}`}>
-                {experimentTitle}
-              </Link>
-            )}
-            {/* TODO-p1-1: If this is onReview, add text saying X% potential CR increase, then the total potential CR % increase in the onboard page should be the sum of all exps */}
-          </div>
-          {isOpen && (
-            <div className={styles.experimentActions}>
-              {isAlterable && (
-                <div className={styles.deleteBtn}>
-                  <Trash
-                    height={21}
-                    onClick={() => setShowDeleteExperimentModal(true)}
-                  />
-                </div>
+        <div className={styles.row1}>
+          <div className={styles.colLeft}>
+            <div className={styles.name}>
+              {onReview ? (
+                <div>{experimentTitle}</div>
+              ) : (
+                <Link href={`/experiment/${experiment.id}`}>
+                  {experimentTitle}
+                </Link>
               )}
-
-              {/* <div
-                className={styles.editExperiment}
-                onClick={() => setShowEditExperimentModal(true)}
-              >
-                <Edit height={17} />
-              </div> */}
             </div>
-          )}
-          {!isOpen && (
-            <div className={styles.downArrow}>
-              {' '}
-              <DownArrow width={14} />
-            </div>
-          )}
-        </div>
-
-        <div className={styles.colRight}>
-          <div className={styles.status}>
-            {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
-            {experiment.status}
-          </div>
-          <div className={styles.action}>
-            {showStopPlayPauseButtons && (
-              <div className={styles.stopPlayPauseButtons}>
-                {experiment.status !== ExperimentStatusesEnum.PENDING && (
-                  <StopButton
-                    onClick={() => setShowStopExperimentModal(true)}
-                  />
-                )}
-                {experiment.status === ExperimentStatusesEnum.RUNNING ? (
-                  <PauseButton
-                    onClick={() => setShowPauseExperimentModal(true)}
-                  />
-                ) : (
-                  <PlayButton
-                    onClick={() => setShowResumeExperimentModal(true)}
-                  />
+            {isOpen && (
+              <div className={styles.experimentActions}>
+                {isAlterable && (
+                  <div className={styles.deleteBtn}>
+                    <Trash
+                      height={21}
+                      onClick={() => setShowDeleteExperimentModal(true)}
+                    />
+                  </div>
                 )}
               </div>
             )}
+            {!isOpen && (
+              <div className={styles.downArrow}>
+                {' '}
+                <DownArrow width={14} />
+              </div>
+            )}
           </div>
-          {!isOpen && (
-            <div className={styles.viewDetails} onClick={() => setIsOpen(true)}>
-              View Details
+
+          <div className={styles.colRight}>
+            {!onReview && (
+              <div className={styles.status}>
+                {/* TODO: For queued ones, add tooltip saying "will start when experiment X finishes" */}
+                {experiment.status}
+              </div>
+            )}
+            <div className={styles.action}>
+              {showStopPlayPauseButtons && (
+                <div className={styles.stopPlayPauseButtons}>
+                  {experiment.status !== ExperimentStatusesEnum.PENDING && (
+                    <StopButton
+                      onClick={() => setShowStopExperimentModal(true)}
+                    />
+                  )}
+                  {experiment.status === ExperimentStatusesEnum.RUNNING ? (
+                    <PauseButton
+                      onClick={() => setShowPauseExperimentModal(true)}
+                    />
+                  ) : (
+                    <PlayButton
+                      onClick={() => setShowResumeExperimentModal(true)}
+                    />
+                  )}
+                </div>
+              )}
             </div>
-          )}
+            {!isOpen && (
+              <div
+                className={styles.viewDetails}
+                onClick={() => setIsOpen(true)}
+              >
+                View Details
+              </div>
+            )}
+          </div>
         </div>
+        {onReview && (
+          <Tooltip
+            content="Based on historical data of similar experiments."
+            showArrow
+            className={styles.tooltip}
+            closeDelay={200}
+          >
+            <div className={styles.potentialCR}>
+              <span>
+                {getRandomConversionRate({
+                  seed: experiment.id,
+                  experimentType: name,
+                })}
+                %
+              </span>{' '}
+              potential CR increase.
+            </div>
+          </Tooltip>
+        )}
       </div>
       <img src={getImageTargetUrl()} className={styles.targetElementImage} />
       {isOpen && (
@@ -203,11 +231,11 @@ const Experiment = ({
               <div className={styles.variantsContainer}>
                 {sortedVariants.map((variant, i) => (
                   <div
-                    onMouseEnter={() =>
-                      !variant.is_control && setVariantHovered(variant.id)
-                    }
+                    onMouseEnter={() => setVariantHovered(variant.id)}
                     onMouseLeave={() =>
-                      !variant.is_control && setVariantHovered(null)
+                      (hoverTimeoutId.current = setTimeout(() => {
+                        setVariantHovered(null);
+                      }, 200))
                     }
                   >
                     <Variant

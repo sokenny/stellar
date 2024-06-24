@@ -24,16 +24,6 @@ async function highlightAndCapture({
     );
   }
 
-  // Scroll the element into view
-  await element.evaluate((node) =>
-    node.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center',
-    }),
-  );
-
-  // Apply modifications to the element
   if (modifications && modifications.length > 0) {
     for (const modification of modifications) {
       if (modification.cssText) {
@@ -62,20 +52,25 @@ async function highlightAndCapture({
     await applyStyle(element, highlightStyle);
   }
 
-  const boundingBox = await element.boundingBox();
-  if (!boundingBox) {
-    throw new Error('Failed to calculate the bounding box of the element.');
-  }
+  const viewPort = await page.viewport();
 
-  const padding = 200;
+  const elementDistanceFromTop = await element.evaluate((node) => {
+    const { top } = node.getBoundingClientRect();
+    return top;
+  });
+
   const clipRegion = {
-    x: Math.max(0, boundingBox.x - padding),
-    y: Math.max(0, boundingBox.y - padding),
-    width: boundingBox.width + 2 * padding,
-    height: boundingBox.height + 2 * padding,
+    x: 0,
+    y:
+      elementDistanceFromTop > viewPort.height / 2
+        ? elementDistanceFromTop - viewPort.height / 2
+        : 0,
+    width: viewPort.width,
+    height: viewPort.height,
   };
 
   const destination = path.join(dir, fileName);
+
   await page.screenshot({
     path: destination,
     clip: clipRegion,

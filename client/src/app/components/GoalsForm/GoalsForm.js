@@ -332,8 +332,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           !wantsToUpdateGoal && (
             <div className={styles.currentGoal}>
               <div className={styles.title}>
-                {/* TODO-p1-3: Aclarar el match type aca tambien */}
                 Currently tracking user visits to{' '}
+                {goal?.url_match_type === UrlMatchTypesEnum.EXACT
+                  ? 'urls that match exactly'
+                  : 'urls that contain'}{' '}
                 <Link href="">{goal?.url_match_value}</Link>.
               </div>
               <Button onClick={() => setWantsToUpdateGoal(true)}>

@@ -20,8 +20,11 @@ import StatusChip from '../../../components/StatusChip';
 import styles from './Header.module.css';
 
 const Header = ({ experiment }) => {
-  const { refetchProjects, setErrorModal } = useStore();
+  const { refetchProjects, currentProject, setErrorModal } = useStore();
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
+  const queuedAfter = currentProject?.experiments?.find(
+    (e) => experiment.queue_after === e.id,
+  );
   const {
     isOpen: isLaunchModalOpen,
     onOpen: onOpenLaunchModal,
@@ -110,17 +113,20 @@ const Header = ({ experiment }) => {
     (variant) => variant.modifications?.length > 0,
   );
 
-  function getSwitchTooltipCopy() {
+  function getLaunchTooltipCopy() {
     if (!experiment.goal) {
       return 'Set up a goal before launching your experiment';
     }
     if (hasCeroChanges) {
       return 'Add at least one change to your experiment before launching';
     }
+    if (queuedAfter) {
+      return `This experiment is set to launch after "${queuedAfter.name}" ends. Change this setting if you wish to launch now.`;
+    }
     return '';
   }
 
-  const canLaunchExperiment = hasGoal && !hasCeroChanges;
+  const canLaunchExperiment = hasGoal && !hasCeroChanges && !queuedAfter;
   const showSwitch = experiment.started_at && !experiment.ended_at;
 
   return (
@@ -154,7 +160,7 @@ const Header = ({ experiment }) => {
         )}
         {!experiment.started_at && (
           <Tooltip
-            content={getSwitchTooltipCopy()}
+            content={getLaunchTooltipCopy()}
             isDisabled={canLaunchExperiment}
             showArrow
             className={styles.tooltip}

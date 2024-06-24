@@ -14,6 +14,7 @@ import Calendar from '../../icons/Calendar';
 import Page from '../../icons/Page';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import useStore from '../../store';
 import Notifications from '../Notifications';
 import GoalSetupModal from '../../components/Modals/GoalSetupModal/GoalSetupModal';
@@ -42,6 +43,10 @@ export default function ExperimentPage({ params, searchParams }) {
     onOpen: onOpenSnippetModal,
     onOpenChange: onOpenSnippetModalChange,
   } = useDisclosure();
+
+  const queuedAfter = currentProject?.experiments?.find(
+    (e) => experiment.queue_after === e.id,
+  );
 
   if (loading) {
     return <div>Loading...</div>;
@@ -163,6 +168,15 @@ export default function ExperimentPage({ params, searchParams }) {
               <div className={styles.startDate}>
                 Scheduled start date:{' '}
                 <span>{experiment.scheduled_start_date}</span>
+              </div>
+            )}
+            {queuedAfter && !experiment.started_at && (
+              <div className={styles.startDate}>
+                Starts once{' '}
+                <Link href={`/experiment/${queuedAfter.id}`}>
+                  {queuedAfter.name}
+                </Link>{' '}
+                ends.
               </div>
             )}
             {experiment.ended_at && (

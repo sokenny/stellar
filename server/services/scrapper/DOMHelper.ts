@@ -197,12 +197,30 @@ export default function DOMHelper(page: any, window: any) {
         mainElements.cta = [cta, chosenCtaSelector, ctaStyles];
       }
       // Only add biggestText if it is not the same as h1, h2, or cta
+      // if (
+      //   chosenBiggestText &&
+      //   chosenBiggestTextSelector &&
+      //   chosenBiggestTextSelector !== chosenH1Selector &&
+      //   chosenBiggestTextSelector !== chosenDescriptionSelector &&
+      //   chosenBiggestTextSelector !== chosenCtaSelector
+      // ) {
+      //   mainElements.biggestText = [
+      //     chosenBiggestText,
+      //     chosenBiggestTextSelector,
+      //     biggestTextStyles,
+      //   ];
+      // }
+
+      // Only add biggestText if its innerText is not the same as h1, h2, or cta
       if (
         chosenBiggestText &&
         chosenBiggestTextSelector &&
-        chosenBiggestTextSelector !== chosenH1Selector &&
-        chosenBiggestTextSelector !== chosenDescriptionSelector &&
-        chosenBiggestTextSelector !== chosenCtaSelector
+        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
+          (await chosenH1.evaluate((el: any) => el.innerText)) &&
+        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
+          (await chosenDescription.evaluate((el: any) => el.innerText)) &&
+        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
+          (await cta.evaluate((el: any) => el.innerText))
       ) {
         mainElements.biggestText = [
           chosenBiggestText,

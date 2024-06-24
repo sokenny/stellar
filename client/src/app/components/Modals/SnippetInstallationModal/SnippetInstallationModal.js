@@ -29,25 +29,6 @@ const SnippetInstallationModal = ({ isOpen, onOpenChange }) => {
             <ModalBody className={styles.body}>
               <SnippetMissing />
             </ModalBody>
-            {/* <ModalFooter>
-              <Button
-                color="danger"
-                variant="light"
-                onPress={onClose}
-                className={styles.button}
-              >
-                Close
-              </Button>
-              <Button
-                color="primary"
-                onPress={() => {
-                  onClose();
-                }}
-                className={styles.button}
-              >
-                Launch Experiment
-              </Button>
-            </ModalFooter> */}
           </>
         )}
       </ModalContent>

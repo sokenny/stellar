@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import jsdom from 'jsdom';
 
 import { MainElements } from '../types';
-import { IElement, IVariant } from '../types';
+import { IVariant } from '../types';
 import db from '../models';
 import { getTextVariants, MAX_TOKENS } from './gpt/getTextVariants';
 import DOMHelper from './scrapper/DOMHelper';
@@ -12,7 +12,6 @@ export async function initiatePage(website) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.setViewport({
-    // TODO-p1-1: Maybe cut this to half but same dimensions so that screenshots are smaller (?) We just want the screenshots more performant on the FE
     width: 1260,
     height: 770,
   });
@@ -66,10 +65,7 @@ export async function createVariants(
   transaction,
 ) {
   const variantsForThisElement = [];
-  console.log('prev text');
   const text = await element.domReference.evaluate((el: any) => el.innerText);
-  console.log('post text: ', text);
-  // const color = element.domReference.evaluate((el: any) => el.style.color);
 
   const prompt = buildPromptFromPageContext(pageContext, element, text);
   const variants = await getTextVariants({ prompt });
@@ -87,7 +83,6 @@ export async function createVariants(
       residualTraffic = 0; // Reset residual traffic after assigning
     }
 
-    // const modifications is array of shape [{"cssText": "", "selector": "html > body:nth-child(2) > div:nth-child(3) > div > div:nth-child(2) > section > div > h1:nth-child(2)", "innerText": "artesanales de papu"}]
     const modifications = [
       {
         cssText: element.style.cssText || '',
@@ -95,8 +90,6 @@ export async function createVariants(
         innerText: isControl ? text : variants[i - 1],
       },
     ];
-
-    console.log('modifications! ', modifications);
 
     const variant: IVariant = await db.Variant.create(
       {
@@ -133,6 +126,7 @@ export async function createExperiments(
   try {
     const experiments = [];
 
+    let lastExpCreated = null;
     for (const element of elements) {
       const experiment = await db.Experiment.create(
         {
@@ -140,11 +134,13 @@ export async function createExperiments(
           project_id: projectId,
           page_id: page.id,
           url: page.url,
+          queue_after: lastExpCreated ? lastExpCreated.id : null,
         },
         {
           transaction,
         },
       );
+      lastExpCreated = experiment;
 
       const variants = await createVariants(
         element,

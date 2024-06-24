@@ -9,10 +9,6 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
-// TODO-p1-1: Make sure the screenshot is not a cropping, rather the full screen scrolled to the element. ITs being tricky but find a way to do it.
-// TODO-p1-2: Have autoGenerate create experiments with a queue_after value defined for queued exps
-// TODO-p1-3: Prevent exps with duplicated innerText from being created (usually happens when biggestText matches h1 text)
-
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const transaction = await db.sequelize.transaction();
   try {
@@ -45,9 +41,6 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
       project.id,
       transaction,
     );
-
-    console.log('experiments created! ', experiments[0]);
-    // console.log('variants! ', experiments[0]?.variants[0]);
 
     await browserSession.browser.close();
 
