@@ -67,7 +67,9 @@ const Variant = ({
         {/* TODO: add link to "preview variant" that takes you to preview mode of the variant */}
         <div className={styles.header}>
           <div className={styles.colLeft}>
-            <div className={styles.title}>#{num}</div>
+            <div className={styles.title}>
+              #{num} - {id}
+            </div>
             {thisVariant.is_control && (
               <div className={styles.original}>original</div>
             )}

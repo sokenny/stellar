@@ -8,10 +8,14 @@ async function applyStyle(elementHandle, styleObject) {
   }
 }
 
-async function highlightAndCapture({ session, selector, fileName }) {
+async function highlightAndCapture({
+  session,
+  selector,
+  fileName,
+  modifications = [],
+}) {
   const { page } = session;
   const dir = path.join(__dirname, '..', 'public', 'snapshots');
-  console.log('dir!!:', dir);
 
   const element = await page.$(selector);
   if (!element) {
@@ -20,6 +24,7 @@ async function highlightAndCapture({ session, selector, fileName }) {
     );
   }
 
+  // Scroll the element into view
   await element.evaluate((node) =>
     node.scrollIntoView({
       behavior: 'smooth',
@@ -28,11 +33,34 @@ async function highlightAndCapture({ session, selector, fileName }) {
     }),
   );
 
+  // Apply modifications to the element
+  if (modifications && modifications.length > 0) {
+    for (const modification of modifications) {
+      if (modification.cssText) {
+        await element.evaluate(
+          (node, cssText) => (node.style.cssText += cssText),
+          modification.cssText,
+        );
+      }
+      if (modification.innerText) {
+        await element.evaluate(
+          (node, innerText) => (node.innerText = innerText),
+          modification.innerText,
+        );
+      }
+    }
+  }
+
+  // Apply a highlight style to the element
   const highlightStyle = {
     border: '2px solid red',
     backgroundColor: 'rgba(255, 0, 0, 0.1)',
   };
-  await applyStyle(element, highlightStyle);
+
+  // For now, we only want to highlight the control variant
+  if (modifications.length === 0) {
+    await applyStyle(element, highlightStyle);
+  }
 
   const boundingBox = await element.boundingBox();
   if (!boundingBox) {
@@ -48,7 +76,6 @@ async function highlightAndCapture({ session, selector, fileName }) {
   };
 
   const destination = path.join(dir, fileName);
-
   await page.screenshot({
     path: destination,
     clip: clipRegion,

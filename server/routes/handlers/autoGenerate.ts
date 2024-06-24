@@ -9,8 +9,8 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
-// TODO-p1-1: Have autoGenerate create experiments with a queue_after value defined for queued exps
-// TODO-p1-2: Make puppeter scroll to element before taking screenshot
+// TODO-p1-1: Make sure the screenshot is not a cropping, rather the full screen scrolled to the element. ITs being tricky but find a way to do it.
+// TODO-p1-2: Have autoGenerate create experiments with a queue_after value defined for queued exps
 // TODO-p1-3: Prevent exps with duplicated innerText from being created (usually happens when biggestText matches h1 text)
 
 async function autoGenerate(req: Request, res: Response): Promise<void> {
@@ -46,6 +46,9 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
       transaction,
     );
 
+    console.log('experiments created! ', experiments[0]);
+    // console.log('variants! ', experiments[0]?.variants[0]);
+
     await browserSession.browser.close();
 
     // We initiate 3 parallel sessions to take screenshots of the main elements. And we need to do it asap because popups may appear
@@ -61,6 +64,21 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
           selector,
           fileName: `experiment-${thisExperiment.id}.png`,
         });
+        const thisVariants = thisExperiment.variants.filter(
+          (variant) => !variant.is_control,
+        );
+        await Promise.all(
+          thisVariants.map(async (variant) => {
+            const variantSnapshotBrowserSession = await initiatePage(url);
+            await highlightAndCapture({
+              session: variantSnapshotBrowserSession,
+              selector,
+              fileName: `experiment-${thisExperiment.id}var${variant.id}.png`,
+              modifications: variant.modifications,
+            });
+            await variantSnapshotBrowserSession.browser.close();
+          }),
+        );
       }),
     );
 

@@ -86,5 +86,6 @@ router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
 
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
+router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
 
 export default router;

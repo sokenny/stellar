@@ -12,6 +12,7 @@ export async function initiatePage(website) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.setViewport({
+    // TODO-p1-1: Maybe cut this to half but same dimensions so that screenshots are smaller (?) We just want the screenshots more performant on the FE
     width: 1260,
     height: 770,
   });
@@ -116,40 +117,6 @@ export async function createVariants(
   return variantsForThisElement;
 }
 
-// export async function createExperiments(
-//   elements,
-//   page,
-//   projectId,
-//   transaction,
-// ) {
-//   try {
-//     const experiments = [];
-
-//     for (const element of elements) {
-//       const experiment = await db.Experiment.create(
-//         {
-//           name: `${element.type} Experiment`,
-//           element_id: element.id,
-//           project_id: projectId,
-//           page_id: page.id,
-//           url: page.url,
-//         },
-//         {
-//           transaction,
-//         },
-//       );
-
-//       await createVariants(element, experiment.id, page.context, transaction);
-//       experiments.push(experiment);
-//     }
-
-//     return experiments;
-//   } catch (error) {
-//     console.error('Error creating experiments:', error);
-//     throw error;
-//   }
-// }
-
 export async function createExperiments(
   mainElementsObject,
   page,
@@ -179,7 +146,13 @@ export async function createExperiments(
         },
       );
 
-      await createVariants(element, experiment.id, page.context, transaction);
+      const variants = await createVariants(
+        element,
+        experiment.id,
+        page.context,
+        transaction,
+      );
+      experiment.variants = variants;
       experiments.push(experiment);
     }
 

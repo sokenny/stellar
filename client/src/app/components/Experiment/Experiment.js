@@ -33,6 +33,7 @@ const Experiment = ({
   cardLike = false,
 }) => {
   const { stats, setStats } = useStore();
+  const [variantHovered, setVariantHovered] = useState(null);
   const [maxVariantHeight, setMaxVariantHeight] = useState(null);
   const { name, variants, goal, url } = experiment;
   const [isOpen, setIsOpen] = useState(open);
@@ -47,6 +48,13 @@ const Experiment = ({
     useState(false);
   const [showCreateVariantModal, setShowCreateVariantModal] = useState(false);
   const [isGoalTooltipOpen, setIsGoalTooltipOpen] = useState(false);
+
+  function getImageTargetUrl() {
+    if (!variantHovered) {
+      return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/snapshot`;
+    }
+    return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/${variantHovered}/snapshot`;
+  }
 
   console.log('on review: ', onReview);
 
@@ -110,6 +118,7 @@ const Experiment = ({
                 {experimentTitle}
               </Link>
             )}
+            {/* TODO-p1-1: If this is onReview, add text saying X% potential CR increase, then the total potential CR % increase in the onboard page should be the sum of all exps */}
           </div>
           {isOpen && (
             <div className={styles.experimentActions}>
@@ -170,10 +179,7 @@ const Experiment = ({
           )}
         </div>
       </div>
-      <img
-        src={`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/snapshot`}
-        className={styles.targetElementImage}
-      />
+      <img src={getImageTargetUrl()} className={styles.targetElementImage} />
       {isOpen && (
         <>
           {experiment.started_at && !experiment.ended_at && (
@@ -193,27 +199,30 @@ const Experiment = ({
                 <div className={styles.variantsTitle}>
                   Variants ({variants.length})
                 </div>
-                {/* {isAlterable && (
-                  <CreateButton
-                    height={18}
-                    onClick={() => setShowCreateVariantModal(true)}
-                  />
-                )} */}
               </div>
               <div className={styles.variantsContainer}>
                 {sortedVariants.map((variant, i) => (
-                  <Variant
-                    key={variant.id}
-                    id={variant.id}
-                    variants={sortedVariants}
-                    experiment={experiment}
-                    stats={stats[experiment.id]?.find(
-                      (s) => s.variantId === variant.id,
-                    )}
-                    height={maxVariantHeight}
-                    setHeight={setMaxVariantHeight}
-                    onReview={onReview}
-                  />
+                  <div
+                    onMouseEnter={() =>
+                      !variant.is_control && setVariantHovered(variant.id)
+                    }
+                    onMouseLeave={() =>
+                      !variant.is_control && setVariantHovered(null)
+                    }
+                  >
+                    <Variant
+                      key={variant.id}
+                      id={variant.id}
+                      variants={sortedVariants}
+                      experiment={experiment}
+                      stats={stats[experiment.id]?.find(
+                        (s) => s.variantId === variant.id,
+                      )}
+                      height={maxVariantHeight}
+                      setHeight={setMaxVariantHeight}
+                      onReview={onReview}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
