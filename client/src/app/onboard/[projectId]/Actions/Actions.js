@@ -52,6 +52,7 @@ const Actions = ({ projectId, authenticated }) => {
           >
             Create Account with Experiments
           </Button>
+          {/* TODO-p1-1: This CTA should float on the bottom right until it is scrolled into view */}
           <div className={styles.disclaimer}>
             You can further edit your experiments and variants after creating
             your account.

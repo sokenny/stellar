@@ -61,10 +61,6 @@
   margin-right: 4px;
 }
 
-.goal .icon {
-  transform: translateY(-3px);
-}
-
 .goal,
 .datesData,
 .targetPage {

@@ -78,13 +78,15 @@
 }
 
 .title {
-  text-transform: uppercase;
   color: black;
   font-weight: 400;
 }
 
+.isControl .title {
+  color: var(--blue);
+}
+
 .label {
-  text-transform: uppercase;
   color: black;
   font-weight: 400;
 }
@@ -98,4 +100,8 @@
 .edit.disabled {
   cursor: initial;
   opacity: .25;
+}
+
+.traffic {
+  font-size: 14px;
 }

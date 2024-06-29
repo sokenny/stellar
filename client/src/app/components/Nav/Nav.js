@@ -21,14 +21,8 @@ import styles from './Nav.module.css';
 const Nav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const {
-    setProjects,
-    setCurrentProject,
-    setSession,
-    setUser,
-    errorModal,
-    // setErrorModal,
-  } = useStore();
+  const { setProjects, setCurrentProject, setSession, setUser, errorModal } =
+    useStore();
   const initializedProjects = useRef(false);
 
   async function initializeProjects() {
@@ -90,6 +84,7 @@ const Nav = () => {
         />
       )}
       <Navbar maxWidth="full" className={styles.container}>
+        {/* TODO-p1-2: Add basic logo to stellar */}
         <NavbarBrand className={styles.identity}>
           <Link href={session ? '/dashboard' : '/'}>STELLAR</Link>
         </NavbarBrand>

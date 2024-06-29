@@ -12,6 +12,7 @@ export default async function HomePage({}) {
         <div className={styles.form}>
           <EnterUrlForm />
         </div>
+        {/* TODO-p1-1: Create attractive / descriptive landing page */}
         <div className={styles.bullets}>
           <div>1. Get ai generated experiments</div>
           <div>2. Edit them if needed</div>

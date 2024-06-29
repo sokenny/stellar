@@ -25,8 +25,6 @@ import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperim
 import Button from '../Button/Button';
 import styles from './Experiment.module.css';
 
-// TODO-p1-1: Simplify data shown for the experiment and the variant
-
 const Experiment = ({
   experiment,
   order = '',
@@ -95,8 +93,6 @@ const Experiment = ({
     v.num = i + 1;
   });
 
-  const experimentTitle = name + ' - #' + experiment.id;
-
   const isAlterable =
     experiment.status === ExperimentStatusesEnum.QUEUED ||
     experiment.status === ExperimentStatusesEnum.PENDING;
@@ -121,12 +117,13 @@ const Experiment = ({
       <div className={styles.header}>
         <div className={styles.row1}>
           <div className={styles.colLeft}>
+            {/* TODO-p1-1: Add experiment icon here https://fontawesome.com/search?q=experiment&o=r&m=free */}
             <div className={styles.name}>
               {onReview ? (
-                <div>{experimentTitle}</div>
+                <div>{experiment.name}</div>
               ) : (
                 <Link href={`/experiment/${experiment.id}`}>
-                  {experimentTitle}
+                  {experiment.name}
                 </Link>
               )}
             </div>
@@ -189,20 +186,21 @@ const Experiment = ({
         </div>
         {onReview && (
           <Tooltip
-            content="Based on historical data of similar experiments."
+            content="Based on historical data from similar experiments."
             showArrow
             className={styles.tooltip}
             closeDelay={200}
           >
             <div className={styles.potentialCR}>
+              Estimated{' '}
               <span>
                 {getRandomConversionRate({
                   seed: experiment.id,
                   experimentType: name,
                 })}
-                %
-              </span>{' '}
-              potential CR increase.
+                % potential CR increase
+              </span>
+              .
             </div>
           </Tooltip>
         )}
@@ -229,6 +227,7 @@ const Experiment = ({
                 </div>
               </div>
               <div className={styles.variantsContainer}>
+                {/* TODO-p1-2: Have hover effect when hovering over variants */}
                 {sortedVariants.map((variant, i) => (
                   <div
                     onMouseEnter={() => setVariantHovered(variant.id)}
