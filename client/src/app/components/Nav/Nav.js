@@ -69,8 +69,8 @@ const Nav = () => {
   } = useDisclosure();
 
   const tabs = [
-    { name: 'changelog', path: '/changelog', isAuth: false },
-    { name: 'pricing', path: '/pricing', isAuth: false },
+    { name: 'Faq', path: '/faq', isAuth: false },
+    { name: 'Pricing', path: '/pricing', isAuth: false },
   ];
   return (
     <>
@@ -84,9 +84,8 @@ const Nav = () => {
         />
       )}
       <Navbar maxWidth="full" className={styles.container}>
-        {/* TODO-p1-2: Add basic logo to stellar */}
         <NavbarBrand className={styles.identity}>
-          <Link href={session ? '/dashboard' : '/'}>STELLAR</Link>
+          <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {tabs.map((tab, i) => {

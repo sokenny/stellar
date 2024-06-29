@@ -6,6 +6,7 @@ import { Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import Trash from '../../icons/Trash';
 import DownArrow from '../../icons/DownArrow';
+import ExperimentIcon from '../../icons/Experiment';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficInitialValues';
 import getSortedVariants from '../../helpers/getSortedVariants';
@@ -117,7 +118,9 @@ const Experiment = ({
       <div className={styles.header}>
         <div className={styles.row1}>
           <div className={styles.colLeft}>
-            {/* TODO-p1-1: Add experiment icon here https://fontawesome.com/search?q=experiment&o=r&m=free */}
+            <div className={styles.expIconWrapper}>
+              <ExperimentIcon />
+            </div>
             <div className={styles.name}>
               {onReview ? (
                 <div>{experiment.name}</div>
@@ -227,7 +230,6 @@ const Experiment = ({
                 </div>
               </div>
               <div className={styles.variantsContainer}>
-                {/* TODO-p1-2: Have hover effect when hovering over variants */}
                 {sortedVariants.map((variant, i) => (
                   <div
                     onMouseEnter={() => setVariantHovered(variant.id)}

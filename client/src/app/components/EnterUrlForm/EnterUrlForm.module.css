@@ -17,7 +17,7 @@
   padding: 4px 8px;
   width: 300px;
   font-size: 18px;
-  border-radius: 8px;
+  border-radius: 4px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -26,8 +26,12 @@
   height: 40px;
 }
 
+.input:focus {
+  border-color: var(--linkBlue);
+}
+
 .button {
   height: 40px;
-
+  background-color: var(--linkBlue);
 }
 

@@ -5,3 +5,16 @@
 .pageContent{
     padding: 10vh 10vw 10vh 10vw;
 }
+
+.footer {
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    /* background-color: rgba(0, 0, 0, 0.01); */
+    padding: 8px;
+    padding-left: 10vw;
+    padding-right: 10vw;
+    text-align: center;
+    /* box-shadow: 0px 0px 10px hsl(0deg 0% 0% / 0.15); */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}

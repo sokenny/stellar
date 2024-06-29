@@ -12,8 +12,6 @@ const EnterUrlForm = () => {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
-  console.log('loading. ', loading);
-
   const onSubmit = useCallback(async () => {
     try {
       setLoading(true);
@@ -59,7 +57,7 @@ const EnterUrlForm = () => {
         <div className={styles.inputAndHelpText}>
           <Input
             className={styles.input}
-            placeholder="http://yoursite.com"
+            placeholder="http://your-landing-page.com"
             onChange={(e) => setUrl(e.target.value)}
             value={url}
           />

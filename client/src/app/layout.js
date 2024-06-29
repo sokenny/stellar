@@ -20,6 +20,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <Nav />
           <div className={styles.pageContent}>{children}</div>
+          <footer className={styles.footer}>dev: juanchaher99@gmail.com</footer>
         </Providers>
       </body>
     </html>
