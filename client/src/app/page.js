@@ -30,6 +30,13 @@ export default async function HomePage({}) {
           </div>
         </div>
         {/* TODO-p1: Planear y grabar demo */}
+        {/* 1: Brief explanation of what the software is about */}
+        {/* 2: Input URL and show experiments created */}
+        {/* 3: Create account and setup snippet */}
+        {/* 4: Show how to edit variants */}
+        {/* 5: Set up goal and launch experiment */}
+        {/* 6: Display the experiment in action and how data is updated on the table */}
+
         <div className={styles.loomContainer}>
           <div className={styles.infoBar}>1 minute demo :)</div>
           <div>

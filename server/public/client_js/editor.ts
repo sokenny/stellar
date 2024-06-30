@@ -637,7 +637,9 @@
               window.addEventListener('mouseup', reset);
             });
 
-            const textarea = document.getElementById('stellar-element-content');
+            const textarea = document.getElementById(
+              'stellar-element-content',
+            ) as any;
             if (textarea) {
               textarea.addEventListener('input', function () {
                 if (selectedElement) {
@@ -648,8 +650,9 @@
               });
             }
 
-            const hideElementCheckbox =
-              document.getElementById('sve-hide-element');
+            const hideElementCheckbox = document.getElementById(
+              'sve-hide-element',
+            ) as any;
             if (hideElementCheckbox) {
               hideElementCheckbox.addEventListener('change', function () {
                 if (selectedElement) {
@@ -664,7 +667,9 @@
               });
             }
 
-            const fontSizeInput = document.getElementById('stellar-font-size');
+            const fontSizeInput = document.getElementById(
+              'stellar-font-size',
+            ) as any;
             if (fontSizeInput) {
               fontSizeInput.addEventListener('input', function () {
                 if (selectedElement) {
@@ -675,7 +680,7 @@
               });
             }
 
-            const colorInput = document.getElementById('stellar-color');
+            const colorInput = document.getElementById('stellar-color') as any;
             if (colorInput) {
               colorInput.addEventListener('input', function () {
                 if (selectedElement) {
@@ -688,7 +693,7 @@
 
             const backgroundColorInput = document.getElementById(
               'stellar-background-color',
-            );
+            ) as any;
             if (backgroundColorInput) {
               backgroundColorInput.addEventListener('input', function () {
                 if (selectedElement) {
@@ -700,25 +705,32 @@
               });
             }
 
-            const customCssInput =
-              document.getElementById('stellar-custom-css');
+            const customCssInput = document.getElementById(
+              'stellar-custom-css',
+            ) as any;
             if (customCssInput) {
               // This function handles not resetting the css set with individual style input fields
               function applyStylesToElement(selector) {
-                const element = document.querySelector(selector);
+                const element = document.querySelector(selector) as any;
                 if (!element) return;
-                element.style.color =
-                  document.getElementById('stellar-color').value;
-                element.style.fontSize =
-                  document.getElementById('stellar-font-size').value + 'px';
+                const stellarColorEl = document.getElementById(
+                  'stellar-color',
+                ) as any;
+                element.style.color = stellarColorEl.value;
+                const stellarFontSizeEl = document.getElementById(
+                  'stellar-font-size',
+                ) as any;
+                element.style.fontSize = stellarFontSizeEl.value + 'px';
                 element.style.cssText += ';' + customCssText;
               }
 
               customCssInput.addEventListener('input', function () {
                 if (selectedElement) {
                   handleElementMutation();
-                  customCssText =
-                    document.getElementById('stellar-custom-css').value;
+                  const customCssTextEl = document.getElementById(
+                    'stellar-custom-css',
+                  ) as any;
+                  customCssText = customCssTextEl.value;
                   if (selectedElement) {
                     applyStylesToElement(selectedElement);
                   }

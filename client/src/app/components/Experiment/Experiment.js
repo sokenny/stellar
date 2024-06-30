@@ -238,9 +238,9 @@ const Experiment = ({
                         setVariantHovered(null);
                       }, 200))
                     }
+                    key={variant.id}
                   >
                     <Variant
-                      key={variant.id}
                       id={variant.id}
                       variants={sortedVariants}
                       experiment={experiment}

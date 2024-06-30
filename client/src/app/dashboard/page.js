@@ -5,6 +5,9 @@ import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperime
 import SnippetMissing from '../components/SnippetMissing';
 import styles from './page.module.css';
 
+// TODO-p1-2: Probarlo para in-product ab tests como dijo Adrian
+// TODO-p1-1: Fix initial loading that has you waiting and having to refresh
+
 export default function Dashboard() {
   const { currentProject } = useStore();
 

@@ -4,6 +4,7 @@
 
 .pageContent{
     padding: 10vh 10vw 10vh 10vw;
+    min-height: 92vh;
 }
 
 .footer {
