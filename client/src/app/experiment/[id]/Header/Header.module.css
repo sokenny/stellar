@@ -1,26 +1,37 @@
 .container {
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .colLeft {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .colRight {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .tooltip {
-    padding: 12px;
-    max-width: 250px;
-    text-align: center;
+  padding: 12px;
+  max-width: 250px;
+  text-align: center;
 }
 
 .launchButton {
-    margin-right: 8px;
+  margin-right: 8px;
+}
+
+@media (max-width: 720px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 24px;
+  }
 }

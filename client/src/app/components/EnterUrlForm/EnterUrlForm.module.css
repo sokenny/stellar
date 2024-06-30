@@ -35,3 +35,14 @@
   background-color: var(--linkBlue);
 }
 
+
+@media (max-width: 720px) {  
+  .form {
+    flex-direction: column;
+  }
+
+  .input {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+}

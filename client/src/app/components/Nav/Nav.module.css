@@ -20,3 +20,15 @@
 .navItem a {
   color: black;
 }
+
+@media (max-width: 720px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    --navbar-height: 3rem;
+  }
+
+  .container header {
+    padding-left: 0;
+  }
+}

@@ -3,6 +3,8 @@ import db from '../models';
 const staticAllowedOrigins = [
   'http://localhost:3000',
   'https://localhost:3000',
+  'https://gostellar.app',
+  'https://www.gostellar.app',
 ];
 
 async function getAllowedOrigins() {
