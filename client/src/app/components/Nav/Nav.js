@@ -83,7 +83,11 @@ const Nav = () => {
           message={errorModal}
         />
       )}
-      <Navbar maxWidth="full" className={styles.container}>
+      <Navbar
+        maxWidth="full"
+        className={styles.container}
+        style={{ height: '3rem' }}
+      >
         <NavbarBrand className={styles.identity}>
           <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
         </NavbarBrand>

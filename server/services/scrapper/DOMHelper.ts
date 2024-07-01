@@ -148,6 +148,7 @@ export default function DOMHelper(page: any, window: any) {
       const secondBiggestText =
         await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
 
+      // TODO-p1-1: When scraping https://ma8.vercel.app/, an error occurs related to h1 being null fix this
       const chosenH1 = h1;
       const chosenBiggestText = biggestText;
       const chosenDescription = h2 || secondBiggestText;

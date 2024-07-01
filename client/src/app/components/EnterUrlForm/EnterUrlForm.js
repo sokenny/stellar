@@ -35,7 +35,8 @@ const EnterUrlForm = () => {
           },
           error: (error) => {
             console.error('Fetch error:', error);
-            throw error;
+            setLoading(false);
+            return 'An error occured while creating experiments.';
           },
         },
       );

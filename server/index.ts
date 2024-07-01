@@ -7,6 +7,10 @@ import getAllowedOrigins from './services/getAllowedOrigins'; // Import the serv
 
 const UPDATE_ORIGINS_EVERY = 300000 / 10; // This is 5 min divided by 10. On prod it could be like 5 min
 
+// TODO-p1-4: Add authentication for each request - create a middleware for this
+
+// TODO-p1-5: Setup cronjobs that handle exp settings with worker
+
 dotenv.config();
 
 const app: Express = express();
