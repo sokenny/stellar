@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import interceptFetch from '../helpers/interceptFetch';
 
 const useStore = create((set, get) => ({
   projects: [],
@@ -6,7 +7,10 @@ const useStore = create((set, get) => ({
   setIsOnboarding: (isOnboarding) => set({ isOnboarding }),
   setProjects: (projects) => set({ projects }),
   currentProject: {},
-  setCurrentProject: (currentProject) => set({ currentProject }),
+  setCurrentProject: (currentProject) => {
+    set({ currentProject });
+    interceptFetch(currentProject.id);
+  },
   stats: {},
   lastCallTimestamps: {}, // Track the last call timestamp for each experiment ID
   setStats: (experimentId, experimentStats) =>

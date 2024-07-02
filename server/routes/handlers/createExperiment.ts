@@ -1,3 +1,4 @@
+import { invalidateCache } from '../../helpers/cache';
 import removeUrlParams from '../../helpers/removeUrlParams';
 import db from '../../models';
 import createVariantsFromElement from '../../services/createVariantsFromElement';
@@ -36,6 +37,14 @@ async function createExperiment(req, res) {
   const variants = await createVariantsFromElement({
     experimentId: experiment.id,
   });
+
+  // TODO: We should remove this fetching of user. It should either always be available from a middleware, or the redis key should eventually be 'experiments:projectId'
+  const user = await db.Project.findOne({
+    where: { id: projectId },
+    attributes: ['user_id'],
+  });
+
+  await invalidateCache(`experiments:${user.user_id}`);
 
   res.json({
     ...experiment.dataValues,

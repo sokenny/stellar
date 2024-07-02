@@ -2,7 +2,7 @@ import EnterUrlForm from './components/EnterUrlForm/EnterUrlForm';
 import Faqs from './components/Faqs';
 import styles from './page.module.css';
 
-// TODO-p1-1: Add redis for client exp fetching and measure performance diff
+// TODO-p1-1: Have the FE always send the projectId and make sure it is always available in req.body. Then use it as key for redis
 
 export default async function HomePage({}) {
   return (

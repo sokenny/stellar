@@ -21,8 +21,14 @@ import styles from './Nav.module.css';
 const Nav = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { setProjects, setCurrentProject, setSession, setUser, errorModal } =
-    useStore();
+  const {
+    currentProject,
+    setProjects,
+    setCurrentProject,
+    setSession,
+    setUser,
+    errorModal,
+  } = useStore();
   const initializedProjects = useRef(false);
 
   async function initializeProjects() {
@@ -41,6 +47,7 @@ const Nav = () => {
   }
 
   useEffect(() => {
+    console.log('session user: ', session);
     if (
       !initializedProjects.current &&
       session &&
@@ -51,10 +58,10 @@ const Nav = () => {
       initializedProjects.current = true;
     }
 
-    if (!session?.user?.projects) {
+    if (!currentProject) {
       initializedProjects.current = false;
     }
-  }, [initializedProjects, session, pathname]);
+  }, [initializedProjects, session, pathname, currentProject]);
 
   useEffect(() => {
     if (errorModal) {

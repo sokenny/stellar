@@ -1,5 +1,12 @@
 import { Op } from 'sequelize';
 import db from '../../models';
+import * as redis from 'redis';
+
+const client: any = redis.createClient({
+  url: 'redis://127.0.0.1:6379',
+});
+client.on('error', (err) => console.log('Redis Client Error', err));
+client.connect();
 
 async function getUserByApiKey(apiKey: string) {
   console.log('apiKey: ', apiKey);
@@ -23,7 +30,21 @@ async function getUserByApiKey(apiKey: string) {
   return keyWUser.user;
 }
 
-async function getExperimentsForClientForUser(userId: number) {
+async function getExperimentsForClientForUser(userId: number): Promise<any[]> {
+  const start = Date.now();
+  const cacheKey = `experiments:${userId}`;
+
+  const cachedExperiments = await client.get(cacheKey);
+  if (cachedExperiments) {
+    console.log(`Cache hit for user ${userId}`);
+    const end = Date.now();
+
+    console.log(`Retrieved experiments for user ${userId} in ${end - start}ms`);
+    return JSON.parse(cachedExperiments);
+  }
+
+  console.log(`Cache miss for user ${userId}`);
+
   const experimentInstances = await db.Experiment.findAll({
     where: {
       [Op.and]: [
@@ -63,13 +84,16 @@ async function getExperimentsForClientForUser(userId: number) {
     ],
   });
 
-  const experiments = experimentInstances.map((experiment) => {
+  const experiments = experimentInstances.map((experiment: any) => {
     const experimentJson = experiment.toJSON();
-    // Implement weighted selection based on traffic percentages
     let selectedVariantId = weightedRandomSelection(experimentJson.variants);
     experimentJson.variant_to_use = selectedVariantId;
     return experimentJson;
   });
+
+  client.set(cacheKey, JSON.stringify(experiments));
+  const end = Date.now();
+  console.log(`Retrieved experiments for user ${userId} in ${end - start}ms`);
 
   return experiments;
 }
@@ -86,7 +110,7 @@ function weightedRandomSelection(variants) {
       return variants[i].id;
     }
   }
-  return null; // Fallback if something goes wrong
+  return null;
 }
 
 async function getExperimentsForClient(req, res) {
@@ -96,13 +120,16 @@ async function getExperimentsForClient(req, res) {
     return res.status(401).send('API key is required');
   }
 
+  // TODO-p1: In reality, we should have one apikey per user project, so here we should be fetching the project
   const user = await getUserByApiKey(apiKey);
 
   if (!user) {
     return res.status(401).send('Invalid API key');
   }
 
+  console.log('wait starts');
   const experiments = await getExperimentsForClientForUser(user.id);
+  console.log('wait ends');
 
   res.json(experiments);
 }
