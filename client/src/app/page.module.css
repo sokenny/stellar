@@ -82,6 +82,13 @@
   text-align: center;
 }
 
+.varA {
+  color: var(--linkBlue);
+}
+.varB {
+  color: #cb5edc;
+}
+
 @media (max-width: 720px) {
   .loomContainer {
     width: 100%;

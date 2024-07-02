@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import db from '../../models';
 import * as redis from 'redis';
+import { decryptApiKey } from '../../helpers/crypto';
 
 const client: any = redis.createClient({
   url: 'redis://127.0.0.1:6379',
@@ -9,7 +10,6 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 client.connect();
 
 async function getUserByApiKey(apiKey: string) {
-  console.log('apiKey: ', apiKey);
   // lookup ApiKey and include user required true
   const keyWUser = await db.ApiKey.findOne({
     where: { key: apiKey },
@@ -32,6 +32,9 @@ async function getUserByApiKey(apiKey: string) {
 
 async function getExperimentsForClientForUser(userId: number): Promise<any[]> {
   const start = Date.now();
+
+  // TODO-p1: We should have projectId here
+
   const cacheKey = `experiments:${userId}`;
 
   const cachedExperiments = await client.get(cacheKey);
@@ -119,6 +122,14 @@ async function getExperimentsForClient(req, res) {
   if (!apiKey) {
     return res.status(401).send('API key is required');
   }
+
+  const keyData = decryptApiKey(apiKey);
+
+  if (!keyData) {
+    return res.status(401).send('Invalid API key');
+  }
+
+  console.log('decryptedKey: ', keyData);
 
   // TODO-p1: In reality, we should have one apikey per user project, so here we should be fetching the project
   const user = await getUserByApiKey(apiKey);

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
+import isValidUrl from '../../helpers/isValidUrl';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './EnterUrlForm.module.css';
@@ -13,6 +14,10 @@ const EnterUrlForm = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = useCallback(async () => {
+    if (!isValidUrl(url)) {
+      toast.error('Invalid URL. Please enter a valid URL.');
+      return;
+    }
     try {
       setLoading(true);
 

@@ -2,6 +2,7 @@ const minMaxMapper = {
   'h1 Experiment': [20, 38],
   'cta Experiment': [10, 28],
   'description Experiment': [5, 19],
+  'biggestText Experiment': [15, 25],
   [undefined]: [10, 30],
 };
 

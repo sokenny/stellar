@@ -27,16 +27,6 @@ async function createAccount(req, res) {
       { transaction },
     );
 
-    const apiKey = uuid();
-
-    await db.ApiKey.create(
-      {
-        user_id: newUser.id,
-        key: apiKey,
-      },
-      { transaction },
-    );
-
     await transaction.commit(); // Commit the transaction if all operations succeed
     res.status(200).json({ user: newUser });
   } catch (error) {

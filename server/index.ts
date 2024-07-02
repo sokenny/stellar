@@ -1,15 +1,10 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import api from './routes/api';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import getAllowedOrigins from './services/getAllowedOrigins'; // Import the service you created
-
-const UPDATE_ORIGINS_EVERY = 300000 / 10; // This is 5 min divided by 10. On prod it could be like 5 min
-
-// TODO-p1-4: Add authentication for each request - create a middleware for this
-
-// TODO-p1-5: Setup cronjobs that handle exp settings with worker
+import getAllowedOrigins from './services/getAllowedOrigins';
+import authMiddleware from './middlewares/auth-middleware';
 
 dotenv.config();
 
@@ -29,7 +24,7 @@ async function updateAllowedOrigins() {
 }
 
 updateAllowedOrigins();
-setInterval(updateAllowedOrigins, UPDATE_ORIGINS_EVERY);
+setInterval(updateAllowedOrigins, 300000 / 10); // 5 min divided by 10
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -46,9 +41,13 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// I might then exclude this middleware from some routes
+app.use(authMiddleware);
+
 app.get('/', (req, res) => {
   res.status(200).send('All good!');
 });
+
 app.use('/api', api);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

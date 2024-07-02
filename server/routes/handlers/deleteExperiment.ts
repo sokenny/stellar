@@ -4,9 +4,11 @@ import db from '../../models';
 async function deleteExperiment(req, res) {
   const { id } = req.params;
 
+  const projectId = req.body.projectId;
+
   await db.Experiment.update({ deleted_at: new Date() }, { where: { id } });
 
-  // await invalidateCache(`experiments:${id}`);
+  await invalidateCache(`experiments:${projectId}`);
 
   res.json({ success: true });
 }

@@ -4,6 +4,7 @@ class ApiKey extends Model {
   public id!: number;
   public key!: string;
   public user_id!: number;
+  public project_id!: number;
   public created_at!: Date;
   public expires_at!: Date;
 }
@@ -22,6 +23,10 @@ export const initializeApiKey = (sequelize: Sequelize): typeof ApiKey => {
         unique: true,
       },
       user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      project_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

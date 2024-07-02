@@ -1,20 +1,39 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react'; // Import useRef
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import Button from '../../../components/Button/Button';
+import useStore from '../../../store';
 import styles from './Actions.module.css';
 
 const Actions = ({ projectId, authenticated }) => {
+  const router = useRouter();
+  const { session } = useStore();
   const actionsRef = useRef(null);
   const [isFloating, setIsFloating] = useState(false);
   const canChange = useRef(true);
+
+  useEffect(() => {
+    if (authenticated && session) {
+      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/onboard/${projectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: session.user.email,
+        }),
+      }).then(() => {
+        router.push('/dashboard');
+      });
+    }
+  }, [authenticated, projectId, session]);
 
   const handleScroll = () => {
     if (actionsRef.current) {
       const { bottom } = actionsRef.current.getBoundingClientRect();
       const nextIsFloating = bottom > window.innerHeight;
-      // Only update if 'canChange' is true and the new state differs from the current
       if (canChange.current && nextIsFloating !== isFloating) {
         setIsFloating(nextIsFloating);
         canChange.current = false;

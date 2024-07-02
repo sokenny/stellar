@@ -15,7 +15,6 @@ async function createExperiment(req, res) {
 
   let page = await db.Page.findOne({ where: { url } });
 
-  // if not page, create page
   if (!page) {
     console.log('no hay page!!');
     page = await db.Page.create({
@@ -24,8 +23,6 @@ async function createExperiment(req, res) {
       project_id: projectId,
     });
   }
-
-  console.log('Page id! ', page.id);
 
   const experiment = await db.Experiment.create({
     project_id: projectId,
@@ -38,13 +35,7 @@ async function createExperiment(req, res) {
     experimentId: experiment.id,
   });
 
-  // TODO: We should remove this fetching of user. It should either always be available from a middleware, or the redis key should eventually be 'experiments:projectId'
-  const user = await db.Project.findOne({
-    where: { id: projectId },
-    attributes: ['user_id'],
-  });
-
-  await invalidateCache(`experiments:${user.user_id}`);
+  await invalidateCache(`experiments:${projectId}`);
 
   res.json({
     ...experiment.dataValues,

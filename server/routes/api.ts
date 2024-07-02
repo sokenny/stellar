@@ -43,7 +43,7 @@ router.post('/create-account', createAccount);
 router.post('/onboard', autoGenerate);
 // router.post('/auto-generate', autoGenerate);
 
-router.post('/finish-onboarding/:projectId', finishOnboarding);
+router.post('/onboard/:projectId', finishOnboarding);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
