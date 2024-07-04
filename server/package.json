@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/sequelize": "^4.28.19",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.2",
@@ -22,6 +23,8 @@
     "jsdom": "^20.0.0",
     "jstat": "^1.9.6",
     "mongoose": "^6.6.2",
+    "next-auth": "^4.24.7",
+    "node-jose": "^2.2.0",
     "openai": "3.3.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",

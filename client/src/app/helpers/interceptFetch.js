@@ -1,8 +1,12 @@
-function interceptFetch(projectId) {
+function interceptFetch(projectId, token) {
+  console.log('Intercept called! ', projectId, token);
   const originalFetch = fetch;
 
   window.fetch = function (url, options = {}) {
-    const customHeaders = { 'project-id': projectId };
+    const customHeaders = {
+      'project-id': projectId,
+      'Authorization': `Bearer ${token}`,
+    };
 
     if (options.headers) {
       options.headers = new Headers(options.headers);

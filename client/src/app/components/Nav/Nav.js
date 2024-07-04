@@ -18,7 +18,7 @@ import {
 } from '@nextui-org/react';
 import styles from './Nav.module.css';
 
-const Nav = () => {
+const Nav = ({ token }) => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
@@ -26,16 +26,22 @@ const Nav = () => {
     setProjects,
     setCurrentProject,
     setSession,
+    setToken,
     setUser,
     errorModal,
   } = useStore();
   const initializedProjects = useRef(false);
 
   async function initializeProjects() {
+    setToken(token);
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${session.user.email}`,
       {
         cache: 'no-store',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     );
 

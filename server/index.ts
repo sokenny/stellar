@@ -1,6 +1,8 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express } from 'express';
 import bodyParser from 'body-parser';
 import api from './routes/api';
+import publicRoutes from './routes/public';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import getAllowedOrigins from './services/getAllowedOrigins';
@@ -34,21 +36,22 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Project-Id'],
 };
 
 app.use(cors(corsOptions));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// I might then exclude this middleware from some routes
-app.use(authMiddleware);
+app.use(cookieParser()); // Add cookie-parser middleware
 
 app.get('/', (req, res) => {
   res.status(200).send('All good!');
 });
 
-app.use('/api', api);
+app.use('/public', publicRoutes);
+app.use('/api', authMiddleware, api);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 

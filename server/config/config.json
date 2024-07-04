@@ -4,20 +4,23 @@
     "password": "DB_PASSWORD",
     "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "DB_USER",
     "password": "DB_PASSWORD",
     "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "production": {
     "username": "DB_USER",
     "password": "DB_PASSWORD",
     "database": "DB_NAME",
     "host": "34.172.27.248",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   }
 }

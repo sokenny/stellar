@@ -9,44 +9,24 @@ const client: any = redis.createClient({
 client.on('error', (err) => console.log('Redis Client Error', err));
 client.connect();
 
-async function getUserByApiKey(apiKey: string) {
-  // lookup ApiKey and include user required true
-  const keyWUser = await db.ApiKey.findOne({
-    where: { key: apiKey },
-    attributes: ['id'],
-    include: [
-      {
-        model: db.User,
-        required: true,
-        as: 'user',
-      },
-    ],
-  });
-
-  if (!keyWUser) {
-    return null;
-  }
-
-  return keyWUser.user;
-}
-
-async function getExperimentsForClientForUser(userId: number): Promise<any[]> {
+async function getExperimentsForClientForUser(
+  projectId: number,
+): Promise<any[]> {
   const start = Date.now();
-
-  // TODO-p1: We should have projectId here
-
-  const cacheKey = `experiments:${userId}`;
+  const cacheKey = `experiments:${projectId}`;
 
   const cachedExperiments = await client.get(cacheKey);
   if (cachedExperiments) {
-    console.log(`Cache hit for user ${userId}`);
+    console.log(`Cache hit for user ${projectId}`);
     const end = Date.now();
 
-    console.log(`Retrieved experiments for user ${userId} in ${end - start}ms`);
+    console.log(
+      `Retrieved experiments for user ${projectId} in ${end - start}ms`,
+    );
     return JSON.parse(cachedExperiments);
   }
 
-  console.log(`Cache miss for user ${userId}`);
+  console.log(`Cache miss for user ${projectId}`);
 
   const experimentInstances = await db.Experiment.findAll({
     where: {
@@ -80,7 +60,7 @@ async function getExperimentsForClientForUser(userId: number): Promise<any[]> {
             as: 'project',
             required: true,
             attributes: ['id'],
-            where: { user_id: userId },
+            where: { id: projectId },
           },
         ],
       },
@@ -96,7 +76,9 @@ async function getExperimentsForClientForUser(userId: number): Promise<any[]> {
 
   client.set(cacheKey, JSON.stringify(experiments));
   const end = Date.now();
-  console.log(`Retrieved experiments for user ${userId} in ${end - start}ms`);
+  console.log(
+    `Retrieved experiments for project ${projectId} in ${end - start}ms`,
+  );
 
   return experiments;
 }
@@ -116,6 +98,8 @@ function weightedRandomSelection(variants) {
   return null;
 }
 
+// TODO-p1-1: The variant to use should not be cached in redis :p!
+
 async function getExperimentsForClient(req, res) {
   const apiKey = req.header('Authorization').substring(7);
 
@@ -123,24 +107,13 @@ async function getExperimentsForClient(req, res) {
     return res.status(401).send('API key is required');
   }
 
-  const keyData = decryptApiKey(apiKey);
+  const keyData: any = decryptApiKey(apiKey);
 
   if (!keyData) {
     return res.status(401).send('Invalid API key');
   }
 
-  console.log('decryptedKey: ', keyData);
-
-  // TODO-p1: In reality, we should have one apikey per user project, so here we should be fetching the project
-  const user = await getUserByApiKey(apiKey);
-
-  if (!user) {
-    return res.status(401).send('Invalid API key');
-  }
-
-  console.log('wait starts');
-  const experiments = await getExperimentsForClientForUser(user.id);
-  console.log('wait ends');
+  const experiments = await getExperimentsForClientForUser(keyData.projectId);
 
   res.json(experiments);
 }

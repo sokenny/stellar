@@ -25,7 +25,7 @@ const Actions = ({ projectId, authenticated }) => {
           userEmail: session.user.email,
         }),
       }).then(() => {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       });
     }
   }, [authenticated, projectId, session]);

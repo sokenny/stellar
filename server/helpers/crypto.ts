@@ -3,8 +3,6 @@ import crypto from 'crypto';
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
 
-// TODO-p1-1: Have incoming requests from clientsiede for exps, have the apikey that contains project id and user id and decrypt it to get the user id and project id
-
 function encrypt(text) {
   let iv = crypto.randomBytes(IV_LENGTH);
   let cipher = crypto.createCipheriv(

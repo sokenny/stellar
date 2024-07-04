@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import Nav from './components/Nav/Nav';
 import './globals.css';
+import { cookies } from 'next/headers';
 import styles from './layout.module.css';
 
 import './globals.css';
@@ -14,11 +15,14 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const nextCookies = cookies();
+  const nextAuthSessionToken = nextCookies.get('next-auth.session-token');
+
   return (
     <html lang="en">
       <body className={`${inter.className} ${styles.layout}`}>
         <Providers>
-          <Nav />
+          <Nav token={nextAuthSessionToken.value} />
           <div className={styles.pageContent}>{children}</div>
           <footer className={styles.footer}>dev: juanchaher99@gmail.com</footer>
         </Providers>
