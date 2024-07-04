@@ -1,3 +1,4 @@
+import { invalidateCache } from '../../helpers/cache';
 import db from '../../models';
 
 async function stopExperiment(req, res) {
@@ -9,6 +10,7 @@ async function stopExperiment(req, res) {
     const experiment = await db.Experiment.findByPk(id);
 
     // TODO:p1-2: start next experiment available under this page
+    invalidateCache(`experiments:${req.projectId}`);
 
     res.json({ message: 'Experiment stopped successfully', experiment });
   } catch (error) {

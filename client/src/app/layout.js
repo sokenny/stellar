@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} ${styles.layout}`}>
         <Providers>
-          <Nav token={nextAuthSessionToken.value} />
+          <Nav token={nextAuthSessionToken?.value} />
           <div className={styles.pageContent}>{children}</div>
           <footer className={styles.footer}>dev: juanchaher99@gmail.com</footer>
         </Providers>

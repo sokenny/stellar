@@ -16,7 +16,7 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
     }
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/stop`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/stop`,
       {
         method: 'POST',
       },

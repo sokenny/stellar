@@ -270,3 +270,14 @@
 .expIconWrapper {
   margin-right: 6px;
 }
+
+@media (max-width: 720px) {
+  .Experiment {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .targetElementImage {
+    width: 100%;
+  }
+}

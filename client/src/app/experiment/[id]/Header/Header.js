@@ -37,7 +37,7 @@ const Header = ({ experiment }) => {
       toast.promise(
         async () => {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/launch`,
+            `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}/launch`,
             {
               method: 'POST',
             },
@@ -75,7 +75,7 @@ const Header = ({ experiment }) => {
     if (!isSelected) {
       return toast.promise(
         fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/pause`,
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}/pause`,
           {
             method: 'POST',
           },
@@ -92,7 +92,7 @@ const Header = ({ experiment }) => {
     }
     return toast.promise(
       fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/on`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}/on`,
         {
           method: 'POST',
         },

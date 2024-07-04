@@ -12,7 +12,7 @@ const PauseExperimentModal = ({ onClose, experimentId }) => {
   function handlePauseExperiment() {
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/pause`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/pause`,
       {
         method: 'POST',
       },

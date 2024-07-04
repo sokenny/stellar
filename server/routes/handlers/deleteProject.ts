@@ -7,6 +7,13 @@ async function deleteProject(req, res) {
   const transaction = await db.sequelize.transaction();
 
   try {
+    await db.ApiKey.findAll({
+      where: {
+        project_id: projectId,
+      },
+      transaction,
+    });
+
     const pages = await db.Page.findAll({
       where: {
         project_id: projectId,

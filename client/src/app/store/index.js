@@ -41,7 +41,7 @@ const useStore = create((set, get) => ({
     if (!state.stats[experimentId]) {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/stats`,
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/stats`,
           {
             method: 'GET',
             headers: {
@@ -69,7 +69,7 @@ const useStore = create((set, get) => ({
     const { session } = useStore.getState();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${session.user.email}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/projects/${session.user.email}`,
         {
           cache: 'no-store',
         },

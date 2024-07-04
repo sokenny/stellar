@@ -8,7 +8,6 @@ import useStore from '../../../store';
 import styles from './Actions.module.css';
 
 const Actions = ({ projectId, authenticated }) => {
-  const router = useRouter();
   const { session } = useStore();
   const actionsRef = useRef(null);
   const [isFloating, setIsFloating] = useState(false);
@@ -16,7 +15,7 @@ const Actions = ({ projectId, authenticated }) => {
 
   useEffect(() => {
     if (authenticated && session) {
-      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/onboard/${projectId}`, {
+      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/api/onboard/${projectId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

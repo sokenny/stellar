@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import db from '../../models';
+import { invalidateCache } from '../../helpers/cache';
 
 async function turnOnExperiment(req, res) {
   try {
@@ -67,6 +68,8 @@ async function turnOnExperiment(req, res) {
       { started_at: db.Sequelize.literal('NOW()') },
       { where: { id, deleted_at: null } },
     );
+
+    invalidateCache(`experiments:${req.projectId}`);
 
     res.json({
       experiment: updatedExperiment,

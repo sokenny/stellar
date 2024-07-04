@@ -15,8 +15,12 @@
 .container .cardSnippet {
     border-radius: 6px;
     margin-top: 8px;
-    padding: 2px 6px 2px 12px;
+    padding: 2px 8px 2px 4px;
     font-size: 12px;
+}
+
+.cardSnippet button {
+    order: -1;
 }
 
 .cardActions {

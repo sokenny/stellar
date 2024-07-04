@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import db from '../../models';
+import { invalidateCache } from '../../helpers/cache';
 
 async function setVariantModifications(req: Request, res: Response) {
   const variantId: string = req.params.id;

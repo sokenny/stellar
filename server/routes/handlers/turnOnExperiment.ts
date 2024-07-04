@@ -1,3 +1,4 @@
+import { invalidateCache } from '../../helpers/cache';
 import db from '../../models';
 
 async function turnOnExperiment(req, res) {
@@ -19,6 +20,8 @@ async function turnOnExperiment(req, res) {
       },
       { where: { id, deleted_at: null, ended_at: null } },
     );
+
+    invalidateCache(`experiments:${req.projectId}`);
 
     res.json({ message: 'Experiment turned on successfully' });
   } catch (error) {

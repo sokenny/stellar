@@ -102,7 +102,7 @@ const SettingsForm = ({ experiment }) => {
   function onSubmit() {
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/settings`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}/settings`,
       {
         method: 'PUT',
         headers: {

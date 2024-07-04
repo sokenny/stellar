@@ -19,7 +19,7 @@ function useVariantEditor({ experiment }) {
     variantsCheckIntervalRef.current = setInterval(async () => {
       console.log('interval iter');
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
       );
       const experimentJson = await res.json();
       const variant = experimentJson.variants.find((v) => v.id === variantId);

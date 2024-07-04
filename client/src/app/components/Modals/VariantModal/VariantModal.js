@@ -60,7 +60,7 @@ const VariantModal = ({
   const onSave = useCallback(async () => {
     try {
       setSubmitting(true);
-      const apiPath = `/variant/${id}`;
+      const apiPath = `/api/variant/${id}`;
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}${apiPath}`,
         {

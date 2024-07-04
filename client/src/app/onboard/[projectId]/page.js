@@ -9,7 +9,7 @@ export default async function OnboardPage({ params, searchParams }) {
   const projectId = params.projectId;
   const authenticated = searchParams.authenticated === 'true';
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${projectId}/experiments`,
+    `${process.env.NEXT_PUBLIC_STELLAR_API}/public/onboard/${projectId}/experiments`,
     {
       cache: 'no-store',
     },

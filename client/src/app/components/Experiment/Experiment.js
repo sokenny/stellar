@@ -57,9 +57,9 @@ const Experiment = ({
       (v) => v.is_control && v.id === variantHovered,
     );
     if (isControl || !variantHovered) {
-      return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/snapshot`;
+      return `${process.env.NEXT_PUBLIC_STELLAR_API}/public/experiment/${experiment.id}/snapshot`;
     }
-    return `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/${variantHovered}/snapshot`;
+    return `${process.env.NEXT_PUBLIC_STELLAR_API}/public/experiment/${experiment.id}/${variantHovered}/snapshot`;
   }
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const Experiment = ({
   useEffect(() => {
     const fetchExperimentStats = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}/stats`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}/stats`,
         {
           method: 'GET',
           headers: {

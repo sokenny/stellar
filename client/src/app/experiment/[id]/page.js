@@ -65,7 +65,7 @@ export default function ExperimentPage({ params, searchParams }) {
     setCreatingVariant(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/variant/${experiment.id}`,
         {
           method: 'POST',
           headers: {

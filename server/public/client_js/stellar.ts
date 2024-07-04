@@ -1,7 +1,9 @@
 (function () {
   'use strict';
 
-  const STELLAR_API_URL = 'http://localhost:3001/public';
+  console.log('LCDTM');
+
+  const STELLAR_API_URL = 'process.env.STELLAR_API_URL/public';
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
@@ -316,7 +318,7 @@
 
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
-    console.log('fetchExperiments run!');
+    console.log('fetchExperiments run! - ', hasFetchedExperiments);
     const pageUrl = window.location.href;
     if (
       !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
@@ -434,11 +436,11 @@
   }
 
   function initializeScript() {
-    if (stellarMode === 'true') {
-      return;
-    }
+    console.log('inicializamos ');
+
     showLoadingState();
-    document.addEventListener('DOMContentLoaded', () => {
+    function domContentLoadedActions() {
+      console.log('DOM fully loaded and parsed');
       restoreSessionData();
       trackPageVisit();
       wrapHistoryMethods();
@@ -447,8 +449,15 @@
       trackScrollDepth();
       sendDataOnLeave();
       fetchExperiments();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', domContentLoadedActions);
+    } else {
+      domContentLoadedActions();
+    }
   }
 
+  console.log('linea 458si');
   initializeScript();
 })();

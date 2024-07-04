@@ -23,7 +23,7 @@ const EnterUrlForm = () => {
 
       // Display the "Scrapping main elements..." toast
       toast.promise(
-        fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/onboard', {
+        fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/public/onboard', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

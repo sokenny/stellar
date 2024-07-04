@@ -58,10 +58,11 @@ export async function findOrCreateProject(website_url: string, transaction) {
   });
 
   if (created) {
+    console.log('Created! We invalidate');
     await invalidateCache('allowed-origins');
   }
 
-  return project[0];
+  return project;
 }
 
 export async function createVariants(

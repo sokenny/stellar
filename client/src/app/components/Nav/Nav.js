@@ -36,7 +36,7 @@ const Nav = ({ token }) => {
     setToken(token);
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/projects/${session.user.email}`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/projects/${session.user.email}`,
       {
         cache: 'no-store',
         headers: {
@@ -96,11 +96,7 @@ const Nav = ({ token }) => {
           message={errorModal}
         />
       )}
-      <Navbar
-        maxWidth="full"
-        className={styles.container}
-        style={{ height: '3rem' }}
-      >
+      <Navbar maxWidth="full" className={styles.container}>
         <NavbarBrand className={styles.identity}>
           <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
         </NavbarBrand>

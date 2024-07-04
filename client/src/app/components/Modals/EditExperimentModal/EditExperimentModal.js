@@ -17,7 +17,7 @@ const EditExperimentModal = ({ onClose, experiment, initialValues = {} }) => {
     try {
       setSubmitting(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
         {
           method: 'PUT',
           headers: {

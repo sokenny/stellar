@@ -22,7 +22,7 @@ const VariantName = ({ name, variantId }) => {
     try {
       toast.promise(
         fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}/name`,
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/api/variant/${variantId}/name`,
           {
             method: 'PUT',
             headers: {

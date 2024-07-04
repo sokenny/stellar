@@ -6,7 +6,6 @@ import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
 import getVariant from './handlers/getVariant';
 import setVariantModifications from './handlers/setVariantModifications';
-import getExperiments from './handlers/getExperiments';
 import stopExperiment from './handlers/stopExperiment';
 import getExperimentStatsHandler from './handlers/getExperimentStats';
 import getStatisticalSignificance from '../services/getStatisticalSignificance';
@@ -18,13 +17,10 @@ import launchExperiment from './handlers/launchExperiment';
 import createExperiment from './handlers/createExperiment';
 import getProjects from './handlers/getProjects';
 import createVariant from './handlers/createVariant';
-import createAccount from './handlers/createAccount';
 import finishOnboarding from './handlers/finishOnboarding';
 import checkSnippet from './handlers/checkSnippet';
-import autoGenerate from './handlers/autoGenerate';
 import updateVariantName from './handlers/updateVariantName';
 import updateExperimentName from './handlers/updateExperimentName';
-import getVariantScreenshot from './handlers/getVariantScreenshot';
 import updateExperimentSettings from './handlers/updateExperimentSettings';
 
 const router = express.Router();
@@ -32,15 +28,10 @@ const router = express.Router();
 // TODO: add Rate Limiting to prevent abuse. mainly for the endpoints exposed to the client that
 // are authenticated with the public api key
 
-router.post('/create-account', createAccount);
-
-router.post('/onboard', autoGenerate);
-
 router.post('/onboard/:projectId', finishOnboarding);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
-router.get('/projects/:projectId/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/name', updateExperimentName);
@@ -66,8 +57,5 @@ router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 router.get('/projects/:userEmail', getProjects);
 router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
-
-router.get('/experiment/:id/snapshot', getVariantScreenshot);
-router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
 
 export default router;

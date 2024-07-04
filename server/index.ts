@@ -36,8 +36,15 @@ app.get('/', (req, res) => {
   res.status(200).send('All good!');
 });
 
+// middleware that console logs the request method and path
+app.use((req, res, next) => {
+  console.log(`${req.method} request for ${req.url}`);
+  next();
+});
+
 app.use('/public', publicRoutes);
 app.use('/api', authMiddleware, api);
+// app.use('/api', api);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 

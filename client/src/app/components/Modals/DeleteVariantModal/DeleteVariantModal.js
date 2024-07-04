@@ -11,7 +11,7 @@ const DeleteVariantModal = ({ onClose, variantId }) => {
 
   function handleDeleteVariant() {
     setSubmitting(true);
-    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}`, {
+    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/api/variant/${variantId}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())

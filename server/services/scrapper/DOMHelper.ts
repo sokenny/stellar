@@ -65,15 +65,22 @@ export default function DOMHelper(page: any, window: any) {
       const domElementTextContent: string = await element.evaluate(
         (el: any) => el.textContent,
       );
-      const hasButtonClass = async () =>
-        buttonClasses.some((buttonClass) =>
-          domElementClassName.toLocaleLowerCase().includes(buttonClass),
-        );
+      // const hasButtonClass = async () =>
+      //   buttonClasses.some((buttonClass) =>
+      //     domElementClassName.toLocaleLowerCase().includes(buttonClass),
+      //   );
+
+      function hasCTAText() {
+        const pattern =
+          /\b(start|get|try|learn|buy|subscribe|sign up|sign in|sign out|log in|log out|register|create|join|discover|explore)\b/i;
+        return pattern.test(domElementTextContent);
+      }
+
       const isNotLoginCta = async () =>
         !loginCtas.includes(domElementTextContent.toLocaleLowerCase());
       try {
         return (
-          (await hasButtonClass()) &&
+          hasCTAText() &&
           (await isNotLoginCta()) &&
           (await this.isInRelevantScreenArea(element))
         );

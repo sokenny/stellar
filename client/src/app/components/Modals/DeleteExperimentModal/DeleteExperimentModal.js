@@ -12,9 +12,12 @@ const DeleteExperimentModal = ({ onClose, experimentId, onComplete }) => {
 
   function handleDeleteExperiment() {
     setSubmitting(true);
-    fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}`, {
-      method: 'DELETE',
-    })
+    fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}`,
+      {
+        method: 'DELETE',
+      },
+    )
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);

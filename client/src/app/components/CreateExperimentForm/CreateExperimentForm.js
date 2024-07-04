@@ -38,7 +38,7 @@ const CreateExperimentForm = ({ experiment }) => {
   async function handleConfirmUrl() {
     setCreateExperimentLoading(true);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/experiments`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiments`,
       {
         method: 'POST',
         headers: {
@@ -72,7 +72,7 @@ const CreateExperimentForm = ({ experiment }) => {
     setAddVariantLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/variant/${experiment.id}`,
         {
           method: 'POST',
           headers: {
@@ -101,7 +101,7 @@ const CreateExperimentForm = ({ experiment }) => {
 
   function handleDeleteVariant(variantId) {
     toast.promise(
-      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/variant/${variantId}`, {
+      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/api/variant/${variantId}`, {
         method: 'DELETE',
       }),
       {

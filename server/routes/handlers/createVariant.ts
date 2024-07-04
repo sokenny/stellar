@@ -86,6 +86,7 @@ async function createVariant(req: Request, res: Response) {
     );
 
     await transaction.commit();
+
     res.json(variant);
   } catch (error) {
     await transaction.rollback();

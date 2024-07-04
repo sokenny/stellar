@@ -15,7 +15,7 @@ const handler = NextAuth({
       console.log('DATA! ', data);
 
       const response = await fetch(
-        process.env.NEXT_PUBLIC_STELLAR_API + '/create-account',
+        process.env.NEXT_PUBLIC_STELLAR_API + '/public/create-account',
         {
           method: 'POST',
           headers: {

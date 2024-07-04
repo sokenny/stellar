@@ -1,5 +1,5 @@
 (function () {
-  const STELLAR_API_URL = 'http://localhost:3001/api';
+  const STELLAR_API_URL = 'process.env.STELLAR_API_URL/api';
 
   // TODO-pfuturo: Based on this chat with gpt, develop a functionality that allows to create copy variants from an initial widget.
   // https://chatgpt.com/c/d46cdac3-e1c5-4e2e-9833-b0e8bc50c24a
@@ -20,7 +20,7 @@
   const text = urlParams.get('text');
   const visualEditorOn = urlParams.get('visualEditorOn');
   const previewMode = urlParams.get('previewMode');
-  console.log('visualEditorOn: ', visualEditorOn);
+  console.log('visualEditorOn -: ', visualEditorOn);
 
   let editedElements = [];
   let elementsPristineState = {};

@@ -14,7 +14,7 @@ const SnippetMissing = ({ className }) => {
   function handleSnippetCheck() {
     setLoading(true);
     toast.promise(
-      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/check-snippet`, {
+      fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/api/check-snippet`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,9 @@ const SnippetMissing = ({ className }) => {
               tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
-              {'<script async src="http://localhost:3001/public/clientjs" data-stellar-api-key="' +
+              {'<script async src="' +
+                process.env.NEXT_PUBLIC_STELLAR_API +
+                '/public/clientjs" data-stellar-api-key="' +
                 apiKey +
                 '"></script>'}
             </Snippet>

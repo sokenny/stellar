@@ -2,11 +2,8 @@ import { Request, Response } from 'express';
 import db from '../../models';
 
 async function updateVariantName(req: Request, res: Response) {
-  console.log('Si so so');
   const variantId: string = req.params.id;
   const { name } = req.body;
-
-  console.log('name: ', name);
 
   const variant = await db.Variant.findOne({
     where: { id: variantId },

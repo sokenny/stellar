@@ -32,7 +32,7 @@ const ExperimentName = ({ name, experimentId }) => {
     try {
       toast.promise(
         fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experimentId}/name`,
+          `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/name`,
           {
             method: 'PUT',
             headers: {

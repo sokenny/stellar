@@ -45,7 +45,7 @@ const goals = [
 ];
 
 const GoalsForm = ({ experiment, goal, onClose }) => {
-  const { refetchProjects } = useStore();
+  const { refetchProjects, token } = useStore();
   const domain = getDomainFromUrl(experiment.url);
   const goalCheckIntervalRef = useRef(null);
   const toastSuccessCalledRef = useRef(false);
@@ -99,7 +99,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
 
       setSubmiting(true);
       const response = await fetch(
-        process.env.NEXT_PUBLIC_STELLAR_API + '/goals',
+        process.env.NEXT_PUBLIC_STELLAR_API + '/api/goals',
         {
           method: 'POST',
           headers: {
@@ -145,13 +145,15 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     window.open(
       `http://${
         getDomainFromUrl(experiment.url) + '/' + formData.elementUrl
-      }?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true`,
+      }?stellarMode=true&experimentId=${
+        experiment.id
+      }&isSettingGoal=true&token=${token}`,
       '_blank',
     );
 
     goalCheckIntervalRef.current = setInterval(async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/experiment/${experiment.id}`,
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
       );
       const experimentJson = await res.json();
       if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {

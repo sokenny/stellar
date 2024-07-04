@@ -1,3 +1,4 @@
+import { invalidateCache } from '../../helpers/cache';
 import db from '../../models';
 
 async function pauseExperiment(req, res) {
@@ -8,6 +9,8 @@ async function pauseExperiment(req, res) {
       { paused_at: new Date() },
       { where: { id, deleted_at: null, ended_at: null } },
     );
+
+    invalidateCache(`experiments:${req.projectId}`);
 
     res.json({ message: 'Experiment paused successfully' });
   } catch (error) {

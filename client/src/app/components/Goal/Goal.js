@@ -1,9 +1,13 @@
+'use client';
+
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import { Tooltip } from '@nextui-org/react';
 import Edit from '../../icons/Edit';
 import styles from './Goal.module.css';
+import useStore from '../../store';
 
 const Goal = ({ experiment, onEdit, className }) => {
+  const { token } = useStore();
   if (!experiment) return;
 
   const { goal, url, status } = experiment;
@@ -34,7 +38,9 @@ const Goal = ({ experiment, onEdit, className }) => {
               typeof goal.url_match_value === 'string'
                 ? goal.url_match_value
                 : ''
-            }?stellarMode=true&elementToHighlight=${goal.selector}`}
+            }?stellarMode=true&elementToHighlight=${
+              goal.selector
+            }&token=${token}`}
             target="_blank"
             rel="noopener noreferrer"
           >
