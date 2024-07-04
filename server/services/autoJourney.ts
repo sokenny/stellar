@@ -7,6 +7,7 @@ import db from '../models';
 import { getTextVariants, MAX_TOKENS } from './gpt/getTextVariants';
 import DOMHelper from './scrapper/DOMHelper';
 import tryOrReturn from '../helpers/tryOrReturn';
+import { invalidateCache } from '../helpers/cache';
 
 export async function initiatePage(website) {
   const browser = await puppeteer.launch();
@@ -45,7 +46,7 @@ export async function findOrCreateProject(website_url: string, transaction) {
     .replace('http://', '')
     .replace('www.', '');
 
-  const project = await db.Project.findOrCreate({
+  const [project, created] = await db.Project.findOrCreate({
     where: {
       domain,
     },
@@ -55,6 +56,11 @@ export async function findOrCreateProject(website_url: string, transaction) {
     },
     transaction,
   });
+
+  if (created) {
+    await invalidateCache('allowed-origins');
+  }
+
   return project[0];
 }
 

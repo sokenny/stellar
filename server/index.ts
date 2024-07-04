@@ -13,23 +13,9 @@ dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
-let allowedOrigins: string[] = [];
-
-async function updateAllowedOrigins() {
-  console.log('---- UPDATING ORIGINS ----');
-  try {
-    const updatedAllowedOrigins = await getAllowedOrigins();
-    allowedOrigins = updatedAllowedOrigins;
-  } catch (error) {
-    console.error('Failed to fetch origins from database:', error);
-  }
-}
-
-updateAllowedOrigins();
-setInterval(updateAllowedOrigins, 300000 / 10); // 5 min divided by 10
-
 const corsOptions = {
-  origin: function (origin, callback) {
+  origin: async function (origin, callback) {
+    const allowedOrigins = await getAllowedOrigins();
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

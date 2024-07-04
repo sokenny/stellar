@@ -1,4 +1,5 @@
 import db from '../models';
+import { client as redisClient } from '../helpers/cache';
 
 const staticAllowedOrigins = [
   'http://localhost:3000',
@@ -8,7 +9,16 @@ const staticAllowedOrigins = [
 ];
 
 async function getAllowedOrigins() {
-  // query all projects in db and bring unique projects.domains in an array
+  const cacheKey = 'allowed-origins';
+  let cachedOrigins = await redisClient.get(cacheKey);
+
+  if (cachedOrigins) {
+    console.log('---- USING CACHED ORIGINS ----');
+    return JSON.parse(cachedOrigins);
+  }
+
+  console.log('---- FETCHING ORIGINS FROM DATABASE ----');
+
   const allowedOriginsQuery = await db.Project.findAll({
     attributes: ['domain'],
     raw: true,
@@ -27,6 +37,10 @@ async function getAllowedOrigins() {
     ...allowedOriginsWithHttp,
     ...allowedOriginsWithHttps,
   ];
+
+  await redisClient.set(cacheKey, JSON.stringify(allAllowedOrigins), {
+    EX: 60 * 60,
+  });
 
   return allAllowedOrigins;
 }

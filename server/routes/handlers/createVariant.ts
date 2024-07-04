@@ -4,8 +4,7 @@ import db from '../../models';
 async function createVariant(req: Request, res: Response) {
   const experimentId: string = req.params.experimentId;
   const { name } = req.body;
-  const newVariantTraffic = 10; // Set the traffic percentage for the new variant
-
+  const newVariantTraffic = 10;
   const experiment = await db.Experiment.findByPk(experimentId);
   if (!experiment) {
     return res.status(404).send('Experiment not found');
@@ -15,11 +14,9 @@ async function createVariant(req: Request, res: Response) {
     return res.status(400).send('Experiment has already started');
   }
 
-  // Start transaction
   const transaction = await db.sequelize.transaction();
 
   try {
-    // Fetch all current variants of the experiment
     const variants = await db.Variant.findAll({
       where: {
         experiment_id: experimentId,
@@ -28,14 +25,12 @@ async function createVariant(req: Request, res: Response) {
       transaction,
     });
 
-    // Calculate current total traffic to check for deficit
     let currentTotalTraffic = variants.reduce(
       (sum, variant) => sum + variant.traffic,
       0,
     );
     let trafficDeficit = 100 - currentTotalTraffic;
 
-    // Adjust traffic for existing variants if there is a deficit
     if (trafficDeficit !== 0 && trafficDeficit > newVariantTraffic) {
       const increasePerVariant = Math.floor(trafficDeficit / variants.length);
       for (let variant of variants) {
@@ -53,7 +48,6 @@ async function createVariant(req: Request, res: Response) {
       trafficDeficit -= increasePerVariant * variants.length;
     }
 
-    // Calculate new traffic allocations ensuring total sums to 100%
     const trafficReductionFactor =
       (100 - newVariantTraffic - trafficDeficit) / 100;
     let adjustments = variants.map((variant) => ({
@@ -61,7 +55,6 @@ async function createVariant(req: Request, res: Response) {
       updatedTraffic: Math.floor(variant.traffic * trafficReductionFactor),
     }));
 
-    // Correct the total traffic sum to 100%
     const totalNewTraffic =
       adjustments.reduce((sum, adj) => sum + adj.updatedTraffic, 0) +
       newVariantTraffic +
@@ -71,7 +64,6 @@ async function createVariant(req: Request, res: Response) {
       lastAdjustment.updatedTraffic += 100 - totalNewTraffic;
     }
 
-    // Apply the adjustments
     for (const adj of adjustments) {
       await db.Variant.update(
         { traffic: adj.updatedTraffic },
@@ -84,7 +76,6 @@ async function createVariant(req: Request, res: Response) {
       );
     }
 
-    // Create the new variant with specified initial traffic
     const variant = await db.Variant.create(
       {
         name,
