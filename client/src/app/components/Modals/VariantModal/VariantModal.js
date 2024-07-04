@@ -31,7 +31,6 @@ const VariantModal = ({
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [isControlTooltipOpen, setIsControlTooltipOpen] = useState(false);
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
   const thisVariant = variants.find((v) => v.id === id);
   const otherVariants = variants.filter((v) => v.id !== id);
@@ -132,8 +131,6 @@ const VariantModal = ({
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                onMouseEnter={() => setIsControlTooltipOpen(true)}
-                onMouseLeave={() => setIsControlTooltipOpen(false)}
               />
             </div>
           </div>

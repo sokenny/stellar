@@ -7,6 +7,7 @@
 
   // TODO-p3: Add a prefix "global__" to global vars
   const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
   const variantId = urlParams.get('variantId');
@@ -88,6 +89,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           experiment_id: experimentId,
@@ -106,6 +108,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           selector,
@@ -188,6 +191,11 @@
             fetchingVariant = true;
             const response = await fetch(
               `${STELLAR_API_URL}/variant/${variantId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              },
             );
             const variant = await response.json();
 
@@ -552,6 +560,7 @@
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                   modifications,

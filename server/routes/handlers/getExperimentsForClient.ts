@@ -9,25 +9,23 @@ const client: any = redis.createClient({
 client.on('error', (err) => console.log('Redis Client Error', err));
 client.connect();
 
-async function getExperimentsForClientForUser(
-  projectId: number,
-): Promise<any[]> {
-  const start = Date.now();
+async function getProjectExperiments(projectId: number): Promise<any[]> {
   const cacheKey = `experiments:${projectId}`;
 
   const cachedExperiments = await client.get(cacheKey);
   if (cachedExperiments) {
     console.log(`Cache hit for user ${projectId}`);
-    const end = Date.now();
-
-    console.log(
-      `Retrieved experiments for user ${projectId} in ${end - start}ms`,
-    );
-    return JSON.parse(cachedExperiments);
+    const experiments = JSON.parse(cachedExperiments);
+    return selectVariantsAtRuntime(experiments);
   }
 
   console.log(`Cache miss for user ${projectId}`);
+  const experiments = await fetchExperiments(projectId);
+  client.set(cacheKey, JSON.stringify(experiments));
+  return selectVariantsAtRuntime(experiments);
+}
 
+async function fetchExperiments(projectId: number) {
   const experimentInstances = await db.Experiment.findAll({
     where: {
       [Op.and]: [
@@ -67,20 +65,20 @@ async function getExperimentsForClientForUser(
     ],
   });
 
-  const experiments = experimentInstances.map((experiment: any) => {
-    const experimentJson = experiment.toJSON();
-    let selectedVariantId = weightedRandomSelection(experimentJson.variants);
-    experimentJson.variant_to_use = selectedVariantId;
-    return experimentJson;
-  });
-
-  client.set(cacheKey, JSON.stringify(experiments));
-  const end = Date.now();
-  console.log(
-    `Retrieved experiments for project ${projectId} in ${end - start}ms`,
+  const experiments = experimentInstances.map((experiment) =>
+    experiment.toJSON(),
   );
-
   return experiments;
+}
+
+function selectVariantsAtRuntime(experiments) {
+  return experiments.map((experiment) => {
+    const selectedVariantId = weightedRandomSelection(experiment.variants);
+    return {
+      ...experiment,
+      variant_to_use: selectedVariantId,
+    };
+  });
 }
 
 function weightedRandomSelection(variants) {
@@ -89,16 +87,14 @@ function weightedRandomSelection(variants) {
     0,
   );
   let randomNum = Math.random() * totalWeight;
-  for (let i = 0; i < variants.length; i++) {
-    randomNum -= variants[i].traffic;
+  for (let variant of variants) {
+    randomNum -= variant.traffic;
     if (randomNum <= 0) {
-      return variants[i].id;
+      return variant.id;
     }
   }
   return null;
 }
-
-// TODO-p1-1: The variant to use should not be cached in redis :p!
 
 async function getExperimentsForClient(req, res) {
   const apiKey = req.header('Authorization').substring(7);
@@ -113,7 +109,7 @@ async function getExperimentsForClient(req, res) {
     return res.status(401).send('Invalid API key');
   }
 
-  const experiments = await getExperimentsForClientForUser(keyData.projectId);
+  const experiments = await getProjectExperiments(keyData.projectId);
 
   res.json(experiments);
 }

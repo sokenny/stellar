@@ -49,7 +49,7 @@ const SnippetMissing = ({ className }) => {
               tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
-              {'<script async src="http://localhost:3001/api/clientjs" data-stellar-api-key="' +
+              {'<script async src="http://localhost:3001/public/clientjs" data-stellar-api-key="' +
                 apiKey +
                 '"></script>'}
             </Snippet>

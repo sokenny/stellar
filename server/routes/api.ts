@@ -1,18 +1,13 @@
 import express from 'express';
-import getExperimentsForClient from './handlers/getExperimentsForClient';
-import processUserSession from './handlers/processUserSession';
 import deleteProject from './handlers/deleteProject';
 import getExperiment from './handlers/getExperiment';
 import setGoal from './handlers/setGoal';
-// import launchJourney from './handlers/launchJourney';
 import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
 import getVariant from './handlers/getVariant';
 import setVariantModifications from './handlers/setVariantModifications';
 import getExperiments from './handlers/getExperiments';
-import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import stopExperiment from './handlers/stopExperiment';
-import onboardNewPage from './handlers/onboardNewPage';
 import getExperimentStatsHandler from './handlers/getExperimentStats';
 import getStatisticalSignificance from '../services/getStatisticalSignificance';
 import deleteExperiment from './handlers/deleteExperiment';
@@ -37,17 +32,14 @@ const router = express.Router();
 // TODO: add Rate Limiting to prevent abuse. mainly for the endpoints exposed to the client that
 // are authenticated with the public api key
 
-// router.post('/onboard', onboardNewPage);
 router.post('/create-account', createAccount);
 
 router.post('/onboard', autoGenerate);
-// router.post('/auto-generate', autoGenerate);
 
 router.post('/onboard/:projectId', finishOnboarding);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
-router.get('/experiments/client', getExperimentsForClient);
 router.get('/projects/:projectId/experiments', getExperiments);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
@@ -65,24 +57,14 @@ router.put('/variant/:id', editVariant);
 router.put('/variant/:id/modifications', setVariantModifications);
 router.delete('/variant/:id', deleteVariant);
 router.post('/variant/:experimentId', createVariant);
-// endpoint to set variant's name
 router.put('/variant/:id/name', updateVariantName);
 
 router.post('/goals', setGoal);
-
-router.post(
-  '/experiments/end-session',
-  express.text({ type: '*/*' }),
-  processUserSession,
-);
-
-router.get('/clientjs', sendStellarJSBundle);
 
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
 router.get('/projects/:userEmail', getProjects);
 router.delete('/project/:projectId', deleteProject);
-// router.post('/projects/check-snippet', checkSnippet);
 router.post('/check-snippet', checkSnippet);
 
 router.get('/experiment/:id/snapshot', getVariantScreenshot);

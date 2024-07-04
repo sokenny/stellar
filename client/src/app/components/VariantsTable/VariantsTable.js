@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -114,7 +114,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
   const [variantToDelete, setVariantToDelete] = useState(null);
   const [page, setPage] = React.useState(1);
   const hasStarted = experiment.started_at;
-  const { stats, getExperimentStats, currentProject } = useStore();
+  const { stats, getExperimentStats, currentProject, token } = useStore();
   const missingSnippet = currentProject.snippet_status !== 1;
   const thisStats = stats[experiment.id];
   const {
@@ -155,7 +155,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
 
   function handleOnView(variantId) {
     window.open(
-      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true`,
+      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`,
       '_blank',
     );
   }

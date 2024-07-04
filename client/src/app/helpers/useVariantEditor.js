@@ -1,12 +1,14 @@
 import { useRef } from 'react';
+import useStore from '../store';
 import { toast } from 'sonner';
 
 function useVariantEditor({ experiment }) {
+  const { token } = useStore();
   const variantsCheckIntervalRef = useRef(null);
 
   const handleEditVariant = (variantId, onVariantModifiedCallback) => {
     window.open(
-      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true`,
+      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true&token=${token}`,
       '_blank',
     );
 
