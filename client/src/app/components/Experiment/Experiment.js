@@ -332,6 +332,7 @@ const Experiment = ({
           onClose={() => setShowDeleteExperimentModal(false)}
           experimentId={experiment.id}
           onComplete={() => (onReview ? location.reload() : null)}
+          isUnauthRequest={onReview}
         />
       )}
       {showCreateVariantModal && (

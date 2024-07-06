@@ -64,6 +64,10 @@ const associateModels = () => {
     foreignKey: 'page_id',
     as: 'experiments',
   });
+  db.Experiment.belongsTo(db.Project, {
+    foreignKey: 'project_id',
+    as: 'project',
+  });
   db.Experiment.belongsTo(db.Page, {
     foreignKey: 'page_id',
     as: 'page',

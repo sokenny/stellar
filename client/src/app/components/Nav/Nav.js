@@ -82,8 +82,8 @@ const Nav = ({ token }) => {
   } = useDisclosure();
 
   const tabs = [
-    { name: 'Faq', path: '/faq', isAuth: false },
-    { name: 'Pricing', path: '/pricing', isAuth: false },
+    // { name: 'Faq', path: '/faq', isAuth: false },
+    // { name: 'Pricing', path: '/pricing', isAuth: false },
   ];
   return (
     <>

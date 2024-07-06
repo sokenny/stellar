@@ -6,14 +6,21 @@ import Button from '../../Button/Button';
 import { toast } from 'sonner';
 import styles from './DeleteExperimentModal.module.css';
 
-const DeleteExperimentModal = ({ onClose, experimentId, onComplete }) => {
+const DeleteExperimentModal = ({
+  onClose,
+  experimentId,
+  onComplete,
+  isUnauthRequest,
+}) => {
   const { refetchProjects } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteExperiment() {
     setSubmitting(true);
     fetch(
-      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}`,
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/${
+        isUnauthRequest ? 'public' : 'api'
+      }/experiment/${experimentId}`,
       {
         method: 'DELETE',
       },

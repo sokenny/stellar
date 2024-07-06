@@ -6,6 +6,8 @@ import autoGenerate from './handlers/autoGenerate';
 import createAccount from './handlers/createAccount';
 import getExperiments from './handlers/getExperiments';
 import getVariantScreenshot from './handlers/getVariantScreenshot';
+import deleteExperiment from './handlers/deleteExperiment';
+import publicDeleteExperiment from './handlers/publicDeleteExperiment';
 
 const router = express.Router();
 
@@ -27,5 +29,6 @@ router.get('/onboard/:projectId/experiments', getExperiments);
 
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
 router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
+router.delete('/experiment/:id', publicDeleteExperiment);
 
 export default router;

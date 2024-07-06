@@ -6,6 +6,8 @@ async function deleteExperiment(req, res) {
 
   const projectId = req.projectId;
 
+  console.log('hay project id! ', projectId);
+
   await db.Experiment.update({ deleted_at: new Date() }, { where: { id } });
 
   await invalidateCache(`experiments:${projectId}`);
