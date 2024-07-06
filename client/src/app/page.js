@@ -29,25 +29,15 @@ export default async function HomePage({}) {
             <span>3.</span> Launch within seconds
           </div>
         </div>
-        {/* TODO-p1-1: Planear y grabar demo */}
-        {/* 1: Brief explanation of what the software is about */}
-        {/* 2: Input URL and show experiments created */}
-        {/* 3: Create account and setup snippet */}
-        {/* 4: Show how to edit variants */}
-        {/* 5: Set up goal and launch experiment */}
-        {/* 6: Display the experiment in action and how data is updated on the table */}
-
         <div className={styles.loomContainer}>
-          <div className={styles.infoBar}>1 minute demo :)</div>
-          <div>
-            <iframe
-              src="https://www.loom.com/embed/adc6f34bf1fe4ce3ac849396cb4d7734?sid=28444408-debd-4eba-97c1-d09a05c255ae"
-              frameBorder="0"
-              webkitallowfullscreen="true"
-              mozallowfullscreen="true"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <div className={styles.infoBar}>2 minute demo :)</div>
+          <iframe
+            src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
         </div>
         <div className={styles.faqs}>
           {/* <h3>FAQ</h3> */}
