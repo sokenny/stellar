@@ -1,5 +1,6 @@
 import db from '../models';
 import { client as redisClient } from '../helpers/cache';
+import normalizeUrl from '../helpers/normalizeUrl';
 
 const staticAllowedOrigins = [
   'http://localhost:3000',
@@ -26,12 +27,13 @@ async function getAllowedOrigins() {
 
   const allowedOrigins = allowedOriginsQuery.map((item) => item.domain);
 
-  const allowedOriginsWithHttp = allowedOrigins.map(
-    (domain) => `http://${domain}`,
+  const allowedOriginsWithHttp = allowedOrigins.map((domain) =>
+    normalizeUrl(`http://${domain}`),
   );
-  const allowedOriginsWithHttps = allowedOrigins.map(
-    (domain) => `https://${domain}`,
+  const allowedOriginsWithHttps = allowedOrigins.map((domain) =>
+    normalizeUrl(`https://${domain}`),
   );
+
   const allAllowedOrigins = [
     ...staticAllowedOrigins,
     ...allowedOriginsWithHttp,

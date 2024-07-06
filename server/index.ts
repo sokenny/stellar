@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
+import normalizeUrl from './helpers/normalizeUrl';
 
 dotenv.config();
 
@@ -16,7 +17,12 @@ const PORT = process.env.PORT || 3000;
 const corsOptions = {
   origin: async function (origin, callback) {
     const allowedOrigins = await getAllowedOrigins();
-    if (!origin || allowedOrigins.includes(origin)) {
+
+    const normalizedOrigin = normalizeUrl(origin);
+
+    console.log('normalized origin: ', origin);
+
+    if (!origin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -46,12 +52,24 @@ app.use('/public', publicRoutes);
 app.use('/api', authMiddleware, api);
 // app.use('/api', api);
 
+// If this is a .ts file, ignore the line below
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
 
-process.once('SIGUSR2', function () {
-  process.kill(process.pid, 'SIGUSR2');
-});
+// process.once('SIGUSR2', function () {
+//   server.close(() => {
+//     process.kill(process.pid, 'SIGUSR2');
+//   });
+// });
 
-process.on('SIGINT', function () {
-  process.kill(process.pid, 'SIGINT');
-});
+// process.on('SIGINT', function () {
+//   server.close(() => {
+//     process.kill(process.pid, 'SIGINT');
+//   });
+// });
+
+// process.on('uncaughtException', function (err) {
+//   console.error(err);
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });

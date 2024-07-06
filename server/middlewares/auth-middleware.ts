@@ -9,7 +9,7 @@ async function authenticateSession(req) {
   }
 
   try {
-    const decoded = await decode({
+    await decode({
       token,
       secret: process.env.NEXTAUTH_SECRET,
     });
@@ -24,7 +24,7 @@ async function authMiddleware(req: any, res: Response, next: NextFunction) {
   const token = req.headers['authorization']?.split(' ')[1];
   if (token) {
     req.token = token; // Attach token to the request object
-    console.log('Token attached to request:', token);
+    // console.log('Token attached to request:', token);
   }
 
   try {

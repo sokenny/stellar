@@ -20,8 +20,17 @@ const SnippetMissing = ({ className }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          url: 'http://' + currentProject.domain,
+          url:
+            (currentProject.domain.includes('localhost')
+              ? 'http://'
+              : 'https://') + currentProject.domain,
         }),
+      }).then(async (response) => {
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'An unknown error occurred');
+        }
+        return response;
       }),
       {
         loading: 'Checking snippet...',
@@ -30,9 +39,10 @@ const SnippetMissing = ({ className }) => {
           refetchProjects();
           return 'Snippet installation confirmed';
         },
-        error: async () => {
+        error: async (e) => {
+          console.log(e);
           setLoading(false);
-          return 'Error checking snippet - not found';
+          return e.message || 'Error checking snippet - not found';
         },
       },
     );

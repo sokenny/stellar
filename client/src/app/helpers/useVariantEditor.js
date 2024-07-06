@@ -3,7 +3,7 @@ import useStore from '../store';
 import { toast } from 'sonner';
 
 function useVariantEditor({ experiment }) {
-  const { token } = useStore();
+  const { token, refetchProjects } = useStore();
   const variantsCheckIntervalRef = useRef(null);
 
   const handleEditVariant = (variantId, onVariantModifiedCallback) => {
@@ -30,6 +30,7 @@ function useVariantEditor({ experiment }) {
       if (variantModified) {
         clearInterval(variantsCheckIntervalRef.current);
         toast.success('Variant modified successfully!');
+        refetchProjects();
         if (typeof onVariantModifiedCallback === 'function') {
           onVariantModifiedCallback(experimentJson); // Execute the callback
         }

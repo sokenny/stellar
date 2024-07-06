@@ -18,7 +18,6 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     const { url } = req.body;
     console.log('url:', url);
 
-    // Parallelize initiating browser session and finding/creating project
     const [project, browserSession] = await Promise.all([
       findOrCreateProject(url, transaction),
       initiatePage(url),
@@ -27,12 +26,14 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     const mainElementsPromise = scrapMainElements(browserSession);
     const contextPromise = getPageContext(browserSession);
 
-    // Find or create page concurrently with scraping and context fetching
     let page = await db.Page.findOne({
       where: { project_id: project.id, url: url },
     });
 
+    console.log('Hay page !: ', page);
+
     if (!page) {
+      console.log('no hay page, creamos');
       const context = await contextPromise;
       page = await db.Page.create(
         {

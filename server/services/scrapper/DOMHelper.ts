@@ -135,11 +135,9 @@ export default function DOMHelper(page: any, window: any) {
       });
     },
 
-    // TODO-p1-2: Consider running certain operations concurrently to reduce the time it takes to generate the experiments
     retrieveElements: async function () {
       const mainElements: any = {};
 
-      // Parallelize the initial element selection
       let [h1, h2, allElements, cta] = await Promise.all([
         page.$('h1'),
         page.$('h2'),
@@ -151,7 +149,6 @@ export default function DOMHelper(page: any, window: any) {
         allElements,
       );
 
-      // Parallelize the checks for important CTA buttons
       const ctaChecks = relevantElements.map((element) =>
         this.isImportantCtaButton(element),
       );
@@ -162,7 +159,6 @@ export default function DOMHelper(page: any, window: any) {
         }
       }
 
-      // Parallelize the fetching of the biggest text elements
       const [biggestText, secondBiggestText] = await Promise.all([
         this.getVisibleElementWithNBiggestFontSize(relevantElements, 1),
         this.getVisibleElementWithNBiggestFontSize(relevantElements, 2),
@@ -172,7 +168,6 @@ export default function DOMHelper(page: any, window: any) {
       const chosenBiggestText = biggestText;
       const chosenDescription = h2 || secondBiggestText;
 
-      // Parallelize getting basic styles for each chosen element
       const [h1Styles, h2Styles, ctaStyles, biggestTextStyles] =
         await Promise.all([
           tryOrReturn(async () => await this.getBasicStyles(chosenH1), {}),
@@ -187,7 +182,6 @@ export default function DOMHelper(page: any, window: any) {
           ),
         ]);
 
-      // Parallelize getting selectors for each chosen element
       const [
         chosenH1Selector,
         chosenDescriptionSelector,
@@ -219,7 +213,6 @@ export default function DOMHelper(page: any, window: any) {
         mainElements.cta = [cta, chosenCtaSelector, ctaStyles];
       }
 
-      // Parallelize the innerText evaluation for chosen elements
       const [
         chosenBiggestTextText,
         chosenH1Text,

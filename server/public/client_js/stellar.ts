@@ -150,6 +150,7 @@
           sessionIssues,
         };
 
+        // TODO-p1-1: Averiguar porque en mobile e incognito no sale el beacon.
         navigator.sendBeacon(
           `${STELLAR_API_URL}/experiments/end-session`,
           JSON.stringify(data),
@@ -440,7 +441,6 @@
 
     showLoadingState();
     function domContentLoadedActions() {
-      console.log('DOM fully loaded and parsed');
       restoreSessionData();
       trackPageVisit();
       wrapHistoryMethods();
@@ -458,6 +458,5 @@
     }
   }
 
-  console.log('linea 458si');
   initializeScript();
 })();

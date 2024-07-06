@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "npx tsc && cp -R config dist/config",
-    "start": "node dist/index.js",
-    "dev": "kill -9 $(lsof -ti:3001) ; concurrently \"npx tsc --watch\" \"nodemon --delay 500ms -q dist/index.js\"",
+    "prestart": "kill -9 $(lsof -ti:3001) || true",
+    "build": "npx tsc --watch",
+    "start": "nodemon --delay 500ms -q dist/index.js",
+    "dev": "npm run prestart && concurrently \"npm run build\" \"npm run start\"",
     "migrate": "sequelize-cli db:migrate"
   },
   "keywords": [],

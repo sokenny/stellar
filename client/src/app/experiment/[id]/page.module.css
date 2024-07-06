@@ -67,8 +67,7 @@
   margin-bottom: 6px;
 }
 
-.startDate span, .endDate span,
-.targetPage span {
+.startDate span, .endDate span {
   color: rgba(0, 0, 0, 0.5);
   font-weight: 300;
 }
@@ -80,6 +79,11 @@
 .targetPage {
   display: flex;
   align-items: center;
+}
+
+.targetPage a {
+  margin-left: 4px;
+  font-weight: 300;
 }
 
 .targetPage span {

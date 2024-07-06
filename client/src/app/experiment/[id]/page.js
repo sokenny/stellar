@@ -194,7 +194,10 @@ export default function ExperimentPage({ params, searchParams }) {
             <div className={styles.icon}>
               <Page width={15} height={15} />
             </div>
-            Target page: <span>{experiment.url}</span>
+            Target page:{' '}
+            <a href={experiment.url} target="_blank" rel="noopener noreferrer">
+              {experiment.url}
+            </a>
           </div>
         </div>
         <section>

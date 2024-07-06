@@ -29,7 +29,7 @@ export default async function HomePage({}) {
             <span>3.</span> Launch within seconds
           </div>
         </div>
-        {/* TODO-p1-2: Planear y grabar demo */}
+        {/* TODO-p1-1: Planear y grabar demo */}
         {/* 1: Brief explanation of what the software is about */}
         {/* 2: Input URL and show experiments created */}
         {/* 3: Create account and setup snippet */}

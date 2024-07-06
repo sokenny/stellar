@@ -58,6 +58,7 @@ export async function findOrCreateProject(website_url: string, transaction) {
   });
 
   if (created) {
+    // TODO-p1-1: Make sure this invalidation works well
     console.log('Created! We invalidate');
     await invalidateCache('allowed-origins');
   }
