@@ -131,39 +131,49 @@ export async function createExperiments(
   }));
 
   try {
-    const experiments = [];
+    const experimentPromises = elements.map((element) =>
+      createExperiment(element, projectId, page, transaction),
+    );
+    const experiments = await Promise.all(experimentPromises);
 
-    let lastExpCreated = null;
-    for (const element of elements) {
-      const experiment = await db.Experiment.create(
+    for (let i = 1; i < experiments.length; i++) {
+      await db.Experiment.update(
+        { queue_after: experiments[i - 1].id },
         {
-          name: `${element.type} Experiment`,
-          project_id: projectId,
-          page_id: page.id,
-          url: page.url,
-          queue_after: lastExpCreated ? lastExpCreated.id : null,
-        },
-        {
+          where: { id: experiments[i].id },
           transaction,
         },
       );
-      lastExpCreated = experiment;
-
-      const variants = await createVariants(
-        element,
-        experiment.id,
-        page.context,
-        transaction,
-      );
-      experiment.variants = variants;
-      experiments.push(experiment);
     }
 
     return experiments;
   } catch (error) {
-    console.error('Error creating experiments:', error);
+    console.error('Error creating and updating experiments:', error);
     throw error;
   }
+}
+
+async function createExperiment(element, projectId, page, transaction) {
+  const experiment = await db.Experiment.create(
+    {
+      name: `${element.type} Experiment`,
+      project_id: projectId,
+      page_id: page.id,
+      url: page.url,
+      queue_after: null, // Initially set to null
+    },
+    { transaction },
+  );
+
+  const variants = await createVariants(
+    element,
+    experiment.id,
+    page.context,
+    transaction,
+  );
+  experiment.variants = variants;
+
+  return experiment;
 }
 
 export async function createElements(elements, pageId, transaction) {

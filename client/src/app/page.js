@@ -1,5 +1,4 @@
 import EnterUrlForm from './components/EnterUrlForm/EnterUrlForm';
-import Faqs from './components/Faqs';
 import styles from './page.module.css';
 
 export default async function HomePage({}) {

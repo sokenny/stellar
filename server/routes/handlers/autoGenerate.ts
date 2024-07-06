@@ -12,21 +12,28 @@ import highlightAndCapture from '../../helpers/highlightAndCapture';
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
 
 async function autoGenerate(req: Request, res: Response): Promise<void> {
+  const start = Date.now();
   const transaction = await db.sequelize.transaction();
   try {
     const { url } = req.body;
     console.log('url:', url);
-    const project = await findOrCreateProject(url, transaction);
-    const browserSession = await initiatePage(url);
-    const mainElements = await scrapMainElements(browserSession);
 
-    const context = await getPageContext(browserSession);
+    // Parallelize initiating browser session and finding/creating project
+    const [project, browserSession] = await Promise.all([
+      findOrCreateProject(url, transaction),
+      initiatePage(url),
+    ]);
 
+    const mainElementsPromise = scrapMainElements(browserSession);
+    const contextPromise = getPageContext(browserSession);
+
+    // Find or create page concurrently with scraping and context fetching
     let page = await db.Page.findOne({
       where: { project_id: project.id, url: url },
     });
 
     if (!page) {
+      const context = await contextPromise;
       page = await db.Page.create(
         {
           name: 'Page sample name',
@@ -37,16 +44,23 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
         { transaction },
       );
     }
-    const experiments = await createExperiments(
+
+    // Await main elements scraping
+    const mainElements = await mainElementsPromise;
+
+    const experimentsPromise = createExperiments(
       mainElements,
       page,
       project.id,
       transaction,
     );
 
+    // We initiate 3 parallel sessions to take screenshots of the main elements.
+    // And we need to do it asap because popups may appear
+    const experiments = await experimentsPromise;
+
     await browserSession.browser.close();
 
-    // We initiate 3 parallel sessions to take screenshots of the main elements. And we need to do it asap because popups may appear
     await Promise.all(
       Object.keys(mainElements).map(async (key) => {
         const thisExperiment = experiments.find((experiment) =>
@@ -59,9 +73,13 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
           selector,
           fileName: `experiment-${thisExperiment.id}.png`,
         });
+        await snapshotBrowserSession.browser.close();
+
         const thisVariants = thisExperiment.variants.filter(
           (variant) => !variant.is_control,
         );
+
+        // Parallelize the variant snapshots
         await Promise.all(
           thisVariants.map(async (variant) => {
             const variantSnapshotBrowserSession = await initiatePage(url);
@@ -78,6 +96,10 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     );
 
     await transaction.commit();
+
+    const end = Date.now();
+    console.log('-----Time taken:', end - start);
+
     res.status(200).send({ project });
   } catch (error) {
     await transaction.rollback();

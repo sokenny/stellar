@@ -134,57 +134,71 @@ export default function DOMHelper(page: any, window: any) {
         };
       });
     },
+
+    // TODO-p1-2: Consider running certain operations concurrently to reduce the time it takes to generate the experiments
     retrieveElements: async function () {
       const mainElements: any = {};
-      const h1 = await page.$('h1');
-      const h2 = await page.$('h2');
-      let cta = await page.$('button');
-      const elements = await page.$$('*');
-      const relevantElements = await this.getRelevantElementsToScan(elements);
 
-      for (const element of relevantElements) {
-        if (await this.isImportantCtaButton(element)) {
-          cta = element;
+      // Parallelize the initial element selection
+      let [h1, h2, allElements, cta] = await Promise.all([
+        page.$('h1'),
+        page.$('h2'),
+        page.$$('*'),
+        page.$('button'),
+      ]);
+
+      const relevantElements = await this.getRelevantElementsToScan(
+        allElements,
+      );
+
+      // Parallelize the checks for important CTA buttons
+      const ctaChecks = relevantElements.map((element) =>
+        this.isImportantCtaButton(element),
+      );
+      const ctaResults = await Promise.all(ctaChecks);
+      for (let i = 0; i < ctaResults.length; i++) {
+        if (ctaResults[i]) {
+          cta = relevantElements[i];
         }
       }
 
-      const biggestText = await this.getVisibleElementWithNBiggestFontSize(
-        relevantElements,
-        1,
-      );
-      const secondBiggestText =
-        await this.getVisibleElementWithNBiggestFontSize(relevantElements, 2);
+      // Parallelize the fetching of the biggest text elements
+      const [biggestText, secondBiggestText] = await Promise.all([
+        this.getVisibleElementWithNBiggestFontSize(relevantElements, 1),
+        this.getVisibleElementWithNBiggestFontSize(relevantElements, 2),
+      ]);
 
-      // TODO-p1-2: When scraping https://ma8.vercel.app/, an error occurs related to h1 being null fix this
       const chosenH1 = h1;
       const chosenBiggestText = biggestText;
       const chosenDescription = h2 || secondBiggestText;
 
-      const h1Styles = await tryOrReturn(
-        async () => await this.getBasicStyles(chosenH1),
-        {},
-      );
-      const h2Styles = await tryOrReturn(
-        async () => await this.getBasicStyles(chosenDescription),
-        {},
-      );
-      const ctaStyles = await tryOrReturn(
-        async () => await this.getBasicStyles(cta),
-        {},
-      );
-      const biggestTextStyles = await tryOrReturn(
-        async () => await this.getBasicStyles(chosenBiggestText),
-        {},
-      );
+      // Parallelize getting basic styles for each chosen element
+      const [h1Styles, h2Styles, ctaStyles, biggestTextStyles] =
+        await Promise.all([
+          tryOrReturn(async () => await this.getBasicStyles(chosenH1), {}),
+          tryOrReturn(
+            async () => await this.getBasicStyles(chosenDescription),
+            {},
+          ),
+          tryOrReturn(async () => await this.getBasicStyles(cta), {}),
+          tryOrReturn(
+            async () => await this.getBasicStyles(chosenBiggestText),
+            {},
+          ),
+        ]);
 
-      const chosenH1Selector = await this.getSelector(chosenH1);
-      const chosenDescriptionSelector = await this.getSelector(
-        chosenDescription,
-      );
-      const chosenCtaSelector = await this.getSelector(cta);
-      const chosenBiggestTextSelector = await this.getSelector(
-        chosenBiggestText,
-      );
+      // Parallelize getting selectors for each chosen element
+      const [
+        chosenH1Selector,
+        chosenDescriptionSelector,
+        chosenCtaSelector,
+        chosenBiggestTextSelector,
+      ] = await Promise.all([
+        this.getSelector(chosenH1),
+        this.getSelector(chosenDescription),
+        this.getSelector(cta),
+        this.getSelector(chosenBiggestText),
+      ]);
 
       console.log('chosenH1Selector:', chosenH1Selector);
       console.log('chosenDescriptionSelector:', chosenDescriptionSelector);
@@ -204,31 +218,26 @@ export default function DOMHelper(page: any, window: any) {
       if (cta && chosenCtaSelector) {
         mainElements.cta = [cta, chosenCtaSelector, ctaStyles];
       }
-      // Only add biggestText if it is not the same as h1, h2, or cta
-      // if (
-      //   chosenBiggestText &&
-      //   chosenBiggestTextSelector &&
-      //   chosenBiggestTextSelector !== chosenH1Selector &&
-      //   chosenBiggestTextSelector !== chosenDescriptionSelector &&
-      //   chosenBiggestTextSelector !== chosenCtaSelector
-      // ) {
-      //   mainElements.biggestText = [
-      //     chosenBiggestText,
-      //     chosenBiggestTextSelector,
-      //     biggestTextStyles,
-      //   ];
-      // }
 
-      // Only add biggestText if its innerText is not the same as h1, h2, or cta
+      // Parallelize the innerText evaluation for chosen elements
+      const [
+        chosenBiggestTextText,
+        chosenH1Text,
+        chosenDescriptionText,
+        ctaText,
+      ] = await Promise.all([
+        chosenBiggestText.evaluate((el) => el.innerText),
+        chosenH1.evaluate((el) => el.innerText),
+        chosenDescription.evaluate((el) => el.innerText),
+        cta.evaluate((el) => el.innerText),
+      ]);
+
       if (
         chosenBiggestText &&
         chosenBiggestTextSelector &&
-        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
-          (await chosenH1.evaluate((el: any) => el.innerText)) &&
-        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
-          (await chosenDescription.evaluate((el: any) => el.innerText)) &&
-        (await chosenBiggestText.evaluate((el: any) => el.innerText)) !==
-          (await cta.evaluate((el: any) => el.innerText))
+        chosenBiggestTextText !== chosenH1Text &&
+        chosenBiggestTextText !== chosenDescriptionText &&
+        chosenBiggestTextText !== ctaText
       ) {
         mainElements.biggestText = [
           chosenBiggestText,
