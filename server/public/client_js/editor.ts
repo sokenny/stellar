@@ -170,8 +170,50 @@
 
     injectStyles(styles);
 
+    function addHoverStyles() {
+      document.addEventListener('mouseover', function (e) {
+        injectStyles(`
+          .stellar-hover-effect {
+            outline: 2px solid blue !important;
+          }
+        `);
+
+        document.querySelectorAll('.stellar-hover-effect').forEach((el) => {
+          el.classList.remove('stellar-hover-effect');
+        });
+
+        let target: any = e.target;
+        let isVariantEditorOrChild = false;
+
+        while (target && target !== document) {
+          if (target.classList.contains('stellar-variant-editor')) {
+            isVariantEditorOrChild = true;
+            break;
+          }
+          target = target.parentNode;
+        }
+
+        target = e.target;
+
+        if (!isVariantEditorOrChild) {
+          while (target && target !== document) {
+            if (target.matches('*:not(body, html)')) {
+              target.classList.add('stellar-hover-effect');
+              break;
+            }
+            target = target.parentNode;
+          }
+        }
+      });
+    }
+
     document.onreadystatechange = async () => {
       if (document.readyState === 'complete') {
+        if (visualEditorOn === 'true' || isSettingGoal === 'true') {
+          console.log('adding hover styles :p');
+          addHoverStyles();
+        }
+
         if (elementToHighlight) {
           const element: any = document.querySelector(elementToHighlight);
           if (element) {
@@ -189,10 +231,8 @@
           (visualEditorOn === 'true' && experimentId) ||
           (previewMode === 'true' && experimentId)
         ) {
-          let fetchingVariant = false;
           if (variantId) {
             showLoadingState('Fetching variant...');
-            fetchingVariant = true;
             const response = await fetch(
               `${STELLAR_API_URL}/variant/${variantId}`,
               {
@@ -376,10 +416,6 @@
 
           .sve-hide-element input {
             margin-right: 8px;
-          }
-          
-          .stellar-hover-effect {
-            outline: 2px solid blue !important;
           }
           `;
 
@@ -792,43 +828,6 @@
             renderEditor({});
           }
 
-          function addoverStyles() {
-            document.addEventListener('mouseover', function (e) {
-              document
-                .querySelectorAll('.stellar-hover-effect')
-                .forEach((el) => {
-                  el.classList.remove('stellar-hover-effect');
-                });
-
-              let target: any = e.target;
-              let isVariantEditorOrChild = false;
-
-              while (target && target !== document) {
-                if (target.classList.contains('stellar-variant-editor')) {
-                  isVariantEditorOrChild = true;
-                  break;
-                }
-                target = target.parentNode;
-              }
-
-              target = e.target;
-
-              if (!isVariantEditorOrChild) {
-                while (target && target !== document) {
-                  if (target.matches('*:not(body, html)')) {
-                    target.classList.add('stellar-hover-effect');
-                    break;
-                  }
-                  target = target.parentNode;
-                }
-              }
-            });
-          }
-
-          if (visualEditorOn === 'true') {
-            addoverStyles();
-          }
-
           function handleClickBehaviour() {
             document.addEventListener(
               'click',
@@ -871,9 +870,10 @@
       target.classList.add('stellar-selected');
     }
 
-    document.addEventListener('contextmenu', (event) => {
-      if (!isSettingGoal && !newExperiment) return;
+    document.addEventListener('click', (event) => {
       event.preventDefault();
+      event.stopPropagation();
+      if (!isSettingGoal && !newExperiment) return;
 
       if (isSettingGoal) {
         handleElementSelection(event);

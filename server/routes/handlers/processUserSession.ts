@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import db from '../../models';
 
 async function processUserSession(req: Request, res: Response) {
+  const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  console.log('ipAddress: ', ipAddress);
   try {
     const payloadString = req.body.toString();
     const payload = JSON.parse(payloadString);
@@ -14,6 +16,7 @@ async function processUserSession(req: Request, res: Response) {
       click_count: payload.clickCount,
       scroll_depth: payload.scrollDepth,
       visited_pages: payload.visitedPages,
+      ip: ipAddress,
     });
 
     const sessionExperimentPromises = payload.experimentsRun.map(

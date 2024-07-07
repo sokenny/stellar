@@ -8,6 +8,7 @@ class Session extends Model {
   public scroll_depth!: number;
   public experiments_run!: any[];
   public visited_pages!: string[];
+  public ip!: string;
   public created_at!: Date;
   public updated_at!: Date;
 }
@@ -42,6 +43,10 @@ export const initializeSession = (sequelize: Sequelize): typeof Session => {
       },
       visited_pages: {
         type: DataTypes.JSON,
+        allowNull: true,
+      },
+      ip: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       created_at: {

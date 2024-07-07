@@ -86,6 +86,7 @@ const Nav = ({ token }) => {
   const tabs = [
     // { name: 'Faq', path: '/faq', isAuth: false },
     // { name: 'Pricing', path: '/pricing', isAuth: false },
+    { name: 'Dashboard', path: '/dashboard', isAuth: true, when: isHome },
   ];
   return (
     <>
@@ -107,6 +108,7 @@ const Nav = ({ token }) => {
             const isActive = tab.path === pathname;
             if (tab.isAuth && !session) return null;
             if (!tab.isAuth && session) return null;
+            if (tab.when === false) return null;
             return (
               <NavbarItem
                 key={i}

@@ -7,28 +7,10 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
-  // const checkingSnippet = urlParams.get('checkingSnippet');
   const sessionIssues = [];
   let global__experimentsToMount = null;
   let global__observer = null;
   let global__mountedOnThisPageLoad = {};
-
-  // if (checkingSnippet === 'true') {
-  //   fetch(`${STELLAR_API_URL}/projects/check-snippet`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       url: window.location.origin + window.location.pathname,
-  //     }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {})
-  //     .catch((error) => {
-  //       console.error('Error checkingSnippet:', error);
-  //     });
-  // }
 
   if (!localStorage.getItem('stellarVisitorId')) {
     localStorage.setItem(
@@ -150,7 +132,7 @@
           sessionIssues,
         };
 
-        // TODO-p1-1: Averiguar porque en mobile e incognito no sale el beacon.
+        // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
         navigator.sendBeacon(
           `${STELLAR_API_URL}/experiments/end-session`,
           JSON.stringify(data),
@@ -437,7 +419,11 @@
   }
 
   function initializeScript() {
-    console.log('inicializamos ');
+    console.log('inicializamos caca');
+
+    if (stellarMode === 'true') {
+      return;
+    }
 
     showLoadingState();
     function domContentLoadedActions() {

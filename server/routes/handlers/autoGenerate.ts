@@ -11,6 +11,7 @@ import highlightAndCapture from '../../helpers/highlightAndCapture';
 
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
 
+// TODO-p1-1: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const start = Date.now();
   const transaction = await db.sequelize.transaction();
