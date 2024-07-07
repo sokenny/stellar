@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import Nav from './components/Nav/Nav';
 import './globals.css';
+import getAuthTokenName from './helpers/getAuthTokenName';
 import { cookies } from 'next/headers';
 import styles from './layout.module.css';
 
@@ -16,7 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   const nextCookies = cookies();
-  const nextAuthSessionToken = nextCookies.get('next-auth.session-token');
+  const nextAuthSessionToken = nextCookies.get(getAuthTokenName());
 
   return (
     <html lang="en">
