@@ -20,6 +20,8 @@ import styles from './Nav.module.css';
 
 const Nav = ({ token }) => {
   const pathname = usePathname();
+  const isHome = pathname === '/';
+  console.log('Pathname! ', pathname);
   const { data: session } = useSession();
   const {
     currentProject,
@@ -87,7 +89,7 @@ const Nav = ({ token }) => {
   ];
   return (
     <>
-      {session === undefined && <FullPageLoader />}
+      {session === undefined && !isHome && <FullPageLoader />}
       <Toaster richColors position="bottom-right" />
       {errorModal && (
         <ErrorModal
