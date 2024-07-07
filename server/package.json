@@ -29,7 +29,7 @@
     "openai": "3.3.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "puppeteer": "^21.6.1",
+    "puppeteer": "^22.12.1",
     "redis": "^4.6.14",
     "sequelize": "^6.35.1",
     "uuidv4": "^6.2.13"
