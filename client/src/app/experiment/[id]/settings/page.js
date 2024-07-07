@@ -15,8 +15,8 @@ import styles from './page.module.css';
 export default function SettingsPage({ params }) {
   const router = useRouter();
   const experimentId = params.id;
-  const { currentProject, refetchProjects } = useStore();
-  const loading = Object.keys(currentProject).length === 0;
+  const { currentProject, user } = useStore();
+  const loading = user === null;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
   );
@@ -38,7 +38,6 @@ export default function SettingsPage({ params }) {
         </BreadcrumbItem>
         <BreadcrumbItem>settings</BreadcrumbItem>
       </Breadcrumbs>
-      {/* <pre>{JSON.stringify(experiment)}</pre> */}
       <h1 className={styles.title}>Settings</h1>
       <SettingsForm experiment={experiment} />
     </>

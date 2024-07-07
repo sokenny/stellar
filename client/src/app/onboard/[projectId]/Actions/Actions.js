@@ -7,7 +7,7 @@ import Button from '../../../components/Button/Button';
 import useStore from '../../../store';
 import styles from './Actions.module.css';
 
-const Actions = ({ projectId, authenticated }) => {
+const Actions = ({ projectId, authenticated, isEmpty }) => {
   const { session } = useStore();
   const actionsRef = useRef(null);
   const [isFloating, setIsFloating] = useState(false);
@@ -69,14 +69,17 @@ const Actions = ({ projectId, authenticated }) => {
                   callbackUrl: `/onboard/${projectId}?authenticated=true`,
                 });
               }}
+              key={btn}
             >
-              Create Account with Experiments
+              {isEmpty ? 'Create Account' : 'Create Account with Experiments'}
             </Button>
           ))}
-          <div className={styles.disclaimer}>
-            You can further edit your experiments and variants after creating
-            your account.
-          </div>
+          {!isEmpty && (
+            <div className={styles.disclaimer}>
+              You can further edit your experiments and variants after creating
+              your account.
+            </div>
+          )}
         </div>
       )}
     </>

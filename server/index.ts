@@ -10,12 +10,13 @@ import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
 dotenv.config();
+// TODO-p1-2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 
-// TODO-p1-1: Mandarle link de demo a huguito y que me diga que piensa (?)
-// TODO-p1-2: Publicar en reddit /webdev y talvez /ppc (?) pidiendo opiniones
-// TODO-p1-3: Mandar link a Dani y/o Raj y que me de sus thoughts (?)
+// TODO-p1-3: Mandarle link de demo a huguito y que me diga que piensa (?)
+// TODO-p1-4: Publicar en reddit /webdev y talvez /ppc (?) pidiendo opiniones
+// TODO-p1-5: Mandar link a Dani y/o Raj y que me de sus thoughts (?)
 
-// TODO-p1-4: Have account section and be able to create / switch projects
+// TODO-p1-6: Have account section and be able to create / switch projects
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;

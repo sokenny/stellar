@@ -55,7 +55,7 @@ router.post('/goals', setGoal);
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
 router.get('/projects/:userEmail', getProjects);
-router.delete('/project/:projectId', deleteProject);
+// router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
 
 export default router;

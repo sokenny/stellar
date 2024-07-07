@@ -24,5 +24,8 @@
 
 .variant {
   margin-right: 8px;
-  
+}
+
+.empty {
+  max-width: 750px;
 }

@@ -26,7 +26,7 @@ const VariantModal = ({
 }) => {
   const router = useRouter();
   const { refetchProjects, currentProject } = useStore();
-  const missingSnippet = currentProject.snippet_status !== 1;
+  const missingSnippet = currentProject?.snippet_status !== 1;
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);

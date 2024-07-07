@@ -4,14 +4,16 @@ import useStore from '../store';
 import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperiments';
 import SnippetMissing from '../components/SnippetMissing';
 import styles from './page.module.css';
+import EnterUrlForm from '../components/EnterUrlForm/EnterUrlForm';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
 export default function Dashboard() {
-  const { currentProject } = useStore();
+  const { currentProject, user } = useStore();
+  const loading = user === null;
+  const missingSnippet = currentProject && currentProject?.snippet_status !== 1;
 
-  const loading = !currentProject.id;
-  const missingSnippet = currentProject.snippet_status !== 1;
+  const emptyState = !currentProject && !loading;
 
   if (loading) {
     return <div>Loading...</div>;
@@ -20,7 +22,36 @@ export default function Dashboard() {
   return (
     <div className={styles.Dashboard}>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}
-      <TabsAndExperiments experiments={currentProject.experiments} />
+      {currentProject && (
+        <TabsAndExperiments experiments={currentProject.experiments} />
+      )}
+      {emptyState && (
+        <div className={styles.setUpProjectFlow}>
+          <h3 className={styles.title}>Let's set up your first project! 🚀</h3>
+          <div className={styles.description}>
+            Enter your landing page or website URL to get started.
+          </div>
+          <EnterUrlForm
+            className={styles.urlForm}
+            onSuccess={async (project) => {
+              return fetch(
+                `${process.env.NEXT_PUBLIC_STELLAR_API}/api/onboard/${project.id}`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    userEmail: user.email,
+                  }),
+                },
+              ).then(() => {
+                window.location.href = '/dashboard';
+              });
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

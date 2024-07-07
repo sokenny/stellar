@@ -14,9 +14,9 @@ import styles from './CreateExperimentForm.module.css';
 const CreateExperimentForm = ({ experiment }) => {
   const router = useRouter();
   const variantsCheckIntervalRef = useRef(null);
-  const { currentProject, refetchProjects } = useStore();
-  const missingSnippet = currentProject.snippet_status !== 1;
-  const loading = Object.keys(currentProject).length === 0;
+  const { user, currentProject, refetchProjects } = useStore();
+  const missingSnippet = currentProject?.snippet_status !== 1;
+  const loading = user === null;
   const [createExperimentLoading, setCreateExperimentLoading] = useState(false);
   const [addVariantLoading, setAddVariantLoading] = useState(false);
   const [formState, setFormState] = useState({

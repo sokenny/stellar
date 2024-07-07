@@ -6,8 +6,8 @@ import useStore from '../../../store';
 import styles from './page.module.css';
 
 export default function CreateExperimentPage({ params }) {
-  const { currentProject } = useStore();
-  const loading = Object.keys(currentProject).length === 0;
+  const { currentProject, user } = useStore();
+  const loading = user === null;
   const { id } = params;
   const isNew = id === 'new';
 

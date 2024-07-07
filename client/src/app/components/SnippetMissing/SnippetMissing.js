@@ -6,7 +6,7 @@ import Button from '../Button';
 import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
 
-const SnippetMissing = ({ className }) => {
+const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const { user, refetchProjects, currentProject } = useStore();
   const apiKey = user?.api_keys?.[0].key;
@@ -37,6 +37,7 @@ const SnippetMissing = ({ className }) => {
         success: async () => {
           setLoading(false);
           refetchProjects();
+          onSuccess();
           return 'Snippet installation confirmed';
         },
         error: async (e) => {

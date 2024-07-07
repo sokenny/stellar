@@ -7,8 +7,10 @@ import isValidUrl from '../../helpers/isValidUrl';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './EnterUrlForm.module.css';
+import useStore from '../../store';
 
-const EnterUrlForm = () => {
+const EnterUrlForm = ({ className, onSuccess }) => {
+  const { user } = useStore();
   const router = useRouter();
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +23,6 @@ const EnterUrlForm = () => {
     try {
       setLoading(true);
 
-      // Display the "Scrapping main elements..." toast
       toast.promise(
         fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/public/onboard', {
           method: 'POST',
@@ -33,9 +34,14 @@ const EnterUrlForm = () => {
         {
           loading: 'Scrapping page & creating experiments...',
           success: async (response) => {
+            setLoading(false);
+            // TODO: Idealmente todo esto vendría desde onSuccess, eventualmente deberíamos refactorizarlo
             const parsedResponse = await response.json();
-            console.log('parsedResponse', parsedResponse);
-            router.push(`/onboard/${parsedResponse.project.id}`);
+            if (!user) {
+              router.push(`/onboard/${parsedResponse.project.id}`);
+            } else {
+              await onSuccess(parsedResponse.project);
+            }
             return 'Experiments created successfully';
           },
           error: (error) => {
@@ -52,7 +58,7 @@ const EnterUrlForm = () => {
   }, [url, router]);
 
   return (
-    <div className={styles.EnterUrlForm}>
+    <div className={`${styles.EnterUrlForm} ${className}`}>
       <form
         className={styles.form}
         onSubmit={(e) => {

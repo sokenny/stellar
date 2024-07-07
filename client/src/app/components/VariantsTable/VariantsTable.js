@@ -115,7 +115,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
   const [page, setPage] = React.useState(1);
   const hasStarted = experiment.started_at;
   const { stats, getExperimentStats, currentProject, token } = useStore();
-  const missingSnippet = currentProject.snippet_status !== 1;
+  const missingSnippet = currentProject?.snippet_status !== 1;
   const thisStats = stats[experiment.id];
   const {
     isOpen: isSnippetModalOpen,

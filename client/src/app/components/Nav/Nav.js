@@ -49,7 +49,7 @@ const Nav = ({ token }) => {
 
     const user = await response.json();
     setProjects(user?.projects);
-    setCurrentProject(user?.projects[0] || {});
+    setCurrentProject(user?.projects[0] || null);
     setSession(session);
     setUser(user);
   }
@@ -136,7 +136,7 @@ const Nav = ({ token }) => {
                 <div
                   onClick={() =>
                     signIn('google', {
-                      callbackUrl: '/dashboard?juanito=banana',
+                      callbackUrl: '/dashboard',
                     })
                   }
                 >
@@ -147,7 +147,7 @@ const Nav = ({ token }) => {
                 <Button
                   onClick={() =>
                     signIn('google', {
-                      callbackUrl: '/dashboard?juanito=banana',
+                      callbackUrl: '/dashboard',
                     })
                   }
                   color="primary"

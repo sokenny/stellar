@@ -10,9 +10,8 @@ function interceptFetch(projectId, token) {
 
     if (options.headers) {
       options.headers = new Headers(options.headers);
-      for (const [key, value] of Object.entries(customHeaders)) {
-        options.headers.append(key, value);
-      }
+      options.headers.set('project-id', projectId);
+      options.headers.set('Authorization', `Bearer ${token}`);
     } else {
       options.headers = new Headers(customHeaders);
     }

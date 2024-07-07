@@ -21,6 +21,7 @@ async function getProjects(req, res) {
             where: {
               deleted_at: null,
             },
+            required: false,
             include: [
               {
                 model: db.Variant,
@@ -33,6 +34,7 @@ async function getProjects(req, res) {
               {
                 model: db.Goal,
                 as: 'goal',
+                required: false,
               },
             ],
           },

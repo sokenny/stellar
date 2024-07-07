@@ -11,7 +11,6 @@
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
   const variantId = urlParams.get('variantId');
-  const newExperiment = urlParams.get('newExperiment');
   const tempId = urlParams.get('tempId');
   const projectId = urlParams.get('projectId');
   const isSettingGoal = urlParams.get('isSettingGoal');
@@ -101,26 +100,6 @@
           selector,
           // TODO-p1-3: Make sure this is only the path
           url_match_value: pageUrl,
-        }),
-      });
-
-      return { status: response.status, data: await response.json() };
-    }
-
-    async function createNewExperiment({ selector, properties, elementType }) {
-      const response = await fetch(STELLAR_API_URL + '/experiments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          selector,
-          properties,
-          url: window.location.href,
-          elementType,
-          tempId,
-          projectId,
         }),
       });
 
@@ -870,10 +849,8 @@
       target.classList.add('stellar-selected');
     }
 
-    document.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (!isSettingGoal && !newExperiment) return;
+    function handleGoalElementSelection(event) {
+      if (!isSettingGoal) return;
 
       if (isSettingGoal) {
         handleElementSelection(event);
@@ -891,35 +868,9 @@
           }
         }, 50);
       }
+    }
 
-      if (newExperiment) {
-        handleElementSelection(event);
-        const target: any = event.target;
-        const selector = getSelector(target);
-        const properties = {
-          color: window.getComputedStyle(target).color,
-          fontSize: window.getComputedStyle(target).fontSize,
-          fontWeight: window.getComputedStyle(target).fontWeight,
-          innerText: target.innerText,
-        };
-        setTimeout(async () => {
-          const confirmElement = confirm('Confirm element selection?');
-          if (confirmElement) {
-            const response = await createNewExperiment({
-              selector,
-              properties,
-              elementType: target.nodeName,
-            });
-            console.log('la respuestaa: ', response);
-            if (response.status === 200) {
-              window.close();
-            }
-          } else {
-            const target = event.target as any;
-            target.classList.remove('stellar-selected');
-          }
-        }, 50);
-      }
-    });
+    document.addEventListener('click', handleGoalElementSelection);
+    document.addEventListener('contextmenu', handleGoalElementSelection);
   }
 })();

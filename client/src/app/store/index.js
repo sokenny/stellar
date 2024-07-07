@@ -3,15 +3,16 @@ import interceptFetch from '../helpers/interceptFetch';
 
 const useStore = create((set, get) => ({
   token: null,
+  user: null,
   setToken: (token) => set({ token }),
   projects: [],
   isOnboarding: false,
   setIsOnboarding: (isOnboarding) => set({ isOnboarding }),
   setProjects: (projects) => set({ projects }),
-  currentProject: {},
+  currentProject: null,
   setCurrentProject: (currentProject) => {
     set({ currentProject });
-    interceptFetch(currentProject.id, get().token);
+    interceptFetch(currentProject?.id, get().token);
   },
   stats: {},
   lastCallTimestamps: {}, // Track the last call timestamp for each experiment ID
@@ -75,6 +76,7 @@ const useStore = create((set, get) => ({
         },
       );
       const user = await response.json();
+      set({ user });
       // TODO-p2: Deprecar projects y setProjects / refetchProjects y que sea user y setUser, refetchUser
       set({ projects: user.projects, currentProject: user.projects[0] });
     } catch (error) {

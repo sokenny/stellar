@@ -40,7 +40,10 @@ export async function getPageContext(browserSession: any) {
   return context;
 }
 
-export async function findOrCreateProject(website_url: string, transaction) {
+export async function findOrCreateProject(
+  website_url: string,
+  transaction = null,
+) {
   const domain = website_url
     .replace('https://', '')
     .replace('http://', '')

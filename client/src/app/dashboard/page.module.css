@@ -5,3 +5,15 @@
 .snippet {
     margin-bottom: 32px;
 }
+
+.setUpProjectFlow .title {
+    font-size: 32px;
+}
+
+.setUpProjectFlow .description {
+    font-weight: 300;
+}
+
+.setUpProjectFlow .urlForm {
+    margin-top: 16px;
+}

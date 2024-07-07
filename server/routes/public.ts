@@ -8,6 +8,7 @@ import getExperiments from './handlers/getExperiments';
 import getVariantScreenshot from './handlers/getVariantScreenshot';
 import deleteExperiment from './handlers/deleteExperiment';
 import publicDeleteExperiment from './handlers/publicDeleteExperiment';
+import deleteProject from './handlers/deleteProject';
 
 const router = express.Router();
 
@@ -30,5 +31,7 @@ router.get('/onboard/:projectId/experiments', getExperiments);
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
 router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
 router.delete('/experiment/:id', publicDeleteExperiment);
+
+// router.delete('/hipersecretapa/:projectId', deleteProject);
 
 export default router;

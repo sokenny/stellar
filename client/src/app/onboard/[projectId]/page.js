@@ -26,18 +26,43 @@ export default async function OnboardPage({ params, searchParams }) {
     );
   }, 0);
 
+  const isEmpty = experiments.length === 0;
+
   return (
-    <div className={styles.Experiment}>
-      <h1 className={styles.title}>Review & Submit</h1>
-      <Description estimatedCR={totalEstimatedCR} />
-      <div className={styles.content}>
-        <div className={styles.experiments}>
-          {experiments.map((experiment, i) => (
-            <Experiment experiment={experiment} key={experiment.id} onReview />
-          ))}
+    <div className={styles.container}>
+      {isEmpty ? (
+        <div className={styles.empty}>
+          <h1 className={styles.title}>
+            Create your account to continue setting up experiments
+          </h1>
+          <h3 className={styles.subTitle}>
+            Seems we could not auto-generate experiments for you right now. But
+            you can still create your account and start setting up experiments
+            manually :)
+          </h3>
         </div>
-      </div>
-      <Actions projectId={projectId} authenticated={authenticated} />
+      ) : (
+        <>
+          <h1 className={styles.title}>Review & Submit</h1>
+          <Description estimatedCR={totalEstimatedCR} />
+          <div className={styles.content}>
+            <div className={styles.experiments}>
+              {experiments.map((experiment, i) => (
+                <Experiment
+                  experiment={experiment}
+                  key={experiment.id}
+                  onReview
+                />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      <Actions
+        projectId={projectId}
+        authenticated={authenticated}
+        isEmpty={isEmpty}
+      />
     </div>
   );
 }

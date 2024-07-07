@@ -32,9 +32,9 @@ export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
-  const { currentProject, refetchProjects } = useStore();
-  const missingSnippet = currentProject.snippet_status !== 1;
-  const loading = Object.keys(currentProject).length === 0;
+  const { user, currentProject, refetchProjects } = useStore();
+  const missingSnippet = currentProject?.snippet_status !== 1;
+  const loading = user === null;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
   );

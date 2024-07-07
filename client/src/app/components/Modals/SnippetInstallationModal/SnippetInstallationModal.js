@@ -27,7 +27,7 @@ const SnippetInstallationModal = ({ isOpen, onOpenChange }) => {
               action
             </ModalHeader>
             <ModalBody className={styles.body}>
-              <SnippetMissing />
+              <SnippetMissing onSuccess={onClose} />
             </ModalBody>
           </>
         )}

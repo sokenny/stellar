@@ -42,21 +42,21 @@ async function fetchExperiments(projectId: number) {
         as: 'goal',
         required: true,
       },
-      {
-        model: db.Page,
-        as: 'page',
-        required: true,
-        attributes: ['id'],
-        include: [
-          {
-            model: db.Project,
-            as: 'project',
-            required: true,
-            attributes: ['id'],
-            where: { id: projectId },
-          },
-        ],
-      },
+      // {
+      //   model: db.Page,
+      //   as: 'page',
+      //   // required: true,
+      //   attributes: ['id'],
+      //   include: [
+      //     {
+      //       model: db.Project,
+      //       as: 'project',
+      //       // required: true,
+      //       attributes: ['id'],
+      //       where: { id: projectId },
+      //     },
+      //   ],
+      // },
     ],
   });
 

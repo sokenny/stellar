@@ -11,14 +11,12 @@ import highlightAndCapture from '../../helpers/highlightAndCapture';
 
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
 
-// TODO-p1-1: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const start = Date.now();
+  const { url } = req.body;
+
   const transaction = await db.sequelize.transaction();
   try {
-    const { url } = req.body;
-    console.log('url:', url);
-
     const [project, browserSession] = await Promise.all([
       findOrCreateProject(url, transaction),
       initiatePage(url),
@@ -30,8 +28,6 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     let page = await db.Page.findOne({
       where: { project_id: project.id, url: url },
     });
-
-    console.log('Hay page !: ', page);
 
     if (!page) {
       console.log('no hay page, creamos');
@@ -105,8 +101,30 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     res.status(200).send({ project });
   } catch (error) {
     await transaction.rollback();
-    console.error('Error during onboarding:', error);
-    res.status(500).send('An error occurred during onboarding');
+    console.error('Error auto generating experiments:', error);
+
+    try {
+      const [project, browserSession] = await Promise.all([
+        findOrCreateProject(url),
+        initiatePage(url),
+      ]);
+
+      const context = await getPageContext(browserSession);
+
+      await db.Page.create({
+        name: 'Page sample name',
+        url: url,
+        project_id: project.id,
+        context,
+      });
+
+      await browserSession.browser.close();
+
+      res.status(200).send({ project });
+    } catch (error) {
+      console.error('Error creating project and page:', error);
+      res.status(500).send({ error: 'Error creating project and page' });
+    }
   }
 }
 
