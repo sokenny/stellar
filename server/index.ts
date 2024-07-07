@@ -50,26 +50,5 @@ app.use((req, res, next) => {
 
 app.use('/public', publicRoutes);
 app.use('/api', authMiddleware, api);
-// app.use('/api', api);
 
-// If this is a .ts file, ignore the line below
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
-
-// process.once('SIGUSR2', function () {
-//   server.close(() => {
-//     process.kill(process.pid, 'SIGUSR2');
-//   });
-// });
-
-// process.on('SIGINT', function () {
-//   server.close(() => {
-//     process.kill(process.pid, 'SIGINT');
-//   });
-// });
-
-// process.on('uncaughtException', function (err) {
-//   console.error(err);
-//   server.close(() => {
-//     process.exit(1);
-//   });
-// });

@@ -1,18 +1,13 @@
 import { Op } from 'sequelize';
 import db from '../../models';
-import * as redis from 'redis';
+// import * as redis from 'redis';
 import { decryptApiKey } from '../../helpers/crypto';
-
-const client: any = redis.createClient({
-  url: 'redis://127.0.0.1:6379',
-});
-client.on('error', (err) => console.log('Redis Client Error', err));
-client.connect();
+import { client as redisClient } from '../../helpers/cache';
 
 async function getProjectExperiments(projectId: number): Promise<any[]> {
   const cacheKey = `experiments:${projectId}`;
 
-  const cachedExperiments = await client.get(cacheKey);
+  const cachedExperiments = await redisClient.get(cacheKey);
   if (cachedExperiments) {
     console.log(`Cache hit for user ${projectId}`);
     const experiments = JSON.parse(cachedExperiments);
@@ -21,7 +16,7 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
 
   console.log(`Cache miss for user ${projectId}`);
   const experiments = await fetchExperiments(projectId);
-  client.set(cacheKey, JSON.stringify(experiments));
+  redisClient.set(cacheKey, JSON.stringify(experiments));
   return selectVariantsAtRuntime(experiments);
 }
 
