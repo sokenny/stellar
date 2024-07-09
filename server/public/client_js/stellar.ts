@@ -315,18 +315,13 @@
     const apiKey = getApiKey();
 
     try {
-      const response = await fetch(
-        `${STELLAR_API_URL}/experiments/client?page=${encodeURIComponent(
-          pageUrl,
-        )}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
+      const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
         },
-      );
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

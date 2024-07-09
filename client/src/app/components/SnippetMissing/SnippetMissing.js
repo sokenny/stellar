@@ -37,7 +37,7 @@ const SnippetMissing = ({ className, onSuccess }) => {
         success: async () => {
           setLoading(false);
           refetchProjects();
-          onSuccess();
+          onSuccess && onSuccess();
           return 'Snippet installation confirmed';
         },
         error: async (e) => {

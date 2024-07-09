@@ -1,6 +1,5 @@
 import { Op } from 'sequelize';
 import db from '../../models';
-// import * as redis from 'redis';
 import { decryptApiKey } from '../../helpers/crypto';
 import { client as redisClient } from '../../helpers/cache';
 
@@ -9,12 +8,12 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
 
   const cachedExperiments = await redisClient.get(cacheKey);
   if (cachedExperiments) {
-    console.log(`Cache hit for user ${projectId}`);
+    console.log(`Cache hit for project ${projectId}`);
     const experiments = JSON.parse(cachedExperiments);
     return selectVariantsAtRuntime(experiments);
   }
 
-  console.log(`Cache miss for user ${projectId}`);
+  console.log(`Cache miss for project ${projectId}`);
   const experiments = await fetchExperiments(projectId);
   redisClient.set(cacheKey, JSON.stringify(experiments));
   return selectVariantsAtRuntime(experiments);
@@ -42,21 +41,13 @@ async function fetchExperiments(projectId: number) {
         as: 'goal',
         required: true,
       },
-      // {
-      //   model: db.Page,
-      //   as: 'page',
-      //   // required: true,
-      //   attributes: ['id'],
-      //   include: [
-      //     {
-      //       model: db.Project,
-      //       as: 'project',
-      //       // required: true,
-      //       attributes: ['id'],
-      //       where: { id: projectId },
-      //     },
-      //   ],
-      // },
+      {
+        model: db.Project,
+        as: 'project',
+        required: true,
+        attributes: ['id'],
+        where: { id: projectId },
+      },
     ],
   });
 
