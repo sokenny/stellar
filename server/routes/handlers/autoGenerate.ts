@@ -9,6 +9,11 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
+// TODO-p1-1: Borrar logs de autogenerate que no me dejan entender q mierda pasa en cloudwatch, ver que onda el "Jul  9 19:34:35 ip-172-31-24-99 web[9229]: Error: Could not parse CSS stylesheet"
+
+// TODO-p1-1: Add process manager tht autorestarts app when it dies
+// TODO-p1-1: Figure out why instance dies. Check nginx timeout.
+
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
 
 async function autoGenerate(req: Request, res: Response): Promise<void> {

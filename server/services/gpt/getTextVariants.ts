@@ -17,11 +17,7 @@ export const getTextVariants = async ({ prompt }) => {
       max_tokens: MAX_TOKENS,
     });
 
-    console.log('gpt data!! ', openaiResponse.data);
-
     const stringifiedVariants = openaiResponse.data.choices[0].message.content;
-
-    console.log('stringifiedVariants! ', stringifiedVariants);
 
     return JSON.parse(stringifiedVariants);
   } catch (e) {

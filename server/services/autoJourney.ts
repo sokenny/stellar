@@ -10,7 +10,9 @@ import tryOrReturn from '../helpers/tryOrReturn';
 import { invalidateCache } from '../helpers/cache';
 
 export async function initiatePage(website) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--disable-logging'],
+  });
   const page = await browser.newPage();
   await page.setViewport({
     width: 1260,
@@ -19,8 +21,23 @@ export async function initiatePage(website) {
   const response = await page.goto(website);
   const statusCode = response.status();
   const html = await page.content();
-  const dom = new jsdom.JSDOM(html);
-  const window = dom.window;
+  let window;
+  try {
+    const virtualConsole = new jsdom.VirtualConsole();
+    virtualConsole.on('error', (message) => {
+      console.error('Error from JSDOM:', message);
+    });
+    virtualConsole.on('warn', () => {}); // Ignore warnings
+
+    const dom = new jsdom.JSDOM(html, {
+      virtualConsole,
+      contentType: 'text/html',
+    });
+
+    window = dom.window;
+  } catch (error) {
+    window = undefined;
+  }
   return { page, browser, statusCode, window };
 }
 
@@ -36,7 +53,6 @@ export async function scrapMainElements(
 export async function getPageContext(browserSession: any) {
   const domHelper = DOMHelper(browserSession.page, browserSession.window);
   const context = await domHelper.getPageContext();
-  console.log('context! ', context);
   return context;
 }
 

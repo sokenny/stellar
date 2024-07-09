@@ -31,7 +31,9 @@ async function performSnippetCheck(url, projectId) {
     throw new Error('Page not found');
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--disable-logging'],
+  });
   const browserPage = await browser.newPage();
   await browserPage.goto(`${url}?stellarMode=true&checkingSnippet=true`);
 

@@ -194,11 +194,6 @@ export default function DOMHelper(page: any, window: any) {
         this.getSelector(chosenBiggestText),
       ]);
 
-      console.log('chosenH1Selector:', chosenH1Selector);
-      console.log('chosenDescriptionSelector:', chosenDescriptionSelector);
-      console.log('chosenCtaSelector:', chosenCtaSelector);
-      console.log('chosenBiggestTextSelector:', chosenBiggestTextSelector);
-
       if (chosenH1 && chosenH1Selector) {
         mainElements.h1 = [chosenH1, chosenH1Selector, h1Styles];
       }
@@ -243,7 +238,7 @@ export default function DOMHelper(page: any, window: any) {
     },
     printAppTitle: async function () {
       const title = await page.title();
-      console.log('title:', title);
+      console.log('Title:', title);
     },
     getSelector: async function (element: ElementHandle) {
       try {

@@ -57,6 +57,11 @@
   border: 1px solid #cb5edc;
   border-radius: 8px;
   overflow: hidden;
+  transition: 0.75s;
+}
+
+.loomContainer:hover {
+  box-shadow: 0px 0px 25px hsl(292 64% 62% / 0.35);
 }
 
 .loomContainer iframe {
