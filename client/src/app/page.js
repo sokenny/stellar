@@ -12,7 +12,7 @@ export default async function HomePage({}) {
           </h1>
           <h2 className={styles.description}>
             Get AI generated experiments for your landing pages. Increase
-            conversions, effortlessly.
+            conversions, effortlessly. (staging)
           </h2>
         </div>
         <div className={styles.form}>
