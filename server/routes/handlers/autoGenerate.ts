@@ -9,13 +9,13 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
-// TODO-p1-1: Borrar logs de autogenerate que no me dejan entender q mierda pasa en cloudwatch, ver que onda el "Jul  9 19:34:35 ip-172-31-24-99 web[9229]: Error: Could not parse CSS stylesheet"
+// TODO-p1-1: Optimize generation of snapshots.
+// -Dont create multiple browser sessions even if it means having a pop up block the view
+// -Consider only awaiting the snapshots for the "control" variants. The other ones can be generated asynchronously, and momentarily unavailable to preview on the FE. Its just a nice to have after all.
 
-// TODO-p1-1: Add process manager tht autorestarts app when it dies
-// TODO-p1-1: Figure out why instance dies. Check nginx timeout.
+// TODO-p1-2: Store snapshots on s3.
 
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
-
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const start = Date.now();
   const { url } = req.body;
@@ -48,8 +48,11 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
       );
     }
 
-    // Await main elements scraping
+    console.log('page created');
+
     const mainElements = await mainElementsPromise;
+
+    console.log('main elements scraped');
 
     const experimentsPromise = createExperiments(
       mainElements,
@@ -58,50 +61,31 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
       transaction,
     );
 
-    // We initiate 3 parallel sessions to take screenshots of the main elements.
-    // And we need to do it asap because popups may appear
     const experiments = await experimentsPromise;
 
-    await browserSession.browser.close();
+    console.log('experiments created');
 
-    await Promise.all(
-      Object.keys(mainElements).map(async (key) => {
-        const thisExperiment = experiments.find((experiment) =>
-          experiment.name.includes(key),
-        );
-        const snapshotBrowserSession = await initiatePage(url);
-        const selector = mainElements[key][1];
-        await highlightAndCapture({
-          session: snapshotBrowserSession,
-          selector,
-          fileName: `experiment-${thisExperiment.id}.png`,
-        });
-        await snapshotBrowserSession.browser.close();
+    for (const key of Object.keys(mainElements)) {
+      const thisExperiment = experiments.find((experiment) =>
+        experiment.name.includes(key),
+      );
+      const selector = mainElements[key][1];
+      await highlightAndCapture({
+        session: browserSession,
+        selector,
+        fileName: `experiment-${thisExperiment.id}.png`,
+      });
+    }
 
-        const thisVariants = thisExperiment.variants.filter(
-          (variant) => !variant.is_control,
-        );
-
-        // Parallelize the variant snapshots
-        await Promise.all(
-          thisVariants.map(async (variant) => {
-            const variantSnapshotBrowserSession = await initiatePage(url);
-            await highlightAndCapture({
-              session: variantSnapshotBrowserSession,
-              selector,
-              fileName: `experiment-${thisExperiment.id}var${variant.id}.png`,
-              modifications: variant.modifications,
-            });
-            await variantSnapshotBrowserSession.browser.close();
-          }),
-        );
-      }),
-    );
+    console.log('control variants snapshots taken');
 
     await transaction.commit();
 
     const end = Date.now();
     console.log('-----Time taken:', end - start);
+
+    // We dont await this
+    captureNonControlVariants(experiments, mainElements, browserSession);
 
     res.status(200).send({ project });
   } catch (error) {
@@ -130,6 +114,39 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
       console.error('Error creating project and page:', error);
       res.status(500).send({ error: 'Error creating project and page' });
     }
+  }
+}
+
+async function captureNonControlVariants(
+  experiments,
+  mainElements,
+  browserSession,
+) {
+  console.log('capturing non control variants');
+  try {
+    for (const key of Object.keys(mainElements)) {
+      const thisExperiment = experiments.find((experiment) =>
+        experiment.name.includes(key),
+      );
+      const selector = mainElements[key][1];
+
+      const thisVariants = thisExperiment.variants.filter(
+        (variant) => !variant.is_control,
+      );
+
+      for (const variant of thisVariants) {
+        await highlightAndCapture({
+          session: browserSession,
+          selector,
+          fileName: `experiment-${thisExperiment.id}var${variant.id}.png`,
+          modifications: variant.modifications,
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error capturing non control variants:', error);
+  } finally {
+    await browserSession.browser.close();
   }
 }
 

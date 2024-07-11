@@ -1,10 +1,31 @@
 import path from 'path';
 
-async function applyStyle(elementHandle, styleObject) {
+async function injectCSSClass(page, className, cssText) {
+  await page.evaluate(
+    (className, cssText) => {
+      const style = document.createElement('style');
+      style.type = 'text/css';
+      style.innerHTML = `.${className} { ${cssText} }`;
+      document.head.appendChild(style);
+    },
+    className,
+    cssText,
+  );
+}
+
+async function applyClass(elementHandle, className) {
   if (elementHandle) {
-    await elementHandle.evaluate((el, style) => {
-      Object.assign(el.style, style);
-    }, styleObject);
+    await elementHandle.evaluate((el, className) => {
+      el.classList.add(className);
+    }, className);
+  }
+}
+
+async function removeClass(elementHandle, className) {
+  if (elementHandle) {
+    await elementHandle.evaluate((el, className) => {
+      el.classList.remove(className);
+    }, className);
   }
 }
 
@@ -41,15 +62,17 @@ async function highlightAndCapture({
     }
   }
 
-  // Apply a highlight style to the element
-  const highlightStyle = {
-    border: '2px solid red',
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-  };
+  // Inject CSS class into the page
+  const highlightClass = 'stellar__highlight';
+  const highlightStyle =
+    'border: 2px solid red; background-color: rgba(255, 0, 0, 0.1);';
 
-  // For now, we only want to highlight the control variant
+  // Inject the CSS class into the page
+  await injectCSSClass(page, highlightClass, highlightStyle);
+
+  // Apply the CSS class to the element
   if (modifications.length === 0) {
-    await applyStyle(element, highlightStyle);
+    await applyClass(element, highlightClass);
   }
 
   const viewPort = await page.viewport();
@@ -75,6 +98,13 @@ async function highlightAndCapture({
     path: destination,
     clip: clipRegion,
   });
+
+  // Remove the CSS class after taking the screenshot
+  if (modifications.length === 0) {
+    console.log('Remoiving class', highlightClass);
+    await removeClass(element, highlightClass);
+    console.log('Class removed', highlightClass);
+  }
 
   return destination;
 }

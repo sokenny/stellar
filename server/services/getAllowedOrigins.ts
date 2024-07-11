@@ -7,6 +7,8 @@ const staticAllowedOrigins = [
   'https://localhost:3000',
   'https://gostellar.app',
   'https://www.gostellar.app',
+  'http://staging.gostellar.app',
+  'https://staging.gostellar.app',
 ];
 
 async function getAllowedOrigins() {

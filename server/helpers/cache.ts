@@ -7,6 +7,9 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 
 client.connect();
 
+// Let's have allowed-origins be invalidated on every server restart
+client.del('allowed-origins');
+
 export async function invalidateCache(key) {
   try {
     await client.del(key);
