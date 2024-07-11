@@ -6,6 +6,19 @@ import Button from '../Button';
 import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
 
+// TODO-p1-1: Perhaps have part of the installed code that is actual JS directly pasted. mainly to include a loader.
+// TODO-p1-1: The included JS can try intialize experiments that were cached in localstorage, which would be invalidated if the fetch request brings new changes saying the exp ended.
+
+// TODO-p1-1: Do the following to have the browser load the snippet faster
+{
+  /* <link rel="preconnect" href="https://your-cdn-or-api-domain.com">
+<link rel="dns-prefetch" href="https://your-cdn-or-api-domain.com">
+<link rel="preload" href="https://your-cdn-or-api-domain.com/path-to-script.js" as="script">
+<script async src="https://your-cdn-or-api-domain.com/path-to-script.js" data-stellar-api-key="YOUR_API_KEY"></script>  */
+}
+
+// TODO-p1-1: Consider hosting the snippet on a CDN
+
 const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const { user, refetchProjects, currentProject } = useStore();
