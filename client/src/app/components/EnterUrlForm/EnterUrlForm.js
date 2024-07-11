@@ -38,7 +38,8 @@ const EnterUrlForm = ({ className, onSuccess }) => {
             // TODO: Idealmente todo esto vendría desde onSuccess, eventualmente deberíamos refactorizarlo
             const parsedResponse = await response.json();
             if (!user) {
-              router.push(`/onboard/${parsedResponse.project.id}`);
+              // router.push(`/onboard/${parsedResponse.project.id}`);
+              window.location.href = `/onboard/${parsedResponse.project.id}`;
             } else {
               await onSuccess(parsedResponse.project);
             }

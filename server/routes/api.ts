@@ -22,11 +22,14 @@ import checkSnippet from './handlers/checkSnippet';
 import updateVariantName from './handlers/updateVariantName';
 import updateExperimentName from './handlers/updateExperimentName';
 import updateExperimentSettings from './handlers/updateExperimentSettings';
+import generalRequestLimiter from '../helpers/generalRequestLimiter';
 
 const router = express.Router();
 
 // TODO: add Rate Limiting to prevent abuse. mainly for the endpoints exposed to the client that
 // are authenticated with the public api key
+
+router.use(generalRequestLimiter);
 
 router.post('/onboard/:projectId', finishOnboarding);
 

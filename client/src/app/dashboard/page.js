@@ -10,6 +10,7 @@ import EnterUrlForm from '../components/EnterUrlForm/EnterUrlForm';
 
 export default function Dashboard() {
   const { currentProject, user } = useStore();
+  console.log('curproj! ', currentProject);
   const loading = user === null;
   const missingSnippet = currentProject && currentProject?.snippet_status !== 1;
 

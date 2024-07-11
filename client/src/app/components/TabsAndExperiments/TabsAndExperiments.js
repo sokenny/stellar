@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import ExperimentsTable from '../ExperimentsTable';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';

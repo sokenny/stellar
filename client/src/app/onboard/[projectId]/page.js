@@ -28,6 +28,8 @@ export default async function OnboardPage({ params, searchParams }) {
 
   const isEmpty = experiments.length === 0;
 
+  console.log('expos :', experiments);
+
   return (
     <div className={styles.container}>
       {isEmpty ? (

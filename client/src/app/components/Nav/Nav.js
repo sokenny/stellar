@@ -160,6 +160,11 @@ const Nav = ({ token }) => {
           )}
         </NavbarContent>
       </Navbar>
+      <div className={styles.statusBar}>
+        <div>
+          Currently on limited open beta. <a>Leave us your feedback</a>.
+        </div>
+      </div>
     </>
   );
 };

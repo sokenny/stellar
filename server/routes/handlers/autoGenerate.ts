@@ -9,12 +9,7 @@ import {
 } from '../../services/autoJourney';
 import highlightAndCapture from '../../helpers/highlightAndCapture';
 
-// TODO-p1-1: Optimize generation of snapshots.
-// -Dont create multiple browser sessions even if it means having a pop up block the view
-// -Consider only awaiting the snapshots for the "control" variants. The other ones can be generated asynchronously, and momentarily unavailable to preview on the FE. Its just a nice to have after all.
-
 // TODO-p1-2: Store snapshots on s3.
-
 // TODO-p2: Consider adding further experiments that involve font-size or button bg color changes. Maybe not for v1
 async function autoGenerate(req: Request, res: Response): Promise<void> {
   const start = Date.now();

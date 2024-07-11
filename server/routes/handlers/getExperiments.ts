@@ -21,7 +21,7 @@ async function getExperiments(req, res) {
         as: 'goal',
       },
     ],
-    order: [['created_at', 'ASC']],
+    order: [['id', 'ASC']],
   });
 
   res.json(experiments);

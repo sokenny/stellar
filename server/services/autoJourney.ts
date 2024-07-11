@@ -135,6 +135,26 @@ export async function createVariants(
   return variantsForThisElement;
 }
 
+function sortByRelevance(elements) {
+  return elements.sort((a, b) => {
+    if (a.type === 'h1') {
+      return -1;
+    } else if (b.type === 'h1') {
+      return 1;
+    } else if (a.type === 'cta') {
+      return -1;
+    } else if (b.type === 'cta') {
+      return 1;
+    } else if (a.type === 'description') {
+      return -1;
+    } else if (b.type === 'description') {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+}
+
 export async function createExperiments(
   mainElementsObject,
   page,
@@ -148,8 +168,12 @@ export async function createExperiments(
     type: element[0],
   }));
 
+  const sortedElements = sortByRelevance(elements);
+
+  console.log('Sorted elementos:', sortedElements);
+
   try {
-    const experimentPromises = elements.map((element) =>
+    const experimentPromises = sortedElements.map((element) =>
       createExperiment(element, projectId, page, transaction),
     );
     const experiments = await Promise.all(experimentPromises);
