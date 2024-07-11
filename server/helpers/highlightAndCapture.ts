@@ -45,6 +45,9 @@ async function highlightAndCapture({
     );
   }
 
+  const originalStyles = await element.evaluate((node) => node.style.cssText);
+  const originalText = await element.evaluate((node) => node.innerText);
+
   if (modifications && modifications.length > 0) {
     for (const modification of modifications) {
       if (modification.cssText) {
@@ -99,12 +102,20 @@ async function highlightAndCapture({
     clip: clipRegion,
   });
 
-  // Remove the CSS class after taking the screenshot
   if (modifications.length === 0) {
     console.log('Remoiving class', highlightClass);
     await removeClass(element, highlightClass);
     console.log('Class removed', highlightClass);
   }
+
+  await element.evaluate(
+    (node, originalStyles, originalText) => {
+      node.style.cssText = originalStyles;
+      node.innerText = originalText;
+    },
+    originalStyles,
+    originalText,
+  );
 
   return destination;
 }

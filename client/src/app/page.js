@@ -33,10 +33,8 @@ export default async function HomePage({}) {
           <div className={styles.infoBar}>2 minute demo :)</div>
           <iframe
             src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
-            frameborder="0"
-            webkitallowfullscreen
-            mozallowfullscreen
-            allowfullscreen
+            frameBorder="0"
+            allowFullScreen
           ></iframe>
         </div>
         <div className={styles.faqs}>

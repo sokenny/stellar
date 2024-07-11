@@ -84,8 +84,7 @@ async function autoGenerate(req: Request, res: Response): Promise<void> {
     const end = Date.now();
     console.log('-----Time taken:', end - start);
 
-    // We dont await this
-    captureNonControlVariants(experiments, mainElements, browserSession);
+    await captureNonControlVariants(experiments, mainElements, browserSession);
 
     res.status(200).send({ project });
   } catch (error) {
