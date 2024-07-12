@@ -5,19 +5,14 @@ import InfoCard from '../InfoCard';
 import Button from '../Button';
 import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
+import getStellarClientCode from '../../helpers/getStellarClientCode';
 
 // TODO-p1-1: Perhaps have part of the installed code that is actual JS directly pasted. mainly to include a loader.
 // TODO-p1-1: The included JS can try intialize experiments that were cached in localstorage, which would be invalidated if the fetch request brings new changes saying the exp ended.
-
-// TODO-p1-1: Do the following to have the browser load the snippet faster
-{
-  /* <link rel="preconnect" href="https://your-cdn-or-api-domain.com">
-<link rel="dns-prefetch" href="https://your-cdn-or-api-domain.com">
-<link rel="preload" href="https://your-cdn-or-api-domain.com/path-to-script.js" as="script">
-<script async src="https://your-cdn-or-api-domain.com/path-to-script.js" data-stellar-api-key="YOUR_API_KEY"></script>  */
-}
-
-// TODO-p1-1: Consider hosting the snippet on a CDN
+// 1- Script loads, looks for exp-id key in localstorage. If found, it mounts the exp without fetching from the server.
+// 2- Once fetch is done, it checks if the exp-id is still valid. If not, it removes the exp from localstorage.
+//    -Aside from removing the exp from localstorage, it will also remove the exp from the DOM.
+//    -It will also set localStorage with any other experiment that was returned. So that the cache is updated.
 
 const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -73,11 +68,7 @@ const SnippetMissing = ({ className, onSuccess }) => {
               tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
-              {'<script async src="' +
-                process.env.NEXT_PUBLIC_STELLAR_API +
-                '/public/clientjs" data-stellar-api-key="' +
-                apiKey +
-                '"></script>'}
+              {getStellarClientCode(apiKey)}
             </Snippet>
             <div className={styles.cardActions}>
               <NextUIButton

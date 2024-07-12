@@ -100,9 +100,14 @@ const Nav = ({ token }) => {
         />
       )}
       <Navbar maxWidth="full" className={styles.container}>
-        <NavbarBrand className={styles.identity}>
-          <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
-        </NavbarBrand>
+        <div className={styles.leftCol}>
+          <NavbarBrand className={styles.identity}>
+            <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
+          </NavbarBrand>
+          <div className={styles.project}>
+            Project: <span>{currentProject?.name}</span>
+          </div>
+        </div>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {tabs.map((tab, i) => {
             const isActive = tab.path === pathname;

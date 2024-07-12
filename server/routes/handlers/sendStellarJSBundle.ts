@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { minify } from 'uglify-js';
 
 async function sendStellarJSBundle(req, res) {
   try {
@@ -18,8 +19,10 @@ async function sendStellarJSBundle(req, res) {
       `${process.env.STELLAR_API_URL}`,
     );
 
+    const minifiedContent = minify(populatedContent).code;
+
     res.type('.js');
-    res.send(populatedContent);
+    res.send(minifiedContent);
   } catch (error) {
     console.error('Error sending files:', error);
     res.status(500).send('Internal Server Error');

@@ -37,6 +37,22 @@
   margin-left: 4px;
 }
 
+.leftCol {
+  display: flex;
+  align-items: center;
+}
+
+.leftCol .project {
+  margin-left: 32px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.leftCol .project span {
+  text-transform: lowercase;
+  font-weight: 500;
+}
+
 @media (max-width: 720px) {
   .container {
     padding-left: 16px;
