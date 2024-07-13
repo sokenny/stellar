@@ -104,9 +104,11 @@ const Nav = ({ token }) => {
           <NavbarBrand className={styles.identity}>
             <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
           </NavbarBrand>
-          <div className={styles.project}>
-            Project: <span>{currentProject?.name}</span>
-          </div>
+          {currentProject && (
+            <div className={styles.project}>
+              Project: <span>{currentProject?.name}</span>
+            </div>
+          )}
         </div>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {tabs.map((tab, i) => {

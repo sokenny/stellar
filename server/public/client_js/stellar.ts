@@ -34,6 +34,14 @@
     localStorage.setItem('stellarData', JSON.stringify(data));
   }
 
+  function setStellarCache(data) {
+    try {
+      localStorage.setItem('stelar__cache', JSON.stringify(data));
+    } catch (e) {
+      console.error('Error setting stellar cache: ', e);
+    }
+  }
+
   function getSessionId() {
     let sessionId = localStorage.getItem('stellar_session_id');
     if (!sessionId) {
@@ -333,11 +341,9 @@
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
-      // TODO: This filtering should be done on the server. fetchexperiments could send the domain, and we can then retrieve experiments for projects with this domain
-      // global__experimentsToMount = data.filter((experiment) =>
-      //   window.location.href.includes(experiment.url),
-      // );
       global__experimentsToMount = data;
+
+      setStellarCache(global__experimentsToMount);
 
       console.log('global__experimentsToMount', global__experimentsToMount);
 
