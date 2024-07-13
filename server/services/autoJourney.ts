@@ -92,7 +92,7 @@ export async function createVariants(
   const variantsForThisElement = [];
   const text = await element.domReference.evaluate((el: any) => el.innerText);
 
-  const prompt = buildPromptFromPageContext(pageContext, element, text);
+  const prompt = buildPromptFromPageContext({ pageContext, element, text });
   const variants = await getTextVariants({ prompt });
   const variantCount = 1 + variants.length; // Including control variant
   const baseTraffic = Math.floor(100 / variantCount);
@@ -137,7 +137,11 @@ export async function createVariants(
 
 function sortByRelevance(elements) {
   return elements.sort((a, b) => {
-    if (a.type === 'h1') {
+    if (a.type === 'biggestText') {
+      return -1;
+    } else if (b.type === 'biggestText') {
+      return 1;
+    } else if (a.type === 'h1') {
       return -1;
     } else if (b.type === 'h1') {
       return 1;
@@ -249,14 +253,23 @@ export async function createElements(elements, pageId, transaction) {
   return createdElements;
 }
 
-export function buildPromptFromPageContext(pageContext, element, text) {
+export function buildPromptFromPageContext({ pageContext, element, text }) {
+  const numVariants = {
+    h1: 3,
+    biggestText: 3,
+    cta: 2,
+    description: 2,
+  };
+
   return `I am running an A/B test for a "${
     element.type
   }" element on a webpage. I need alternative text variants for this element to compare against the original text. 
 
 Original Text: "${text}"
 
-Please provide 2 additional text variants specifically in an array format, aiming to enhance page interaction and conversion rates. For instance, the response should be structured like this:
+Please provide ${
+    numVariants[element.type] || 2
+  } additional text variants specifically in an array format, aiming to enhance page interaction and conversion rates. For instance, the response should be structured like this:
 
 ["First alternative text variant", "Second alternative text variant"].
 

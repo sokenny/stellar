@@ -169,7 +169,15 @@ const Nav = ({ token }) => {
       </Navbar>
       <div className={styles.statusBar}>
         <div>
-          Currently on limited open beta. <a>Leave us your feedback</a>.
+          Currently on limited open beta.{' '}
+          <a
+            href="https://forms.gle/h2ytTVbdYLH5ZWKs9"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Leave us your feedback
+          </a>
+          .
         </div>
       </div>
     </>
