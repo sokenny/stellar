@@ -3,6 +3,7 @@ import Description from './Description';
 import Experiment from '../../components/Experiment/Experiment';
 import styles from './page.module.css';
 import getRandomConversionRate from '../../helpers/getRandomConversionRate';
+import Script from 'next/script';
 
 export default async function OnboardPage({ params, searchParams }) {
   const projectId = params.projectId;
@@ -28,10 +29,15 @@ export default async function OnboardPage({ params, searchParams }) {
 
   const isEmpty = experiments.length === 0;
 
-  console.log('expos :', experiments);
-
   return (
     <div className={styles.container}>
+      <Script>
+        {`
+          gtag('event', 'ads_conversion_Registro_1', {
+            project_id: ${projectId}, 
+          });
+        `}
+      </Script>
       {isEmpty ? (
         <div className={styles.empty}>
           <h1 className={styles.title}>

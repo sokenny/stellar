@@ -5,12 +5,12 @@ import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperime
 import SnippetMissing from '../components/SnippetMissing';
 import styles from './page.module.css';
 import EnterUrlForm from '../components/EnterUrlForm/EnterUrlForm';
+import Script from 'next/script';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
 export default function Dashboard() {
   const { currentProject, user } = useStore();
-  console.log('curproj! ', currentProject);
   const loading = user === null;
   const missingSnippet = currentProject && currentProject?.snippet_status !== 1;
 
@@ -22,6 +22,13 @@ export default function Dashboard() {
 
   return (
     <div className={styles.Dashboard}>
+      <Script>
+        {`
+          gtag('event', 'ads_conversion_Started_onboarding_1', {
+            project_id: ${currentProject?.id},
+          });
+        `}
+      </Script>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}
       {currentProject && (
         <TabsAndExperiments experiments={currentProject.experiments} />
