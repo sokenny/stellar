@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <Head>
+      <head>
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-EHWTS4GXBX"
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-HLTERT31Y6');
           `}
         </Script>
-      </Head>
+      </head>
       <body className={`${inter.className} ${styles.layout}`}>
         <Providers>
           <Nav token={nextAuthSessionToken?.value} />
