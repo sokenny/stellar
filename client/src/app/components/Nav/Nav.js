@@ -100,16 +100,14 @@ const Nav = ({ token }) => {
         />
       )}
       <Navbar maxWidth="full" className={styles.container}>
-        <div className={styles.leftCol}>
-          <NavbarBrand className={styles.identity}>
-            <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
-          </NavbarBrand>
-          {currentProject && (
-            <div className={styles.project}>
-              Project: <span>{currentProject?.name}</span>
-            </div>
-          )}
-        </div>
+        <NavbarBrand className={styles.identity}>
+          <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
+        </NavbarBrand>
+        {currentProject && !isHome && (
+          <div className={styles.project}>
+            Project: <span>{currentProject?.name}</span>
+          </div>
+        )}
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {tabs.map((tab, i) => {
             const isActive = tab.path === pathname;

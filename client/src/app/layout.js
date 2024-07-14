@@ -5,8 +5,10 @@ import './globals.css';
 import getAuthTokenName from './helpers/getAuthTokenName';
 import { cookies } from 'next/headers';
 import styles from './layout.module.css';
+import Head from 'next/head';
 
 import './globals.css';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,6 +23,20 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <Head>
+        <Script
+          strategy="lazyOnload"
+          src="https://www.googletagmanager.com/gtag/js?id=G-EHWTS4GXBX"
+        ></Script>
+        <Script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EHWTS4GXBX');
+          `}
+        </Script>
+      </Head>
       <body className={`${inter.className} ${styles.layout}`}>
         <Providers>
           <Nav token={nextAuthSessionToken?.value} />

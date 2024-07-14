@@ -3,6 +3,7 @@
   border-bottom: 1px solid rgba(0,0,0,0.1);
   padding-left: 64px;
   padding-right: 64px;
+  height: 3rem!important;
 }
 
 .identity a, .navItem, .navItem * {
@@ -37,18 +38,13 @@
   margin-left: 4px;
 }
 
-.leftCol {
-  display: flex;
-  align-items: center;
-}
-
-.leftCol .project {
+.project {
   margin-left: 32px;
   font-size: 12px;
   text-transform: uppercase;
 }
 
-.leftCol .project span {
+.project span {
   text-transform: lowercase;
   font-weight: 500;
 }
