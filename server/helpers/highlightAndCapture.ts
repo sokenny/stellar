@@ -1,27 +1,32 @@
-import path from 'path';
-import AWS from 'aws-sdk';
+import { S3Client } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
+import Jimp from 'jimp';
 import fs from 'fs';
+import path from 'path';
 
-// Configure the AWS SDK
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-2',
+// TODO: Move s3 utilities into a helper or lib file
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
-const s3 = new AWS.S3();
-
-async function uploadToS3(filePath, bucketName, key) {
-  const fileContent = fs.readFileSync(filePath);
-
-  const params = {
+async function uploadToS3(buffer, bucketName, key) {
+  const uploadParams = {
     Bucket: bucketName,
     Key: key,
-    Body: fileContent,
+    Body: buffer,
     ContentType: 'image/png',
   };
 
-  return s3.upload(params).promise();
+  const upload = new Upload({
+    client: s3Client,
+    params: uploadParams,
+  });
+
+  return upload.done();
 }
 
 async function injectCSSClass(page, className, cssText) {
@@ -143,12 +148,16 @@ async function highlightAndCapture({
 
   const bucketName = 'stellar-app-bucket';
 
+  const image = await Jimp.read(destination);
+  image.resize(500, Jimp.AUTO).quality(80);
+  const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+
   const s3Key = `snapshots/${fileName}`;
-  await uploadToS3(destination, bucketName, s3Key);
+  const s3UploadResult = await uploadToS3(buffer, bucketName, s3Key);
 
   fs.unlinkSync(destination);
 
-  return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`;
+  return s3UploadResult.Location;
 }
 
 export default highlightAndCapture;

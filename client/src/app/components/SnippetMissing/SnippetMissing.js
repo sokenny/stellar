@@ -7,13 +7,6 @@ import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
 import getStellarClientCode from '../../helpers/getStellarClientCode';
 
-// TODO-p1-1: Perhaps have part of the installed code that is actual JS directly pasted. mainly to include a loader.
-// TODO-p1-1: The included JS can try intialize experiments that were cached in localstorage, which would be invalidated if the fetch request brings new changes saying the exp ended.
-// 1- Script loads, looks for exp-id key in localstorage. If found, it mounts the exp without fetching from the server.
-// 2- Once fetch is done, it checks if the exp-id is still valid. If not, it removes the exp from localstorage.
-//    -Aside from removing the exp from localstorage, it will also remove the exp from the DOM.
-//    -It will also set localStorage with any other experiment that was returned. So that the cache is updated.
-
 const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const { user, refetchProjects, currentProject } = useStore();

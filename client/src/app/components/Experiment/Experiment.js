@@ -57,9 +57,9 @@ const Experiment = ({
       (v) => v.is_control && v.id === variantHovered,
     );
     if (isControl || !variantHovered) {
-      return `${process.env.NEXT_PUBLIC_STELLAR_API}/public/experiment/${experiment.id}/snapshot`;
+      return `https://stellar-app-bucket.s3.us-east-2.amazonaws.com/snapshots/experiment-${experiment.id}.png`;
     }
-    return `${process.env.NEXT_PUBLIC_STELLAR_API}/public/experiment/${experiment.id}/${variantHovered}/snapshot`;
+    return `https://stellar-app-bucket.s3.us-east-2.amazonaws.com/snapshots/experiment-${experiment.id}var${variantHovered}.png`;
   }
 
   useEffect(() => {
