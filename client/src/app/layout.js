@@ -6,9 +6,9 @@ import getAuthTokenName from './helpers/getAuthTokenName';
 import { cookies } from 'next/headers';
 import styles from './layout.module.css';
 import Head from 'next/head';
+import Script from 'next/script';
 
 import './globals.css';
-import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,15 +25,16 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         <Script
-          strategy="lazyOnload"
+          async
           src="https://www.googletagmanager.com/gtag/js?id=G-EHWTS4GXBX"
         ></Script>
-        <Script>
+        <Script id="google-ads">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-EHWTS4GXBX');
+
+            gtag('config', 'G-HLTERT31Y6');
           `}
         </Script>
       </Head>
