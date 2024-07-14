@@ -1,4 +1,28 @@
 import path from 'path';
+import AWS from 'aws-sdk';
+import fs from 'fs';
+
+// Configure the AWS SDK
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-2',
+});
+
+const s3 = new AWS.S3();
+
+async function uploadToS3(filePath, bucketName, key) {
+  const fileContent = fs.readFileSync(filePath);
+
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+    Body: fileContent,
+    ContentType: 'image/png',
+  };
+
+  return s3.upload(params).promise();
+}
 
 async function injectCSSClass(page, className, cssText) {
   await page.evaluate(
@@ -103,7 +127,7 @@ async function highlightAndCapture({
   });
 
   if (modifications.length === 0) {
-    console.log('Remoiving class', highlightClass);
+    console.log('Removing class', highlightClass);
     await removeClass(element, highlightClass);
     console.log('Class removed', highlightClass);
   }
@@ -117,7 +141,14 @@ async function highlightAndCapture({
     originalText,
   );
 
-  return destination;
+  const bucketName = 'stellar-app-bucket';
+
+  const s3Key = `snapshots/${fileName}`;
+  await uploadToS3(destination, bucketName, s3Key);
+
+  fs.unlinkSync(destination);
+
+  return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3Key}`;
 }
 
 export default highlightAndCapture;
