@@ -65,6 +65,9 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
           },
         },
       );
+      window?.gtag?.('event', 'click_go_stellar', {
+        url,
+      });
     } catch (err) {
       console.log(err);
       setLoading(false);

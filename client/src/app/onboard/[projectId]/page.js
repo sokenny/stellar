@@ -31,13 +31,6 @@ export default async function OnboardPage({ params, searchParams }) {
 
   return (
     <div className={styles.container}>
-      <Script>
-        {`
-          gtag('event', 'ads_conversion_Registro_1', {
-            project_id: ${projectId}, 
-          });
-        `}
-      </Script>
       {isEmpty ? (
         <div className={styles.empty}>
           <h1 className={styles.title}>
