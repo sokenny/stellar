@@ -1,6 +1,8 @@
 import EnterUrlForm from './components/EnterUrlForm/EnterUrlForm';
 import styles from './page.module.css';
 
+// TODO-p1-1: curate flow without onboarding (straight signup)
+
 export default async function HomePage({}) {
   return (
     <div className={styles.HomePage}>
@@ -16,7 +18,7 @@ export default async function HomePage({}) {
           </h2>
         </div>
         <div className={styles.form}>
-          <EnterUrlForm />
+          <EnterUrlForm isHomePage />
         </div>
         <div className={styles.bullets}>
           <div className={styles.bullet}>

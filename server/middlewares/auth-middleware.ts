@@ -1,5 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
+import { client as redisClient } from '../helpers/cache';
+import db from '../models';
 import { decode } from 'next-auth/jwt';
+
+async function getUserAttributes(email) {
+  const key = `user:${email}`;
+  const cachedUser = await redisClient.get(key);
+  if (cachedUser) {
+    return JSON.parse(cachedUser);
+  }
+
+  const user = await db.User.findOne({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // TODO-p1: Start always setting expiraton for redis keys. Maybe 12 hours for now
+  await redisClient.set(key, JSON.stringify(user));
+}
 
 async function authenticateSession(req) {
   const token = req.token;
@@ -9,10 +30,12 @@ async function authenticateSession(req) {
   }
 
   try {
-    await decode({
+    const decoded = await decode({
       token,
       secret: process.env.NEXTAUTH_SECRET,
     });
+    const user = await getUserAttributes(decoded.email);
+    req.user = user;
   } catch (error) {
     throw new Error('Failed to decode token: ' + error.message);
   }

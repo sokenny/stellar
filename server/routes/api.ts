@@ -23,6 +23,7 @@ import updateVariantName from './handlers/updateVariantName';
 import updateExperimentName from './handlers/updateExperimentName';
 import updateExperimentSettings from './handlers/updateExperimentSettings';
 import generalRequestLimiter from '../helpers/generalRequestLimiter';
+import autoGenerate from './handlers/autoGenerate';
 
 const router = express.Router();
 
@@ -32,6 +33,8 @@ const router = express.Router();
 router.use(generalRequestLimiter);
 
 router.post('/onboard/:projectId', finishOnboarding);
+
+router.post('/kickstart-project', autoGenerate);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);

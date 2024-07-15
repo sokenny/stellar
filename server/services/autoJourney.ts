@@ -57,17 +57,34 @@ export async function getPageContext(browserSession: any) {
 }
 
 export async function findOrCreateProject(
-  website_url: string,
+  website_url,
   transaction = null,
+  user = null,
 ) {
   const domain = website_url
     .replace('https://', '')
     .replace('http://', '')
     .replace('www.', '');
 
+  if (user) {
+    const existingProject = await db.Project.findOne({
+      where: {
+        domain,
+        user_id: user.id,
+      },
+      transaction,
+    });
+
+    if (existingProject) {
+      throw new Error('You already have a project with this domain');
+    }
+  }
+
+  // TODO-p1-1: If no user is set, we need to directly create the project, this logic below is prone to just find an old project with a null user
   const [project, created] = await db.Project.findOrCreate({
     where: {
       domain,
+      user_id: user ? user.id : null,
     },
     defaults: {
       name: domain,

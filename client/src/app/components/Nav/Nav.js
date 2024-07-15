@@ -173,9 +173,15 @@ const Nav = ({ token }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Leave us your feedback
+            Leave us your feedback 📝
           </a>
-          .
+          <a
+            href="https://discord.gg/62krmWQ4ae"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Engage with us on Discord 🙌
+          </a>
         </div>
       </div>
     </>

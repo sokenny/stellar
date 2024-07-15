@@ -9,7 +9,7 @@ import Input from '../Input/Input';
 import styles from './EnterUrlForm.module.css';
 import useStore from '../../store';
 
-const EnterUrlForm = ({ className, onSuccess }) => {
+const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
   const { user } = useStore();
   const router = useRouter();
   const [url, setUrl] = useState('');
@@ -23,8 +23,22 @@ const EnterUrlForm = ({ className, onSuccess }) => {
     try {
       setLoading(true);
 
+      // TODO-p1-1: Resolver este rompecabezas y que no sea tan falopa la cosa.
+      if (user && isHomePage) {
+        toast.error(
+          'This feature is momentarily disabled for authenticated users.',
+        );
+        setLoading(false);
+        return;
+      }
+
+      // If there is a user, we want to hit the auth route
+      const endpoint = user
+        ? process.env.NEXT_PUBLIC_STELLAR_API + '/api/kickstart-project'
+        : process.env.NEXT_PUBLIC_STELLAR_API + '/public/onboard';
+
       toast.promise(
-        fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/public/onboard', {
+        fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +52,6 @@ const EnterUrlForm = ({ className, onSuccess }) => {
             // TODO: Idealmente todo esto vendría desde onSuccess, eventualmente deberíamos refactorizarlo
             const parsedResponse = await response.json();
             if (!user) {
-              // router.push(`/onboard/${parsedResponse.project.id}`);
               window.location.href = `/onboard/${parsedResponse.project.id}`;
             } else {
               await onSuccess(parsedResponse.project);
