@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
 import useStore from '../store';
 import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperiments';
 import SnippetMissing from '../components/SnippetMissing';
 import styles from './page.module.css';
 import EnterUrlForm from '../components/EnterUrlForm/EnterUrlForm';
-import Script from 'next/script';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
@@ -16,19 +16,18 @@ export default function Dashboard() {
 
   const emptyState = !currentProject && !loading;
 
+  useEffect(() => {
+    window?.gtag?.('event', 'ads_conversion_Registro_1', {
+      project_id: currentProject?.id,
+    });
+  }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.Dashboard}>
-      <Script>
-        {`
-          gtag('event', 'ads_conversion_Started_onboarding_1', {
-            project_id: ${currentProject?.id},
-          });
-        `}
-      </Script>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}
       {currentProject && (
         <TabsAndExperiments experiments={currentProject.experiments} />
