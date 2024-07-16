@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       <head>
         <Script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-EHWTS4GXBX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-HLTERT31Y6"
         ></Script>
         <Script id="google-ads">
           {`
