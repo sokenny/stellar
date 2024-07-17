@@ -104,7 +104,6 @@ async function autoGenerate(req: any, res: Response): Promise<void> {
 
       res.status(200).send({ project });
     } catch (error) {
-      console.error('Error creating project and page:', error);
       res.status(500).send({ error: 'Error creating project and page' });
     }
   }

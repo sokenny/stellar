@@ -9,7 +9,7 @@ import styles from './TabsAndExperiments.module.css';
 
 const tabs = ['All', 'Running', 'Draft', 'Ended'];
 
-// TODO-p1-1: Add a create experiment tutorial
+// TODO-p1-2: Add a create experiment tutorial
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -47,7 +47,10 @@ const TabsAndExperiments = ({ experiments }) => {
             >
               <div className={styles.createNewExperiment}>
                 <CreateButton
-                  onClick={() => router.push('/experiment/create/new')}
+                  onClick={() => {
+                    router.push('/experiment/create/new');
+                    window?.gtag?.('event', 'click_create_new_experiment');
+                  }}
                 />
               </div>
             </Tooltip>

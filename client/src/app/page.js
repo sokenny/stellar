@@ -1,7 +1,7 @@
-import EnterUrlForm from './components/EnterUrlForm/EnterUrlForm';
+import HomeActions from './components/HomeActions';
 import styles from './page.module.css';
 
-// TODO-p1-1: curate flow without onboarding (straight signup)
+// TODO-p1-1: curate flow without onboarding (straight signup) - more CTAs to instruct user(?) make it dummy proof and unbreakable
 
 export default async function HomePage({}) {
   return (
@@ -13,24 +13,15 @@ export default async function HomePage({}) {
             <span className={styles.varB}>B</span> tests on autopilot
           </h1>
           <h2 className={styles.description}>
-            Get AI generated experiments for your landing pages. Increase
-            conversions, effortlessly.
+            Easily create and schedule your landing page experiments. No coding
+            required. 86% of our users increase their conversion rate under 1
+            month.
           </h2>
         </div>
-        <div className={styles.form}>
-          <EnterUrlForm isHomePage />
+        <div>
+          <HomeActions />
         </div>
-        <div className={styles.bullets}>
-          <div className={styles.bullet}>
-            <span>1.</span> Get AI generated experiments
-          </div>
-          <div className={styles.bullet}>
-            <span>2.</span> Edit them if needed
-          </div>
-          <div className={styles.bullet}>
-            <span>3.</span> Launch within seconds
-          </div>
-        </div>
+
         <div className={styles.loomContainer}>
           <div className={styles.infoBar}>2 minute demo :)</div>
           <iframe

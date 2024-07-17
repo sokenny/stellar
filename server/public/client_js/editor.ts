@@ -98,7 +98,7 @@
           experiment_id: experimentId,
           type: 'CLICK',
           selector,
-          // TODO-p1-3: Make sure this is only the path
+          // TODO-p2: Make sure this is only the path
           url_match_value: pageUrl,
         }),
       });

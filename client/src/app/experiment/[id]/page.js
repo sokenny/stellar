@@ -27,7 +27,7 @@ import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import SnippetInstallationModal from '../../components/Modals/SnippetInstallationModal';
 import styles from './page.module.css';
 
-// TODO-p1-1: Add a manage experiment tutorial
+// TODO-p1-2: Add a manage experiment tutorial
 
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();

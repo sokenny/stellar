@@ -6,11 +6,9 @@ import React, { useCallback, useState } from 'react';
 import isValidUrl from '../../helpers/isValidUrl';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
-import styles from './EnterUrlForm.module.css';
-import useStore from '../../store';
+import styles from './CreateSimpleProjectForm.module.css';
 
-const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
-  const { user } = useStore();
+const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
   const router = useRouter();
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,23 +20,8 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
     }
     try {
       setLoading(true);
-
-      // TODO-p2: Resolver este rompecabezas y que no sea tan falopa la cosa.
-      if (user && isHomePage) {
-        toast.error(
-          'This feature is momentarily disabled for authenticated users.',
-        );
-        setLoading(false);
-        return;
-      }
-
-      // If there is a user, we want to hit the auth route
-      const endpoint = user
-        ? process.env.NEXT_PUBLIC_STELLAR_API + '/api/kickstart-project'
-        : process.env.NEXT_PUBLIC_STELLAR_API + '/public/onboard';
-
       toast.promise(
-        fetch(endpoint, {
+        fetch(process.env.NEXT_PUBLIC_STELLAR_API + '/api/project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -46,17 +29,14 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
           body: JSON.stringify({ url }),
         }),
         {
-          loading: 'Scrapping page & creating experiments...',
+          loading: 'Creating project...',
           success: async (response) => {
             setLoading(false);
-            // TODO: Idealmente todo esto vendría desde onSuccess, eventualmente deberíamos refactorizarlo
             const parsedResponse = await response.json();
-            if (!user) {
-              window.location.href = `/onboard/${parsedResponse.project.id}`;
-            } else {
-              await onSuccess(parsedResponse.project);
-            }
-            return 'Experiments created successfully';
+            console.log(parsedResponse);
+            // refresh browser page
+            window?.location?.reload();
+            return 'Project created successfully';
           },
           error: (error) => {
             console.error('Fetch error:', error);
@@ -72,12 +52,12 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
   }, [url, router]);
 
   return (
-    <div className={`${styles.EnterUrlForm} ${className}`}>
+    <div className={`${styles.CreateSimpleProjectForm} ${className}`}>
       <form
         className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
-          window?.gtag?.('event', 'click_go_stellar', {
+          window?.gtag?.('event', 'click_create_project', {
             url,
           });
           onSubmit();
@@ -97,11 +77,11 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
           className={styles.button}
           type="submit"
         >
-          Go Stellar
+          Create Project
         </Button>
       </form>
     </div>
   );
 };
 
-export default EnterUrlForm;
+export default CreateSimpleProjectForm;

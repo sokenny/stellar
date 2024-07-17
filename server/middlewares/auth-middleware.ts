@@ -18,8 +18,8 @@ async function getUserAttributes(email) {
     throw new Error('User not found');
   }
 
-  // TODO-p1: Start always setting expiraton for redis keys. Maybe 12 hours for now
-  await redisClient.set(key, JSON.stringify(user));
+  await redisClient.set(key, JSON.stringify(user), { EX: 10 });
+  return user.toJSON();
 }
 
 async function authenticateSession(req) {

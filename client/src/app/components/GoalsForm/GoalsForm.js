@@ -18,7 +18,7 @@ import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
 
-// TODO-p1-1: Add a set goal tutorial
+// TODO-p1-2: Add a set goal tutorial
 
 const matchTypes = [
   { key: UrlMatchTypesEnum.CONTAINS, label: 'Contains' },

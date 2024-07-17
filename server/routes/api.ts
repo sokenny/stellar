@@ -24,6 +24,7 @@ import updateExperimentName from './handlers/updateExperimentName';
 import updateExperimentSettings from './handlers/updateExperimentSettings';
 import generalRequestLimiter from '../helpers/generalRequestLimiter';
 import autoGenerate from './handlers/autoGenerate';
+import createProject from './handlers/createProject';
 
 const router = express.Router();
 
@@ -33,6 +34,7 @@ const router = express.Router();
 router.use(generalRequestLimiter);
 
 router.post('/onboard/:projectId', finishOnboarding);
+router.post('/project', createProject);
 
 router.post('/kickstart-project', autoGenerate);
 
@@ -60,6 +62,7 @@ router.post('/goals', setGoal);
 
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
+// Should be called getUserData or sth like that
 router.get('/projects/:userEmail', getProjects);
 // router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);

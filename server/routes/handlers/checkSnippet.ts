@@ -49,10 +49,12 @@ async function performSnippetCheck(url, projectId) {
   const decyptedKey = decryptApiKey(apiKey);
 
   if (!decyptedKey) {
+    console.log('no decyptedKey');
     throw new Error('The snippet found is not valid');
   }
 
   if (decyptedKey.projectId !== projectId) {
+    console.log('projectId no coincide', decyptedKey, projectId);
     throw new Error('The snippet found is not valid');
   }
 

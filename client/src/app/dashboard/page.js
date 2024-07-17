@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import useStore from '../store';
 import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperiments';
 import SnippetMissing from '../components/SnippetMissing';
+import CreateSimpleProjectForm from '../components/CreateSimpleProjectForm';
 import styles from './page.module.css';
-import EnterUrlForm from '../components/EnterUrlForm/EnterUrlForm';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
@@ -38,7 +38,7 @@ export default function Dashboard() {
           <div className={styles.description}>
             Enter your landing page or website URL to get started.
           </div>
-          <EnterUrlForm
+          <CreateSimpleProjectForm
             className={styles.urlForm}
             onSuccess={async (project) => {
               return fetch(

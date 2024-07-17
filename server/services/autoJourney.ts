@@ -80,7 +80,7 @@ export async function findOrCreateProject(
     }
   }
 
-  // TODO-p1-1: If no user is set, we need to directly create the project, this logic below is prone to just find an old project with a null user
+  // TODO-p2: If no user is set, we need to directly create the project, this logic below is prone to just find an old project with a null user
   const [project, created] = await db.Project.findOrCreate({
     where: {
       domain,

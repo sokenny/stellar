@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import useStore from '../../store';
 import getShortId from '../../helpers/getShortId';
 import useVariantEditor from '../../helpers/useVariantEditor';
+import isUrlFromDomain from '../../helpers/isUrlFromDomain';
 import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 import Button from '../Button/Button';
 import Delete from '../../icons/Delete';
@@ -156,6 +157,12 @@ const CreateExperimentForm = ({ experiment }) => {
               <Button
                 onClick={handleConfirmUrl}
                 loading={createExperimentLoading}
+                disabled={
+                  !isUrlFromDomain(
+                    formState.experimentUrl,
+                    currentProject.domain,
+                  )
+                }
               >
                 Confirm URL
               </Button>

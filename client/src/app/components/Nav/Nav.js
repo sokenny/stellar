@@ -1,5 +1,5 @@
 'use client';
-
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Toaster } from 'sonner';
@@ -19,6 +19,7 @@ import {
 import styles from './Nav.module.css';
 
 const Nav = ({ token }) => {
+  const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === '/';
   console.log('Pathname! ', pathname);
@@ -83,8 +84,6 @@ const Nav = ({ token }) => {
   } = useDisclosure();
 
   const tabs = [
-    // { name: 'Faq', path: '/faq', isAuth: false },
-    // { name: 'Pricing', path: '/pricing', isAuth: false },
     { name: 'Dashboard', path: '/dashboard', isAuth: true, when: isHome },
   ];
   return (
@@ -103,7 +102,12 @@ const Nav = ({ token }) => {
           <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
         </NavbarBrand>
         {currentProject && !isHome && (
-          <div className={styles.project}>
+          <div
+            className={styles.project}
+            onClick={() => {
+              router.push('/dashboard');
+            }}
+          >
             Project: <span>{currentProject?.name}</span>
           </div>
         )}
