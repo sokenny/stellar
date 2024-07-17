@@ -1,5 +1,4 @@
 function interceptFetch(projectId, token) {
-  console.log('Intercept called! ', projectId, token);
   const originalFetch = fetch;
 
   window.fetch = function (url, options = {}) {

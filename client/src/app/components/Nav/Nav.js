@@ -55,7 +55,6 @@ const Nav = ({ token }) => {
   }
 
   useEffect(() => {
-    console.log('session user: ', session);
     if (
       !initializedProjects.current &&
       session &&
@@ -150,11 +149,12 @@ const Nav = ({ token }) => {
               </NavbarItem>
               <NavbarItem className={styles.navItem}>
                 <Button
-                  onClick={() =>
+                  onClick={() => {
+                    window?.gtag?.('event', 'click_sign_up', {});
                     signIn('google', {
                       callbackUrl: '/dashboard',
-                    })
-                  }
+                    });
+                  }}
                   color="primary"
                   variant="flat"
                 >
