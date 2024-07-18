@@ -15,8 +15,11 @@ import UrlMatchTypesEnum from '../../helpers/enums/UrlMatchTypesEnum';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import Link from 'next/link';
 import Button from '../Button/Button';
+import Click from '../../icons/Click';
+import Time from '../../icons/Time';
 import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
+import Page from '../../icons/Page';
 
 // TODO-p1-2: Add a set goal tutorial
 
@@ -29,19 +32,19 @@ const goals = [
   {
     title: 'Clicks',
     description: 'Clicks on a particular element of your website',
-    icon: 'i',
+    icon: <Click width={25} height={25} />,
     value: GoalTypesEnum.CLICK,
   },
   {
     title: 'Page Visit',
     description: 'Visits to a particular page on your website',
-    icon: 'i',
+    icon: <Page width={25} height={25} />,
     value: GoalTypesEnum.PAGE_VISIT,
   },
   {
     title: 'Time on Page',
     description: 'How long users spend on a particular page',
-    icon: 'i',
+    icon: <Time width={25} height={25} />,
     value: GoalTypesEnum.SESSION_TIME,
   },
 ];
@@ -67,6 +70,8 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     urlMatchValue: goal?.url_match_value ? goal.url_match_value : '',
     elementUrl: goal?.element_url ? goal.element_url : '',
   });
+
+  console.log('formData.urlMatchValue:', formData.urlMatchValue);
 
   function canContinue() {
     if (formData.goalType === GoalTypesEnum.SESSION_TIME) {
@@ -116,7 +121,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                 : UrlMatchTypesEnum.CONTAINS,
             url_match_value: isQuerySelector
               ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
-              : '/' + formData.urlMatchValue,
+              : formData.urlMatchValue,
             element_url: '/' + formData.elementUrl,
             selector: isQuerySelector ? querySelector : null,
           }),
@@ -326,7 +331,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                     }
                     placeholder="thank-you"
                   />
-                  {/* <Button onClick={onSetUrl}>Set Url</Button> */}
                 </div>
               </div>
             </div>
@@ -354,7 +358,13 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             className={styles.continueButton}
             loading={submiting}
             disabled={!canContinue() || submiting}
-            onClick={onSetGoal}
+            onClick={() => {
+              window?.gtag?.('event', 'experiment_goal_set', {
+                experimentId: experiment.id,
+                goalType: formData.goalType,
+              });
+              onSetGoal();
+            }}
           >
             Set Goal
           </Button>

@@ -9,7 +9,12 @@ import {
 } from '@nextui-org/react';
 import styles from './LaunchExperimentModal.module.css';
 
-const LaunchExperimentModal = ({ isOpen, onOpenChange, onLaunch }) => {
+const LaunchExperimentModal = ({
+  isOpen,
+  onOpenChange,
+  onLaunch,
+  experimentId,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -54,7 +59,7 @@ const LaunchExperimentModal = ({ isOpen, onOpenChange, onLaunch }) => {
                 color="primary"
                 onPress={() => {
                   window?.gtag?.('event', 'launch_experiment', {
-                    experiment_id: experiment.id,
+                    experiment_id: experimentId,
                   });
                   onLaunch();
                   onClose();

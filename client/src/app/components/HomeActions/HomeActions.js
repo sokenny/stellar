@@ -10,7 +10,9 @@ const HomeActions = () => {
       className={styles.button}
       type="submit"
       onClick={() => {
-        window?.gtag?.('event', 'click_sign_up', {});
+        window?.gtag?.('event', 'click_sign_up', {
+          location: 'home',
+        });
         signIn('google', {
           callbackUrl: '/dashboard',
         });

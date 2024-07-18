@@ -43,12 +43,14 @@ const ExperimentName = ({ name, experimentId }) => {
         ),
         {
           loading: 'Updating experiment name...',
-          success: async () => 'Experiment name updated',
+          success: async () => {
+            refetchProjects();
+            return 'Experiment name updated';
+          },
           error: async () => `Failed to update experiment name`,
         },
       );
       setIsEditingName(false);
-      refetchProjects();
     } catch (error) {
       console.error('Save failed:', error);
       nameRef.current.textContent = name;

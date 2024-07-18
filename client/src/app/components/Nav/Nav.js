@@ -154,7 +154,9 @@ const Nav = ({ token }) => {
               <NavbarItem className={styles.navItem}>
                 <Button
                   onClick={() => {
-                    window?.gtag?.('event', 'click_sign_up', {});
+                    window?.gtag?.('event', 'click_sign_up', {
+                      location: 'nav',
+                    });
                     signIn('google', {
                       callbackUrl: '/dashboard',
                     });

@@ -3,14 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../store';
-import {
-  Switch,
-  ListboxItem,
-  Listbox,
-  Tooltip,
-  cn,
-  useDisclosure,
-} from '@nextui-org/react';
+import { Switch, Tooltip, useDisclosure } from '@nextui-org/react';
 import ExperimentStatusesEnum from '../../../helpers/enums/ExperimentStatusesEnum';
 import Button from '../../../components/Button';
 import LaunchExperimentModal from '../../../components/Modals/LaunchExperimentModal';
@@ -186,6 +179,7 @@ const Header = ({ experiment }) => {
           isOpen={isLaunchModalOpen}
           onOpenChange={onOpenLaunchModalChange}
           onLaunch={handleLaunchExperiment}
+          experimentId={experiment.id}
         />
       </div>
     </div>

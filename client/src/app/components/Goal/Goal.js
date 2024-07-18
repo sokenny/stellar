@@ -34,7 +34,7 @@ const Goal = ({ experiment, onEdit, className }) => {
           </>
         ) : (
           <a
-            href={`${url}${
+            href={`${
               typeof goal.url_match_value === 'string'
                 ? goal.url_match_value
                 : ''

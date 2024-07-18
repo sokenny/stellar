@@ -1,8 +1,6 @@
 import HomeActions from './components/HomeActions';
 import styles from './page.module.css';
 
-// TODO-p1-1: curate flow without onboarding (straight signup) - more CTAs to instruct user(?) make it dummy proof and unbreakable
-
 export default async function HomePage({}) {
   return (
     <div className={styles.HomePage}>
@@ -14,7 +12,7 @@ export default async function HomePage({}) {
           </h1>
           <h2 className={styles.description}>
             Easily create and schedule your landing page experiments. No coding
-            required. 86% of our users increase their conversion rate under 1
+            required. 86% of our users increase their conversion rates under 1
             month.
           </h2>
         </div>
