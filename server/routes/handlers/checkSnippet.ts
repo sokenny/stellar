@@ -25,11 +25,6 @@ async function checkSnippet(req, res) {
 
 async function performSnippetCheck(url, projectId) {
   console.log('Url que llega: ', url);
-  const page = await db.Page.findOne({ where: { url, project_id: projectId } });
-
-  if (!page) {
-    throw new Error('Page not found');
-  }
 
   const browser = await puppeteer.launch({
     args: ['--disable-logging'],
@@ -60,7 +55,7 @@ async function performSnippetCheck(url, projectId) {
 
   await db.Project.update(
     { snippet_status: 1 },
-    { where: { id: page.project_id } },
+    { where: { id: decyptedKey.projectId } },
   );
 
   await browser.close();
