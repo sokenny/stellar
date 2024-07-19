@@ -1,14 +1,14 @@
 import { invalidateCache } from '../../helpers/cache';
 import { generateApiKey } from '../../helpers/crypto';
+import normalizeUrl from '../../helpers/normalizeUrl';
 import db from '../../models';
 
 async function createProject(req, res) {
   const { url } = req.body;
   const userId = req.user.id;
-  const domain = url
-    .replace('https://', '')
-    .replace('http://', '')
-    .replace('www.', '');
+  const domain = normalizeUrl(
+    url.replace('https://', '').replace('http://', '').replace('www.', ''),
+  ).replace(/\/$/, '');
 
   const [project, created] = await db.Project.findOrCreate({
     where: { domain, user_id: userId },
