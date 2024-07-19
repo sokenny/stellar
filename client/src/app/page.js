@@ -23,7 +23,8 @@ export default async function HomePage({}) {
         <div className={styles.loomContainer}>
           <div className={styles.infoBar}>2 minute demo :)</div>
           <iframe
-            src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
+            // src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
+            src="https://www.loom.com/embed/e7e907a9f30746c192d09a07d72b8d3b?sid=cd48b15a-4941-47c5-b9a9-52d1bb020bdc"
             frameBorder="0"
             allowFullScreen
           ></iframe>
