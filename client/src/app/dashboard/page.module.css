@@ -17,3 +17,7 @@
 .setUpProjectFlow .urlForm {
     margin-top: 16px;
 }
+
+.tutorialLink {
+    text-decoration: underline;
+}

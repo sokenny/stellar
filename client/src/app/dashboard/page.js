@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import useStore from '../store';
 import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperiments';
 import SnippetMissing from '../components/SnippetMissing';
@@ -28,6 +29,16 @@ export default function Dashboard() {
 
   return (
     <div className={styles.Dashboard}>
+      <div>
+        <a
+          href="https://www.loom.com/share/e7e907a9f30746c192d09a07d72b8d3b?sid=702ebaa5-d02b-40ef-87fd-bcba8948e0c4"
+          rel="noreferrer"
+          target="_blank"
+          className={styles.tutorialLink}
+        >
+          📽⚡️ Watch 2 min. tutorial
+        </a>
+      </div>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}
       {currentProject && (
         <TabsAndExperiments experiments={currentProject.experiments} />
