@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
+import segmentTrack from '../../helpers/segment/segmentTrack';
 import ExperimentsTable from '../ExperimentsTable';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
@@ -49,7 +50,8 @@ const TabsAndExperiments = ({ experiments }) => {
                 <CreateButton
                   onClick={() => {
                     router.push('/experiment/create/new');
-                    window?.gtag?.('event', 'click_create_new_experiment');
+                    // window?.gtag?.('event', 'click_create_new_experiment');
+                    segmentTrack('click_create_new_experiment');
                   }}
                 />
               </div>

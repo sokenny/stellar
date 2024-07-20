@@ -59,7 +59,7 @@ const LaunchExperimentModal = ({
                 color="primary"
                 onPress={() => {
                   window?.gtag?.('event', 'launch_experiment', {
-                    experiment_id: experimentId,
+                    experimentId: experimentId,
                   });
                   onLaunch();
                   onClose();

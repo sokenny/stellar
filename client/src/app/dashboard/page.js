@@ -19,7 +19,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     window?.gtag?.('event', 'ads_conversion_Registro_1', {
-      project_id: currentProject?.id,
+      projectId: currentProject?.id,
     });
   }, []);
 

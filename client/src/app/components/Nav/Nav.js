@@ -16,6 +16,7 @@ import {
   Button,
   useDisclosure,
 } from '@nextui-org/react';
+import segmentIdentify from '../../helpers/segment/segmentIdentify';
 import styles from './Nav.module.css';
 
 const Nav = ({ token }) => {
@@ -49,6 +50,9 @@ const Nav = ({ token }) => {
     );
 
     const user = await response.json();
+    segmentIdentify(user.id, {
+      ...user,
+    });
     setProjects(user?.projects);
     setCurrentProject(user?.projects[0] || null);
     setSession(session);
