@@ -18,6 +18,7 @@ import {
 } from '@nextui-org/react';
 import segmentIdentify from '../../helpers/segment/segmentIdentify';
 import styles from './Nav.module.css';
+import segmentTrack from '../../helpers/segment/segmentTrack';
 
 const Nav = ({ token }) => {
   const router = useRouter();
@@ -159,6 +160,9 @@ const Nav = ({ token }) => {
                 <Button
                   onClick={() => {
                     window?.gtag?.('event', 'click_sign_up', {
+                      location: 'nav',
+                    });
+                    segmentTrack('click_sign_up_test', {
                       location: 'nav',
                     });
                     signIn('google', {

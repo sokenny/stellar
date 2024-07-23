@@ -19,5 +19,9 @@
 }
 
 .tutorialLink {
+    margin-bottom: 8px;
+}
+
+.tutorialLink a {
     text-decoration: underline;
 }

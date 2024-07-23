@@ -50,7 +50,7 @@ const TabsAndExperiments = ({ experiments }) => {
                 <CreateButton
                   onClick={() => {
                     router.push('/experiment/create/new');
-                    // window?.gtag?.('event', 'click_create_new_experiment');
+                    window?.gtag?.('event', 'click_create_new_experiment');
                     segmentTrack('click_create_new_experiment');
                   }}
                 />

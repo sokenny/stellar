@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
 import isValidUrl from '../../helpers/isValidUrl';
+import segmentTrack from '../../helpers/segment/segmentTrack';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './EnterUrlForm.module.css';
@@ -78,6 +79,9 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
         onSubmit={(e) => {
           e.preventDefault();
           window?.gtag?.('event', 'click_go_stellar', {
+            url,
+          });
+          segmentTrack('click_go_stellar', {
             url,
           });
           onSubmit();

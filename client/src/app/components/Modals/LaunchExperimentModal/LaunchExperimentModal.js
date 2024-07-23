@@ -8,6 +8,7 @@ import {
   Button,
 } from '@nextui-org/react';
 import styles from './LaunchExperimentModal.module.css';
+import segmentTrack from '../../../helpers/segment/segmentTrack';
 
 const LaunchExperimentModal = ({
   isOpen,
@@ -59,6 +60,9 @@ const LaunchExperimentModal = ({
                 color="primary"
                 onPress={() => {
                   window?.gtag?.('event', 'launch_experiment', {
+                    experimentId: experimentId,
+                  });
+                  segmentTrack('launch_experiment', {
                     experimentId: experimentId,
                   });
                   onLaunch();

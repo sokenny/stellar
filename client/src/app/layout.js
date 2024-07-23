@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <Nav token={nextAuthSessionToken?.value} />
           <div className={styles.pageContent}>{children}</div>
-          <footer className={styles.footer}>dev: juanchaher99@gmail.com</footer>
+          <footer className={styles.footer}>hello@gostellar.app</footer>
         </Providers>
       </body>
     </html>

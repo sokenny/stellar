@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
 import isValidUrl from '../../helpers/isValidUrl';
+import segmentTrack from '../../helpers/segment/segmentTrack';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './CreateSimpleProjectForm.module.css';
@@ -58,6 +59,9 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
         onSubmit={(e) => {
           e.preventDefault();
           window?.gtag?.('event', 'click_create_project', {
+            url,
+          });
+          segmentTrack('click_create_project', {
             url,
           });
           onSubmit();

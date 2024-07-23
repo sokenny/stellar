@@ -20,6 +20,7 @@ import Time from '../../icons/Time';
 import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
 import Page from '../../icons/Page';
+import segmentTrack from '../../helpers/segment/segmentTrack';
 
 // TODO-p1-2: Add a set goal tutorial
 
@@ -360,6 +361,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             disabled={!canContinue() || submiting}
             onClick={() => {
               window?.gtag?.('event', 'experiment_goal_set', {
+                experimentId: experiment.id,
+                goalType: formData.goalType,
+              });
+              segmentTrack('experiment_goal_set', {
                 experimentId: experiment.id,
                 goalType: formData.goalType,
               });

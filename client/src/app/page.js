@@ -1,4 +1,8 @@
-import HomeActions from './components/HomeActions';
+import SignUpCTA from './components/SignUpCTA';
+import Bolt from './icons/Bolt';
+import Traffic from './icons/Traffic';
+import Goal from './icons/Goal';
+import Cookie from './icons/Cookie';
 import styles from './page.module.css';
 
 export default async function HomePage({}) {
@@ -7,17 +11,18 @@ export default async function HomePage({}) {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1 className={styles.title}>
-            Your <span className={styles.varA}>A</span>/
-            <span className={styles.varB}>B</span> tests on autopilot
+            The #1 <span className={styles.varA}>A</span>/
+            <span className={styles.varB}>B</span> test solution for marketing
+            teams
           </h1>
           <h2 className={styles.description}>
-            Easily create and schedule your landing page experiments. No coding
-            required. 86% of our users increase their conversion rates under 1
-            month.
+            Your real alternative to <b>Google Optimize</b>. No coding required.
+            86% of our users increase their conversion rates under 1 month, for
+            free.
           </h2>
         </div>
         <div>
-          <HomeActions />
+          <SignUpCTA>Go Stellar</SignUpCTA>
         </div>
 
         <div className={styles.loomContainer}>
@@ -28,6 +33,50 @@ export default async function HomePage({}) {
             frameBorder="0"
             allowFullScreen
           ></iframe>
+        </div>
+        <div className={styles.advantages}>
+          <h3>Advantages of Stellar</h3>
+          <div className={styles.list}>
+            <div className={styles.advantage}>
+              <div className={styles.icon}>
+                <Bolt color="white" width={15} height={15} />
+              </div>
+              <div className={styles.text}>
+                Lightning-fast load time thanks to CDN caching.
+              </div>
+            </div>
+            <div className={styles.advantage}>
+              <div className={styles.icon}>
+                <Traffic color="white" width={15} height={15} />
+              </div>
+              <div className={styles.text}>
+                Unlimitted traffic, experiments and variations.
+              </div>
+            </div>
+            <div className={styles.advantage}>
+              <div className={styles.icon}>
+                <Goal color="white" width={15} height={15} />
+              </div>
+              <div className={styles.text}>
+                Ease of use. Clutter-free. To the point.
+              </div>
+            </div>
+            <div className={styles.advantage}>
+              <div className={styles.icon}>
+                <Cookie color="white" width={15} height={15} />
+              </div>
+              <div className={styles.text}>No use of cookies.</div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.pricing}>
+          <h3>Pricing</h3>
+          <p>
+            Our software is available for <b>free</b>. No credit card required.
+            After getting set-up, if you exceed 10k unique users per month, we
+            will reach out to establish a <b>$32 USD monthly</b> subscription.
+          </p>
+          <SignUpCTA className={styles.pricingCTA}>Start For Free</SignUpCTA>
         </div>
         <div className={styles.faqs}>
           {/* <h3>FAQ</h3> */}
