@@ -58,9 +58,6 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
         className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
-          window?.gtag?.('event', 'click_create_project', {
-            url,
-          });
           segmentTrack('click_create_project', {
             url,
           });

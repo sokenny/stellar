@@ -159,10 +159,7 @@ const Nav = ({ token }) => {
               <NavbarItem className={styles.navItem}>
                 <Button
                   onClick={() => {
-                    window?.gtag?.('event', 'click_sign_up', {
-                      location: 'nav',
-                    });
-                    segmentTrack('click_sign_up_test', {
+                    segmentTrack('click_sign_up', {
                       location: 'nav',
                     });
                     signIn('google', {

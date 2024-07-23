@@ -360,10 +360,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             loading={submiting}
             disabled={!canContinue() || submiting}
             onClick={() => {
-              window?.gtag?.('event', 'experiment_goal_set', {
-                experimentId: experiment.id,
-                goalType: formData.goalType,
-              });
               segmentTrack('experiment_goal_set', {
                 experimentId: experiment.id,
                 goalType: formData.goalType,

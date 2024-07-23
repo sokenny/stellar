@@ -13,11 +13,7 @@ const SignUpCTA = ({ children, className }) => {
       }
       type="submit"
       onClick={() => {
-        window?.gtag?.('event', 'click_sign_up', {
-          location: 'home',
-          children,
-        });
-        segmentTrack('click_sign_up_test', {
+        segmentTrack('click_sign_up', {
           location: 'home',
           children,
         });

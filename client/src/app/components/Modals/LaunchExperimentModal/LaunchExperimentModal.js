@@ -59,9 +59,6 @@ const LaunchExperimentModal = ({
               <Button
                 color="primary"
                 onPress={() => {
-                  window?.gtag?.('event', 'launch_experiment', {
-                    experimentId: experimentId,
-                  });
                   segmentTrack('launch_experiment', {
                     experimentId: experimentId,
                   });
