@@ -144,6 +144,8 @@
 
 .pricing {
   text-align: center;
+  padding-top: 64px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .pricing h3 {
@@ -158,6 +160,52 @@
 .pricingCTA {
   margin-top: 16px;
   font-size: 14px;
+}
+
+.process .block {
+  display: flex;
+  align-items: center;
+}
+
+.block {
+  margin-bottom: 84px;
+}
+
+.block .texts p {
+  font-weight: 300;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.block img {
+  box-shadow: 0px 0px 10px hsl(0deg 0% 0% / 0.25);
+  border-radius: 4px;
+  transition: 1s;
+}
+
+.block img:hover {
+  box-shadow: 0px 0px 25px hsl(292 64% 62% / 0.35);
+}
+
+.block .left {
+  margin-right: 64px;
+}
+
+.block .title {
+  font-size: 28px;
+  margin-bottom: 12px;
+  line-height: normal;
+}
+
+.block .title span {
+  background: linear-gradient(45deg, #0072f5, #cb5edc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* For WebKit browsers */
+  color: transparent; /* For other browsers */
+}
+
+.block .texts {
+  max-width: 500px;
 }
 
 @media (max-width: 720px) {
@@ -177,7 +225,7 @@
     margin-bottom: 16px;
   }
 
-  .advantages .list{
+  .advantages .list {
     flex-direction: column;
   }
 
@@ -200,5 +248,22 @@
   .advantage .icon {
     min-width: 30px;
     margin-right: 8px;
+  }
+
+  .process .block {
+    flex-direction: column;
+    margin-bottom: 56px;
+  }
+
+  .process .block:nth-child(even) {
+    flex-direction: column-reverse;
+  }
+
+  .process .left {
+    margin-right: 0;
+  }
+
+  .process .texts {
+    margin-top: 16px;
   }
 }

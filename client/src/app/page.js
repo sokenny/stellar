@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import SignUpCTA from './components/SignUpCTA';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
@@ -69,12 +70,72 @@ export default async function HomePage({}) {
             </div>
           </div>
         </div>
+        <div className={styles.process}>
+          <div className={styles.block}>
+            <div className={styles.left}>
+              <img
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                alt="Create variants"
+                width={550}
+              />
+            </div>
+            <div className={styles.texts}>
+              <h3 className={styles.title}>
+                <span>Create variants</span> with our visual editor.
+              </h3>
+              <p>
+                Once you install our snippet, you'll be able to access a WYSIWYG
+                editor inside of your website. Here you can easily make the
+                necessary HTML / CSS adjustments to create your variants.
+              </p>
+            </div>
+          </div>
+          <div className={styles.block}>
+            <div className={`${styles.left} ${styles.texts}`}>
+              <h3 className={styles.title}>
+                <span>Set your goal</span> in seconds.
+              </h3>
+              <p>
+                Our goal setting is easy yet powerful. Set one based on clicks,
+                page visits or time spent on the page. Zero coding required.
+              </p>
+            </div>
+            <div>
+              <img
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
+                alt="Set your goal"
+                width={550}
+              />
+            </div>
+          </div>
+          <div className={styles.block}>
+            <div className={styles.left}>
+              <img
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-experiment-page.webp"
+                alt="Control your experiment"
+                width={550}
+              />
+            </div>
+            <div className={styles.texts}>
+              <h3 className={styles.title}>
+                <span>Control your experiments</span> and track their
+                performance.
+              </h3>
+              <p>
+                Stay on top of your experiment's progress. Pause and resumen if
+                needed. Track your conversion rates and see how your variants
+                are performing.
+              </p>
+            </div>
+          </div>
+        </div>
         <div className={styles.pricing}>
           <h3>Pricing</h3>
           <p>
             Our software is available for <b>free</b>. No credit card required.
-            After getting set-up, if you exceed 10k unique users per month, we
-            will reach out to establish a <b>$32 USD monthly</b> subscription.
+            After getting set-up, if you exceed 10k MTU (monthly tracked users),
+            we will reach out to establish a <b>$32 USD monthly</b>{' '}
+            subscription.
           </p>
           <SignUpCTA className={styles.pricingCTA}>Start For Free</SignUpCTA>
         </div>
