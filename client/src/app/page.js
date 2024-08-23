@@ -12,7 +12,7 @@ export default async function HomePage({}) {
       <div className={styles.content}>
         <div className={styles.header}>
           <h1 className={styles.title}>
-            The #1 <span className={styles.varA}>A</span>/
+            The preferred <span className={styles.varA}>A</span>/
             <span className={styles.varB}>B</span> test solution for marketing
             teams
           </h1>

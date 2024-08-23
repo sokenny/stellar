@@ -9,6 +9,10 @@ import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
+// TODO-p1-1: Add sign up welcome emails
+
+// TODO-p1-1: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
+
 dotenv.config();
 // TODO-p2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 //   - A menos que este logeado y esa url pertenezca a un proyecto suyo.
