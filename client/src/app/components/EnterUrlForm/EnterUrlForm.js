@@ -87,7 +87,7 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
         <div className={styles.inputAndHelpText}>
           <Input
             className={styles.input}
-            placeholder="http://your-landing-page.com"
+            placeholder="https://your-landing-page.com"
             onChange={(e) => setUrl(e.target.value)}
             value={url}
           />

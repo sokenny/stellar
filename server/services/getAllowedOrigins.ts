@@ -35,16 +35,30 @@ async function getAllowedOrigins() {
   const allowedOriginsWithHttps = allowedOrigins.map((domain) =>
     normalizeUrl(`https://${domain}`),
   );
+  const allowedOriginsWithWww = allowedOrigins.map((domain) =>
+    normalizeUrl(`https://www.${domain}`),
+  );
 
   const allAllowedOrigins = [
     ...staticAllowedOrigins,
     ...allowedOriginsWithHttp,
     ...allowedOriginsWithHttps,
+    ...allowedOriginsWithWww,
   ];
 
   await redisClient.set(cacheKey, JSON.stringify(allAllowedOrigins), {
     EX: 60 * 60,
   });
+
+  // check if https://lingobites.io is in allowedOrigins
+  console.log(
+    'all allowedOrigins: ',
+    allAllowedOrigins.filter((origin) => origin.includes('lingobites')),
+  );
+  console.log(
+    'allowedOrigins: ',
+    allAllowedOrigins.includes('https://lingobites.io'),
+  );
 
   return allAllowedOrigins;
 }
