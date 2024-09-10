@@ -75,3 +75,7 @@
 .changes span {
   color: var(--linkBlue);
 }
+
+.otherVariants.withErrors input {
+  border: 1px solid var(--error);
+}

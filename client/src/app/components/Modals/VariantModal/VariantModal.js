@@ -51,7 +51,7 @@ const VariantModal = ({
     }, 0);
 
     if (totalTraffic > 100 || totalTraffic < 100) {
-      setErrors(['Toal traffic must be 100%']);
+      setErrors(['Sum of all traffic must be 100%']);
       return;
     }
     setErrors([]);
@@ -150,7 +150,12 @@ const VariantModal = ({
           </div>
           <Divider className="my-4" />
           {otherVariants.map((v) => (
-            <div className={styles.fieldGroup} key={v.id}>
+            <div
+              className={`${styles.fieldGroup} ${styles.otherVariants} ${
+                errors.length > 0 ? styles.withErrors : ''
+              }`}
+              key={v.id}
+            >
               <label className={styles.label}>{v.name} Traffic:</label>
               <Input
                 type="number"

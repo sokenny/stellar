@@ -20,6 +20,14 @@
   }
   const stellarVisitorId = localStorage.getItem('stellarVisitorId');
 
+  function getPathFromURL(url) {
+    const a = document.createElement('a');
+    a.href = url;
+
+    const pathname = a.pathname.endsWith('/') ? a.pathname : a.pathname + '/';
+    return pathname.toLowerCase();
+  }
+
   function getApiKey() {
     const scriptTag = document.querySelector('script[data-stellar-api-key]');
     return scriptTag ? scriptTag.getAttribute('data-stellar-api-key') : null;
@@ -172,9 +180,12 @@
           return;
         }
 
-        if (!window.location.href.includes(experiment.url)) {
+        if (
+          getPathFromURL(window.location.href) !==
+          getPathFromURL(experiment.url)
+        ) {
           console.log(
-            'Skipping experiment as it is not for this page: ',
+            'Skipping experiment as it is not for this page :):',
             experiment,
           );
           return;
