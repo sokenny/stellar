@@ -10,6 +10,7 @@ import getStellarClientCode from '../../helpers/getStellarClientCode';
 const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const { user, refetchProjects, currentProject } = useStore();
+  console.log('currentProject', currentProject);
   const apiKey = user?.api_keys.find(
     (key) => key.project_id === currentProject.id,
   )?.key;

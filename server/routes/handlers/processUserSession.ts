@@ -11,7 +11,7 @@ async function processUserSession(req: Request, res: Response) {
     console.log('payload that arrived: ', payload);
 
     const session = await db.Session.create({
-      session_id: payload.sessionId,
+      visitor_id: payload.visitorId,
       length: payload.timeOnPage,
       click_count: payload.clickCount,
       scroll_depth: payload.scrollDepth,
@@ -19,7 +19,7 @@ async function processUserSession(req: Request, res: Response) {
       ip: ipAddress,
     });
 
-    const sessionExperimentPromises = payload.experimentsRun.map(
+    const sessionExperimentPromises = payload.activeExperiments.map(
       (experiment) => {
         return db.SessionExperiment.create({
           session_id: session.id,

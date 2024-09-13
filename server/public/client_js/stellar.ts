@@ -50,22 +50,23 @@
     }
   }
 
-  function getSessionId() {
-    let sessionId = localStorage.getItem('stellar_session_id');
-    if (!sessionId) {
+  function getVisitorId() {
+    let visitorId = localStorage.getItem('stellar_visitor_id');
+    if (!visitorId) {
       const userAgent = window.navigator.userAgent.replace(/\D/g, '');
-      sessionId = `session_${Date.now()}_${userAgent}`;
-      localStorage.setItem('stellar_session_id', sessionId);
+      visitorId = `session_${Date.now()}_${userAgent}`;
+      localStorage.setItem('stellar_visitor_id', visitorId);
     }
-    return sessionId;
+    return visitorId;
   }
 
-  const sessionId = getSessionId();
+  const visitorId = getVisitorId();
 
   let timeOnPage = 0;
   let clickCount = 0;
   let scrollDepth = 0;
-  let experimentsRun = [];
+  let activeExperiments = [];
+  console.log('cocaina - a');
   let visitedPages = [];
 
   let isInternalNavigation = false;
@@ -102,7 +103,7 @@
       timeOnPage,
       clickCount,
       scrollDepth,
-      experimentsRun,
+      activeExperiments,
       visitedPages,
       pagesWithExperiments,
       hasFetchedExperiments,
@@ -117,7 +118,7 @@
         timeOnPage: storedTime,
         clickCount: storedClicks,
         scrollDepth: storedDepth,
-        experimentsRun: storedExperiments,
+        activeExperiments: storedExperiments,
         visitedPages: storedVisitedPages,
         pagesWithExperiments: storedPagesWithExperiments,
         hasFetchedExperiments: storedHasFetchedExperiments,
@@ -125,7 +126,7 @@
       timeOnPage = storedTime;
       clickCount = storedClicks;
       scrollDepth = storedDepth;
-      experimentsRun = storedExperiments;
+      activeExperiments = storedExperiments;
       visitedPages = storedVisitedPages;
       pagesWithExperiments = storedPagesWithExperiments;
       hasFetchedExperiments = storedHasFetchedExperiments;
@@ -136,12 +137,12 @@
     window.addEventListener('beforeunload', () => {
       if (!isInternalNavigation) {
         const data = {
-          sessionId,
+          visitorId,
           timeOnPage,
           clickCount,
           scrollDepth,
-          idempotencyKey: sessionId,
-          experimentsRun,
+          idempotencyKey: visitorId, // not sure if this is right or needed
+          activeExperiments,
           visitedPages,
           stellarVisitorId,
           // TODO-p2: Store session issues in the database, and perhaps do not count these sessions as valid. Or raise an issue on the FE of the exp about it
@@ -225,22 +226,6 @@
               setStellarData(stellarData);
             }
 
-            const isExperimentInArray = experimentsRun.find(
-              (e) => e.experiment === experiment.id,
-            );
-
-            if (!isExperimentInArray) {
-              experimentsRun.push({
-                experiment: experiment.id,
-                variant: variant.id,
-                converted: false,
-                goalType: experiment.goal.type,
-                goalElementUrl: experiment.goal.url_match_value,
-                goalUrlMatchType: experiment.goal.url_match_type,
-                goalUrlMatchValue: experiment.goal.url_match_value,
-              });
-            }
-
             if (
               experiment.goal.type === 'CLICK' &&
               (currentPageUrl.includes(experiment.goal.url_match_value) ||
@@ -251,7 +236,7 @@
               );
               if (selectorElement) {
                 selectorElement.addEventListener('click', function () {
-                  const expRun = experimentsRun.find(
+                  const expRun = activeExperiments.find(
                     (e) =>
                       e.experiment === experiment.id &&
                       e.variant === variant.id,
@@ -293,6 +278,7 @@
   }
 
   function showLoadingState() {
+    console.log('showLoadingState run!');
     const loadingElement = document.createElement('div');
     loadingElement.id = 'stellar-loading';
     loadingElement.textContent = 'LOADING...';
@@ -354,11 +340,25 @@
 
       global__experimentsToMount = data;
 
+      activeExperiments = data.map((experiment) => {
+        const stellarData = getStellarData();
+        const storedVariantId = stellarData[experiment.id];
+        return {
+          experiment: experiment.id,
+          variant: storedVariantId || experiment.variant_to_use,
+          converted: false,
+          goalType: experiment.goal.type,
+          goalElementUrl: experiment.goal.url_match_value,
+          goalUrlMatchType: experiment.goal.url_match_type,
+          goalUrlMatchValue: experiment.goal.url_match_value,
+        };
+      });
+
       setStellarCache(global__experimentsToMount);
 
       console.log('global__experimentsToMount', global__experimentsToMount);
-
       mountExperiments(global__experimentsToMount);
+      trackPageVisit();
     } catch (error) {
       console.error('Error fetching experiments:', error);
     } finally {
@@ -387,7 +387,7 @@
   }
 
   function trackPageVisit() {
-    console.log('track page visit run! ', experimentsRun);
+    console.log('track page visit run! ', activeExperiments);
     const currentPage = window.location.pathname;
     if (visitedPages.length === 1 && visitedPages[0] === currentPage) {
       return;
@@ -397,7 +397,12 @@
 
     console.log('currentPage: ', currentPage);
 
-    experimentsRun.forEach((experiment) => {
+    activeExperiments.forEach((experiment) => {
+      console.log(
+        'foriching: ',
+        experiment,
+        hasPageVisitGoalConverted(experiment),
+      );
       if (hasPageVisitGoalConverted(experiment)) {
         console.log('converted page visit!');
         experiment.converted = true;
@@ -440,7 +445,6 @@
     showLoadingState();
     function domContentLoadedActions() {
       restoreSessionData();
-      trackPageVisit();
       wrapHistoryMethods();
       startTimeTracking();
       trackClicks();

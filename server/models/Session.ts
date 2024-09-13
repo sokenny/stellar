@@ -2,11 +2,10 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Session extends Model {
   public id!: number;
-  public session_id!: string;
+  public visitor_id!: string;
   public length!: number;
   public click_count!: number;
   public scroll_depth!: number;
-  public experiments_run!: any[];
   public visited_pages!: string[];
   public ip!: string;
   public created_at!: Date;
@@ -21,7 +20,7 @@ export const initializeSession = (sequelize: Sequelize): typeof Session => {
         autoIncrement: true,
         primaryKey: true,
       },
-      session_id: {
+      visitor_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -35,10 +34,6 @@ export const initializeSession = (sequelize: Sequelize): typeof Session => {
       },
       scroll_depth: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      experiments_run: {
-        type: DataTypes.JSON,
         allowNull: true,
       },
       visited_pages: {

@@ -7,7 +7,9 @@ const goalFunctionMapper = {
   [GoalTypesEnum.PAGE_VISIT]: getGoalClickAndPageVisitStats,
 };
 
-async function getGoalSessionTimeStats(experimentId, variantIds) {
+// TODO-p1-1: Terminar de refactorear este servicio para que pueda devolver stats por unique visitor o total sessions. y conectarlo con el FE
+
+async function getGoalSessionTimeStats_b(experimentId, variantIds) {
   try {
     const stats = await db.SessionExperiment.findAll({
       where: { experiment_id: experimentId },
@@ -70,7 +72,7 @@ async function getGoalSessionTimeStats(experimentId, variantIds) {
   }
 }
 
-async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
+async function getGoalClickAndPageVisitStats_b(experimentId, variantIds) {
   try {
     const stats = await db.SessionExperiment.findAll({
       where: {
@@ -161,6 +163,141 @@ async function getExperimentStats(experimentId) {
     return variantStats;
   } catch (error) {
     console.log('error', error);
+    throw error;
+  }
+}
+
+async function getGoalSessionTimeStats(experimentId, variantIds) {
+  try {
+    const stats = await db.SessionExperiment.findAll({
+      where: { experiment_id: experimentId },
+      attributes: [
+        ['variant_id', 'variantId'],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.fn('DISTINCT', db.sequelize.col('session.visitor_id')),
+          ),
+          'uniqueVisitors',
+        ],
+        [
+          db.sequelize.fn('AVG', db.sequelize.col('session.length')),
+          'averageSessionTime',
+        ],
+        [
+          db.sequelize.fn('SUM', db.sequelize.col('session.length')),
+          'totalSessionTime',
+        ],
+      ],
+      include: [
+        {
+          model: db.Session,
+          as: 'session',
+          attributes: [],
+        },
+      ],
+      group: ['SessionExperiment.variant_id'],
+      raw: true,
+    });
+
+    const formattedStats = stats.map((stat) => ({
+      variantId: stat.variantId,
+      uniqueVisitors: parseInt(stat.uniqueVisitors, 10),
+      averageSessionTime: parseFloat(stat.averageSessionTime).toFixed(2),
+      totalSessionTime: parseFloat(stat.totalSessionTime).toFixed(2), // Adding total session time
+    }));
+
+    formattedStats.forEach((variantStat) => {
+      const index = variantIds.indexOf(variantStat.variantId);
+      if (index > -1) {
+        variantIds.splice(index, 1);
+      }
+    });
+
+    variantIds.forEach((variantId) => {
+      formattedStats.push({
+        variantId: variantId,
+        uniqueVisitors: 0,
+        averageSessionTime: '0.00',
+        totalSessionTime: '0.00',
+      });
+    });
+
+    return formattedStats;
+  } catch (error) {
+    console.error('Error in getGoalSessionTimeStats:', error);
+    throw error;
+  }
+}
+
+async function getGoalClickAndPageVisitStats(experimentId, variantIds) {
+  try {
+    const stats = await db.SessionExperiment.findAll({
+      where: {
+        experiment_id: experimentId,
+      },
+      attributes: [
+        ['variant_id', 'variantId'],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.fn('DISTINCT', db.sequelize.col('session.visitor_id')),
+          ),
+          'uniqueVisitors',
+        ],
+        [
+          db.sequelize.fn(
+            'SUM',
+            db.sequelize.cast(
+              db.sequelize.col('SessionExperiment.converted'),
+              'integer',
+            ),
+          ),
+          'conversions',
+        ],
+      ],
+      include: [
+        {
+          model: db.Session,
+          as: 'session', // Ensure this matches the correct alias defined in your associations
+          attributes: [], // We don't need any attributes from the session table in the final result
+        },
+      ],
+      group: ['SessionExperiment.variant_id'],
+      raw: true,
+    });
+
+    const formattedStats = stats.map((stat) => {
+      const conversionRate = parseFloat(
+        ((stat.conversions / stat.uniqueVisitors) * 100).toFixed(2),
+      );
+      return {
+        variantId: stat.variantId,
+        uniqueVisitors: parseInt(stat.uniqueVisitors, 10),
+        conversions: parseInt(stat.conversions, 10),
+        conversionRate: conversionRate,
+      };
+    });
+
+    formattedStats.forEach((variantStat) => {
+      const index = variantIds.indexOf(variantStat.variantId);
+      if (index > -1) {
+        variantIds.splice(index, 1);
+      }
+    });
+
+    variantIds.forEach((variantId) => {
+      formattedStats.push({
+        variantId: variantId,
+        uniqueVisitors: 0,
+        conversions: 0,
+        conversionRate: 0,
+      });
+    });
+
+    return formattedStats;
+  } catch (error) {
+    console.error('Error in getGoalClickAndPageVisitStats:', error);
     throw error;
   }
 }
