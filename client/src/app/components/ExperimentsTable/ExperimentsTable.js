@@ -34,8 +34,8 @@ const ExperimentsTable = ({ experiments = [] }) => {
         let experimentStats = [];
         let loadingStats = false;
         if (experiment.status !== ExperimentStatusesEnum.PENDING) {
-          getExperimentStats(experiment.id);
-          experimentStats = stats[experiment.id];
+          getExperimentStats(experiment.id, 'total-sessions');
+          experimentStats = stats[experiment.id + '-total-sessions'];
           if (experimentStats === undefined) {
             loadingStats = true;
           }

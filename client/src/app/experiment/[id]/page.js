@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import {
   Tooltip,
@@ -25,12 +26,14 @@ import Header from './Header';
 import CreateButton from '../../components/CreateButton';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import SnippetInstallationModal from '../../components/Modals/SnippetInstallationModal';
+import StatsSwitch from '../../components/StatsSwitch/StatsSwitch';
 import styles from './page.module.css';
 
 // TODO-p1-2: Add a manage experiment tutorial
 
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();
+  const [statsType, setStatsType] = useState('total-sessions');
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
@@ -203,35 +206,41 @@ export default function ExperimentPage({ params, searchParams }) {
           </div>
         </div>
         <section>
-          <div className={styles.tableTitle}>
-            <h3 className={styles.sectionTitle}>Variants</h3>
-            <Tooltip
-              content={
-                hasStarted
-                  ? 'You can not add new variants to an experiment that has already started.'
-                  : 'Create a new variant'
-              }
-              showArrow
-              className={styles.tooltip}
-              closeDelay={0}
-            >
-              <span className={styles.tooltipInner}>
-                {creatingVariant ? (
-                  <Spinner size={'sm'} />
-                ) : (
-                  <CreateButton
-                    height={20}
-                    className={styles.createButton}
-                    onClick={handleCreateVariant}
-                    isDisabled={hasStarted}
-                  />
-                )}
-              </span>
-            </Tooltip>
+          <div className={styles.tableHeader}>
+            <div className={styles.tableTitle}>
+              <h3 className={styles.sectionTitle}>Variants</h3>
+              <Tooltip
+                content={
+                  hasStarted
+                    ? 'You can not add new variants to an experiment that has already started.'
+                    : 'Create a new variant'
+                }
+                showArrow
+                className={styles.tooltip}
+                closeDelay={0}
+              >
+                <span className={styles.tooltipInner}>
+                  {creatingVariant ? (
+                    <Spinner size={'sm'} />
+                  ) : (
+                    <CreateButton
+                      height={20}
+                      className={styles.createButton}
+                      onClick={handleCreateVariant}
+                      isDisabled={hasStarted}
+                    />
+                  )}
+                </span>
+              </Tooltip>
+            </div>
+            <div>
+              <StatsSwitch onSwitch={setStatsType} />
+            </div>
           </div>
           <VariantsTable
             variants={experiment.variants}
             experiment={experiment}
+            statsType={statsType}
           />
           {/* TODO-p2: Have a line chart with sessions and conversions. Be able to filter by variant if needed */}
         </section>

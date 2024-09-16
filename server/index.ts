@@ -9,12 +9,6 @@ import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
-// TODO-p1-1: Arreglar esto de que se "parte" la sesion con el google auth:
-// --- Vamos a:
-// ------ 1. Que "experiments_run" sea mas bien un "active_experiments" sin importar si el experimento montó o no.
-// ------ 2. Que el "session_id" se renueve cada vez que el usuario se va de el dominio de la pagina.
-// ------ 3. Que la "ip" o algo, nos sirva realmente como identificador del usuario. O deviceId o lo que sea.
-
 // TODO-p1-1-1: Arreglar esto de que el sendBeacon a veces no se manda. Buscar una forma que las sesiones se cuenten mejor.
 
 // TODO-p1-1-1: Arreglar esto de que no aparece el toast o el cambio en la UI despues de modificar una variante exitosamente.

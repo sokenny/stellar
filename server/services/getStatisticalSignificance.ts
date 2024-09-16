@@ -1,6 +1,6 @@
 import db from '../models';
 import jStat from 'jstat';
-import getExperimentStats from './getExperimentStats';
+import getExperimentStats from './getTotalSessionsExperimentStats';
 
 function getStatisticalSignificance(variants) {
   let results = [];

@@ -43,7 +43,7 @@ router.post('/experiments', createExperiment);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/name', updateExperimentName);
-router.get('/experiment/:id/stats', getExperimentStatsHandler);
+router.get('/experiment/:id/stats/:type', getExperimentStatsHandler);
 router.post('/experiment/:id/stop', stopExperiment);
 router.post('/experiment/:id/pause', pauseExperiment);
 router.post('/experiment/:id/on', turnOnExperiment);

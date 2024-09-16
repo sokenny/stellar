@@ -32,10 +32,15 @@
   margin-right: 8px;
 }
 
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
 .tableTitle {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .tooltip {
@@ -52,7 +57,7 @@
   margin-left: -4px;
 }
 
-.goal { 
+.goal {
   display: flex;
   align-items: center;
 }
@@ -67,7 +72,8 @@
   margin-bottom: 6px;
 }
 
-.startDate span, .endDate span {
+.startDate span,
+.endDate span {
   color: rgba(0, 0, 0, 0.5);
   font-weight: 300;
 }

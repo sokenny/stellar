@@ -1,6 +1,28 @@
 import { create } from 'zustand';
 import interceptFetch from '../helpers/interceptFetch';
 
+async function fetchExperimentStats(experimentId, type) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/stats/${type}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch stats for experiment ${experimentId}:`,
+      error,
+    );
+    throw new Error('Failed to fetch experiment stats.');
+  }
+}
+
 const useStore = create((set, get) => ({
   token: null,
   user: null,
@@ -16,52 +38,44 @@ const useStore = create((set, get) => ({
   },
   stats: {},
   lastCallTimestamps: {}, // Track the last call timestamp for each experiment ID
-  setStats: (experimentId, experimentStats) =>
+  setStats: (key, experimentStats) =>
     set((state) => ({
       stats: {
         ...state.stats,
-        [experimentId]: experimentStats,
+        [key]: experimentStats,
       },
     })),
-  getExperimentStats: async (experimentId) => {
+  getExperimentStats: async (experimentId, type = 'total-sessions') => {
+    const expStatsKey = `${experimentId}-${type}`;
     const state = get();
     const now = Date.now();
-    const lastCallTimestamp = state.lastCallTimestamps[experimentId] || 0;
+    const lastCallTimestamp = state.lastCallTimestamps[expStatsKey] || 0;
 
     if (now - lastCallTimestamp < 2000) {
-      return state.stats[experimentId];
+      return state.stats[expStatsKey];
     }
 
     set((state) => ({
       lastCallTimestamps: {
         ...state.lastCallTimestamps,
-        [experimentId]: now,
+        [expStatsKey]: now,
       },
     }));
 
-    if (!state.stats[experimentId]) {
+    if (!state.stats[expStatsKey]) {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}/stats`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-        const data = await res.json();
-        state.setStats(experimentId, data);
+        const data = await fetchExperimentStats(experimentId, type);
+        state.setStats(expStatsKey, data);
         return data;
       } catch (error) {
         console.error(
-          `Failed to fetch stats for experiment ${experimentId}:`,
+          `Failed to fetch stats for experiment ${experimentId} - ${type}:`,
           error,
         );
         throw new Error('Failed to fetch experiment stats.');
       }
     } else {
-      return state.stats[experimentId];
+      return state.stats[expStatsKey];
     }
   },
   session: null,

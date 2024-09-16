@@ -26,16 +26,7 @@ import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import styles from './VariantsTable.module.css';
 
-function getConversionRate(variantStats) {
-  if (!variantStats || !variantStats.sessions) {
-    return '-';
-  }
-  return (
-    ((variantStats.conversions / variantStats.sessions) * 100).toFixed(2) + '%'
-  );
-}
-
-const columns = [
+const columns = (statsType) => [
   {
     key: 'name',
     label: 'Name',
@@ -66,16 +57,31 @@ const columns = [
       undefined,
     ],
   },
-  {
-    key: 'sessions',
-    label: 'Sessions',
-    goalTypes: [
-      GoalTypesEnum.CLICK,
-      GoalTypesEnum.PAGE_VISIT,
-      GoalTypesEnum.SESSION_TIME,
-      undefined,
-    ],
-  },
+  ...(statsType === 'total-sessions'
+    ? [
+        {
+          key: 'sessions',
+          label: 'Sessions',
+          goalTypes: [
+            GoalTypesEnum.CLICK,
+            GoalTypesEnum.PAGE_VISIT,
+            GoalTypesEnum.SESSION_TIME,
+            undefined,
+          ],
+        },
+      ]
+    : [
+        {
+          key: 'unique_visitors',
+          label: 'Unique Visitors',
+          goalTypes: [
+            GoalTypesEnum.CLICK,
+            GoalTypesEnum.PAGE_VISIT,
+            GoalTypesEnum.SESSION_TIME,
+            undefined,
+          ],
+        },
+      ]),
   {
     key: 'conversions',
     label: 'Conversions',
@@ -108,7 +114,7 @@ const columns = [
   },
 ];
 
-const VariantsTable = ({ variants = [], experiment }) => {
+const VariantsTable = ({ variants = [], experiment, statsType }) => {
   variants.sort((a, b) => a.id - b.id);
   const [variantToEdit, setVariantToEdit] = useState(null);
   const [variantToDelete, setVariantToDelete] = useState(null);
@@ -116,7 +122,8 @@ const VariantsTable = ({ variants = [], experiment }) => {
   const hasStarted = experiment.started_at;
   const { stats, getExperimentStats, currentProject, token } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
-  const thisStats = stats[experiment.id];
+  const thisStats = stats[experiment.id + '-' + statsType];
+  console.log('thisStats!', thisStats);
   const {
     isOpen: isSnippetModalOpen,
     onOpen: onOpenSnippetModal,
@@ -125,9 +132,9 @@ const VariantsTable = ({ variants = [], experiment }) => {
 
   useEffect(() => {
     if (hasStarted) {
-      getExperimentStats(experiment.id);
+      getExperimentStats(experiment.id, statsType);
     }
-  }, [hasStarted, getExperimentStats]);
+  }, [hasStarted, getExperimentStats, statsType]);
 
   function getVariantsRows(variants, hasStarted) {
     return variants.map((variant) => {
@@ -137,9 +144,13 @@ const VariantsTable = ({ variants = [], experiment }) => {
         name: variant.name,
         traffic: <>{variant.traffic + '%'}</>,
         changes: variant?.modifications?.length,
-        sessions: hasStarted ? variantStats?.sessions : '-',
+        ...(statsType === 'total-sessions'
+          ? { sessions: hasStarted ? variantStats?.sessions : '-' }
+          : {
+              unique_visitors: hasStarted ? variantStats?.unique_visitors : '-',
+            }),
         conversions: hasStarted ? variantStats?.conversions : '-',
-        conversion_rate: hasStarted ? getConversionRate(variantStats) : '-',
+        conversion_rate: hasStarted ? variantStats?.conversionRate + '%' : '-',
         average_session_time: hasStarted
           ? variantStats?.averageSessionTime
           : '-',
@@ -183,6 +194,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
         className={`${styles.table} ${rows.length ? '' : styles.empty} ${
           hasStarted ? styles.hasStarted : ''
         }`}
+        aria-label="Variants Table"
         bottomContent={
           pages > 1 ? (
             <div className="flex w-full justify-center">
@@ -201,7 +213,7 @@ const VariantsTable = ({ variants = [], experiment }) => {
         }
       >
         <TableHeader className={styles.tableHeader}>
-          {columns
+          {columns(statsType)
             .filter((col) => col.goalTypes.includes(experiment?.goal?.type))
             .map((column) => {
               return (
