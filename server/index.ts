@@ -9,8 +9,6 @@ import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
-// TODO-p1-1-1: Arreglar esto de que el sendBeacon a veces no se manda. Buscar una forma que las sesiones se cuenten mejor.
-
 // TODO-p1-1-1: Arreglar esto de que no aparece el toast o el cambio en la UI despues de modificar una variante exitosamente.
 //  - Capaz mostrar un mensaje de exito en el visual builder
 

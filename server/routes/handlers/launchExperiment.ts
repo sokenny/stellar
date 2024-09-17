@@ -38,7 +38,7 @@ async function turnOnExperiment(req, res) {
     if (inPageExperiment) {
       return res.status(400).json({
         message:
-          'The targeted page has an active experiment. Please finish all experiments on this page before launching a new one.',
+          'The targeted page has an active experiment. Please finish all experiments on this page before launching a new one. Or enable parallel experiments inside the experiment settings.',
       });
     }
 

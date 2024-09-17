@@ -150,7 +150,10 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
               unique_visitors: hasStarted ? variantStats?.unique_visitors : '-',
             }),
         conversions: hasStarted ? variantStats?.conversions : '-',
-        conversion_rate: hasStarted ? variantStats?.conversionRate + '%' : '-',
+        conversion_rate:
+          hasStarted && variantStats?.conversionRate
+            ? variantStats?.conversionRate + '%'
+            : '-',
         average_session_time: hasStarted
           ? variantStats?.averageSessionTime
           : '-',

@@ -29,8 +29,6 @@ import SnippetInstallationModal from '../../components/Modals/SnippetInstallatio
 import StatsSwitch from '../../components/StatsSwitch/StatsSwitch';
 import styles from './page.module.css';
 
-// TODO-p1-2: Add a manage experiment tutorial
-
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();
   const [statsType, setStatsType] = useState('total-sessions');

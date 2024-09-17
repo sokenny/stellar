@@ -145,6 +145,11 @@
       .stellar-confirmation-prompt button {
         margin: 5px;
       }
+      
+      .sve-success {
+        background-color: #cfffdf!important;
+        border: 1px solid #50c878!important;
+      }
     `;
 
     injectStyles(styles);
@@ -451,7 +456,7 @@
             }
 
             if (variantCreated) {
-              return `<div class="stellar-variant-editor sve-empty-state">
+              return `<div class="stellar-variant-editor sve-empty-state sve-success">
                 <div>
                   <div class="sve-identity">STELLAR</div>
                   <div class="sve-instructions">Variant created! You can close this tab :)</div>
@@ -607,7 +612,7 @@
             );
 
             if (response.status === 200) {
-              window.close();
+              // window.close();
             }
 
             // Sometimes the window won't close so we perform the handling below

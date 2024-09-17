@@ -115,7 +115,7 @@ const VariantModal = ({
                       : handleEditVariant(thisVariant.id)
                   }
                 >
-                  Edit on website
+                  Go to Visual Editor
                 </NextUIButton>
               </div>
             </div>
