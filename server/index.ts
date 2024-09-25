@@ -9,10 +9,9 @@ import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
-// TODO-p1-1-1: Arreglar esto de que no aparece el toast o el cambio en la UI despues de modificar una variante exitosamente.
-//  - Capaz mostrar un mensaje de exito en el visual builder
-
 // TODO-p1-1: Add sign up welcome emails
+
+// TODO-p1-1: Launch my campaign with lingobites!
 
 // TODO-p1-1: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
 
