@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
 import isValidUrl from '../../helpers/isValidUrl';
+import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import segmentTrack from '../../helpers/segment/segmentTrack';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
@@ -27,7 +28,7 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ url }),
+          body: JSON.stringify({ url: getDomainFromUrl(url) }),
         }),
         {
           loading: 'Creating project...',
@@ -35,7 +36,6 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
             setLoading(false);
             const parsedResponse = await response.json();
             console.log(parsedResponse);
-            // refresh browser page
             window?.location?.reload();
             return 'Project created successfully';
           },
@@ -67,7 +67,7 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
         <div className={styles.inputAndHelpText}>
           <Input
             className={styles.input}
-            placeholder="https://your-landing-page.com"
+            placeholder="https://your-domain.com"
             onChange={(e) => setUrl(e.target.value)}
             value={url}
           />
