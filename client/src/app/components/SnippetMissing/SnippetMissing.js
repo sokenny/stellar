@@ -60,21 +60,20 @@ const SnippetMissing = ({ className, onSuccess }) => {
           <div>
             <div className={styles.cardTitle}>Snippet missing</div>
             <div>
-              Place this snippet in the {'<head>'} tag of your website to start
-              tracking and running your experiments:
+              Place this snippet inside the {'<head>'} tag of your website to
+              start tracking and running your experiments:
             </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
               {getStellarClientCode(apiKey)}
             </Snippet>
             <div className={styles.cardActions}>
-              <NextUIButton
+              {/* <NextUIButton
                 color="primary"
                 variant="light"
                 className={styles.seeHowBtn}
               >
-                {/* TODO-p2: Armar pagina mostrando como instalarlo */}
                 See how
-              </NextUIButton>
+              </NextUIButton> */}
               <Button onClick={handleSnippetCheck} loading={loading}>
                 I've installed it
               </Button>
