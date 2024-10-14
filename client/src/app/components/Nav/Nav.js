@@ -130,7 +130,16 @@ const Nav = ({ token }) => {
       )}
       <Navbar maxWidth="full" className={styles.container}>
         <NavbarBrand className={styles.identity}>
-          <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
+          <Link href={session ? '/dashboard' : '/'}>
+            <div className={styles.id}>
+              <img
+                src="/stellar-logo.png"
+                alt="Stellar"
+                style={{ height: 18 }}
+              />
+              Stellar
+            </div>
+          </Link>
         </NavbarBrand>
         {currentProject && !isHome && (
           <Dropdown>

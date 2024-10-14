@@ -68,3 +68,12 @@
 .downArrow svg {
   width: 10px;
 }
+
+.id {
+  display: flex;
+  align-items: center;
+}
+
+.id img {
+  margin-right: 4px;
+}
