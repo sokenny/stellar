@@ -36,7 +36,7 @@ export default function SettingsPage({ params }) {
         >
           {experiment.name}
         </BreadcrumbItem>
-        <BreadcrumbItem>settings</BreadcrumbItem>
+        <BreadcrumbItem>Settings</BreadcrumbItem>
       </Breadcrumbs>
       <h1 className={styles.title}>Settings</h1>
       <SettingsForm experiment={experiment} />

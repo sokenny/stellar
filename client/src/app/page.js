@@ -17,9 +17,9 @@ export default async function HomePage({}) {
             teams
           </h1>
           <h2 className={styles.description}>
-            Your real alternative to <b>Google Optimize</b>. No coding required.
-            86% of our users increase their conversion rates under 1 month, for
-            free.
+            Your real alternative to <b>Google Optimize</b>. Clutter free and to
+            the point. 86% of our users increase their conversion rates under 1
+            month, for free.
           </h2>
         </div>
         <div>
