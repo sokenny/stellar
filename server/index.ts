@@ -9,9 +9,9 @@ import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 
-// TODO-p1-1: Launch my campaign with lingobites!
+// TODO-p1-2: Launch my campaign with lingobites!
 
-// TODO-p1-1: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
+// TODO-p1-2: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
 
 dotenv.config();
 // TODO-p2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente

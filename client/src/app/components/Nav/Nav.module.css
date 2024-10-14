@@ -1,16 +1,19 @@
 .container {
   justify-content: space-between;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-left: 64px;
   padding-right: 64px;
-  height: 3rem!important;
+  height: 3rem !important;
 }
 
-.identity a, .navItem, .navItem * {
+.identity a,
+.navItem,
+.navItem * {
   font-size: 14px;
 }
 
-.identity, .container li {
+.identity,
+.container li {
   cursor: pointer;
 }
 
@@ -54,10 +57,14 @@
   .container {
     padding-left: 16px;
     padding-right: 16px;
-    --navbar-height: 3rem!important;
+    --navbar-height: 3rem !important;
   }
 
   .container header {
     padding-left: 0;
   }
+}
+
+.downArrow svg {
+  width: 10px;
 }

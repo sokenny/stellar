@@ -8,6 +8,7 @@ import useStore from '../../store';
 import Link from 'next/link';
 import FullPageLoader from '../FullPageLoader';
 import ErrorModal from '../Modals/ErrorModal';
+import CreateNewProjectModal from '../Modals/CreateNewProjectModal';
 import {
   Navbar,
   NavbarBrand,
@@ -15,7 +16,14 @@ import {
   NavbarItem,
   Button,
   useDisclosure,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  cn,
 } from '@nextui-org/react';
+import AddNote from '../../icons/AddNote';
+import DownArrow from '../../icons/DownArrow';
 import segmentIdentify from '../../helpers/segment/segmentIdentify';
 import styles from './Nav.module.css';
 import segmentTrack from '../../helpers/segment/segmentTrack';
@@ -27,6 +35,7 @@ const Nav = ({ token }) => {
   console.log('Pathname! ', pathname);
   const { data: session } = useSession();
   const {
+    user,
     currentProject,
     setProjects,
     setCurrentProject,
@@ -88,9 +97,19 @@ const Nav = ({ token }) => {
     onOpen: onOpenErrorModal,
   } = useDisclosure();
 
+  const {
+    isOpen: isCreateNewProjectModalOpen,
+    onOpen: onOpenCreateNewProjectModal,
+    onOpenChange: onOpenCreateNewProjectModalChange,
+  } = useDisclosure();
+
   const tabs = [
     { name: 'Dashboard', path: '/dashboard', isAuth: true, when: isHome },
   ];
+
+  const iconClasses =
+    'text-xl text-default-500 pointer-events-none flex-shrink-0';
+
   return (
     <>
       {session === undefined && !isHome && <FullPageLoader />}
@@ -102,19 +121,64 @@ const Nav = ({ token }) => {
           message={errorModal}
         />
       )}
+      {isCreateNewProjectModalOpen && (
+        <CreateNewProjectModal
+          isOpen={isCreateNewProjectModalOpen}
+          onOpenChange={onOpenCreateNewProjectModalChange}
+          onOpen={onOpenCreateNewProjectModal}
+        />
+      )}
       <Navbar maxWidth="full" className={styles.container}>
         <NavbarBrand className={styles.identity}>
           <Link href={session ? '/dashboard' : '/'}>Stellar</Link>
         </NavbarBrand>
         {currentProject && !isHome && (
-          <div
-            className={styles.project}
-            onClick={() => {
-              router.push('/dashboard');
-            }}
-          >
-            Project: <span>{currentProject?.name}</span>
-          </div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                variant="bordered"
+                size="sm"
+                endContent={
+                  <div className={styles.downArrow}>
+                    <DownArrow />
+                  </div>
+                }
+              >
+                {currentProject?.name}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              variant="faded"
+              aria-label="Dropdown menu with description"
+            >
+              {user?.projects.map((project) => {
+                if (project.id === currentProject.id) return null;
+                return (
+                  <DropdownItem
+                    key={project.id}
+                    onClick={() => {
+                      setCurrentProject(project);
+                      router.push('/dashboard');
+                    }}
+                    showDivider={
+                      project.id ===
+                      user?.projects[user?.projects.length - 1].id
+                    }
+                  >
+                    {project.name}
+                  </DropdownItem>
+                );
+              })}
+              <DropdownItem
+                key="new"
+                description="Create a new project"
+                startContent={<AddNote className={iconClasses} />}
+                onClick={onOpenCreateNewProjectModal}
+              >
+                New project
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         )}
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {tabs.map((tab, i) => {

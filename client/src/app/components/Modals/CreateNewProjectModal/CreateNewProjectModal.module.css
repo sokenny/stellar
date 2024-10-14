@@ -1,0 +1,16 @@
+.modal {
+  padding: 16px;
+  width: fit-content !important;
+}
+
+.modal form {
+  width: 100%;
+}
+
+.modal input {
+  width: 100%;
+}
+
+.modal button {
+  margin-left: 8px;
+}
