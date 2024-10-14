@@ -61,6 +61,7 @@ const ThreeDotActions = ({ experimentId, status }) => {
                   key="copy"
                   description="Duplicate this experiment"
                   startContent={<Copy className={iconClasses} />}
+                  isDisabled
                 >
                   Copy
                 </ListboxItem>
