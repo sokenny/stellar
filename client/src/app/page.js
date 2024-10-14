@@ -40,6 +40,14 @@ export default async function HomePage({}) {
           <div className={styles.list}>
             <div className={styles.advantage}>
               <div className={styles.icon}>
+                <Goal color="white" width={15} height={15} />
+              </div>
+              <div className={styles.text}>
+                Ease of use. Clutter-free. To the point.
+              </div>
+            </div>
+            <div className={styles.advantage}>
+              <div className={styles.icon}>
                 <Bolt color="white" width={15} height={15} />
               </div>
               <div className={styles.text}>
@@ -52,14 +60,6 @@ export default async function HomePage({}) {
               </div>
               <div className={styles.text}>
                 Unlimitted traffic, experiments and variations.
-              </div>
-            </div>
-            <div className={styles.advantage}>
-              <div className={styles.icon}>
-                <Goal color="white" width={15} height={15} />
-              </div>
-              <div className={styles.text}>
-                Ease of use. Clutter-free. To the point.
               </div>
             </div>
             <div className={styles.advantage}>
