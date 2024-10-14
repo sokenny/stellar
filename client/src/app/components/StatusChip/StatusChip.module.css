@@ -1,5 +1,5 @@
 .container {
-  border-radius: 6px;
-  margin-right: 8px;
-  color: white;
+  border-radius: 6px!important;
+  margin-right: 8px!important;
+  color: white!important;
 }
