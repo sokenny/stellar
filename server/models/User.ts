@@ -30,6 +30,10 @@ export const initializeUser = (sequelize: Sequelize): typeof User => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      last_active_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: true,

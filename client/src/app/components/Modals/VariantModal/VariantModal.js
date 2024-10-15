@@ -34,7 +34,10 @@ const VariantModal = ({
   const isFormPristine = isObjectEqual(formData, initialValuesRef.current);
   const thisVariant = variants.find((v) => v.id === id);
   const otherVariants = variants.filter((v) => v.id !== id);
-  const { handleEditVariant } = useVariantEditor({ experiment });
+  const { handleEditVariant } = useVariantEditor({
+    experiment,
+    onSuccess: onClose,
+  });
   const {
     isOpen: isSnippetModalOpen,
     onOpen: onOpenSnippetModal,

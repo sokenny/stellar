@@ -35,6 +35,7 @@ const endTriggerTypes = [
   {
     key: 'auto_finalize',
     label: 'Auto finalize',
+    disabled: true,
   },
 ];
 
@@ -257,7 +258,9 @@ const SettingsForm = ({ experiment }) => {
           isDisabled={!!experiment.ended_at}
         >
           {endTriggerTypes.map((type) => (
-            <SelectItem key={type.key}>{type.label}</SelectItem>
+            <SelectItem key={type.key} isDisabled={type.disabled}>
+              {type.label}
+            </SelectItem>
           ))}
         </Select>
         {!experiment.ended_at &&

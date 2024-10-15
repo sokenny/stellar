@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import useStore from '../store';
 import { toast } from 'sonner';
 
-function useVariantEditor({ experiment }) {
+function useVariantEditor({ experiment, onSuccess }) {
   const { token, refetchProjects } = useStore();
   const variantsCheckIntervalRef = useRef(null);
 
@@ -17,7 +17,6 @@ function useVariantEditor({ experiment }) {
     }
 
     variantsCheckIntervalRef.current = setInterval(async () => {
-      console.log('interval iter');
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
       );
@@ -30,6 +29,7 @@ function useVariantEditor({ experiment }) {
       if (variantModified) {
         clearInterval(variantsCheckIntervalRef.current);
         toast.success('Variant modified successfully!');
+        onSuccess && onSuccess();
         refetchProjects();
         if (typeof onVariantModifiedCallback === 'function') {
           onVariantModifiedCallback(experimentJson); // Execute the callback

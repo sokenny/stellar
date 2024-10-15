@@ -8,10 +8,12 @@ import cors from 'cors';
 import getAllowedOrigins from './services/getAllowedOrigins';
 import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
+import runWorker from './services/worker';
 
+// TODO-p1-1: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
+// TODO-p1-1: Automate mail for inactivity, asking whats wrong
+// TODO-p1-1: Automate mail asking for feedback survey completion
 // TODO-p1-2: Launch my campaign with lingobites!
-
-// TODO-p1-2: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
 
 dotenv.config();
 // TODO-p2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
@@ -58,5 +60,7 @@ app.use((req, res, next) => {
 
 app.use('/public', publicRoutes);
 app.use('/api', authMiddleware, api);
+
+runWorker();
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

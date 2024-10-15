@@ -22,6 +22,19 @@ async function getUserAttributes(email) {
   return user.toJSON();
 }
 
+async function updateLasteActiveAt(email) {
+  const user = await db.User.findOne({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  user.last_active_at = new Date();
+  await user.save();
+}
+
 async function authenticateSession(req) {
   const token = req.token;
 
@@ -52,6 +65,7 @@ async function authMiddleware(req: any, res: Response, next: NextFunction) {
 
   try {
     await authenticateSession(req);
+    updateLasteActiveAt(req.user.email);
   } catch (error) {
     console.error('Authentication failed:', error);
     return res.status(401).send('Authentication failed');
