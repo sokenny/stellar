@@ -19,6 +19,7 @@ import { initializeUser } from './User';
 import { initializeApiKey } from './ApiKey';
 import { initializeGoal } from './Goal';
 import { initializeSessionExperiment } from './SessionExperiment';
+import { initializeTransactionalEmail } from './TransactionalEmail';
 
 export const db: { [key: string]: any } = {};
 
@@ -39,6 +40,7 @@ db.User = initializeUser(sequelize);
 db.ApiKey = initializeApiKey(sequelize);
 db.Goal = initializeGoal(sequelize);
 db.SessionExperiment = initializeSessionExperiment(sequelize);
+db.TransactionalEmail = initializeTransactionalEmail(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -51,6 +53,18 @@ const associateModels = () => {
   db.Page.belongsTo(db.Project, {
     foreignKey: 'project_id',
     as: 'project',
+  });
+  db.User.hasMany(db.TransactionalEmail, {
+    foreignKey: 'user_id',
+    as: 'transactional_emails',
+  });
+  db.TransactionalEmail.belongsTo(db.User, {
+    foreignKey: 'user_id',
+    as: 'user',
+  });
+  db.Project.belongsTo(db.User, {
+    foreignKey: 'user_id',
+    as: 'user',
   });
   db.Project.hasMany(db.Page, {
     foreignKey: 'project_id',
