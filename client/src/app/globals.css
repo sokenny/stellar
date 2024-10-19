@@ -20,7 +20,7 @@
   --lightGray: '#bababa';
   --error: #ff0000;
   --activeTab: #f2f2f2;
-  --primary: #001e41;
+  --primary: #042d5d;
 }
 @tailwind base;
 @tailwind components;
