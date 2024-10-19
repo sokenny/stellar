@@ -10,7 +10,7 @@ import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 import runWorker from './services/worker';
 
-// TODO-p1-1: Improve landing page, add gifs tipo Neuras. Ver si conviene que agregue alguna sección mas
+// TODO-p1-1: Have element selection for goal setting be more intuitive
 // TODO-p1-2: Launch my campaign with lingobites!
 
 dotenv.config();

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import SignUpCTA from './components/SignUpCTA';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
@@ -73,10 +72,15 @@ export default async function HomePage({}) {
         <div className={styles.process}>
           <div className={styles.block}>
             <div className={styles.left}>
-              <img
-                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
-                alt="Create variants"
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className={styles.video}
                 width={550}
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
+                poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
               />
             </div>
             <div className={styles.texts}>
@@ -101,10 +105,15 @@ export default async function HomePage({}) {
               </p>
             </div>
             <div>
-              <img
-                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
-                alt="Set your goal"
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className={styles.video}
                 width={550}
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
+                poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
               />
             </div>
           </div>
@@ -134,7 +143,7 @@ export default async function HomePage({}) {
           <p>
             Our software is available for <b>free</b>. No credit card required.
             After getting set-up, if you exceed 10k MTU (monthly tracked users),
-            we will reach out to establish a <b>$32 USD monthly</b>{' '}
+            we will reach out to establish a <b>$29 USD monthly</b>{' '}
             subscription.
           </p>
           <SignUpCTA className={styles.pricingCTA}>Start For Free</SignUpCTA>

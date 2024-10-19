@@ -38,11 +38,11 @@ const LaunchExperimentModal = ({
                   </div>
                   <div>
                     <b>2.</b> You will not be able to make further edits to your
-                    variants, nor create new ones.
+                    variants inside this experiment, nor create new ones.
                   </div>
                   <div>
                     <b>3.</b> You will not be able to further edit your
-                    experiment's Goal.
+                    experiment's goal.
                   </div>
                 </div>
               </p>

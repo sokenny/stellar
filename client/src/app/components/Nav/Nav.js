@@ -259,13 +259,13 @@ const Nav = ({ token }) => {
           >
             Leave us your feedback 📝
           </a>
-          <a
+          {/* <a
             href="https://discord.gg/62krmWQ4ae"
             target="_blank"
             rel="noopener noreferrer"
           >
             Engage with us on Discord 🙌
-          </a>
+          </a> */}
         </div>
       </div>
     </>
