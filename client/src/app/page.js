@@ -138,6 +138,28 @@ export default async function HomePage({}) {
             </div>
           </div>
         </div>
+        <div className={`${styles.advantages} ${styles.quote}`}>
+          <h3>
+            Split test your way to market fit. 86% of our users see a boost in
+            conversion rates within a month—completely free.
+          </h3>
+        </div>
+        {/* <div className={styles.poc}>
+          <div className={styles.experiment}>
+            <div className={`${styles.variant} ${styles.control}`}>
+              <div className={styles.variantLabel}>Control</div>
+              <div className={styles.title}>Main Text Control</div>
+            </div>
+            <div className={`${styles.variant} ${styles.variantA}`}>
+              <div className={styles.variantLabel}>Variant A</div>
+              <div className={styles.title}>Main Text A</div>
+            </div>
+            <div className={`${styles.variant} ${styles.variantB}`}>
+              <div className={styles.variantLabel}>Variant B</div>
+              <div className={styles.title}>Main Text B</div>
+            </div>
+          </div>
+        </div> */}
         <div className={styles.pricing}>
           <h3>Pricing</h3>
           <p>

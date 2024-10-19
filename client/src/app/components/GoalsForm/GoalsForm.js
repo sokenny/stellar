@@ -168,13 +168,12 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
         clearInterval(goalCheckIntervalRef.current);
         onClose();
         refetchProjects();
-        console.log('caca2');
         if (!toastSuccessCalledRef.current) {
           toast.success('Goal set successfully');
           toastSuccessCalledRef.current = true;
         }
       }
-    }, 1000);
+    }, 1500);
   }
 
   // TODO: validate the url entered

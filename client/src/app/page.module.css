@@ -142,6 +142,18 @@
   justify-content: center;
 }
 
+.advantages.quote {
+  display: flex;
+  justify-content: center;
+}
+
+.advantages.quote h3 {
+  margin: 0;
+  font-weight: 200;
+  width: 800px;
+  text-align: center;
+}
+
 .pricing {
   text-align: center;
   padding-top: 64px;
@@ -207,6 +219,19 @@
 .block .texts {
   max-width: 500px;
 }
+
+/* .experiment {
+  display: flex;
+  text-align: center;
+}
+
+.experiment .variant .title {
+  font-size: 48px;
+}
+
+.experiment .variant.variantA .title {
+  font-size: 64px;
+} */
 
 @media (max-width: 720px) {
   .loomContainer {

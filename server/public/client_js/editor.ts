@@ -19,7 +19,6 @@
   const text = urlParams.get('text');
   const visualEditorOn = urlParams.get('visualEditorOn');
   const previewMode = urlParams.get('previewMode');
-  console.log('visualEditorOn -: ', visualEditorOn);
 
   let editedElements = [];
   let elementsPristineState = {};
@@ -86,7 +85,6 @@
     }
 
     async function setClickGoal({ selector }) {
-      console.log('esto corrio');
       const pageUrl = window.location.href.split('?')[0];
       const response = await fetch(STELLAR_API_URL + '/goals', {
         method: 'POST',
@@ -194,7 +192,6 @@
     document.onreadystatechange = async () => {
       if (document.readyState === 'complete') {
         if (visualEditorOn === 'true' || isSettingGoal === 'true') {
-          console.log('adding hover styles :p');
           addHoverStyles();
         }
 
@@ -559,13 +556,11 @@
             const el: any = document.querySelector(
               `[stellar-element-id="${stellarElementId}"]`,
             );
-            console.log('el to del: ', el);
 
             el.innerText = elementsPristineState[stellarElementId].innerText;
 
             const index = editedElements.indexOf(stellarElementId);
             if (index > -1) {
-              console.log('Spliced! ');
               editedElements.splice(index, 1);
             }
 
@@ -653,18 +648,12 @@
               el.addEventListener('click', function (e) {
                 e.stopPropagation();
                 const attrVal = this.getAttribute('stellar-element-id-ref');
-                console.log('attrVal! ', attrVal);
-                // const selector = `[stellar-element-id="${attrVal}"]`;
-
-                // console.log('cliqueado! ', selector);
-                // TODO-aca ya vengo
                 handleDeleteEditedElement(attrVal);
               });
             });
           }
 
           function handleElementMutation() {
-            console.log('mutating');
             const stellatElementId = document
               .querySelector(selectedElement)
               .getAttribute('stellar-element-id');
@@ -826,7 +815,6 @@
                   target = target.parentNode;
                 }
 
-                console.log('Element clicked 5:', e.target);
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -857,22 +845,24 @@
     function handleGoalElementSelection(event) {
       if (!isSettingGoal) return;
 
-      if (isSettingGoal) {
-        handleElementSelection(event);
-        const selector = getSelector(event.target);
-        setTimeout(async () => {
-          const confirmElement = confirm('Confirm element selection?');
-          if (confirmElement) {
-            const response = await setClickGoal({ selector });
-            if (response.status === 200) {
-              window.close();
-            }
-          } else {
-            const target = event.target as any;
-            target.classList.remove('stellar-selected');
+      event.preventDefault();
+      event.stopPropagation();
+
+      handleElementSelection(event);
+
+      const selector = getSelector(event.target);
+      setTimeout(async () => {
+        const confirmElement = confirm('Confirm element selection?');
+        if (confirmElement) {
+          const response = await setClickGoal({ selector });
+          if (response.status === 200) {
+            window.close();
           }
-        }, 50);
-      }
+        } else {
+          const target = event.target;
+          target.classList.remove('stellar-selected');
+        }
+      }, 50);
     }
 
     document.addEventListener('click', handleGoalElementSelection);

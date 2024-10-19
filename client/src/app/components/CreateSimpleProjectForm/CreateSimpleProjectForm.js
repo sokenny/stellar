@@ -42,7 +42,7 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
           error: (error) => {
             console.error('Fetch error:', error);
             setLoading(false);
-            return 'An error occured while creating experiments.';
+            return 'An error occured while creating project.';
           },
         },
       );
