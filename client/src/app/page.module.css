@@ -156,28 +156,6 @@
   text-align: center;
 }
 
-.pricing {
-  width: 100%;
-  text-align: center;
-  padding-top: 64px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.pricing h3 {
-  font-size: 32px;
-  margin-bottom: 16px;
-  color: var(--primary);
-}
-
-.pricing p b {
-  font-weight: 500;
-}
-
-.pricingCTA {
-  margin-top: 16px;
-  font-size: 14px;
-}
-
 .process .block {
   display: flex;
   align-items: center;
@@ -267,60 +245,6 @@
   justify-content: center;
 }
 
-.plans {
-  display: flex;
-  justify-content: center;
-}
-
-.plan {
-  border: 1px solid black;
-  padding: 32px;
-  border-radius: 4px;
-  text-align: left;
-  width: fit-content;
-  margin: 0 8px;
-}
-
-.plan.growth {
-  background: linear-gradient(45deg, #ffffff, #dde6f5);
-}
-
-.plan h4 {
-  font-weight: 600;
-}
-
-.plan svg {
-  display: inline;
-}
-
-.plan .planButton {
-  margin-top: 12px;
-  border-radius: 4px;
-  margin-bottom: 32px;
-}
-
-.plan .price {
-  font-size: 24px;
-  font-weight: 300;
-  color: rgba(0, 0, 0, 0.5);
-  line-height: normal;
-}
-
-.plan .payment {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.plan .price span {
-  font-size: 42px;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.pricing .bigger {
-  color: rgba(0, 0, 0, 0.5);
-  font-weight: 300;
-  margin-top: 12px;
-}
 
 @media (max-width: 720px) {
   .loomContainer {
@@ -389,17 +313,4 @@
     margin-bottom: 0;
   }
 
-  .pricing .plans {
-    flex-direction: column;
-  }
-
-  .pricing .plan {
-    width: 100%;
-  }
-
-  .pricing .plan {
-    margin: 0;
-    margin-bottom: 12px;
-    padding: 20px;
-  }
 }
