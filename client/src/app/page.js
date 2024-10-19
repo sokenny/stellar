@@ -3,8 +3,10 @@ import AutoPlayVideo from './components/AutoPlayVideo';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
+import Check from './icons/Check';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
+import { Button } from '@nextui-org/react';
 
 const quotes = [
   {
@@ -177,7 +179,7 @@ export default async function HomePage({}) {
         </div>
         {/* agregar borders de colores */}
         <div className={styles.biteTestimonials}>
-          <h3>Why do users stick with Stellar?</h3>
+          <h3>Why do users prefer Stellar?</h3>
           <div className={styles.bitesContainer}>
             {quotes.map((q, i) => (
               <div
@@ -205,13 +207,55 @@ export default async function HomePage({}) {
         </div>
         <div className={styles.pricing}>
           <h3>Pricing</h3>
-          <p>
-            Our software is available for <b>free</b>. No credit card required.
-            After getting set-up, if you exceed 10k MTU (monthly tracked users),
-            we will reach out to establish a <b>$29 USD monthly</b>{' '}
-            subscription.
-          </p>
-          <SignUpCTA className={styles.pricingCTA}>Start For Free</SignUpCTA>
+          <div className={styles.plans}>
+            <div className={styles.plan}>
+              <h4>Starter</h4>
+              <div className={styles.price}>
+                <span>$0</span> USD/mo.
+              </div>
+              <div className={styles.payment}>paid annually</div>
+              <Button className={styles.planButton}>Get Started</Button>
+              <p>
+                <Check width={12} /> Up to 10k MTU
+              </p>
+              <p>
+                <Check width={12} /> Basic support
+              </p>
+            </div>
+            <div className={`${styles.plan} ${styles.growth}`}>
+              <h4>Growth</h4>
+              <div className={styles.price}>
+                <span>$29</span> USD/mo.
+              </div>
+              <div className={styles.payment}>paid annually</div>
+              <Button className={styles.planButton} color="primary">
+                Get Started
+              </Button>
+              <p>
+                <Check width={12} /> Up to 50k MTU
+              </p>
+              <p>
+                <Check width={12} /> Priority support
+              </p>
+            </div>
+            <div className={styles.plan}>
+              <h4>Enterprise</h4>
+              <div className={styles.price}>
+                <span>$89</span> USD/mo.
+              </div>
+              <div className={styles.payment}>paid annually</div>
+              <Button className={styles.planButton}>Get Started</Button>
+              <p>
+                <Check width={12} /> Up to 250k MTU
+              </p>
+              <p>
+                <Check width={12} /> Priority support
+              </p>
+            </div>
+          </div>
+          <div className={styles.bigger}>
+            For bigger plans, please reach out at hello@gostellar.app
+          </div>
         </div>
         <div className={styles.faqs}>
           {/* <h3>FAQ</h3> */}
