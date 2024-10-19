@@ -8,7 +8,7 @@
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace; */
 
   --narrowBody: 800px;
-
+  
   --whiteCardBg: #fcfcfc;
   --whiteCardStroke: #e0e0e0;
   --textBody: #575452;
@@ -20,6 +20,7 @@
   --lightGray: '#bababa';
   --error: #ff0000;
   --activeTab: #f2f2f2;
+  --primary: #001e41;
 }
 @tailwind base;
 @tailwind components;

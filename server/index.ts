@@ -17,8 +17,6 @@ dotenv.config();
 // TODO-p2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 //   - A menos que este logeado y esa url pertenezca a un proyecto suyo.
 
-// TODO-p1-2: Have account section and be able to create / switch projects
-
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 

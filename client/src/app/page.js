@@ -1,9 +1,47 @@
 import SignUpCTA from './components/SignUpCTA';
+import AutoPlayVideo from './components/AutoPlayVideo';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
+
+const quotes = [
+  {
+    quote: 'A/B testing that didn’t make my head hurt.',
+    color: '#0072f5',
+  },
+  {
+    quote: 'This tool helped me actually figure out market fit.',
+    color: '#cb5edc',
+  },
+  {
+    quote:
+      'Went from almost no conversions to real sales, in a bit over 3 weeks.',
+    color: '#f5a623',
+  },
+  {
+    quote: 'It’s powerful, but it doesn’t overcomplicate things.',
+    color: '#00ba2f',
+  },
+  {
+    quote: 'It’s super reliable—no headaches or hidden fees.',
+    color: '#8300e0',
+  },
+  {
+    quote: 'I got clear results without any confusion or overload.',
+    color: '#D52941',
+  },
+  {
+    quote:
+      'Clear data, real insights—without the usual over-complicated dashboards.',
+    color: '#00b7f5',
+  },
+  {
+    quote: 'Exactly what my marketing team needed. AB testing without the BS.',
+    color: '#FF92C2',
+  },
+];
 
 export default async function HomePage({}) {
   return (
@@ -72,15 +110,11 @@ export default async function HomePage({}) {
         <div className={styles.process}>
           <div className={styles.block}>
             <div className={styles.left}>
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className={styles.video}
-                width={550}
+              <AutoPlayVideo
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
                 poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                width={550}
+                className={styles.video}
               />
             </div>
             <div className={styles.texts}>
@@ -105,15 +139,11 @@ export default async function HomePage({}) {
               </p>
             </div>
             <div>
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className={styles.video}
-                width={550}
+              <AutoPlayVideo
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
                 poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
+                width={550}
+                className={styles.video}
               />
             </div>
           </div>
@@ -139,27 +169,40 @@ export default async function HomePage({}) {
           </div>
         </div>
         <div className={`${styles.advantages} ${styles.quote}`}>
+          {/* <img src="/3d-ball.png" width={400} height={400} /> */}
           <h3>
             Split test your way to market fit. 86% of our users see a boost in
             conversion rates within a month—completely free.
           </h3>
         </div>
-        {/* <div className={styles.poc}>
-          <div className={styles.experiment}>
-            <div className={`${styles.variant} ${styles.control}`}>
-              <div className={styles.variantLabel}>Control</div>
-              <div className={styles.title}>Main Text Control</div>
-            </div>
-            <div className={`${styles.variant} ${styles.variantA}`}>
-              <div className={styles.variantLabel}>Variant A</div>
-              <div className={styles.title}>Main Text A</div>
-            </div>
-            <div className={`${styles.variant} ${styles.variantB}`}>
-              <div className={styles.variantLabel}>Variant B</div>
-              <div className={styles.title}>Main Text B</div>
-            </div>
+        {/* agregar borders de colores */}
+        <div className={styles.biteTestimonials}>
+          <h3>Why do users stick with Stellar?</h3>
+          <div className={styles.bitesContainer}>
+            {quotes.map((q, i) => (
+              <div
+                className={styles.bite}
+                key={i}
+                style={{
+                  borderColor: q.color,
+                  backgroundColor: `${q.color}11`,
+                }}
+              >
+                <div
+                  className={styles.avPic}
+                  style={{
+                    backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test${
+                      i + 1
+                    }.webp)`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                ></div>
+                <div className={styles.quote}>"{q.quote}"</div>
+              </div>
+            ))}
           </div>
-        </div> */}
+        </div>
         <div className={styles.pricing}>
           <h3>Pricing</h3>
           <p>

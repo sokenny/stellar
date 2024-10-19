@@ -20,6 +20,7 @@
   line-height: 54px;
   max-width: 675px;
   margin-bottom: 24px;
+  color: var(--primary);
 }
 
 .header .description {
@@ -145,6 +146,7 @@
 .advantages.quote {
   display: flex;
   justify-content: center;
+  background: linear-gradient(45deg, #0053b3, #61a7e8);
 }
 
 .advantages.quote h3 {
@@ -163,6 +165,7 @@
 .pricing h3 {
   font-size: 32px;
   margin-bottom: 16px;
+  color: var(--primary);
 }
 
 .pricing p b {
@@ -188,13 +191,15 @@
   color: rgba(0, 0, 0, 0.75);
 }
 
-.block video, .block img  {
+.block video,
+.block img {
   box-shadow: 0px 0px 10px hsl(0deg 0% 0% / 0.25);
   border-radius: 4px;
   transition: 1s;
 }
 
-.block video:hover, .block img:hover {
+.block video:hover,
+.block img:hover {
   box-shadow: 0px 0px 25px hsl(292 64% 62% / 0.35);
 }
 
@@ -206,6 +211,7 @@
   font-size: 28px;
   margin-bottom: 12px;
   line-height: normal;
+  color: var(--primary);
 }
 
 .block .title span {
@@ -220,18 +226,46 @@
   max-width: 500px;
 }
 
-/* .experiment {
+
+.biteTestimonials {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 74px 0;
+}
+
+.biteTestimonials h3 {
+  font-size: 32px;
+  line-height: normal;
+  max-width: 675px;
+  margin-bottom: 16px;
+  color: var(--primary);
   text-align: center;
 }
 
-.experiment .variant .title {
-  font-size: 48px;
+.bite {
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
+  padding-right: 10px;
+  border: 1.5px solid var(--primary);
+  border-radius: 40px;
+  margin: 8px;
 }
 
-.experiment .variant.variantA .title {
-  font-size: 64px;
-} */
+.bite .avPic {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: var(--primary);
+  margin-right: 8px;
+}
+
+.bitesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 @media (max-width: 720px) {
   .loomContainer {
@@ -290,5 +324,13 @@
 
   .process .texts {
     margin-top: 16px;
+  }
+
+  .bite .quote {
+    width: 80%;
+  }
+
+  .bite:last-child {
+    margin-bottom: 0;
   }
 }

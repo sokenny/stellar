@@ -4,6 +4,7 @@
   padding-left: 64px;
   padding-right: 64px;
   height: 3rem !important;
+  color: var(--primary);
 }
 
 .identity a,
