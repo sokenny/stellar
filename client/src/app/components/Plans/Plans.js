@@ -92,7 +92,7 @@ const Plans = () => {
         </div>
       </div>
       <div className={styles.bigger}>
-        For bigger plans, please reach out at hello@gostellar.app
+        For bigger plans, please reach out to hello@gostellar.app
       </div>
     </div>
   );

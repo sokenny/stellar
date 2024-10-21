@@ -117,7 +117,7 @@ export default async function HomePage({}) {
               <AutoPlayVideo
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
                 poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
-                width={550}
+                width={700}
                 className={styles.video}
               />
             </div>
@@ -146,7 +146,7 @@ export default async function HomePage({}) {
               <AutoPlayVideo
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
                 poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
-                width={550}
+                width={700}
                 className={styles.video}
               />
             </div>
@@ -156,7 +156,7 @@ export default async function HomePage({}) {
               <img
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-experiment-page.webp"
                 alt="Control your experiment"
-                width={550}
+                width={700}
               />
             </div>
             <div className={styles.texts}>
