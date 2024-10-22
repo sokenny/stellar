@@ -91,5 +91,13 @@
       margin-bottom: 12px;
       padding: 20px;
     }
+
+    .pricing {
+      padding-top: 48px;
+    }
+  
+    .pricing h3 {
+      font-size: 28px;
+    }
   }
   

@@ -203,6 +203,7 @@
   box-shadow: 0px 0px 10px hsl(0deg 0% 0% / 0.25);
   border-radius: 4px;
   transition: 1s;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .block video:hover,
@@ -285,9 +286,17 @@
   }
 
   .header .title {
-    font-size: 42px;
+    font-size: 28px;
     line-height: normal;
     margin-bottom: 16px;
+  }
+
+  .header .description {
+    font-size: 16px;
+  }
+
+  .advantages h3 {
+    font-size: 28px;
   }
 
   .advantages .list {
@@ -317,7 +326,7 @@
 
   .process .block {
     flex-direction: column;
-    margin-bottom: 56px;
+    margin-bottom: 48px;
   }
 
   .process .block:nth-child(even) {
@@ -334,10 +343,15 @@
 
   .bite .quote {
     width: 80%;
+    font-size: 14px;
   }
 
   .bite:last-child {
     margin-bottom: 0;
+  }
+
+  .advantages.quote {
+    margin-bottom: 48px;
   }
 
   .advantages.quote h3 {
@@ -348,4 +362,8 @@
   .advantages .startFreeBtn {
     margin-top: 16px;
   }
+  .biteTestimonials h3 {
+    font-size: 28px;
+  }
+
 }

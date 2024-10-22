@@ -185,10 +185,7 @@ export default async function HomePage({}) {
           </div>
         </div>
         <div className={`${styles.advantages} ${styles.quote}`}>
-          <h3>
-            Split test your way to market fit. Unlock the hidden potential of
-            your landing pages.
-          </h3>
+          <h3>Split test your way to market fit and beyond.</h3>
           <SignUpCTA className={styles.startFreeBtn}>Start For Free</SignUpCTA>
         </div>
         <div className={styles.biteTestimonials}>
