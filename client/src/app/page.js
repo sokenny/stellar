@@ -4,11 +4,8 @@ import Plans from './components/Plans';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
-// import Check from './icons/Check';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
-import { Button } from '@nextui-org/react';
-import segmentTrack from './helpers/segment/segmentTrack';
 
 const quotes = [
   {
@@ -66,11 +63,6 @@ export default async function HomePage({}) {
     <div className={styles.HomePage}>
       <div className={styles.content}>
         <div className={styles.header}>
-          {/* <h1 className={styles.title}>
-            The preferred <span className={styles.varA}>A</span>/
-            <span className={styles.varB}>B</span> test solution for marketing
-            teams
-          </h1> */}
           <h1 className={styles.title}>
             <span className={styles.varA}>A</span>/
             <span className={styles.varB}>B</span> test any website.
@@ -80,12 +72,15 @@ export default async function HomePage({}) {
             the point. The preferred choice among marketing teams.
           </h2>
         </div>
-        <div>
-          <SignUpCTA>Go Stellar</SignUpCTA>
+        <div className={styles.ctaSection}>
+          <SignUpCTA className={styles.goStellarBtn}>Go Stellar</SignUpCTA>
+          <div className={styles.lightest}>
+            ⚡️ Lightest in the market at 7.5kb
+          </div>
         </div>
 
         <div className={styles.loomContainer}>
-          <div className={styles.infoBar}>3 minute demo :)</div>
+          <div className={styles.infoBar}>2 minute demo :)</div>
           <iframe
             // src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
             src="https://www.loom.com/embed/e7e907a9f30746c192d09a07d72b8d3b?sid=cd48b15a-4941-47c5-b9a9-52d1bb020bdc"
@@ -190,13 +185,12 @@ export default async function HomePage({}) {
           </div>
         </div>
         <div className={`${styles.advantages} ${styles.quote}`}>
-          {/* <img src="/3d-ball.png" width={400} height={400} /> */}
           <h3>
-            Split test your way to market fit. 86% of our users see a boost in
-            conversion rates within a month—completely free.
+            Split test your way to market fit. Unlock the hidden potential of
+            your landing pages.
           </h3>
+          <SignUpCTA className={styles.startFreeBtn}>Start For Free</SignUpCTA>
         </div>
-        {/* agregar borders de colores */}
         <div className={styles.biteTestimonials}>
           <h3>Why do users prefer Stellar?</h3>
           <div className={styles.bitesContainer}>

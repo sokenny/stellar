@@ -1,6 +1,12 @@
 .HomePage {
 }
 
+.goStellarBtn {
+  height: 50px !important;
+  font-size: 18px !important;
+  background: linear-gradient(45deg, #0072f5, #cb5edc) !important;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -27,6 +33,19 @@
   font-size: 18px;
   opacity: 0.5;
   max-width: 675px;
+}
+
+.ctaSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightest {
+  font-size: 14px;
+  margin-top: 4px;
+  color: gray;
+  font-weight: 300;
 }
 
 .description b {
@@ -145,8 +164,17 @@
 
 .advantages.quote {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   background: linear-gradient(45deg, #0053b3, #61a7e8);
+}
+
+.startFreeBtn {
+  border-radius: 4px!important;
+  background-color: white!important;
+  margin-top: 32px;
+  color: var(--primary)!important;
 }
 
 .advantages.quote h3 {
@@ -245,7 +273,6 @@
   justify-content: center;
 }
 
-
 @media (max-width: 720px) {
   .loomContainer {
     width: 100%;
@@ -313,4 +340,12 @@
     margin-bottom: 0;
   }
 
+  .advantages.quote h3 {
+    width: auto;
+    font-size: 24px;
+  }
+
+  .advantages .startFreeBtn {
+    margin-top: 16px;
+  }
 }
