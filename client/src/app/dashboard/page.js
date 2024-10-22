@@ -35,7 +35,7 @@ export default function Dashboard() {
           rel="noreferrer"
           target="_blank"
         >
-          📽⚡️ Watch 2 min. tutorial
+          📽⚡️ Watch 3 min. tutorial
         </a>
       </div>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}

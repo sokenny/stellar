@@ -12,8 +12,17 @@ import segmentTrack from './helpers/segment/segmentTrack';
 
 const quotes = [
   {
-    quote: 'A/B testing that didn’t make my head hurt.',
-    color: '#0072f5',
+    quote: 'Exactly what my marketing team needed. AB testing without the BS.',
+    color: '#FF92C2',
+  },
+  // {
+  //   quote: 'A/B testing that didn’t make my head hurt.',
+  //   color: '#0072f5',
+  // },
+  {
+    quote:
+      'Clear data, real insights—without the usual over-complicated dashboards.',
+    color: '#00b7f5',
   },
   {
     quote: 'This tool helped me actually figure out market fit.',
@@ -25,26 +34,31 @@ const quotes = [
     color: '#f5a623',
   },
   {
-    quote: 'It’s powerful, but it doesn’t overcomplicate things.',
-    color: '#00ba2f',
-  },
-  {
-    quote: 'It’s super reliable—no headaches or hidden fees.',
-    color: '#8300e0',
-  },
-  {
-    quote: 'I got clear results without any confusion or overload.',
-    color: '#D52941',
-  },
-  {
-    quote:
-      'Clear data, real insights—without the usual over-complicated dashboards.',
+    quote: 'Stellar beat out VWO and AB Tasty—way easier and more affordable.',
     color: '#00b7f5',
   },
   {
-    quote: 'Exactly what my marketing team needed. AB testing without the BS.',
-    color: '#FF92C2',
+    quote: 'Super lightweight script, no performance hit, and fast test loads.',
+    color: '#00ba2f',
   },
+  {
+    quote: 'We switched from other platforms—Stellar is simpler and cheaper.',
+    color: '#8300e0',
+  },
+  // {
+  //   quote: 'I got clear results without any confusion or overload.',
+  //   color: '#D52941',
+  // },
+
+  {
+    quote: 'I set up my first test in 5 minutes, no dev needed.',
+    color: '#00b7f5',
+  },
+  // {
+  //   quote:
+  //     'After trying others, Stellar is by far the best Google Optimize replacement.',
+  //   color: '#00b7f5',
+  // },
 ];
 
 export default async function HomePage({}) {
@@ -52,15 +66,18 @@ export default async function HomePage({}) {
     <div className={styles.HomePage}>
       <div className={styles.content}>
         <div className={styles.header}>
-          <h1 className={styles.title}>
+          {/* <h1 className={styles.title}>
             The preferred <span className={styles.varA}>A</span>/
             <span className={styles.varB}>B</span> test solution for marketing
             teams
+          </h1> */}
+          <h1 className={styles.title}>
+            <span className={styles.varA}>A</span>/
+            <span className={styles.varB}>B</span> test any website.
           </h1>
           <h2 className={styles.description}>
             Your real alternative to <b>Google Optimize</b>. Clutter free and to
-            the point. 86% of our users increase their conversion rates under 1
-            month, for free.
+            the point. The preferred choice among marketing teams.
           </h2>
         </div>
         <div>
@@ -68,7 +85,7 @@ export default async function HomePage({}) {
         </div>
 
         <div className={styles.loomContainer}>
-          <div className={styles.infoBar}>2 minute demo :)</div>
+          <div className={styles.infoBar}>3 minute demo :)</div>
           <iframe
             // src="https://www.loom.com/embed/6d28049798834e6f8b77db8d1dc51f25?sid=7d18fb2e-0f83-4b14-8928-29592f8471eb"
             src="https://www.loom.com/embed/e7e907a9f30746c192d09a07d72b8d3b?sid=cd48b15a-4941-47c5-b9a9-52d1bb020bdc"
