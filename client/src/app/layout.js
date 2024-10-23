@@ -58,20 +58,6 @@ export default function RootLayout({ children }) {
             window.$crisp=[];window.CRISP_WEBSITE_ID="5db3e7f6-49e2-4948-971b-40019e8f0698";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
           `}
         </Script>
-
-        <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
-        <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
-        <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
-        <link
-          rel="preload"
-          href="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js"
-          as="script"
-        />
-        <script
-          async
-          src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js"
-          data-stellar-api-key="ebdfb4f3e79f0bde6187b19376fd63a7:48bdbb58750d1cb980cf1753586f40c6dbabbabf034ca37fc9542cbe8002fcae"
-        />
       </head>
       <GoogleTagManager gtmId="GTM-5XVLW5Z9" />
       <body className={`${inter.className} ${styles.layout}`}>
