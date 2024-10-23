@@ -1,4 +1,6 @@
 .HomePage {
+  padding-left: 5vw;
+  padding-right: 5vw;
 }
 
 .goStellarBtn {
@@ -184,16 +186,47 @@
   text-align: center;
 }
 
+.process {
+  width: 100%;
+}
+
 .process .block {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 64px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.block:nth-child(1) {
+  background: linear-gradient(45deg, #f8bdf4, #ffdbfd);
+}
+
+.block:nth-child(2) {
+  background: linear-gradient(45deg, #7dc7ff, #a8daff);
+}
+
+.block:nth-child(3) {
+  background: linear-gradient(45deg, #f7cd72, #ffe4a8);
 }
 
 .block {
-  margin-bottom: 84px;
+  margin-bottom: 64px;
+}
+
+.block .texts {
+  margin-bottom: 32px;
+  max-width: 700px;
+}
+
+.block .texts .title {
+  font-size: 36px;
 }
 
 .block .texts p {
+  font-size: 18px;
   font-weight: 300;
   color: rgba(0, 0, 0, 0.75);
 }
@@ -211,27 +244,11 @@
   box-shadow: 0px 0px 25px hsl(292 64% 62% / 0.35);
 }
 
-.block .left {
-  margin-right: 64px;
-}
-
 .block .title {
   font-size: 28px;
   margin-bottom: 12px;
   line-height: normal;
   color: var(--primary);
-}
-
-.block .title span {
-  background: linear-gradient(45deg, #0072f5, #cb5edc);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent; /* For WebKit browsers */
-  color: transparent; /* For other browsers */
-}
-
-.block .texts {
-  max-width: 500px;
 }
 
 .biteTestimonials {
@@ -272,13 +289,19 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  width: 115%;
 }
 
 @media (max-width: 720px) {
+
+  .HomePage {
+    padding: 0;
+  }
+
   .loomContainer {
     width: 100%;
     margin-top: 32px;
-    margin-bottom: 64px;
+    margin-bottom: 32px;
   }
 
   .bullets {
@@ -304,7 +327,8 @@
   }
 
   .advantages {
-    padding: 32px;
+    padding: 16px;
+    margin-bottom: 32px;
   }
 
   .advantages .advantage {
@@ -326,11 +350,20 @@
 
   .process .block {
     flex-direction: column;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
+    padding: 16px;
   }
 
-  .process .block:nth-child(even) {
-    flex-direction: column-reverse;
+  .block .texts {
+    margin-bottom: 16px;
+  }
+
+  .block .texts .title {
+    font-size: 24px;
+  }
+
+  .block .texts p {
+    font-size: 16px;
   }
 
   .process .left {
@@ -339,6 +372,10 @@
 
   .process .texts {
     margin-top: 16px;
+  }
+
+  .bitesContainer {
+    width: 100%;
   }
 
   .bite .quote {
@@ -351,7 +388,7 @@
   }
 
   .advantages.quote {
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
 
   .advantages.quote h3 {
@@ -362,6 +399,11 @@
   .advantages .startFreeBtn {
     margin-top: 16px;
   }
+
+  .biteTestimonials {
+    padding-bottom: 32px;
+  }
+
   .biteTestimonials h3 {
     font-size: 28px;
   }

@@ -125,17 +125,9 @@ export default async function HomePage({}) {
         </div>
         <div className={styles.process}>
           <div className={styles.block}>
-            <div className={styles.left}>
-              <AutoPlayVideo
-                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
-                poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
-                width={700}
-                className={styles.video}
-              />
-            </div>
             <div className={styles.texts}>
               <h3 className={styles.title}>
-                <span>Create variants</span> with our visual editor.
+                Create variants with our visual editor.
               </h3>
               <p>
                 Once you install our snippet, you'll be able to access a WYSIWYG
@@ -143,12 +135,18 @@ export default async function HomePage({}) {
                 necessary HTML / CSS adjustments to create your variants.
               </p>
             </div>
+            <div>
+              <AutoPlayVideo
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
+                poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                width={'100%'}
+                className={styles.video}
+              />
+            </div>
           </div>
           <div className={styles.block}>
             <div className={`${styles.left} ${styles.texts}`}>
-              <h3 className={styles.title}>
-                <span>Set your goal</span> in seconds.
-              </h3>
+              <h3 className={styles.title}>Set your goal in seconds.</h3>
               <p>
                 Our goal setting is easy yet powerful. Set one based on clicks,
                 page visits or time spent on the page. Zero coding required.
@@ -158,29 +156,28 @@ export default async function HomePage({}) {
               <AutoPlayVideo
                 src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
                 poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
-                width={700}
+                width={'100%'}
                 className={styles.video}
               />
             </div>
           </div>
           <div className={styles.block}>
-            <div className={styles.left}>
-              <img
-                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-experiment-page.webp"
-                alt="Control your experiment"
-                width={700}
-              />
-            </div>
             <div className={styles.texts}>
               <h3 className={styles.title}>
-                <span>Control your experiments</span> and track their
-                performance.
+                Control your experiments and track their performance.
               </h3>
               <p>
                 Stay on top of your experiment's progress. Pause and resumen if
                 needed. Track your conversion rates and see how your variants
                 are performing.
               </p>
+            </div>
+            <div>
+              <img
+                src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-experiment-page.webp"
+                alt="Control your experiment"
+                width={'100%'}
+              />
             </div>
           </div>
         </div>
