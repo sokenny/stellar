@@ -238,6 +238,7 @@
   border-radius: 4px;
   transition: 1s;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  max-width: 750px;
 }
 
 .block video:hover,
