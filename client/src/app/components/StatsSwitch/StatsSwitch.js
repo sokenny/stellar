@@ -5,12 +5,25 @@ import Users from '../../icons/Users';
 import FingerPrint from '../../icons/FingerPrint';
 import styles from './StatsSwitch.module.css';
 
-const StatsSwitch = ({ onSwitch }) => {
-  const [isSelected, setIsSelected] = useState(false);
+const StatsSwitch = ({ onSwitch, experimentId }) => {
+  const [isSelected, setIsSelected] = useState(() => {
+    const settings =
+      JSON.parse(localStorage.getItem('stellarUserSettings')) || {};
+    return (
+      settings[`experiment:${experimentId}:statsType`] === 'unique-visitors'
+    );
+  });
 
   useEffect(() => {
+    const settings =
+      JSON.parse(localStorage.getItem('stellarUserSettings')) || {};
+    settings[`experiment:${experimentId}:statsType`] = isSelected
+      ? 'unique-visitors'
+      : 'total-sessions';
+    localStorage.setItem('stellarUserSettings', JSON.stringify(settings));
+
     onSwitch(isSelected ? 'unique-visitors' : 'total-sessions');
-  }, [isSelected]);
+  }, [isSelected, experimentId]);
 
   return (
     <div

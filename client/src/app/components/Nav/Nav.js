@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import useStore from '../../store';
 import Link from 'next/link';
@@ -45,6 +45,7 @@ const Nav = ({ token }) => {
     getLastSelectedProject,
   } = useStore();
   const initializedProjects = useRef(false);
+  const variantEditedEffectRan = useRef(false);
 
   async function initializeProjects() {
     setToken(token);
@@ -80,6 +81,17 @@ const Nav = ({ token }) => {
 
     initializedProjects.current = true;
   }
+
+  useEffect(() => {
+    if (!variantEditedEffectRan.current) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const variantEdited = urlParams.get('variantEdited');
+      if (variantEdited) {
+        toast.success('Variant modified successfully!');
+      }
+      variantEditedEffectRan.current = true;
+    }
+  }, []);
 
   useEffect(() => {
     if (

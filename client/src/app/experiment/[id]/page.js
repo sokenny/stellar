@@ -232,7 +232,10 @@ export default function ExperimentPage({ params, searchParams }) {
               </Tooltip>
             </div>
             <div>
-              <StatsSwitch onSwitch={setStatsType} />
+              <StatsSwitch
+                onSwitch={setStatsType}
+                experimentId={experiment.id}
+              />
             </div>
           </div>
           <VariantsTable

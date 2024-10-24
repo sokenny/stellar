@@ -19,7 +19,7 @@
   const text = urlParams.get('text');
   const visualEditorOn = urlParams.get('visualEditorOn');
   const previewMode = urlParams.get('previewMode');
-
+  const fromUrl = urlParams.get('fromUrl');
   let editedElements = [];
   let elementsPristineState = {};
   let selectedElement = null;
@@ -607,7 +607,11 @@
             );
 
             if (response.status === 200) {
-              // window.close();
+              if (fromUrl) {
+                window.location.href = `${fromUrl}?variantEdited=${variantId}`;
+              } else {
+                window.close();
+              }
             }
 
             // Sometimes the window won't close so we perform the handling below

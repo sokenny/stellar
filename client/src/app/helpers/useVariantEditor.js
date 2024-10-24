@@ -6,9 +6,11 @@ function useVariantEditor({ experiment, onSuccess }) {
   const { token, refetchProjects } = useStore();
   const variantsCheckIntervalRef = useRef(null);
 
+  const currentUrl = window.location.href;
+
   const handleEditVariant = (variantId, onVariantModifiedCallback) => {
     window.open(
-      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true&token=${token}`,
+      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true&token=${token}&fromUrl=${currentUrl}`,
       '_blank',
     );
 
