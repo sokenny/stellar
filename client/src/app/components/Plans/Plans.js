@@ -12,83 +12,95 @@ const Plans = () => {
       <h3>Pricing</h3>
       <div className={styles.plans}>
         <div className={styles.plan}>
-          <h4>Starter</h4>
-          <div className={styles.price}>
-            <span>$0</span> USD/mo.
+          <div className={styles.main}>
+            <h4>Starter</h4>
+            <div className={styles.price}>
+              <span>$0</span> USD/mo.
+            </div>
+            <div className={styles.payment}>billed annually</div>
+            <Button
+              className={styles.planButton}
+              onClick={() => {
+                segmentTrack('click_get_started', {
+                  plan: 'Starter',
+                });
+                signIn('google', {
+                  callbackUrl: '/dashboard',
+                });
+              }}
+            >
+              Get Started
+            </Button>
           </div>
-          <div className={styles.payment}>billed annually</div>
-          <Button
-            className={styles.planButton}
-            onClick={() => {
-              segmentTrack('click_get_started', {
-                plan: 'Starter',
-              });
-              signIn('google', {
-                callbackUrl: '/dashboard',
-              });
-            }}
-          >
-            Get Started
-          </Button>
-          <p>
-            <Check width={12} /> Up to 10k MTU
-          </p>
-          <p>
-            <Check width={12} /> Basic support
-          </p>
+          <div className={styles.bullets}>
+            <p>
+              <Check width={12} /> Up to 10k MTU
+            </p>
+            <p>
+              <Check width={12} /> Basic support
+            </p>
+          </div>
         </div>
         <div className={`${styles.plan} ${styles.growth}`}>
-          <h4>Growth</h4>
-          <div className={styles.price}>
-            <span>$29</span> USD/mo.
+          <div className={styles.main}>
+            <h4>Growth</h4>
+            <div className={styles.price}>
+              <span>$29</span> USD/mo.
+            </div>
+            <div className={styles.payment}>billed annually</div>
+            <Button
+              className={styles.planButton}
+              color="primary"
+              onClick={() => {
+                segmentTrack('click_get_started', {
+                  plan: 'Growth',
+                });
+                signIn('google', {
+                  callbackUrl: '/dashboard',
+                });
+              }}
+            >
+              Get Started
+            </Button>
           </div>
-          <div className={styles.payment}>billed annually</div>
-          <Button
-            className={styles.planButton}
-            color="primary"
-            onClick={() => {
-              segmentTrack('click_get_started', {
-                plan: 'Growth',
-              });
-              signIn('google', {
-                callbackUrl: '/dashboard',
-              });
-            }}
-          >
-            Get Started
-          </Button>
-          <p>
-            <Check width={12} /> Up to 50k MTU
-          </p>
-          <p>
-            <Check width={12} /> Priority support
-          </p>
+          <div className={styles.bullets}>
+            <p>
+              <Check width={12} /> Up to 50k MTU
+            </p>
+            <p>
+              <Check width={12} /> Priority support
+            </p>
+          </div>
         </div>
         <div className={styles.plan}>
-          <h4>Enterprise</h4>
-          <div className={styles.price}>
-            <span>$89</span> USD/mo.
+          <div className={styles.main}>
+            <h4>Enterprise</h4>
+            <div className={styles.price}>
+              <span>$89</span> USD/mo.
+            </div>
+            <div className={styles.payment}>billed annually</div>
+            <Button
+              className={styles.planButton}
+              onClick={() => {
+                segmentTrack('click_get_started', {
+                  plan: 'Enterprise',
+                });
+                signIn('google', {
+                  callbackUrl: '/dashboard',
+                });
+              }}
+            >
+              Get Started
+            </Button>
           </div>
-          <div className={styles.payment}>billed annually</div>
-          <Button
-            className={styles.planButton}
-            onClick={() => {
-              segmentTrack('click_get_started', {
-                plan: 'Enterprise',
-              });
-              signIn('google', {
-                callbackUrl: '/dashboard',
-              });
-            }}
-          >
-            Get Started
-          </Button>
-          <p>
-            <Check width={12} /> Up to 250k MTU
-          </p>
-          <p>
-            <Check width={12} /> Priority support
-          </p>
+          <div className={styles.bullets}>
+            <p>
+              <Check width={12} /> Up to 250k MTU
+            </p>
+            <p>
+              <Check width={12} /> Priority support
+            </p>
+          </div>
         </div>
       </div>
       <div className={styles.bigger}>

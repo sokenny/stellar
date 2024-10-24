@@ -90,6 +90,8 @@
       margin: 0;
       margin-bottom: 12px;
       padding: 20px;
+      display: flex;
+      justify-content: space-between;
     }
 
     .pricing {
@@ -99,5 +101,18 @@
     .pricing h3 {
       font-size: 28px;
     }
+
+    .plan .planButton {
+      margin-bottom: 0;
+    }
+
+    .plan .price {
+      font-size: 20px;
+    }
+
+    .plan .price span {
+      font-size: 26px;
+    }
+
   }
   

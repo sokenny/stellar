@@ -9,11 +9,13 @@ import segmentTrack from '../../helpers/segment/segmentTrack';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styles from './CreateSimpleProjectForm.module.css';
+import useStore from '../../store';
 
 const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
   const router = useRouter();
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  const { token } = useStore();
 
   const onSubmit = useCallback(async () => {
     if (!isValidUrl(url)) {
@@ -27,6 +29,7 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ url: getDomainFromUrl(url) }),
         }),

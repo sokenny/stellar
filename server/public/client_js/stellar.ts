@@ -44,9 +44,36 @@
 
   function setStellarCache(data) {
     try {
-      localStorage.setItem('stelar__cache', JSON.stringify(data));
+      const cacheData = {
+        experiments: data,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem('stellar__cache', JSON.stringify(cacheData));
     } catch (e) {
       console.error('Error setting stellar cache: ', e);
+    }
+  }
+
+  function getStellarCache() {
+    try {
+      const cachedData = localStorage.getItem('stellar__cache');
+      if (!cachedData) {
+        return null;
+      }
+
+      const { experiments, timestamp } = JSON.parse(cachedData);
+      const now = Date.now();
+      // const TTL = 300000; // 5 minutes in milliseconds
+      const TTL = 5000; // 5 seconds in milliseconds
+
+      if (now - timestamp < TTL) {
+        return experiments;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error('Error getting stellar cache: ', e);
+      return null;
     }
   }
 
@@ -136,24 +163,30 @@
   function sendDataOnLeave() {
     window.addEventListener('beforeunload', () => {
       if (!isInternalNavigation) {
-        const data = {
-          visitorId,
-          timeOnPage,
-          clickCount,
-          scrollDepth,
-          idempotencyKey: visitorId, // not sure if this is right or needed
-          activeExperiments,
-          visitedPages,
-          stellarVisitorId,
-          // TODO-p2: Store session issues in the database, and perhaps do not count these sessions as valid. Or raise an issue on the FE of the exp about it
-          sessionIssues,
-        };
-
-        // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
-        navigator.sendBeacon(
-          `${STELLAR_API_URL}/experiments/end-session`,
-          JSON.stringify(data),
+        const hasConvertedOrMounted = activeExperiments.some(
+          (experiment) => experiment.converted || experiment.experimentMounted,
         );
+
+        if (hasConvertedOrMounted) {
+          const data = {
+            visitorId,
+            timeOnPage,
+            clickCount,
+            scrollDepth,
+            idempotencyKey: visitorId, // not sure if this is right or needed
+            activeExperiments,
+            visitedPages,
+            stellarVisitorId,
+            // TODO-p2: Store session issues in the database, and perhaps do not count these sessions as valid. Or raise an issue on the FE of the exp about it
+            sessionIssues,
+          };
+
+          // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
+          navigator.sendBeacon(
+            `${STELLAR_API_URL}/experiments/end-session`,
+            JSON.stringify(data),
+          );
+        }
       }
     });
 
@@ -310,6 +343,7 @@
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
     console.log('fetchExperiments run! - ', hasFetchedExperiments);
+
     const pageUrl = window.location.href;
     if (
       !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
@@ -323,19 +357,27 @@
     const apiKey = getApiKey();
 
     try {
-      const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-      });
+      let data;
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const cachedExperiments = getStellarCache();
+      if (cachedExperiments) {
+        data = cachedExperiments;
+        console.log('Using cached experiments');
+      } else {
+        const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        data = await response.json();
       }
-
-      const data = await response.json();
 
       console.log('Datusarda: ', data);
 

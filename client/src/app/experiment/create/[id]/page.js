@@ -19,14 +19,10 @@ export default function CreateExperimentPage({ params }) {
     ? null
     : currentProject?.experiments?.find((e) => e.id == id);
 
-  if (!experiment) {
-    return <div>Experiment not found</div>;
-  }
-
   return (
     <div className={styles.CreateExperiment}>
       <h1 className={styles.title}>
-        {isNew ? 'Create Experiment' : experiment.name}
+        {isNew ? 'Create Experiment' : experiment?.name}
       </h1>
       <CreateExperimentForm experiment={experiment} />
     </div>
