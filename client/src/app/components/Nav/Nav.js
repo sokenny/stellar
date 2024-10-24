@@ -32,7 +32,6 @@ const Nav = ({ token }) => {
   const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === '/';
-  console.log('Pathname! ', pathname);
   const { data: session } = useSession();
   const {
     user,
@@ -43,6 +42,7 @@ const Nav = ({ token }) => {
     setToken,
     setUser,
     errorModal,
+    getLastSelectedProject,
   } = useStore();
   const initializedProjects = useRef(false);
 
@@ -63,10 +63,22 @@ const Nav = ({ token }) => {
     segmentIdentify(user.id, {
       ...user,
     });
-    setProjects(user?.projects);
-    setCurrentProject(user?.projects[0] || null);
     setSession(session);
     setUser(user);
+    setProjects(user.projects);
+
+    const lastSelectedProject = getLastSelectedProject();
+
+    if (
+      lastSelectedProject &&
+      user.projects.some((p) => p.id == lastSelectedProject)
+    ) {
+      setCurrentProject(user.projects.find((p) => p.id == lastSelectedProject));
+    } else if (user.projects.length > 0) {
+      setCurrentProject(user.projects[0]);
+    }
+
+    initializedProjects.current = true;
   }
 
   useEffect(() => {
@@ -166,8 +178,8 @@ const Nav = ({ token }) => {
                   <DropdownItem
                     key={project.id}
                     onClick={() => {
-                      setCurrentProject(project);
                       router.push('/dashboard');
+                      setCurrentProject(project);
                     }}
                     showDivider={
                       project.id ===

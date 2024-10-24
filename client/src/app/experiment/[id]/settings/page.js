@@ -16,7 +16,7 @@ export default function SettingsPage({ params }) {
   const router = useRouter();
   const experimentId = params.id;
   const { currentProject, user } = useStore();
-  const loading = user === null;
+  const loading = user === null || !currentProject;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
   );

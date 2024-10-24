@@ -6,6 +6,7 @@ class SessionExperiment extends Model {
   public experiment_id!: number;
   public variant_id!: number;
   public converted!: boolean;
+  public experiment_mounted!: boolean;
   public created_at!: Date;
   public updated_at!: Date;
 }
@@ -45,6 +46,10 @@ export const initializeSessionExperiment = (
         },
       },
       converted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      experiment_mounted: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },

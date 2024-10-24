@@ -7,16 +7,20 @@ import styles from './page.module.css';
 
 export default function CreateExperimentPage({ params }) {
   const { currentProject, user } = useStore();
-  const loading = user === null;
+  const loading = user === null || !currentProject;
   const { id } = params;
   const isNew = id === 'new';
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const experiment = isNew
     ? null
     : currentProject?.experiments?.find((e) => e.id == id);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!experiment) {
+    return <div>Experiment not found</div>;
   }
 
   return (

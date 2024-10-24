@@ -249,6 +249,9 @@
             }
 
             global__mountedOnThisPageLoad[experiment.id] = true;
+            activeExperiments.find(
+              (e) => e.experiment === experiment.id,
+            ).experimentMounted = true;
           }
         });
       });
@@ -347,6 +350,7 @@
           experiment: experiment.id,
           variant: storedVariantId || experiment.variant_to_use,
           converted: false,
+          experimentMounted: false,
           goalType: experiment.goal.type,
           goalElementUrl: experiment.goal.url_match_value,
           goalUrlMatchType: experiment.goal.url_match_type,

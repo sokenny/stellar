@@ -123,7 +123,12 @@ async function getUniqueUserGoalClickAndPageVisitStats(
         [
           db.sequelize.fn(
             'COUNT',
-            db.sequelize.fn('DISTINCT', db.sequelize.col('session.visitor_id')),
+            db.sequelize.fn(
+              'DISTINCT',
+              db.sequelize.literal(
+                `CASE WHEN experiment_mounted = TRUE THEN session.visitor_id END`,
+              ),
+            ),
           ),
           'unique_visitors',
         ],

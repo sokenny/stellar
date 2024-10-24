@@ -24,8 +24,6 @@ async function checkSnippet(req, res) {
 }
 
 async function performSnippetCheck(url, projectId) {
-  console.log('Url que llega: ', url);
-
   const browser = await puppeteer.launch({
     args: ['--disable-logging'],
   });

@@ -37,7 +37,7 @@ export default function ExperimentPage({ params, searchParams }) {
   const experimentId = params.id;
   const { user, currentProject, refetchProjects } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
-  const loading = user === null;
+  const loading = user === null || !currentProject;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
   );
@@ -48,7 +48,7 @@ export default function ExperimentPage({ params, searchParams }) {
   } = useDisclosure();
 
   const queuedAfter = currentProject?.experiments?.find(
-    (e) => experiment.queue_after === e.id,
+    (e) => experiment?.queue_after === e.id,
   );
 
   if (loading) {

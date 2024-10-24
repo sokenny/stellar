@@ -10,7 +10,7 @@ const goalFunctionMapper = {
 async function getTotalSessionsGoalSessionTimeStats(experimentId, variantIds) {
   try {
     const stats = await db.SessionExperiment.findAll({
-      where: { experiment_id: experimentId },
+      where: { experiment_id: experimentId, experiment_mounted: true },
       attributes: [
         ['variant_id', 'variantId'],
         [
@@ -81,7 +81,15 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
       },
       attributes: [
         ['variant_id', 'variantId'],
-        [db.sequelize.fn('COUNT', db.sequelize.col('session_id')), 'sessions'],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.literal(
+              'CASE WHEN experiment_mounted = TRUE THEN session_id END',
+            ),
+          ),
+          'sessions',
+        ],
         [
           db.sequelize.fn(
             'SUM',

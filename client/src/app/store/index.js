@@ -34,7 +34,12 @@ const useStore = create((set, get) => ({
   currentProject: null,
   setCurrentProject: (currentProject) => {
     set({ currentProject });
+    localStorage.setItem('lastSelectedProject', currentProject.id);
     interceptFetch(currentProject?.id, get().token);
+  },
+  getLastSelectedProject: () => {
+    const lastProject = localStorage.getItem('lastSelectedProject');
+    return lastProject ? lastProject : null;
   },
   stats: {},
   lastCallTimestamps: {}, // Track the last call timestamp for each experiment ID
@@ -90,11 +95,16 @@ const useStore = create((set, get) => ({
         },
       );
       const user = await response.json();
+      const lastSelectedProjectId = get().getLastSelectedProject();
+      const projectToSet =
+        user.projects.find((project) => project.id == lastSelectedProjectId) ||
+        user.projects[0];
+
       // TODO-p2: Deprecar projects y setProjects / refetchProjects y que sea user y setUser, refetchUser
       set({
         user,
         projects: user.projects,
-        currentProject: user.projects[0],
+        currentProject: projectToSet,
       });
     } catch (error) {
       console.error('Failed to fetch projects:', error);

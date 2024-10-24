@@ -1,16 +1,21 @@
+let currentProjectId;
+let currentToken;
+
 function interceptFetch(projectId, token) {
+  currentProjectId = projectId;
+  currentToken = token;
   const originalFetch = fetch;
 
   window.fetch = function (url, options = {}) {
     const customHeaders = {
-      'project-id': projectId,
-      'Authorization': `Bearer ${token}`,
+      'project-id': currentProjectId,
+      'Authorization': `Bearer ${currentToken}`,
     };
 
     if (options.headers) {
       options.headers = new Headers(options.headers);
-      options.headers.set('project-id', projectId);
-      options.headers.set('Authorization', `Bearer ${token}`);
+      options.headers.set('project-id', currentProjectId);
+      options.headers.set('Authorization', `Bearer ${currentToken}`);
     } else {
       options.headers = new Headers(customHeaders);
     }

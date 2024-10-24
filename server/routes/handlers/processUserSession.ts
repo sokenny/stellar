@@ -26,6 +26,7 @@ async function processUserSession(req: Request, res: Response) {
           experiment_id: experiment.experiment,
           variant_id: experiment.variant,
           converted: experiment.converted,
+          experiment_mounted: experiment.experimentMounted,
         });
       },
     );

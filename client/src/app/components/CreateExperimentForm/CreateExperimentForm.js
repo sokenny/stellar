@@ -17,7 +17,7 @@ const CreateExperimentForm = ({ experiment }) => {
   const variantsCheckIntervalRef = useRef(null);
   const { user, currentProject, refetchProjects } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
-  const loading = user === null;
+  const loading = user === null || !currentProject;
   const [createExperimentLoading, setCreateExperimentLoading] = useState(false);
   const [addVariantLoading, setAddVariantLoading] = useState(false);
   const [formState, setFormState] = useState({
