@@ -1,9 +1,9 @@
 const minMaxMapper = {
-  'h1 Experiment': [20, 38],
-  'cta Experiment': [10, 28],
-  'description Experiment': [5, 19],
-  'biggestText Experiment': [15, 25],
-  [undefined]: [10, 30],
+  'h1 Experiment': [12, 20],
+  'cta Experiment': [8, 17],
+  'description Experiment': [5, 13],
+  'biggestText Experiment': [10, 21],
+  [undefined]: [8, 13],
 };
 
 function getRandomConversionRate({ seed, experimentType = undefined }) {

@@ -8,7 +8,7 @@ import useStore from '../../../store';
 import styles from './Actions.module.css';
 
 const Actions = ({ projectId, authenticated, isEmpty }) => {
-  const { session } = useStore();
+  const { session, token } = useStore();
   const actionsRef = useRef(null);
   const [isFloating, setIsFloating] = useState(false);
   const canChange = useRef(true);
@@ -19,6 +19,7 @@ const Actions = ({ projectId, authenticated, isEmpty }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userEmail: session.user.email,

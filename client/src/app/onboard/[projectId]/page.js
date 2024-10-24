@@ -44,7 +44,9 @@ export default async function OnboardPage({ params, searchParams }) {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>Review & Submit</h1>
+          <h1 className={styles.title}>
+            Have you already AB tested your site's copy?
+          </h1>
           <Description estimatedCR={totalEstimatedCR} />
           <div className={styles.content}>
             <div className={styles.experiments}>
