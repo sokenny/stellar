@@ -79,13 +79,16 @@ const SnippetMissing = ({ className, onSuccess }) => {
               {getStellarClientCode(apiKey)}
             </Snippet>
             <div className={styles.cardActions}>
-              {/* <NextUIButton
+              <NextUIButton
                 color="primary"
                 variant="light"
                 className={styles.seeHowBtn}
+                onClick={() => {
+                  window.open('/blog/install-stellar-snippet', '_blank');
+                }}
               >
                 See how
-              </NextUIButton> */}
+              </NextUIButton>
               <Button onClick={handleSnippetCheck} loading={loading}>
                 I've installed it
               </Button>

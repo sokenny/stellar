@@ -19,11 +19,8 @@ export const metadata = {
 };
 
 // TODO-p1-1: Have a "disabled" state for the snippet. Like a kill-switch JIC
-// TODO-p1-1: Create snippet installation page
-// TODO-p1-1: Make loading state white screen and have it removed and inactive if no exps are live.
 // TODO-p1-1: Allow integration with Google Analytics for conversion tracking
 // TODO-p1-1: Use redis cache for variant preview, to not give impression of slow performant snippet
-// TODO-p1-1: Try https://www.blogseo.ai/ for content marketing
 // TODO-p1-1: Allow collection of clicks for goal setting
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 // TODO-p1-1: Allow setting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
@@ -34,6 +31,7 @@ export const metadata = {
 // TODO-p1-1: Crear el loom de "See How" sobre goal setting
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
 // TODO-p1-1: Agregar funcionalidad al "See How" de snippet installation (BASED ON USER FEEDBACK)
+// TODO-p1-2: Try https://www.blogseo.ai/ for content marketing
 // TODO-p1-2: Launch in AppSumo
 // TODO-p1-2: Create FAQ section (?)
 

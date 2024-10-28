@@ -245,7 +245,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   <div className={styles.subTitle}>
                     After typing in your URL, we'll take you there so you can
                     select this element for us to track.{' '}
-                    <span className={styles.link}>See how</span>.
+                    {/* <span className={styles.link}>See how</span>. */}
                   </div>
                   <div className={styles.row}>
                     <div className={styles.domain}>{domain}/</div>

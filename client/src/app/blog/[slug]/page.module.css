@@ -1,0 +1,49 @@
+.container {
+    padding-top: 0;
+    color: var(--primary);
+}
+
+.container h1 {
+    color: var(--primary);
+}
+
+.container p:first-child{
+    margin-top: 0;
+}
+
+.container p {
+    margin: 16px 0;
+    font-weight: 300;
+}
+
+.container code {
+    font-weight: 400;
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.07);
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.container ol li {
+    list-style: disc;
+    margin-left: 16px;
+}
+
+.container ul li {
+    list-style: circle;
+    margin-left: 16px;
+}
+
+.container b, .container strong {
+    font-weight: 600;
+}
+
+.container h3 {
+    margin: 32px 0 16px 0;
+    font-size: 28px;
+}
+
+.container img {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 16px 0;
+}
