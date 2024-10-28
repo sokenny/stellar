@@ -25,7 +25,6 @@ export const metadata = {
 // TODO-p1-1: Allow setting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Allow setting a description / hypothesis for the experiment
 // TODO-p1-1: Add in charts for sessions & conversions
-// TODO-p1-1: Update pricing based on mida
 // TODO-p1-1: Create similar blog entries (?) https://www.mida.so/blog
 // TODO-p1-1: Crear el loom de "See How" sobre goal setting
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity

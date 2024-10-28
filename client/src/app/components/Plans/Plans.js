@@ -45,7 +45,7 @@ const Plans = () => {
           <div className={styles.main}>
             <h4>Growth</h4>
             <div className={styles.price}>
-              <span>$29</span> USD/mo.
+              <span>$69</span> USD/mo.
             </div>
             <div className={styles.payment}>billed annually</div>
             <Button
@@ -76,7 +76,7 @@ const Plans = () => {
           <div className={styles.main}>
             <h4>Enterprise</h4>
             <div className={styles.price}>
-              <span>$89</span> USD/mo.
+              <span>$129</span> USD/mo.
             </div>
             <div className={styles.payment}>billed annually</div>
             <Button
@@ -95,7 +95,9 @@ const Plans = () => {
           </div>
           <div className={styles.bullets}>
             <p>
-              <Check width={12} /> Up to 250k MTU
+              <Check width={12} /> Up to 100k MTU
+              <br />
+              <div className={styles.then}>Then +$129 per 100k MTU</div>
             </p>
             <p>
               <Check width={12} /> Priority support

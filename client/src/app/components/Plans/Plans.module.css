@@ -76,6 +76,12 @@
   margin-top: 12px;
 }
 
+.bullets .then {
+  font-weight: 300;
+  font-size: 12px;
+  margin-top: -3px;
+  color: rgba(0, 0, 0, 0.5);
+}
 
 @media (max-width: 720px) {
     .pricing .plans {
