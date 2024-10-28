@@ -16,7 +16,7 @@ async function checkSnippet(req, res) {
     res.json({ success: true });
   } catch (error) {
     if (error.message === 'Timeout') {
-      res.status(408).json({ error: 'Request timeout' });
+      res.status(408).json({ error: 'Could not verify snippet' });
     } else {
       res.status(400).json({ error: error.message });
     }
