@@ -12,7 +12,7 @@ const urlFor = (source) =>
     ? imageUrlBuilder({ projectId, dataset }).image(source)
     : null;
 
-const options = { next: { revalidate: 0 } };
+const options = { next: { revalidate: 3600 } };
 
 const PortableTextComponents = {
   types: {

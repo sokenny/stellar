@@ -9,6 +9,7 @@ import {
   Input as NInput,
   Select,
   SelectItem,
+  Tooltip,
 } from '@nextui-org/react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import UrlMatchTypesEnum from '../../helpers/enums/UrlMatchTypesEnum';
@@ -190,19 +191,34 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   return (
     <section className={styles.GoalsForm}>
       <div className={styles.goals}>
-        {goals.map((goal) => (
-          <div
-            className={`${styles.goal} ${
-              formData.goalType === goal.value ? styles.selected : ''
-            }`}
-            onClick={() => setFormData({ ...formData, goalType: goal.value })}
-            key={goal.value}
-          >
-            <div className={styles.icon}>{goal.icon}</div>
-            <h3 className={styles.goalTitle}>{goal.title}</h3>
-            <h3 className={styles.goalDescription}>{goal.description}</h3>
+        <Tooltip
+          content={'This feature will soon be available'}
+          showArrow
+          className={styles.tooltip}
+          closeDelay={200}
+        >
+          <div className={styles.gaGoal}>
+            <img
+              src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/GA4.png"
+              width="100"
+            />
           </div>
-        ))}
+        </Tooltip>
+        <div className={styles.classicGoals}>
+          {goals.map((goal) => (
+            <div
+              className={`${styles.goal} ${
+                formData.goalType === goal.value ? styles.selected : ''
+              }`}
+              onClick={() => setFormData({ ...formData, goalType: goal.value })}
+              key={goal.value}
+            >
+              <div className={styles.icon}>{goal.icon}</div>
+              <h3 className={styles.goalTitle}>{goal.title}</h3>
+              <h3 className={styles.goalDescription}>{goal.description}</h3>
+            </div>
+          ))}
+        </div>
       </div>
       <div className={styles.additionalData}>
         {formData.goalType === GoalTypesEnum.CLICK &&

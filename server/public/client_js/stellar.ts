@@ -76,7 +76,7 @@
     }
   }
 
-  function getApiKeyWithRetry(maxAttempts = 20, intervalMs = 100) {
+  function getApiKeyWithRetry(maxAttempts = 40, intervalMs = 50) {
     return new Promise((resolve, reject) => {
       let attempts = 0;
 
