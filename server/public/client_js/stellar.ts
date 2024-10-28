@@ -1,13 +1,12 @@
 (function () {
   'use strict';
 
-  console.log('LCDTM');
-
   const STELLAR_API_URL = 'process.env.STELLAR_API_URL/public';
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
   const sessionIssues = [];
+  const debugging = urlParams.get('stellarDebugging');
   let global__experimentsToMount = null;
   let global__observer = null;
   let global__mountedOnThisPageLoad = {};
@@ -19,6 +18,12 @@
     );
   }
   const stellarVisitorId = localStorage.getItem('stellarVisitorId');
+
+  function log(...args) {
+    if (debugging) {
+      console.log(...args);
+    }
+  }
 
   function getPathFromURL(url) {
     const a = document.createElement('a');
@@ -108,7 +113,6 @@
   let clickCount = 0;
   let scrollDepth = 0;
   let activeExperiments = [];
-  console.log('cocaina - a');
   let visitedPages = [];
 
   let isInternalNavigation = false;
@@ -218,14 +222,14 @@
   }
 
   function mountExperiments(experiments) {
-    console.log('Running mountExperiments');
+    log('Running mountExperiments');
     const stellarData = getStellarData();
     const currentPageUrl = window.location.href;
 
     function processExperiments() {
       experiments.forEach((experiment) => {
         if (global__mountedOnThisPageLoad[experiment.id]) {
-          console.log(`Skipping already mounted experiment: ${experiment.id}`);
+          log(`Skipping already mounted experiment: ${experiment.id}`);
           return;
         }
 
@@ -233,30 +237,27 @@
           getPathFromURL(window.location.href) !==
           getPathFromURL(experiment.url)
         ) {
-          console.log(
-            'Skipping experiment as it is not for this page :):',
-            experiment,
-          );
+          log('Skipping experiment as it is not for this page :):', experiment);
           return;
         }
 
         const storedVariantId = stellarData[experiment.id];
         let variantToUse = storedVariantId || experiment.variant_to_use;
 
-        console.log(
+        log(
           'Variant to use - storedVariantId || experiment.variant_to_use: ',
           variantToUse,
         );
 
         experiment.variants.forEach((variant) => {
           if (variant.id === variantToUse) {
-            console.log('Matching variant found: ', variant);
+            log('Matching variant found: ', variant);
 
             variant.modifications.forEach((modification) => {
               const targetElement = document.querySelector(
                 modification.selector,
               );
-              console.log('Modification target element: ', targetElement);
+              log('Modification target element: ', targetElement);
 
               if (targetElement) {
                 targetElement.innerText = modification.innerText;
@@ -331,10 +332,9 @@
   let loadingTimeout;
 
   function showLoadingState() {
-    console.log('showLoadingState run!');
+    log('showLoadingState run!');
     const loadingElement = document.createElement('div');
     loadingElement.id = 'stellar-loading';
-    // loadingElement.textContent = 'LOADING...';
     loadingElement.style.position = 'fixed';
     loadingElement.style.top = '0';
     loadingElement.style.left = '0';
@@ -371,7 +371,7 @@
 
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
-    console.log('fetchExperiments run! - ', hasFetchedExperiments);
+    log('fetchExperiments run! - ', hasFetchedExperiments);
 
     const pageUrl = window.location.href;
     if (
@@ -381,7 +381,7 @@
     ) {
       return;
     }
-    console.log('fetching!');
+    log('fetching!');
 
     const apiKey = await getApiKeyWithRetry();
 
@@ -389,9 +389,11 @@
       let data;
 
       const cachedExperiments = getStellarCache();
+      log('cachedExperiments!: ', cachedExperiments);
       if (cachedExperiments) {
         data = cachedExperiments;
-        console.log('Using cached experiments');
+        if (cachedExperiments.length == 0) return;
+        log('Using cached experiments');
       } else {
         const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
           method: 'GET',
@@ -408,7 +410,7 @@
         data = await response.json();
       }
 
-      console.log('Datusarda: ', data);
+      log('Datusarda: ', data);
 
       pagesWithExperiments = data.map((experiment) => experiment.url);
 
@@ -431,12 +433,13 @@
 
       setStellarCache(global__experimentsToMount);
 
-      console.log('global__experimentsToMount', global__experimentsToMount);
+      log('global__experimentsToMount', global__experimentsToMount);
       mountExperiments(global__experimentsToMount);
       trackPageVisit();
     } catch (error) {
       console.error('Error fetching experiments:', error);
     } finally {
+      log('finally runs!');
       hideLoadingState();
     }
   }
@@ -444,7 +447,7 @@
   function hasPageVisitGoalConverted(experiment) {
     const currentPage = window.location.href;
     if (experiment.goalType === 'PAGE_VISIT') {
-      console.log('primer if dentro');
+      log('primer if dentro');
       if (
         experiment.goalUrlMatchType === 'CONTAINS' &&
         currentPage.includes(experiment.goalUrlMatchValue)
@@ -462,7 +465,7 @@
   }
 
   function trackPageVisit() {
-    console.log('track page visit run! ', activeExperiments);
+    log('track page visit run! ', activeExperiments);
     const currentPage = window.location.pathname;
     if (visitedPages.length === 1 && visitedPages[0] === currentPage) {
       return;
@@ -470,16 +473,12 @@
     visitedPages.push(currentPage);
     updateSessionStorage();
 
-    console.log('currentPage: ', currentPage);
+    log('currentPage: ', currentPage);
 
     activeExperiments.forEach((experiment) => {
-      console.log(
-        'foriching: ',
-        experiment,
-        hasPageVisitGoalConverted(experiment),
-      );
+      log('foriching: ', experiment, hasPageVisitGoalConverted(experiment));
       if (hasPageVisitGoalConverted(experiment)) {
-        console.log('converted page visit!');
+        log('converted page visit!');
         experiment.converted = true;
       }
     });
@@ -511,13 +510,13 @@
   }
 
   function initializeScript() {
-    console.log('inicializamos caca');
+    log('inicializamos caca');
 
     if (stellarMode === 'true') {
       return;
     }
 
-    showLoadingState();
+    // showLoadingState();
     function domContentLoadedActions() {
       restoreSessionData();
       wrapHistoryMethods();
