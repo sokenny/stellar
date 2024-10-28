@@ -7,6 +7,7 @@ import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
+import Script from 'next/script';
 
 const quotes = [
   {
@@ -64,7 +65,7 @@ export default async function HomePage({}) {
     <>
       {/* <Head> */}
 
-      <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
+      {/* <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
       <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
       <link
         rel="preload"
@@ -75,6 +76,28 @@ export default async function HomePage({}) {
         async
         src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js"
         data-stellar-api-key="0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4"
+      /> */}
+
+      {/* <script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    stellarApiKey: '0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4',
+  });
+</script> */}
+
+      <Script>
+        {`
+            window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    stellarApiKey: '0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4',
+  });
+          `}
+      </Script>
+      <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
+      <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
+      <script
+        async
+        src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js"
       />
 
       {/* </Head> */}
