@@ -58,8 +58,7 @@
 
       const { experiments, timestamp } = JSON.parse(cachedData);
       const now = Date.now();
-      // const TTL = 300000; // 5 minutes in milliseconds
-      const TTL = 5000; // 5 seconds in milliseconds
+      const TTL = 10000; // 10 seconds
 
       if (now - timestamp < TTL) {
         return experiments;
@@ -70,6 +69,27 @@
       console.error('Error getting stellar cache: ', e);
       return null;
     }
+  }
+
+  function getApiKeyWithRetry(maxAttempts = 20, intervalMs = 100) {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
+
+      const interval = setInterval(() => {
+        attempts += 1;
+        const apiKey = window?.dataLayer?.find(
+          (item) => item.stellarApiKey,
+        )?.stellarApiKey;
+
+        if (apiKey) {
+          clearInterval(interval);
+          resolve(apiKey);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          reject(new Error('Failed to retrieve stellarApiKey from dataLayer'));
+        }
+      }, intervalMs);
+    });
   }
 
   function getVisitorId() {
@@ -308,17 +328,19 @@
     debounceProcessExperiments();
   }
 
+  let loadingTimeout;
+
   function showLoadingState() {
     console.log('showLoadingState run!');
     const loadingElement = document.createElement('div');
     loadingElement.id = 'stellar-loading';
-    loadingElement.textContent = 'LOADING...';
+    // loadingElement.textContent = 'LOADING...';
     loadingElement.style.position = 'fixed';
     loadingElement.style.top = '0';
     loadingElement.style.left = '0';
     loadingElement.style.height = '100%';
     loadingElement.style.width = '100%';
-    loadingElement.style.backgroundColor = 'black';
+    loadingElement.style.backgroundColor = 'white';
     loadingElement.style.zIndex = '9999';
     loadingElement.style.display = 'flex';
     loadingElement.style.justifyContent = 'center';
@@ -326,12 +348,24 @@
     loadingElement.style.fontSize = '1.2rem';
     loadingElement.style.color = '#fff';
     document.body.appendChild(loadingElement);
+
+    loadingTimeout = setTimeout(() => {
+      console.warn(
+        'Loading state timeout reached, hiding loading state automatically.',
+      );
+      hideLoadingState();
+    }, 1500);
   }
 
   function hideLoadingState() {
     const loadingElement = document.getElementById('stellar-loading');
     if (loadingElement) {
       loadingElement.remove();
+    }
+
+    if (loadingTimeout) {
+      clearTimeout(loadingTimeout);
+      loadingTimeout = null;
     }
   }
 
@@ -349,9 +383,7 @@
     }
     console.log('fetching!');
 
-    const apiKey = window.dataLayer.find(
-      (item) => item.stellarApiKey,
-    )?.stellarApiKey;
+    const apiKey = await getApiKeyWithRetry();
 
     try {
       let data;

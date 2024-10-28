@@ -19,6 +19,7 @@ export const metadata = {
 };
 
 // TODO-p1-1: Have a "disabled" state for the snippet. Like a kill-switch JIC
+// TODO-p1-1: Create snippet installation page
 // TODO-p1-1: Make loading state white screen and have it removed and inactive if no exps are live.
 // TODO-p1-1: Allow integration with Google Analytics for conversion tracking
 // TODO-p1-1: Use redis cache for variant preview, to not give impression of slow performant snippet
