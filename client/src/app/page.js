@@ -65,7 +65,6 @@ export default async function HomePage({}) {
       {/* <Head> */}
 
       <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
-      <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
       <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
       <link
         rel="preload"

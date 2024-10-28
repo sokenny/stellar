@@ -17,18 +17,28 @@ const SnippetMissing = ({ className, onSuccess }) => {
 
   function handleSnippetCheck() {
     setLoading(true);
+    const url =
+      (currentProject.domain.includes('localhost') ? 'http://' : 'https://') +
+      currentProject.domain;
+
+    const windowWidth = 500;
+    const windowHeight = 600;
+    const left = window.screenX + (window.innerWidth - windowWidth) / 2;
+    const top = window.screenY + (window.innerHeight - windowHeight) / 2;
+
+    const newWindow = window.open(
+      url,
+      '_blank',
+      `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`,
+    );
+
     toast.promise(
       fetch(`${process.env.NEXT_PUBLIC_STELLAR_API}/api/check-snippet`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          url:
-            (currentProject.domain.includes('localhost')
-              ? 'http://'
-              : 'https://') + currentProject.domain,
-        }),
+        body: JSON.stringify({ url }),
       }).then(async (response) => {
         if (!response.ok) {
           const errorData = await response.json();
@@ -42,11 +52,13 @@ const SnippetMissing = ({ className, onSuccess }) => {
           setLoading(false);
           refetchProjects();
           onSuccess && onSuccess();
+          newWindow && newWindow.close();
           return 'Snippet installation confirmed';
         },
         error: async (e) => {
           console.log(e);
           setLoading(false);
+          newWindow && newWindow.close();
           return e.message || 'Error checking snippet - not found';
         },
       },

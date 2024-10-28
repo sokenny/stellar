@@ -28,11 +28,6 @@
     return pathname.toLowerCase();
   }
 
-  function getApiKey() {
-    const scriptTag = document.querySelector('script[data-stellar-api-key]');
-    return scriptTag ? scriptTag.getAttribute('data-stellar-api-key') : null;
-  }
-
   function getStellarData() {
     const stellarData = localStorage.getItem('stellarData');
     return stellarData ? JSON.parse(stellarData) : {};
@@ -354,7 +349,9 @@
     }
     console.log('fetching!');
 
-    const apiKey = getApiKey();
+    const apiKey = window.dataLayer.find(
+      (item) => item.stellarApiKey,
+    )?.stellarApiKey;
 
     try {
       let data;

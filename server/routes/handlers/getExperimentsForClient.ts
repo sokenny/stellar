@@ -3,6 +3,15 @@ import db from '../../models';
 import { decryptApiKey } from '../../helpers/crypto';
 import { client as redisClient } from '../../helpers/cache';
 
+async function updateSnippetStatus(projectId: number) {
+  const project = await db.Project.findByPk(projectId);
+  if (!project) {
+    return;
+  }
+  project.snippet_status = 1;
+  await project.save();
+}
+
 async function getProjectExperiments(projectId: number): Promise<any[]> {
   const cacheKey = `experiments:${projectId}`;
 
@@ -16,6 +25,9 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
   console.log(`Cache miss for project ${projectId}`);
   const experiments = await fetchExperiments(projectId);
   redisClient.set(cacheKey, JSON.stringify(experiments));
+
+  updateSnippetStatus(projectId);
+
   return selectVariantsAtRuntime(experiments);
 }
 

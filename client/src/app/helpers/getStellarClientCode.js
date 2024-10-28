@@ -1,11 +1,15 @@
 function getStellarClientCode(apiKey) {
   return `
 <!-- Stellar code starts -->
-<link rel="preconnect" href="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}"/>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    stellarApiKey: '${apiKey}',
+  });
+</script>
 <link rel="preconnect" href="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}"/>
 <link rel="dns-prefetch" href="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}"/>
-<link rel="preload" href="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}/client_js/stellar.js" as="script"/>
-<script async src="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}/client_js/stellar.js" data-stellar-api-key="${apiKey}"/>
+<script async src="${process.env.NEXT_PUBLIC_STELLAR_PUBLIC_JS_HOST}/client_js/stellar.js"/>
 <!-- Stellar code ends -->
 `;
 }
