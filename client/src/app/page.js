@@ -104,7 +104,7 @@ export default async function HomePage({}) {
       <div className={styles.HomePage}>
         <div className={styles.content}>
           <div className={styles.header}>
-            {/* <GridBg
+            <GridBg
               style={{
                 position: 'absolute',
                 opacity: 0.2,
@@ -113,7 +113,7 @@ export default async function HomePage({}) {
                 height: '800px',
                 zIndex: 0,
               }}
-            /> */}
+            />
             <h1 className={styles.title}>
               <span className={styles.varA}>A</span>/
               <span className={styles.varB}>B</span> test any website.

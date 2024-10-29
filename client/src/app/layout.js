@@ -20,6 +20,7 @@ export const metadata = {
 
 // TODO-p1-1: Implement charts for sessions & conversions. And maybe extra data like session time, total click count, etc
 // TODO-p1-1: Allow integration with Google Analytics for conversion tracking
+// TODO-p1-1: Develop AI-assisted experiment creation: Suggests texts, font-colors, sizes, etc.
 // TODO-p1-1: Use redis cache for variant preview, to not give impression of slow performant snippet
 // TODO-p1-1: Allow collection of clicks for goal setting
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
