@@ -2,12 +2,14 @@ import Head from 'next/head';
 import SignUpCTA from './components/SignUpCTA';
 import AutoPlayVideo from './components/AutoPlayVideo';
 import Plans from './components/Plans';
+import GridBg from './components/GridBg/GridBg';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
 import Script from 'next/script';
+import { headers } from 'next/headers';
 
 const quotes = [
   {
@@ -102,6 +104,16 @@ export default async function HomePage({}) {
       <div className={styles.HomePage}>
         <div className={styles.content}>
           <div className={styles.header}>
+            <GridBg
+              style={{
+                position: 'absolute',
+                opacity: 0.2,
+                transform: 'translateY(-50px)',
+                width: '1200px',
+                height: '800px',
+                zIndex: 0,
+              }}
+            />
             <h1 className={styles.title}>
               <span className={styles.varA}>A</span>/
               <span className={styles.varB}>B</span> test any website.
