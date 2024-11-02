@@ -1,9 +1,8 @@
 'use client';
 
-import getStellarClientCode from '../helpers/getStellarClientCode';
 import useStore from '../store';
-import { Button } from '@nextui-org/react';
 import styles from './page.module.css';
+import DisplaySnippet from '../components/DisplaySnippet';
 
 export default function Account({}) {
   const { user } = useStore();
@@ -11,17 +10,6 @@ export default function Account({}) {
   if (!user) {
     return <div>Loading...</div>;
   }
-
-  const handleCopy = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        console.log('Snippet copied to clipboard');
-      })
-      .catch((err) => {
-        console.error('Failed to copy: ', err);
-      });
-  };
 
   return (
     <div className={styles.container}>
@@ -34,21 +22,7 @@ export default function Account({}) {
           return (
             <div key={project.id} className={styles.project}>
               <h4>{project.name}</h4>
-              <div className={styles.snippet}>
-                <div className={styles.label}>Snippet:</div>
-                <pre>{getStellarClientCode(apiKey)}</pre>
-                <Button
-                  auto
-                  flat
-                  onClick={() => handleCopy(getStellarClientCode(apiKey))}
-                  className={styles.copyBtn}
-                  size="sm"
-                  color="primary"
-                  variant="flat"
-                >
-                  Copy Snippet
-                </Button>
-              </div>
+              <DisplaySnippet apiKey={apiKey} />
             </div>
           );
         })}

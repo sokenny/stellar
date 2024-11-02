@@ -68,17 +68,19 @@ export default async function HomePage({}) {
       {/* <div
         dangerouslySetInnerHTML={{
           __html: `<script>
-            var timeout = 3000;
-            (function(d, w, t, id) {
-              var s = d.createElement("style");
-              s.id = id;
-              s.textContent = "body{opacity:0}";
-              d.head.appendChild(s);
-              
-              w.rmo = () => s && s.remove();
-              setTimeout(w.rmo, t);
-            })(document, window, timeout, "abhide");
-          </script>`,
+  var timeout = 3000;
+  (function(d, w, t, id) {
+    var s = d.createElement("style");
+    s.id = id;
+    s.textContent = "body{opacity:0}";
+    d.head.appendChild(s);
+    
+    w.rmo = function() {
+      if (s) s.parentNode.removeChild(s);
+    };
+    setTimeout(w.rmo, t);
+  })(document, window, timeout, "abhide");
+</script>`,
         }}
       /> */}
       {/* <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />

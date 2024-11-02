@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Snippet, Button as NextUIButton } from '@nextui-org/react';
+import {
+  Snippet,
+  Button as NextUIButton,
+  Switch,
+  Tooltip,
+} from '@nextui-org/react';
 import useStore from '../../store';
 import InfoCard from '../InfoCard';
 import Button from '../Button';
@@ -9,6 +14,7 @@ import getStellarClientCode from '../../helpers/getStellarClientCode';
 
 const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
+  const [withAntiFlicker, setWithAntiFlicker] = useState(true);
   const { user, refetchProjects, currentProject } = useStore();
   console.log('currentProject', currentProject);
   const apiKey = user?.api_keys.find(
@@ -75,8 +81,24 @@ const SnippetMissing = ({ className, onSuccess }) => {
               Place this snippet inside the {'<head>'} tag of your website to
               start tracking and running your experiments:
             </div>
+            <div className={styles.switchContainer}>
+              <Switch
+                defaultSelected={withAntiFlicker}
+                onChange={(e) => setWithAntiFlicker(e.target.checked)}
+                size="sm"
+              >
+                <Tooltip
+                  content="Enabling this option ensures a smoother experience for your visitors by hiding elements momentarily until the changes are fully applied."
+                  showArrow
+                  className={styles.tooltip}
+                  closeDelay={200}
+                >
+                  <div>Anti-Flicker</div>
+                </Tooltip>
+              </Switch>
+            </div>
             <Snippet hideSymbol color="primary" className={styles.cardSnippet}>
-              {getStellarClientCode(apiKey)}
+              {getStellarClientCode(apiKey, withAntiFlicker)}
             </Snippet>
             <div className={styles.cardActions}>
               <NextUIButton
