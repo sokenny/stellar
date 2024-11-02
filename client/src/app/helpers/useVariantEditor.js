@@ -9,7 +9,7 @@ function useVariantEditor({ experiment, onSuccess }) {
   const currentUrl = window.location.href;
 
   const handleEditVariant = (variantId, onVariantModifiedCallback) => {
-    window.open(
+    const variantWindow = window.open(
       `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&visualEditorOn=true&token=${token}&fromUrl=${currentUrl}`,
       '_blank',
     );
@@ -34,8 +34,9 @@ function useVariantEditor({ experiment, onSuccess }) {
         onSuccess && onSuccess();
         refetchProjects();
         if (typeof onVariantModifiedCallback === 'function') {
-          onVariantModifiedCallback(experimentJson); // Execute the callback
+          onVariantModifiedCallback(experimentJson);
         }
+        variantWindow.close();
       }
     }, 1500);
   };

@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import SignUpCTA from './components/SignUpCTA';
 import AutoPlayVideo from './components/AutoPlayVideo';
 import Plans from './components/Plans';
@@ -8,18 +7,12 @@ import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
-import Script from 'next/script';
-import { headers } from 'next/headers';
 
 const quotes = [
   {
     quote: 'Exactly what my marketing team needed. AB testing without the BS.',
     color: '#FF92C2',
   },
-  // {
-  //   quote: 'A/B testing that didn’t make my head hurt.',
-  //   color: '#0072f5',
-  // },
   {
     quote:
       'Clear data, real insights—without the usual over-complicated dashboards.',
@@ -46,26 +39,16 @@ const quotes = [
     quote: 'We switched from other platforms—Stellar is simpler and cheaper.',
     color: '#8300e0',
   },
-  // {
-  //   quote: 'I got clear results without any confusion or overload.',
-  //   color: '#D52941',
-  // },
-
   {
     quote: 'I set up my first test in 5 minutes, no dev needed.',
     color: '#00b7f5',
   },
-  // {
-  //   quote:
-  //     'After trying others, Stellar is by far the best Google Optimize replacement.',
-  //   color: '#00b7f5',
-  // },
 ];
 
 export default async function HomePage({}) {
   return (
     <>
-      {/* <div
+      <div
         dangerouslySetInnerHTML={{
           __html: `<script>
   var timeout = 3000;
@@ -82,13 +65,13 @@ export default async function HomePage({}) {
   })(document, window, timeout, "abhide");
 </script>`,
         }}
-      /> */}
-      {/* <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
+      />
+      <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
       <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
       <script
         async
         src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js?apiKey=0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4"
-      ></script> */}
+      ></script>
 
       <div className={styles.HomePage}>
         <div className={styles.content}>

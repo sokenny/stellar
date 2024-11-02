@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import validateTraffic from '../../helpers/validateTraffic';
 import db from '../../models';
 
 async function getVariant(req: Request, res: Response) {

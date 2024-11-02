@@ -13,8 +13,6 @@
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
   const variantId = urlParams.get('variantId');
-  const tempId = urlParams.get('tempId');
-  const projectId = urlParams.get('projectId');
   const isSettingGoal = urlParams.get('isSettingGoal');
   const elementToHighlight = urlParams.get('elementToHighlight');
   const modificationType = urlParams.get('modificationType');
@@ -37,14 +35,20 @@
     loadingElement.style.left = '0';
     loadingElement.style.height = '100%';
     loadingElement.style.width = '100%';
-    loadingElement.style.backgroundColor = 'black';
+    loadingElement.style.backgroundColor = 'white';
     loadingElement.style.zIndex = '9999';
     loadingElement.style.display = 'flex';
     loadingElement.style.justifyContent = 'center';
     loadingElement.style.alignItems = 'center';
     loadingElement.style.fontSize = '1.2rem';
-    loadingElement.style.color = '#fff';
+    loadingElement.style.color = 'black';
     document.body.appendChild(loadingElement);
+  }
+
+  // We don't need anti flicker overlay in the editor for now
+  if (typeof (window as any).rmo === 'function') {
+    console.log('This run yo');
+    (window as any).rmo();
   }
 
   function hideLoadingState() {

@@ -17,7 +17,7 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
-// TODO-p1-1: Add anti-flicker script option
+// TODO-p1-1: Add annual / monthly pricing toggle
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 
 // TODO-p1-1: Try somethign w google optimize inside the keywords (?)
