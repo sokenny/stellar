@@ -68,20 +68,17 @@ export default async function HomePage({}) {
       <div
         dangerouslySetInnerHTML={{
           __html: `<script>
-  var timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
-  !function(h,i,d,e){
-    var t,n=h.createElement("style");
-    n.id=e;
-    n.innerHTML="body{opacity:0}";
-    h.head.appendChild(n);
-    t=d;
-    i.rmfk=function(){
-      var t=h.getElementById(e);
-      t&&t.parentNode.removeChild(t);
-    };
-    setTimeout(i.rmfk,t);
-  }(document,window,timeout,"abhide");
-</script>`,
+            var timeout = 3000;
+            (function(d, w, t, id) {
+              var s = d.createElement("style");
+              s.id = id;
+              s.textContent = "body{opacity:0}";
+              d.head.appendChild(s);
+              
+              w.rmo = () => s && s.remove();
+              setTimeout(w.rmo, t);
+            })(document, window, timeout, "abhide");
+          </script>`,
         }}
       />
       <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />

@@ -23,8 +23,8 @@
   }
 
   function removeAntiFlickerOverlay() {
-    if (typeof (window as any).rmfk === 'function') {
-      (window as any).rmfk();
+    if (typeof (window as any).rmo === 'function') {
+      (window as any).rmo();
     }
   }
 
@@ -348,44 +348,6 @@
 
   let loadingTimeout;
 
-  function showLoadingState() {
-    log('showLoadingState run!');
-    const loadingElement = document.createElement('div');
-    loadingElement.id = 'stellar-loading';
-    loadingElement.style.position = 'fixed';
-    loadingElement.style.top = '0';
-    loadingElement.style.left = '0';
-    loadingElement.style.height = '100%';
-    loadingElement.style.width = '100%';
-    loadingElement.style.backgroundColor = 'white';
-    loadingElement.style.zIndex = '9999';
-    loadingElement.style.display = 'flex';
-    loadingElement.style.justifyContent = 'center';
-    loadingElement.style.alignItems = 'center';
-    loadingElement.style.fontSize = '1.2rem';
-    loadingElement.style.color = '#fff';
-    document.body.appendChild(loadingElement);
-
-    loadingTimeout = setTimeout(() => {
-      console.warn(
-        'Loading state timeout reached, hiding loading state automatically.',
-      );
-      hideLoadingState();
-    }, 1500);
-  }
-
-  function hideLoadingState() {
-    const loadingElement = document.getElementById('stellar-loading');
-    if (loadingElement) {
-      loadingElement.remove();
-    }
-
-    if (loadingTimeout) {
-      clearTimeout(loadingTimeout);
-      loadingTimeout = null;
-    }
-  }
-
   // TODO-maybe: Perhaps avoid fetching experiments if we already have fetched them and available in localStorage. But this should have a TTL or something.
   async function fetchExperiments() {
     log('fetchExperiments run! - ', hasFetchedExperiments);
@@ -461,7 +423,6 @@
       console.error('Error fetching experiments:', error);
     } finally {
       log('finally runs!');
-      // hideLoadingState();
       removeAntiFlickerOverlay();
     }
   }
@@ -538,7 +499,6 @@
       return;
     }
 
-    // showLoadingState();
     function domContentLoadedActions() {
       restoreSessionData();
       wrapHistoryMethods();
