@@ -65,7 +65,7 @@ const quotes = [
 export default async function HomePage({}) {
   return (
     <>
-      <div
+      {/* <div
         dangerouslySetInnerHTML={{
           __html: `<script>
             var timeout = 3000;
@@ -80,13 +80,13 @@ export default async function HomePage({}) {
             })(document, window, timeout, "abhide");
           </script>`,
         }}
-      />
-      <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
+      /> */}
+      {/* <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
       <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
       <script
         async
         src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js?apiKey=0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4"
-      ></script>
+      ></script> */}
 
       <div className={styles.HomePage}>
         <div className={styles.content}>
