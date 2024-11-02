@@ -98,7 +98,7 @@ const EnterUrlForm = ({ className, onSuccess, isHomePage }) => {
           className={styles.button}
           type="submit"
         >
-          Go Stellar
+          Start For Free
         </Button>
       </form>
     </div>

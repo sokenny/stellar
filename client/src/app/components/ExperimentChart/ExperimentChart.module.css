@@ -1,0 +1,30 @@
+.chartSelect {
+  width: 200px;
+}
+
+.chartSelect {
+  transform: scale(0.8) translateX(-24px);
+}
+
+.chartSelect button {
+  font-weight: 300;
+}
+
+.modeSelectors {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.modeSelectors label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  transform: translateX(-12px);
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 300;
+}
+
+.modeSelectors label input {
+  margin-right: 4px;
+}

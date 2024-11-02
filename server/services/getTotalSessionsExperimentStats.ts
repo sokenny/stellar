@@ -1,5 +1,6 @@
 import GoalTypesEnum from '../helpers/enums/GoalTypesEnum';
 import db from '../models';
+import { Op } from 'sequelize';
 
 const goalFunctionMapper = {
   [GoalTypesEnum.SESSION_TIME]: getTotalSessionsGoalSessionTimeStats,
@@ -10,7 +11,13 @@ const goalFunctionMapper = {
 async function getTotalSessionsGoalSessionTimeStats(experimentId, variantIds) {
   try {
     const stats = await db.SessionExperiment.findAll({
-      where: { experiment_id: experimentId, experiment_mounted: true },
+      where: {
+        experiment_id: experimentId,
+        experiment_mounted: true,
+        had_issues: {
+          [Op.not]: true,
+        },
+      },
       attributes: [
         ['variant_id', 'variantId'],
         [
@@ -78,6 +85,9 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
     const stats = await db.SessionExperiment.findAll({
       where: {
         experiment_id: experimentId,
+        had_issues: {
+          [Op.not]: true,
+        },
       },
       attributes: [
         ['variant_id', 'variantId'],

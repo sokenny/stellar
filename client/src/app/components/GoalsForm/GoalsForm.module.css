@@ -31,13 +31,19 @@
 }
 
 .gaGoal {
+  display: flex;
+  align-items: center;
   border: 1px solid var(--whiteCardStroke);
   border-radius: 2px;
   padding: 24px;
   margin-bottom: 24px;
   width: 100%;
   cursor: pointer;
-  opacity: .5;
+  opacity: 0.5;
+}
+
+.gaGoal svg {
+  margin-right: 16px;
 }
 
 .goal:hover {
@@ -114,7 +120,8 @@
   font-size: 20px;
 }
 
-.clickData .input, .clickData .goButton {
+.clickData .input,
+.clickData .goButton {
   height: 36px;
 }
 

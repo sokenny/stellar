@@ -1,0 +1,35 @@
+.title {
+  font-size: 32px;
+  margin-bottom: 32px;
+  color: var(--primary);
+}
+
+.project {
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  max-width: 1000px;
+  margin-bottom: 16px;
+}
+
+.project h4 {
+  margin-bottom: 16px;
+  color: var(--linkBlue);
+}
+
+.label {
+  margin-bottom: 4px;
+}
+
+.snippet pre {
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.copyBtn {
+  margin-top: 8px;
+  border-radius: 4px;
+}

@@ -106,7 +106,8 @@ const Plans = () => {
         </div>
       </div>
       <div className={styles.bigger}>
-        For bigger plans, please reach out to hello@gostellar.app
+        *MTU means Monthly Tracked Users. This is an internal count of total
+        unique visitors that enter your site.
       </div>
     </div>
   );

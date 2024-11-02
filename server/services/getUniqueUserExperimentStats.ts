@@ -1,5 +1,6 @@
 import GoalTypesEnum from '../helpers/enums/GoalTypesEnum';
 import db from '../models';
+import { Op } from 'sequelize';
 
 const goalFunctionMapper = {
   [GoalTypesEnum.SESSION_TIME]: getUniqueUserGoalSessionTimeStats,
@@ -49,7 +50,12 @@ async function getUniqueUserExperimentStats(experimentId) {
 async function getUniqueUserGoalSessionTimeStats(experimentId, variantIds) {
   try {
     const stats = await db.SessionExperiment.findAll({
-      where: { experiment_id: experimentId },
+      where: {
+        experiment_id: experimentId,
+        had_issues: {
+          [Op.not]: true,
+        },
+      },
       attributes: [
         ['variant_id', 'variantId'],
         [
@@ -117,6 +123,9 @@ async function getUniqueUserGoalClickAndPageVisitStats(
     const stats = await db.SessionExperiment.findAll({
       where: {
         experiment_id: experimentId,
+        had_issues: {
+          [Op.not]: true,
+        },
       },
       attributes: [
         ['variant_id', 'variantId'],
@@ -146,8 +155,8 @@ async function getUniqueUserGoalClickAndPageVisitStats(
       include: [
         {
           model: db.Session,
-          as: 'session', // Ensure this matches the correct alias defined in your associations
-          attributes: [], // We don't need any attributes from the session table in the final result
+          as: 'session',
+          attributes: [],
         },
       ],
       group: ['SessionExperiment.variant_id'],

@@ -7,6 +7,10 @@
   const stellarMode = urlParams.get('stellarMode');
   const sessionIssues = [];
   const debugging = urlParams.get('stellarDebugging');
+  const scriptUrl = new URL((document as any).currentScript.src);
+  const scriptParams = new URLSearchParams(scriptUrl.search);
+  const scriptApiKey = scriptParams.get('apiKey');
+
   let global__experimentsToMount = null;
   let global__observer = null;
   let global__mountedOnThisPageLoad = {};
@@ -77,6 +81,11 @@
   }
 
   function getApiKeyWithRetry(maxAttempts = 40, intervalMs = 50) {
+    if (scriptApiKey) {
+      return Promise.resolve(scriptApiKey);
+    }
+
+    // TODO-p1-1: Deprecate the use of dataLayer
     return new Promise((resolve, reject) => {
       let attempts = 0;
 
@@ -98,11 +107,11 @@
   }
 
   function getVisitorId() {
-    let visitorId = localStorage.getItem('stellar_visitor_id');
+    let visitorId = localStorage.getItem('stellarVisitorId');
     if (!visitorId) {
       const userAgent = window.navigator.userAgent.replace(/\D/g, '');
       visitorId = `session_${Date.now()}_${userAgent}`;
-      localStorage.setItem('stellar_visitor_id', visitorId);
+      localStorage.setItem('stellarVisitorId', visitorId);
     }
     return visitorId;
   }
@@ -195,8 +204,6 @@
             idempotencyKey: visitorId, // not sure if this is right or needed
             activeExperiments,
             visitedPages,
-            stellarVisitorId,
-            // TODO-p2: Store session issues in the database, and perhaps do not count these sessions as valid. Or raise an issue on the FE of the exp about it
             sessionIssues,
           };
 
@@ -293,6 +300,11 @@
                   if (expRun) {
                     expRun.converted = true;
                   }
+                });
+              } else {
+                sessionIssues.push({
+                  type: 'GOAL',
+                  message: `Element not found for goal selector: ${experiment.goal.selector}`,
                 });
               }
             }

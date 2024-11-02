@@ -54,6 +54,10 @@
   font-weight: 500;
 }
 
+.avatar {
+  cursor: pointer;
+}
+
 @media (max-width: 720px) {
   .container {
     padding-left: 16px;

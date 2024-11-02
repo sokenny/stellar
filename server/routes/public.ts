@@ -12,6 +12,7 @@ import publicDeleteExperiment from './handlers/publicDeleteExperiment';
 import deleteProject from './handlers/deleteProject';
 import generalRequestLimiter from '../helpers/generalRequestLimiter';
 import sendEmail from '../services/sendEmail';
+import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -44,6 +45,8 @@ router.get('/onboard/:projectId/experiments', getExperiments);
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
 router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
 router.delete('/experiment/:id', publicDeleteExperiment);
+
+router.get('/chart/experiment/:id', handleGetExperimentChartData);
 
 router.get('/send-test-email', sendEmail);
 

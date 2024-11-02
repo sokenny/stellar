@@ -30,6 +30,10 @@
   opacity: 0.25;
 }
 
+.hasStarted .gearIcon {
+  opacity: 0.15;
+}
+
 .tooltip {
   padding: 12px;
   max-width: 250px;
@@ -59,4 +63,8 @@
 
 .cell-name {
   text-decoration: dotted;
+}
+
+.gearIcon {
+  opacity: 0.4;
 }

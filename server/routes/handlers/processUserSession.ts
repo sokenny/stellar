@@ -17,6 +17,7 @@ async function processUserSession(req: Request, res: Response) {
       scroll_depth: payload.scrollDepth,
       visited_pages: payload.visitedPages,
       ip: ipAddress,
+      session_issues: payload.sessionIssues || null,
     });
 
     const sessionExperimentPromises = payload.activeExperiments.map(
@@ -27,6 +28,7 @@ async function processUserSession(req: Request, res: Response) {
           variant_id: experiment.variant,
           converted: experiment.converted,
           experiment_mounted: experiment.experimentMounted,
+          had_issues: payload?.sessionIssues?.length > 0 || false,
         });
       },
     );

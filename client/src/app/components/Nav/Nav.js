@@ -24,6 +24,7 @@ import {
 } from '@nextui-org/react';
 import AddNote from '../../icons/AddNote';
 import DownArrow from '../../icons/DownArrow';
+import Avatar from '../../icons/Avatar';
 import segmentIdentify from '../../helpers/segment/segmentIdentify';
 import styles from './Nav.module.css';
 import segmentTrack from '../../helpers/segment/segmentTrack';
@@ -88,6 +89,12 @@ const Nav = ({ token }) => {
       const variantEdited = urlParams.get('variantEdited');
       if (variantEdited) {
         toast.success('Variant modified successfully!');
+        urlParams.delete('variantEdited');
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
       }
       variantEditedEffectRan.current = true;
     }
@@ -232,46 +239,67 @@ const Nav = ({ token }) => {
             );
           })}
         </NavbarContent>
-        <NavbarContent justify="end">
-          {session ? (
-            <NavbarItem
-              className={`hidden lg:flex ${styles.navItem}`}
-              onClick={() => signOut()}
-            >
-              <div href="#">Log Out</div>
+        {!session && (
+          <NavbarContent justify="end">
+            <NavbarItem className={`hidden lg:flex ${styles.navItem}`}>
+              <div
+                onClick={() =>
+                  signIn('google', {
+                    callbackUrl: '/dashboard',
+                  })
+                }
+              >
+                Login
+              </div>
             </NavbarItem>
-          ) : (
-            <>
-              <NavbarItem className={`hidden lg:flex ${styles.navItem}`}>
-                <div
-                  onClick={() =>
-                    signIn('google', {
-                      callbackUrl: '/dashboard',
-                    })
-                  }
-                >
-                  Login
+            <NavbarItem className={styles.navItem}>
+              <Button
+                onClick={() => {
+                  segmentTrack('click_sign_up', {
+                    location: 'nav',
+                  });
+                  signIn('google', {
+                    callbackUrl: '/dashboard',
+                  });
+                }}
+                color="primary"
+                variant="flat"
+              >
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </NavbarContent>
+        )}
+        {session && (
+          <NavbarContent as="div" justify="end">
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <div>
+                  <Avatar width={30} height={30} className={styles.avatar} />
                 </div>
-              </NavbarItem>
-              <NavbarItem className={styles.navItem}>
-                <Button
-                  onClick={() => {
-                    segmentTrack('click_sign_up', {
-                      location: 'nav',
-                    });
-                    signIn('google', {
-                      callbackUrl: '/dashboard',
-                    });
-                  }}
-                  color="primary"
-                  variant="flat"
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{session?.user?.email}</p>
+                </DropdownItem>
+                <DropdownItem
+                  key="account"
+                  onClick={() => router.push('/account')}
                 >
-                  Sign Up
-                </Button>
-              </NavbarItem>
-            </>
-          )}
-        </NavbarContent>
+                  Account
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onClick={() => signOut()}
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarContent>
+        )}
       </Navbar>
       <div className={styles.statusBar}>
         <div>
@@ -283,13 +311,6 @@ const Nav = ({ token }) => {
           >
             Leave us your feedback 📝
           </a>
-          {/* <a
-            href="https://discord.gg/62krmWQ4ae"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Engage with us on Discord 🙌
-          </a> */}
         </div>
       </div>
     </>

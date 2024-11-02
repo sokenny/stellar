@@ -25,11 +25,9 @@ import updateExperimentSettings from './handlers/updateExperimentSettings';
 import generalRequestLimiter from '../helpers/generalRequestLimiter';
 import autoGenerate from './handlers/autoGenerate';
 import createProject from './handlers/createProject';
+import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
 
 const router = express.Router();
-
-// TODO: add Rate Limiting to prevent abuse. mainly for the endpoints exposed to the client that
-// are authenticated with the public api key
 
 router.use(generalRequestLimiter);
 
@@ -44,6 +42,7 @@ router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/name', updateExperimentName);
 router.get('/experiment/:id/stats/:type', getExperimentStatsHandler);
+router.get('/chart/experiment/:id', handleGetExperimentChartData);
 router.post('/experiment/:id/stop', handleStopExperiment);
 router.post('/experiment/:id/pause', pauseExperiment);
 router.post('/experiment/:id/on', turnOnExperiment);

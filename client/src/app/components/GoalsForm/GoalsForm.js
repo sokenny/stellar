@@ -17,6 +17,7 @@ import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import Link from 'next/link';
 import Button from '../Button/Button';
 import Click from '../../icons/Click';
+import GA from '../../icons/GA';
 import Time from '../../icons/Time';
 import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
@@ -198,10 +199,8 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           closeDelay={200}
         >
           <div className={styles.gaGoal}>
-            <img
-              src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/GA4.png"
-              width="100"
-            />
+            <GA width={30} height={30} />
+            Import from Google Analytics
           </div>
         </Tooltip>
         <div className={styles.classicGoals}>

@@ -83,6 +83,14 @@ const useStore = create((set, get) => ({
       return state.stats[expStatsKey];
     }
   },
+  charts: {},
+  setCharts: (key, chartData) =>
+    set((state) => ({
+      charts: {
+        ...state.charts,
+        [key]: chartData,
+      },
+    })),
   session: null,
   setSession: (session) => set({ session }),
   refetchProjects: async () => {

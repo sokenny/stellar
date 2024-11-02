@@ -124,7 +124,9 @@ export default async function HomePage({}) {
             </h2>
           </div>
           <div className={styles.ctaSection}>
-            <SignUpCTA className={styles.goStellarBtn}>Go Stellar</SignUpCTA>
+            <SignUpCTA className={styles.goStellarBtn}>
+              Start For Free
+            </SignUpCTA>
             <div className={styles.lightest}>
               ⚡️ Lightest in the market at 7.5kb
             </div>

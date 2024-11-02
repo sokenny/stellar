@@ -18,6 +18,7 @@ import getVariantsTrafficInitialValues from '../../helpers/getVariantsTrafficIni
 import DeleteIcon from '../../icons/Delete/Delete';
 import EditIcon from '../../icons/Edit/Edit';
 import EyeIcon from '../../icons/Eye/Eye';
+import GearIcon from '../../icons/Gear';
 import useStore from '../../store';
 import VariantModal from '../Modals/VariantModal';
 import VariantName from './VariantName';
@@ -25,6 +26,7 @@ import DeleteVariantModal from '../Modals/DeleteVariantModal';
 import SnippetInstallationModal from '../Modals/SnippetInstallationModal';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import styles from './VariantsTable.module.css';
+import useVariantEditor from '../../helpers/useVariantEditor';
 
 const columns = (statsType) => [
   {
@@ -129,6 +131,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
     onOpen: onOpenSnippetModal,
     onOpenChange: onOpenSnippetModalChange,
   } = useDisclosure();
+  const { handleEditVariant } = useVariantEditor({ experiment });
 
   useEffect(() => {
     if (hasStarted) {
@@ -237,21 +240,29 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                   return (
                     <TableCell>
                       <div className="relative flex items-center gap-2">
-                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                          <EyeIcon
-                            className={styles.eyeIcon}
-                            onClick={() =>
-                              missingSnippet
-                                ? onOpenSnippetModal()
-                                : handleOnView(item.id)
-                            }
-                          />
-                        </span>
+                        <Tooltip
+                          content={'Preview'}
+                          showArrow
+                          className={styles.tooltip}
+                          closeDelay={200}
+                        >
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                            <EyeIcon
+                              className={styles.eyeIcon}
+                              onClick={() =>
+                                missingSnippet
+                                  ? onOpenSnippetModal()
+                                  : handleOnView(item.id)
+                              }
+                            />
+                          </span>
+                        </Tooltip>
                         <Tooltip
                           content={
-                            'Can not edit a variant after the experiment has started.'
+                            hasStarted
+                              ? 'Can not edit a variant after the experiment has started.'
+                              : 'Visual Editor'
                           }
-                          isDisabled={!hasStarted}
                           showArrow
                           className={styles.tooltip}
                           closeDelay={200}
@@ -262,18 +273,49 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 if (hasStarted) return;
-                                setVariantToEdit(item.id);
+                                missingSnippet
+                                  ? onOpenSnippetModal()
+                                  : handleEditVariant(item.id);
+                              }}
+                            />
+                          </span>
+                        </Tooltip>
+                        <Tooltip
+                          content={
+                            hasStarted
+                              ? 'Can not edit a variant after the experiment has started.'
+                              : 'Settings'
+                          }
+                          showArrow
+                          className={styles.tooltip}
+                          closeDelay={200}
+                        >
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                            <GearIcon
+                              width={18}
+                              height={18}
+                              className={styles.gearIcon}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (hasStarted) return;
+                                missingSnippet
+                                  ? onOpenSnippetModal()
+                                  : setVariantToEdit(item.id);
                               }}
                             />
                           </span>
                         </Tooltip>
                         {!item._isControl && (
                           <Tooltip
-                            content="Can not delete a variant after the experiment has started."
-                            isDisabled={!hasStarted}
+                            content={
+                              hasStarted
+                                ? 'Can not delete a variant after the experiment has started.'
+                                : 'Delete'
+                            }
                             showArrow
                             className={styles.tooltip}
                             closeDelay={200}
+                            color={hasStarted ? 'default' : 'danger'}
                           >
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
                               <DeleteIcon

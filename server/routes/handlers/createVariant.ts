@@ -4,7 +4,6 @@ import db from '../../models';
 async function createVariant(req: Request, res: Response) {
   const experimentId: string = req.params.experimentId;
   const { name } = req.body;
-  const newVariantTraffic = 10;
   const experiment = await db.Experiment.findByPk(experimentId);
   if (!experiment) {
     return res.status(404).send('Experiment not found');
@@ -25,51 +24,17 @@ async function createVariant(req: Request, res: Response) {
       transaction,
     });
 
-    let currentTotalTraffic = variants.reduce(
-      (sum, variant) => sum + variant.traffic,
-      0,
-    );
-    let trafficDeficit = 100 - currentTotalTraffic;
+    const totalVariants = variants.length + 1;
+    const baseTraffic = Math.floor(100 / totalVariants);
+    const remainder = 100 % totalVariants;
 
-    if (trafficDeficit !== 0 && trafficDeficit > newVariantTraffic) {
-      const increasePerVariant = Math.floor(trafficDeficit / variants.length);
-      for (let variant of variants) {
-        let newTraffic = variant.traffic + increasePerVariant;
-        await db.Variant.update(
-          { traffic: newTraffic },
-          {
-            where: {
-              id: variant.id,
-            },
-            transaction,
-          },
-        );
-      }
-      trafficDeficit -= increasePerVariant * variants.length;
-    }
-
-    const trafficReductionFactor =
-      (100 - newVariantTraffic - trafficDeficit) / 100;
-    let adjustments = variants.map((variant) => ({
-      id: variant.id,
-      updatedTraffic: Math.floor(variant.traffic * trafficReductionFactor),
-    }));
-
-    const totalNewTraffic =
-      adjustments.reduce((sum, adj) => sum + adj.updatedTraffic, 0) +
-      newVariantTraffic +
-      trafficDeficit;
-    if (totalNewTraffic !== 100) {
-      const lastAdjustment = adjustments[adjustments.length - 1];
-      lastAdjustment.updatedTraffic += 100 - totalNewTraffic;
-    }
-
-    for (const adj of adjustments) {
+    for (let i = 0; i < variants.length; i++) {
+      let newTraffic = baseTraffic + (i < remainder ? 1 : 0);
       await db.Variant.update(
-        { traffic: adj.updatedTraffic },
+        { traffic: newTraffic },
         {
           where: {
-            id: adj.id,
+            id: variants[i].id,
           },
           transaction,
         },
@@ -79,7 +44,7 @@ async function createVariant(req: Request, res: Response) {
     const variant = await db.Variant.create(
       {
         name,
-        traffic: newVariantTraffic + trafficDeficit,
+        traffic: baseTraffic + (variants.length < remainder ? 1 : 0),
         experiment_id: experimentId,
       },
       { transaction },

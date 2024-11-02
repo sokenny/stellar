@@ -18,14 +18,21 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
-// TODO-p1-1: Implement charts for sessions & conversions. And maybe extra data like session time, total click count, etc
+// TODO-p1-1: Create account section where one can see the project's snippet for now
+// TODO-p1-1: use tally so for onboarding https://tally.so/
+// TODO-p1-1: Increas g cloud db
+// TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
+// TODO-p1-1: Try somethign w google optimize inside the keywords (?)
+
+// TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
 // TODO-p1-1: Allow integration with Google Analytics for conversion tracking
+// TODO-p1-1: Idenfify users w Crisp (?)
+// TODO-p1-1: Show extra stats on the experiment page, like avg session time or total clicks or desktop / mobile distribution
 // TODO-p1-1: Develop AI-assisted experiment creation: Suggests texts, font-colors, sizes, etc.
+// TODO-p1-1: Use redis cache for stats and chart data.
 // TODO-p1-1: Use redis cache for variant preview, to not give impression of slow performant snippet
 // TODO-p1-1: Allow collection of clicks for goal setting
-// TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 // TODO-p1-1: Allow setting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
-// TODO-p1-1: Allow setting a description / hypothesis for the experiment
 // TODO-p1-1: Create similar blog entries (?) https://www.mida.so/blog
 // TODO-p1-1: Crear el loom de "See How" sobre goal setting
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity

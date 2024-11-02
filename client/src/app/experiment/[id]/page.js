@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Tooltip,
   Spinner,
@@ -26,6 +26,7 @@ import Header from './Header';
 import CreateButton from '../../components/CreateButton';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import SnippetInstallationModal from '../../components/Modals/SnippetInstallationModal';
+import ExperimentChart from '../../components/ExperimentChart';
 import StatsSwitch from '../../components/StatsSwitch/StatsSwitch';
 import styles from './page.module.css';
 
@@ -35,7 +36,8 @@ export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
-  const { user, currentProject, refetchProjects } = useStore();
+  const { user, currentProject, refetchProjects, token, charts, setCharts } =
+    useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
   const experiment = currentProject?.experiments?.find(
@@ -46,6 +48,43 @@ export default function ExperimentPage({ params, searchParams }) {
     onOpen: onOpenSnippetModal,
     onOpenChange: onOpenSnippetModalChange,
   } = useDisclosure();
+
+  const [chartData, setChartData] = useState([]);
+
+  const hasFetchedChartData = useRef(false);
+
+  useEffect(() => {
+    if (!token || hasFetchedChartData.current) return;
+    const chartKey = `experiment-${experimentId}`;
+    if (!charts[chartKey]) {
+      async function fetchChartData() {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_STELLAR_API}/api/chart/experiment/${experimentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+          if (!response.ok) {
+            throw new Error('Failed to fetch chart data');
+          }
+          const data = await response.json();
+          setCharts(chartKey, data);
+          setChartData(data);
+          hasFetchedChartData.current = true;
+        } catch (error) {
+          console.error('Error fetching chart data:', error);
+          toast.error('Failed to load chart data');
+        }
+      }
+
+      fetchChartData();
+    } else {
+      setChartData(charts[chartKey]);
+    }
+  }, [experimentId, token, charts, setCharts]);
 
   const queuedAfter = currentProject?.experiments?.find(
     (e) => experiment?.queue_after === e.id,
@@ -90,7 +129,9 @@ export default function ExperimentPage({ params, searchParams }) {
     setCreatingVariant(false);
   }
 
-  const hasStarted = experiment.status !== ExperimentStatusesEnum.PENDING;
+  const hasStarted =
+    experiment.status !== ExperimentStatusesEnum.PENDING &&
+    experiment.status !== ExperimentStatusesEnum.QUEUED;
   const noGoalOrZeroChanges = !experiment.goal || hasCeroChanges;
 
   return (
@@ -243,7 +284,13 @@ export default function ExperimentPage({ params, searchParams }) {
             experiment={experiment}
             statsType={statsType}
           />
-          {/* TODO-p2: Have a line chart with sessions and conversions. Be able to filter by variant if needed */}
+          {hasStarted && (
+            <ExperimentChart
+              data={chartData}
+              className={styles.chart}
+              variants={experiment.variants}
+            />
+          )}
         </section>
         {showSetUpGoalModal && (
           <GoalSetupModal
