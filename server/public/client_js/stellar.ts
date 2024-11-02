@@ -21,7 +21,12 @@
       'visitor_' + Date.now() + Math.random(),
     );
   }
-  const stellarVisitorId = localStorage.getItem('stellarVisitorId');
+
+  function removeAntiFlickerOverlay() {
+    if (typeof (window as any).rmfk === 'function') {
+      (window as any).rmfk();
+    }
+  }
 
   function log(...args) {
     if (debugging) {
@@ -391,6 +396,7 @@
       visitedPages.length > 1 &&
       hasFetchedExperiments
     ) {
+      removeAntiFlickerOverlay();
       return;
     }
     log('fetching!');
@@ -404,7 +410,10 @@
       log('cachedExperiments!: ', cachedExperiments);
       if (cachedExperiments) {
         data = cachedExperiments;
-        if (cachedExperiments.length == 0) return;
+        if (cachedExperiments.length == 0) {
+          removeAntiFlickerOverlay();
+          return;
+        }
         log('Using cached experiments');
       } else {
         const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
@@ -452,7 +461,8 @@
       console.error('Error fetching experiments:', error);
     } finally {
       log('finally runs!');
-      hideLoadingState();
+      // hideLoadingState();
+      removeAntiFlickerOverlay();
     }
   }
 

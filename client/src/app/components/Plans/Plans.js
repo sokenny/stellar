@@ -106,8 +106,8 @@ const Plans = () => {
         </div>
       </div>
       <div className={styles.bigger}>
-        *MTU means Monthly Tracked Users. This is an internal count of total
-        unique visitors that enter your site.
+        *MTU: Monthly Tracked Users. This is an internal count we keep of the
+        total unique visitors that enter your site.
       </div>
     </div>
   );

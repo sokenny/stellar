@@ -35,6 +35,11 @@ const handler = NextAuth({
 
       return true;
     },
+    // async redirect(data) {
+    //   // Redirect to /onboarding with the user's email as a query parameter
+    //   // return `${baseUrl}/onboarding?email=${encodeURIComponent(user.email)}`;
+    //   return `${data.baseUrl}/onboarding`;
+    // },
   },
 });
 

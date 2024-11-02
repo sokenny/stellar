@@ -5,7 +5,6 @@ import './globals.css';
 import getAuthTokenName from './helpers/getAuthTokenName';
 import { cookies } from 'next/headers';
 import styles from './layout.module.css';
-import Head from 'next/head';
 import { GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
 
@@ -18,12 +17,11 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
-// TODO-p1-1: Create account section where one can see the project's snippet for now
-// TODO-p1-1: use tally so for onboarding https://tally.so/
-// TODO-p1-1: Increas g cloud db
+// TODO-p1-1: Add anti-flicker script option
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
-// TODO-p1-1: Try somethign w google optimize inside the keywords (?)
 
+// TODO-p1-1: Try somethign w google optimize inside the keywords (?)
+// TODO-p1-1: Add alerts / notifs for session issues
 // TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
 // TODO-p1-1: Allow integration with Google Analytics for conversion tracking
 // TODO-p1-1: Idenfify users w Crisp (?)
