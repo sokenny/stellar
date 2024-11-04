@@ -48,9 +48,9 @@ const quotes = [
 export default async function HomePage({}) {
   return (
     <>
-      <div
+      <script
         dangerouslySetInnerHTML={{
-          __html: `<script>
+          __html: `
   var timeout = 3000;
   (function(d, w, t, id) {
     var s = d.createElement("style");
@@ -63,7 +63,7 @@ export default async function HomePage({}) {
     };
     setTimeout(w.rmo, t);
   })(document, window, timeout, "abhide");
-</script>`,
+`,
         }}
       />
       <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
