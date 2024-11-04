@@ -69,8 +69,8 @@ export default async function HomePage({}) {
       <script
         dangerouslySetInnerHTML={{
           __html: `
-          (function(d, w, t, id) {
-            var timeout = 3000;
+          (function(d, w, id) {
+            var timeout = 2000;
             var hideElement = 'body'; // Change to specific selector if needed
             var hideElementStyle = 'opacity: 0 !important; transition: none !important;';
 
@@ -89,7 +89,7 @@ export default async function HomePage({}) {
             }
 
             setTimeout(ensureAntiFlickerRemoval, timeout);
-            })(document, window, timeout, "abhide");
+            })(document, window, "abhide");
 `,
         }}
       />
