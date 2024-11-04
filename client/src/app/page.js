@@ -2,6 +2,7 @@ import SignUpCTA from './components/SignUpCTA';
 import AutoPlayVideo from './components/AutoPlayVideo';
 import Plans from './components/Plans';
 import GridBg from './components/GridBg/GridBg';
+import HomeChartSection from './components/HomeChartSection';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
@@ -138,6 +139,7 @@ export default async function HomePage({}) {
               </div>
             </div>
           </div>
+          <HomeChartSection />
           <div className={styles.process}>
             <div className={styles.block}>
               <div className={styles.texts}>

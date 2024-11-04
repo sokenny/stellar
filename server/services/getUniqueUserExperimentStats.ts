@@ -79,6 +79,12 @@ async function getUniqueUserGoalSessionTimeStats(experimentId, variantIds) {
           model: db.Session,
           as: 'session',
           attributes: [],
+          where: {
+            ip: {
+              [Op.notLike]: '%181.171.202.49%',
+            },
+          },
+          required: true,
         },
       ],
       group: ['SessionExperiment.variant_id'],
@@ -157,6 +163,12 @@ async function getUniqueUserGoalClickAndPageVisitStats(
           model: db.Session,
           as: 'session',
           attributes: [],
+          where: {
+            ip: {
+              [Op.notLike]: '%181.171.202.49%',
+            },
+          },
+          required: true,
         },
       ],
       group: ['SessionExperiment.variant_id'],

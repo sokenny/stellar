@@ -77,17 +77,22 @@ const modeOptions = [
   { label: 'Conversions', value: 'conversions' },
   { label: 'Unique Visitors', value: 'unique_visitors' },
   { label: 'Total Visitors', value: 'visitors' },
+  { label: 'Conversion Rate (Unique)', value: 'conversion_rate_unique' },
+  { label: 'Conversion Rate (Visitors)', value: 'conversion_rate_visitors' },
 ];
 
 const ExperimentChart = ({
   data,
   mode = 'conversions',
   height = '350px',
+  defaultCumulative = false,
   variants,
   className,
 }) => {
+  console.log('Data!', data);
+  console.log('variants!', variants);
   const [selectedMode, setSelectedMode] = useState(new Set([mode]));
-  const [isCumulative, setIsCumulative] = useState(false);
+  const [isCumulative, setIsCumulative] = useState(defaultCumulative);
 
   const handleModeChange = (newMode) => {
     setSelectedMode(newMode);
@@ -142,9 +147,9 @@ function prepareChartData(data, mode, variants, isCumulative) {
   const labels = [...new Set(data.map((entry) => entry.date))];
 
   const datasets = data.reduce((acc, entry) => {
-    const variantLabel = `Variant ${
-      variants.find((variant) => variant.id === entry.variant_id)?.name
-    }`;
+    const variantLabel = variants.find(
+      (variant) => variant.id === entry.variant_id,
+    )?.name;
     const existingDataset = acc.find(
       (dataset) => dataset.label === variantLabel,
     );
@@ -157,7 +162,7 @@ function prepareChartData(data, mode, variants, isCumulative) {
       acc.push({
         label: variantLabel,
         data: [entry[dataKey]],
-        borderColor: colorOptions[acc.length],
+        borderColor: colorOptions[acc.length % colorOptions.length],
         fill: false,
       });
     }

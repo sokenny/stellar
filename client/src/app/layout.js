@@ -23,7 +23,6 @@ export const metadata = {
 // TODO-p1-1: Try somethign w google optimize inside the keywords (?)
 // TODO-p1-1: Add alerts / notifs for session issues
 // TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
-// TODO-p1-1: Allow integration with Google Analytics for conversion tracking
 // TODO-p1-1: Idenfify users w Crisp (?)
 // TODO-p1-1: Show extra stats on the experiment page, like avg session time or total clicks or desktop / mobile distribution
 // TODO-p1-1: Develop AI-assisted experiment creation: Suggests texts, font-colors, sizes, etc.

@@ -71,6 +71,31 @@ async function getExperimentChartData(experimentId) {
       cumulativeData[stat.variant_id].visitors += visitors;
       cumulativeData[stat.variant_id].conversions += conversions;
 
+      const conversionRateUnique =
+        uniqueVisitors > 0
+          ? parseFloat((conversions / uniqueVisitors).toFixed(4))
+          : 0;
+      const conversionRateVisitors =
+        visitors > 0 ? parseFloat((conversions / visitors).toFixed(4)) : 0;
+      const cumulativeConversionRateUnique =
+        cumulativeData[stat.variant_id].uniqueVisitors > 0
+          ? parseFloat(
+              (
+                cumulativeData[stat.variant_id].conversions /
+                cumulativeData[stat.variant_id].uniqueVisitors
+              ).toFixed(4),
+            )
+          : 0;
+      const cumulativeConversionRateVisitors =
+        cumulativeData[stat.variant_id].visitors > 0
+          ? parseFloat(
+              (
+                cumulativeData[stat.variant_id].conversions /
+                cumulativeData[stat.variant_id].visitors
+              ).toFixed(4),
+            )
+          : 0;
+
       return {
         date: stat.date,
         variant_id: stat.variant_id,
@@ -81,6 +106,10 @@ async function getExperimentChartData(experimentId) {
           cumulativeData[stat.variant_id].uniqueVisitors,
         cumulative_visitors: cumulativeData[stat.variant_id].visitors,
         cumulative_conversions: cumulativeData[stat.variant_id].conversions,
+        conversion_rate_unique: conversionRateUnique,
+        conversion_rate_visitors: conversionRateVisitors,
+        cumulative_conversion_rate_unique: cumulativeConversionRateUnique,
+        cumulative_conversion_rate_visitors: cumulativeConversionRateVisitors,
       };
     });
 

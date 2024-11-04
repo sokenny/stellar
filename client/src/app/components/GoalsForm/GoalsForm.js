@@ -192,7 +192,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   return (
     <section className={styles.GoalsForm}>
       <div className={styles.goals}>
-        <Tooltip
+        {/* <Tooltip
           content={'This feature will soon be available'}
           showArrow
           className={styles.tooltip}
@@ -202,7 +202,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             <GA width={30} height={30} />
             Import from Google Analytics
           </div>
-        </Tooltip>
+        </Tooltip> */}
         <div className={styles.classicGoals}>
           {goals.map((goal) => (
             <div

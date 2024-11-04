@@ -41,6 +41,12 @@ async function getTotalSessionsGoalSessionTimeStats(experimentId, variantIds) {
           model: db.Session,
           as: 'session',
           attributes: [],
+          where: {
+            ip: {
+              [Op.notLike]: '%181.171.202.49%',
+            },
+          },
+          required: true,
         },
       ],
       group: ['SessionExperiment.variant_id'],
@@ -107,6 +113,19 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
           ),
           'conversions',
         ],
+      ],
+      include: [
+        {
+          model: db.Session,
+          as: 'session',
+          attributes: [],
+          where: {
+            ip: {
+              [Op.notLike]: '%181.171.202.49%',
+            },
+          },
+          required: true,
+        },
       ],
       group: ['variant_id'],
       raw: true,
