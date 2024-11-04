@@ -67,6 +67,7 @@ export default async function HomePage({}) {
         }}
       /> */}
       <script
+        type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `
           (function(d, w, id) {
