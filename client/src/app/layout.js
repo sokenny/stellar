@@ -72,6 +72,43 @@ export default function RootLayout({ children }) {
             window.$crisp=[];window.CRISP_WEBSITE_ID="5db3e7f6-49e2-4948-971b-40019e8f0698";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
           `}
         </Script>
+
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+          (function(d, w, id) {
+            console.log('this shit has run!');  
+            var timeout = 2000;
+            var hideElement = 'body'; // Change to specific selector if needed
+            var hideElementStyle = 'opacity: 0 !important; transition: none !important;';
+
+            var s = d.createElement('style');
+            s.id = 'anti-flicker';
+            s.textContent = hideElement + '{ ' + hideElementStyle + ' }';
+            d.head.appendChild(s);
+
+            w.rmo = function() {
+              var overlay = d.getElementById('anti-flicker');
+              if (overlay) overlay.parentNode.removeChild(overlay);
+            };
+
+            function ensureAntiFlickerRemoval() {
+              console.log('ensureAntiFlickerRemoval :p');
+              if (typeof w.rmo === 'function') w.rmo();
+            }
+
+            setTimeout(ensureAntiFlickerRemoval, timeout);
+            })(document, window, "abhide");
+`,
+          }}
+        />
+        <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
+        <link rel="dns-prefetch" href="https://d3niuqph2rteir.cloudfront.net" />
+        <script
+          async
+          src="https://d3niuqph2rteir.cloudfront.net/client_js/stellar.js?apiKey=0731c4ad35896011b5a57edd84c2a6da:2ed5c336eaab747c6cb462aa39840a6db9b5abc7dfc750b89103abacb98873f4"
+        ></script>
       </head>
       <GoogleTagManager gtmId="GTM-5XVLW5Z9" />
       <body className={`${inter.className} ${styles.layout}`}>
