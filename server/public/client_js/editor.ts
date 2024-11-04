@@ -46,8 +46,10 @@
   }
 
   // We don't need anti flicker overlay in the editor for now
-  if (typeof (window as any).rmo === 'function') {
-    console.log('This run yo');
+  if (
+    (typeof (window as any).rmo === 'function' && visualEditorOn) ||
+    isSettingGoal
+  ) {
     (window as any).rmo();
   }
 

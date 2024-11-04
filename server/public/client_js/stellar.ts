@@ -233,7 +233,7 @@
     });
   }
 
-  function mountExperiments(experiments) {
+  function mountExperiments(experiments, callback = () => {}) {
     log('Running mountExperiments');
     const stellarData = getStellarData();
     const currentPageUrl = window.location.href;
@@ -329,6 +329,9 @@
     function debounceProcessExperiments() {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
+        if (callback) {
+          callback();
+        }
         processExperiments();
       }, 10);
     }
@@ -352,16 +355,16 @@
   async function fetchExperiments() {
     log('fetchExperiments run! - ', hasFetchedExperiments);
 
-    const pageUrl = window.location.href;
-    if (
-      !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
-      visitedPages.length > 1 &&
-      hasFetchedExperiments
-    ) {
-      log('removeAntiFlickerOverlay 1');
-      removeAntiFlickerOverlay();
-      return;
-    }
+    // const pageUrl = window.location.href;
+    // if (
+    //   !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
+    //   visitedPages.length > 1 &&
+    //   hasFetchedExperiments
+    // ) {
+    //   log('removeAntiFlickerOverlay 1');
+    //   removeAntiFlickerOverlay();
+    //   return;
+    // }
     log('fetching!');
 
     const apiKey = await getApiKeyWithRetry();
@@ -419,13 +422,10 @@
       setStellarCache(global__experimentsToMount);
 
       log('global__experimentsToMount', global__experimentsToMount);
-      mountExperiments(global__experimentsToMount);
+      mountExperiments(global__experimentsToMount, removeAntiFlickerOverlay);
       trackPageVisit();
     } catch (error) {
       console.error('Error fetching experiments:', error);
-    } finally {
-      log('finally runs!');
-      log('removeAntiFlickerOverlay 3');
       removeAntiFlickerOverlay();
     }
   }
