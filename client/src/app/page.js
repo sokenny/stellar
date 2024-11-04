@@ -104,6 +104,7 @@ export default async function HomePage({}) {
               allowFullScreen
             ></iframe>
           </div>
+          <HomeChartSection />
           <div className={styles.advantages}>
             <h3>Advantages of Stellar</h3>
             <div className={styles.list}>
@@ -139,7 +140,7 @@ export default async function HomePage({}) {
               </div>
             </div>
           </div>
-          <HomeChartSection />
+          {/* <HomeChartSection /> */}
           <div className={styles.process}>
             <div className={styles.block}>
               <div className={styles.texts}>

@@ -351,7 +351,9 @@ const HomeChartSection = () => {
       {/* <h2>If you didn't test, you're not growing.</h2> */}
 
       <h2 className={styles.title}>
-        If you are not testing, you are leaving money on the table.
+        {/* If you are not testing, you are leaving money on the table. */}
+        Without testing,
+        <br /> you leave <span>money</span> on the table.
       </h2>
       <div className={styles.variants}>
         {['a', 'b', 'c'].map((variant) => (
@@ -363,7 +365,7 @@ const HomeChartSection = () => {
             />
             {variant === 'b' && (
               <Tooltip
-                content="This variant has a 42% higher conversion rate than the control."
+                content="This variant achieved a 42% higher conversion rate than baseline."
                 showArrow
                 className={styles.tooltip}
                 closeDelay={200}
