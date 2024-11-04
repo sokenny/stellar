@@ -77,30 +77,8 @@ export default function RootLayout({ children }) {
           type="text/javascript"
           dangerouslySetInnerHTML={{
             __html: `
-          (function(d, w, id) {
-            console.log('this shit has run!');  
-            var timeout = 2000;
-            var hideElement = 'body'; // Change to specific selector if needed
-            var hideElementStyle = 'opacity: 0 !important; transition: none !important;';
-
-            var s = d.createElement('style');
-            s.id = 'anti-flicker';
-            s.textContent = hideElement + '{ ' + hideElementStyle + ' }';
-            d.head.appendChild(s);
-
-            w.rmo = function() {
-              var overlay = d.getElementById('anti-flicker');
-              if (overlay) overlay.parentNode.removeChild(overlay);
-            };
-
-            function ensureAntiFlickerRemoval() {
-              console.log('ensureAntiFlickerRemoval :p');
-              if (typeof w.rmo === 'function') w.rmo();
-            }
-
-            setTimeout(ensureAntiFlickerRemoval, timeout);
-            })(document, window, "abhide");
-`,
+!function(){var e="body {opacity: 0 !important;}",t=document.createElement("style");t.type="text/css",t.id="page-hide-style",t.styleSheet?t.styleSheet.cssText=e:t.appendChild(document.createTextNode(e)),document.head.appendChild(t),window.rmo=function(){var e=document.getElementById("page-hide-style");e&&(e.parentNode.removeChild(e),document.body.style.opacity="")},setTimeout(window.rmo,2e3)}();
+            `,
           }}
         />
         <link rel="preconnect" href="https://d3niuqph2rteir.cloudfront.net" />
