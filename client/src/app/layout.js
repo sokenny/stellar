@@ -49,6 +49,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <title>Stellar | A/B Test Any Website</title>
+        <meta
+          name="description"
+          content="A streamlined alternative to complex testing tools. Built for marketers, focused on results."
+        />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-HLTERT31Y6"
