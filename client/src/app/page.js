@@ -71,6 +71,7 @@ export default async function HomePage({}) {
         dangerouslySetInnerHTML={{
           __html: `
           (function(d, w, id) {
+            console.log('this shit has run!');  
             var timeout = 2000;
             var hideElement = 'body'; // Change to specific selector if needed
             var hideElementStyle = 'opacity: 0 !important; transition: none !important;';
@@ -86,6 +87,7 @@ export default async function HomePage({}) {
             };
 
             function ensureAntiFlickerRemoval() {
+              console.log('ensureAntiFlickerRemoval :p');
               if (typeof w.rmo === 'function') w.rmo();
             }
 
