@@ -84,6 +84,10 @@ export default async function HomePage({}) {
               if (overlay) overlay.parentNode.removeChild(overlay);
             };
 
+            function ensureAntiFlickerRemoval() {
+              if (typeof w.rmo === 'function') w.rmo();
+            }
+
             setTimeout(ensureAntiFlickerRemoval, timeout);
             })(document, window, timeout, "abhide");
 `,

@@ -358,6 +358,7 @@
       visitedPages.length > 1 &&
       hasFetchedExperiments
     ) {
+      log('removeAntiFlickerOverlay 1');
       removeAntiFlickerOverlay();
       return;
     }
@@ -373,6 +374,7 @@
       if (cachedExperiments) {
         data = cachedExperiments;
         if (cachedExperiments.length == 0) {
+          log('removeAntiFlickerOverlay 2');
           removeAntiFlickerOverlay();
           return;
         }
@@ -423,6 +425,7 @@
       console.error('Error fetching experiments:', error);
     } finally {
       log('finally runs!');
+      log('removeAntiFlickerOverlay 3');
       removeAntiFlickerOverlay();
     }
   }
