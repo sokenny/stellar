@@ -48,7 +48,7 @@ const quotes = [
 export default async function HomePage({}) {
   return (
     <>
-      <script
+      {/* <script
         dangerouslySetInnerHTML={{
           __html: `
   var timeout = 3000;
@@ -63,6 +63,29 @@ export default async function HomePage({}) {
     };
     setTimeout(w.rmo, t);
   })(document, window, timeout, "abhide");
+`,
+        }}
+      /> */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+          (function(d, w, t, id) {
+            var timeout = 3000;
+            var hideElement = 'body'; // Change to specific selector if needed
+            var hideElementStyle = 'opacity: 0 !important; transition: none !important;';
+
+            var s = d.createElement('style');
+            s.id = 'anti-flicker';
+            s.textContent = hideElement + '{ ' + hideElementStyle + ' }';
+            d.head.appendChild(s);
+
+            w.rmo = function() {
+              var overlay = d.getElementById('anti-flicker');
+              if (overlay) overlay.parentNode.removeChild(overlay);
+            };
+
+            setTimeout(ensureAntiFlickerRemoval, timeout);
+            })(document, window, timeout, "abhide");
 `,
         }}
       />

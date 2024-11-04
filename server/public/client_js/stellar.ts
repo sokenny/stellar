@@ -72,7 +72,7 @@
 
       const { experiments, timestamp } = JSON.parse(cachedData);
       const now = Date.now();
-      const TTL = 10000; // 10 seconds
+      const TTL = 10000; // 10 seconds // TODO-p1-1: Make this longer
 
       if (now - timestamp < TTL) {
         return experiments;
