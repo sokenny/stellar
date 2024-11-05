@@ -17,8 +17,11 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
+// TODO-p1-1: Re-shoot 2 min. demo.
+// TODO-p1-1: Improve snippet guide
 // TODO-p1-1: Add annual / monthly pricing toggle
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
+// TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 
 // TODO-p1-1: Try somethign w google optimize inside the keywords (?)
 // TODO-p1-1: Add alerts / notifs for session issues
@@ -29,7 +32,6 @@ export const metadata = {
 // TODO-p1-1: Use redis cache for stats and chart data.
 // TODO-p1-1: Use redis cache for variant preview, to not give impression of slow performant snippet
 // TODO-p1-1: Allow collection of clicks for goal setting
-// TODO-p1-1: Allow setting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Create similar blog entries (?) https://www.mida.so/blog
 // TODO-p1-1: Crear el loom de "See How" sobre goal setting
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
