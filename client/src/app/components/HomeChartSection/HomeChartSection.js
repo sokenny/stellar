@@ -345,13 +345,51 @@ const mockupVariants = [
   },
 ];
 
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    tooltip: {
+      enabled: true,
+    },
+  },
+  scales: {
+    x: {
+      display: true,
+      title: {
+        display: true,
+      },
+      grid: {
+        color: 'rgba(0, 0, 0, 0.05)',
+        borderDash: [5, 5],
+      },
+      ticks: {
+        color: 'rgba(0, 0, 0, 0.15)',
+      },
+    },
+    y: {
+      display: true,
+      title: {
+        display: true,
+      },
+      grid: {
+        color: 'rgba(0, 0, 0, 0.05)',
+        borderDash: [5, 5],
+      },
+      ticks: {
+        color: 'rgba(0, 0, 0, 0.15)',
+      },
+    },
+  },
+};
+
 const HomeChartSection = () => {
   return (
     <div className={styles.container}>
-      {/* <h2>If you didn't test, you're not growing.</h2> */}
-
       <h2 className={styles.title}>
-        {/* If you are not testing, you are leaving money on the table. */}
         Without testing,
         <br /> you leave <span>money</span> on the table.
       </h2>
@@ -380,6 +418,7 @@ const HomeChartSection = () => {
         data={mockupSessions}
         variants={mockupVariants}
         className={styles.chart}
+        customOptions={chartOptions}
         defaultCumulative
         mode="conversions"
       />

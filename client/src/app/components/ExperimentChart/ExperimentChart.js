@@ -86,6 +86,7 @@ const ExperimentChart = ({
   mode = 'conversions',
   height = '350px',
   defaultCumulative = false,
+  customOptions = null,
   variants,
   className,
 }) => {
@@ -136,7 +137,7 @@ const ExperimentChart = ({
             variants,
             isCumulative,
           )}
-          options={defaultOptions}
+          options={customOptions || defaultOptions}
         />
       </div>
     </div>
