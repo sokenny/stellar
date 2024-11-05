@@ -30,20 +30,20 @@
 }
 
 .variant:nth-child(1) img {
-  border-color: #e37ddc;
+  border-color: #3c93d6;
 }
 
 .variant:nth-child(1) .varTag {
-  background-color: #e37ddc;
+  background-color: #3c93d6;
 }
 
 .variant:nth-child(2) img {
-  border-color: #3c93d6;
+  border-color: #e37ddc;
   max-width: 340px;
 }
 
 .variant:nth-child(2) .varTag {
-  background-color: #3c93d6;
+  background-color: #e37ddc;
 }
 
 .variant:nth-child(3) img {
@@ -59,6 +59,11 @@
   border-radius: 4px;
   border: 2px solid;
   box-shadow: 0px 0px 10px hsl(0deg 0% 0% / 0.15);
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 }
 
 .cvr {
@@ -66,7 +71,7 @@
   transform: translate(-50%, -50%);
   left: 50%;
   font-size: 16px;
-  background-color: #3c93d6;
+  background-color: #e37ddc;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;

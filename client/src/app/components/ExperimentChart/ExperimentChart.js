@@ -58,8 +58,8 @@ const defaultOptions = {
 };
 
 const colorOptions = [
-  '#e37ddc',
   '#3c93d6',
+  '#e37ddc',
   '#ffbe30',
   '#ff8fb1',
   '#68e1b7',
