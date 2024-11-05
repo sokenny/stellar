@@ -17,6 +17,7 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
+// TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
 // TODO-p1-1: Re-shoot 2 min. demo.
 // TODO-p1-1: Improve snippet guide
 // TODO-p1-1: Add annual / monthly pricing toggle
