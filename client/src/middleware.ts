@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export { default } from 'next-auth/middleware';
 
 export const config = {
-  matcher: ['/dashboard', '/experiment/:path*'],
+  matcher: ['/dashboard', '/experiment/:path*', '/onboarding', '/account'],
 };
 
 export async function middleware(request: NextRequest) {

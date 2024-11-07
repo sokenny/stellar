@@ -26,6 +26,7 @@ import generalRequestLimiter from '../helpers/generalRequestLimiter';
 import autoGenerate from './handlers/autoGenerate';
 import createProject from './handlers/createProject';
 import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
+import saveOnboardingDataHandler from './handlers/saveOnboardingDataHandler';
 
 const router = express.Router();
 
@@ -65,5 +66,7 @@ router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 router.get('/projects/:userEmail', getProjects);
 // router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
+
+router.post('/onboarding', saveOnboardingDataHandler);
 
 export default router;

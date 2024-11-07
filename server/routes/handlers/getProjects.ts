@@ -46,6 +46,11 @@ async function getProjects(req, res) {
         model: db.ApiKey,
         as: 'api_keys',
       },
+      {
+        model: db.OnboardingAnswer,
+        required: false,
+        as: 'onboardingAnswer',
+      },
     ],
     order: [['created_at', 'DESC']],
   });

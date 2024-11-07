@@ -20,6 +20,7 @@ import { initializeApiKey } from './ApiKey';
 import { initializeGoal } from './Goal';
 import { initializeSessionExperiment } from './SessionExperiment';
 import { initializeTransactionalEmail } from './TransactionalEmail';
+import { initializeOnboardingAnswer } from './OnboardingAnswer';
 
 export const db: { [key: string]: any } = {};
 
@@ -41,6 +42,7 @@ db.ApiKey = initializeApiKey(sequelize);
 db.Goal = initializeGoal(sequelize);
 db.SessionExperiment = initializeSessionExperiment(sequelize);
 db.TransactionalEmail = initializeTransactionalEmail(sequelize);
+db.OnboardingAnswer = initializeOnboardingAnswer(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -147,6 +149,15 @@ const associateModels = () => {
   db.Variant.hasMany(db.SessionExperiment, {
     foreignKey: 'variant_id',
     as: 'sessionExperiments',
+  });
+
+  db.User.hasOne(db.OnboardingAnswer, {
+    foreignKey: 'user_id',
+    as: 'onboardingAnswer',
+  });
+  db.OnboardingAnswer.belongsTo(db.User, {
+    foreignKey: 'user_id',
+    as: 'user',
   });
 };
 

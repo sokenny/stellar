@@ -62,6 +62,17 @@ const Nav = ({ token }) => {
     );
 
     const user = await response.json();
+
+    if (!user?.onboardingAnswer && !pathname.includes('onboarding')) {
+      router.push('/onboarding');
+      return;
+    }
+
+    if (pathname.includes('onboarding') && user?.onboardingAnswer) {
+      router.push('/dashboard');
+      return;
+    }
+
     segmentIdentify(user.id, {
       ...user,
     });
@@ -301,7 +312,7 @@ const Nav = ({ token }) => {
           </NavbarContent>
         )}
       </Navbar>
-      <div className={styles.statusBar}>
+      <div className={styles.statusBar} data-testid="status-bar">
         <div>
           Currently on limited open beta.{' '}
           <a

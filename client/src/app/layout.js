@@ -3,7 +3,7 @@ import { Providers } from './providers';
 import Nav from './components/Nav/Nav';
 import './globals.css';
 import getAuthTokenName from './helpers/getAuthTokenName';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import styles from './layout.module.css';
 import { GoogleTagManager } from '@next/third-parties/google';
 import Script from 'next/script';
@@ -17,9 +17,11 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
+// TODO-p1-1: Properly set up layouts
+// TODO-p1-1: Animar con counter y scale up el cartelito de CVR de la winning variant.
+// TODO-p1-1: Improve snippet guide
 // TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
 // TODO-p1-1: Re-shoot 2 min. demo.
-// TODO-p1-1: Improve snippet guide
 // TODO-p1-1: Add annual / monthly pricing toggle
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
@@ -47,6 +49,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   const nextCookies = cookies();
   const nextAuthSessionToken = nextCookies.get(getAuthTokenName());
+  const headersList = headers();
+  const fullUrl = headersList.get('referer') || '';
+  const path = fullUrl ? new URL(fullUrl).pathname : '';
 
   return (
     <html lang="en">
@@ -76,7 +81,11 @@ export default function RootLayout({ children }) {
         </Script>
       </head>
       <GoogleTagManager gtmId="GTM-5XVLW5Z9" />
-      <body className={`${inter.className} ${styles.layout}`}>
+      <body
+        className={`${inter.className} ${styles.layout}
+        ${path === '/onboarding' ? styles.onboarding : ''}
+      `}
+      >
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5XVLW5Z9"
