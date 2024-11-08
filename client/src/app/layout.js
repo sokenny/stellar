@@ -17,11 +17,15 @@ export const metadata = {
   description: 'Loved by Growth Marketers',
 };
 
+// TODO-p1-1: Check if I really need to generate a token with jsonwebtoken since I think nextauth is handling it
+// TODO-p1-1: Add email upon email confirmation
+// TODO-p1-1: Create at least 3 static ads more.
+// TODO-p1-1: Add more transactional emails: Upon first experiment creation. Snippet installation. Send the guide link through email. Send a test case example.
+// TODO-p1-1: Improve snippet guide
+// TODO-p1-1: Re-shoot 2 min. demo.
+// TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
 // TODO-p1-1: Properly set up layouts
 // TODO-p1-1: Animar con counter y scale up el cartelito de CVR de la winning variant.
-// TODO-p1-1: Improve snippet guide
-// TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
-// TODO-p1-1: Re-shoot 2 min. demo.
 // TODO-p1-1: Add annual / monthly pricing toggle
 // TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)

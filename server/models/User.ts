@@ -5,6 +5,10 @@ class User extends Model {
   public email!: string;
   public first_name!: string;
   public last_name!: string;
+  public password!: string;
+  public last_active_at!: Date;
+  public confirmation_token!: string;
+  public confirmed_at!: Date;
   public created_at!: Date;
   public updated_at!: Date;
 }
@@ -30,7 +34,19 @@ export const initializeUser = (sequelize: Sequelize): typeof User => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       last_active_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      confirmation_token: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      confirmed_at: {
         type: DataTypes.DATE,
         allowNull: true,
       },

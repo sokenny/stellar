@@ -1,13 +1,13 @@
 import LoginForm from '../components/LoginForm/LoginForm';
 import styles from './page.module.css';
 
-export default function Login() {
+const LoginPage = () => {
   return (
-    <main className={styles.main}>
-      <div className={styles.center}>
-        <h1 className={styles.h1}>Login</h1>
-        <LoginForm />
-      </div>
-    </main>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Stellar Log In</h1>
+      <LoginForm />
+    </div>
   );
-}
+};
+
+export default LoginPage;

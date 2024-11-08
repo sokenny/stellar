@@ -2,11 +2,13 @@
 
 import { Button } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Check from '../../icons/Check';
 import styles from './Plans.module.css';
 import segmentTrack from '../../helpers/segment/segmentTrack';
 
 const Plans = () => {
+  const router = useRouter();
   return (
     <div className={styles.pricing} id="pricing">
       <h3>Pricing</h3>
@@ -20,14 +22,7 @@ const Plans = () => {
             <div className={styles.payment}>billed annually</div>
             <Button
               className={styles.planButton}
-              onClick={() => {
-                segmentTrack('click_get_started', {
-                  plan: 'Starter',
-                });
-                signIn('google', {
-                  callbackUrl: '/dashboard',
-                });
-              }}
+              onClick={() => router.push('/signup')}
             >
               Get Started
             </Button>
@@ -51,14 +46,7 @@ const Plans = () => {
             <Button
               className={styles.planButton}
               color="primary"
-              onClick={() => {
-                segmentTrack('click_get_started', {
-                  plan: 'Growth',
-                });
-                signIn('google', {
-                  callbackUrl: '/dashboard',
-                });
-              }}
+              onClick={() => router.push('/signup')}
             >
               Get Started
             </Button>
@@ -81,14 +69,7 @@ const Plans = () => {
             <div className={styles.payment}>billed annually</div>
             <Button
               className={styles.planButton}
-              onClick={() => {
-                segmentTrack('click_get_started', {
-                  plan: 'Enterprise',
-                });
-                signIn('google', {
-                  callbackUrl: '/dashboard',
-                });
-              }}
+              onClick={() => router.push('/signup')}
             >
               Get Started
             </Button>

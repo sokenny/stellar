@@ -1,10 +1,10 @@
 import db from '../../models';
 import sendEmail from '../../services/sendEmail';
 
-async function createAccount(req, res) {
+async function createAccountSocial(req, res) {
   const user = req.body;
 
-  const transaction = await db.sequelize.transaction(); // Start a new transaction
+  const transaction = await db.sequelize.transaction();
 
   try {
     const existingUser = await db.User.findOne(
@@ -13,7 +13,7 @@ async function createAccount(req, res) {
     );
 
     if (existingUser) {
-      await transaction.rollback(); // Rollback the transaction if user exists
+      await transaction.rollback();
       return res.status(401).json({ error: 'User already exists' });
     }
 
@@ -28,16 +28,17 @@ async function createAccount(req, res) {
 
     sendWelcomeEmail(newUser);
 
-    await transaction.commit(); // Commit the transaction if all operations succeed
+    await transaction.commit();
 
     res.status(200).json({ user: newUser });
   } catch (error) {
-    await transaction.rollback(); // Rollback the transaction in case of an error
+    await transaction.rollback();
     console.error('Failed to create user and API key:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
 
+// TODO-p1-1: Make this a service and call it also on confirm email
 async function sendWelcomeEmail(newUser) {
   const html = `
     <p>Welcome to Stellar AB Testing${
@@ -55,4 +56,4 @@ async function sendWelcomeEmail(newUser) {
   });
 }
 
-export default createAccount;
+export default createAccountSocial;

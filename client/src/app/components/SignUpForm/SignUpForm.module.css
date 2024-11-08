@@ -26,9 +26,31 @@
   background-color: var(--blue);
 }
 
-.signupLink {
+.loginLink {
   text-align: center;
   margin-top: 12px;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.3);
+}
+
+.success {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+  max-width: 400px;
+}
+
+.successTitle {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.successMessage {
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+.successMessage span {
+  /* font-weight: 600; */
+  color: var(--linkBlue);
 }

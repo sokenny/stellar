@@ -4,7 +4,7 @@ import getExperimentsForClient from './handlers/getExperimentsForClient';
 import processUserSession from './handlers/processUserSession';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import autoGenerate from './handlers/autoGenerate';
-import createAccount from './handlers/createAccount';
+import createAccountSocial from './handlers/createAccountSocial';
 import getExperiments from './handlers/getExperiments';
 import getVariantScreenshot from './handlers/getVariantScreenshot';
 import deleteExperiment from './handlers/deleteExperiment';
@@ -13,6 +13,9 @@ import deleteProject from './handlers/deleteProject';
 import generalRequestLimiter from '../helpers/generalRequestLimiter';
 import sendEmail from '../services/sendEmail';
 import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
+import handleCreateAccount from './handlers/handleCreateAccount';
+import handleConfirmEmail from './handlers/handleConfirmEmail';
+import handleLogin from './handlers/handleLogin';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -28,7 +31,13 @@ router.use(generalRequestLimiter);
 
 router.post('/onboard', strictLimiter, autoGenerate);
 
-router.post('/create-account', createAccount);
+router.post('/create-account', handleCreateAccount);
+
+router.post('/login', handleLogin);
+
+router.get('/confirm-email', handleConfirmEmail);
+
+router.post('/create-account-social', createAccountSocial);
 
 router.get('/experiments/client', getExperimentsForClient);
 

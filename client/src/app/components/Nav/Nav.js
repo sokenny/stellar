@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Toaster, toast } from 'sonner';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import useStore from '../../store';
 import Link from 'next/link';
 import FullPageLoader from '../FullPageLoader';
@@ -253,26 +253,11 @@ const Nav = ({ token }) => {
         {!session && (
           <NavbarContent justify="end">
             <NavbarItem className={`hidden lg:flex ${styles.navItem}`}>
-              <div
-                onClick={() =>
-                  signIn('google', {
-                    callbackUrl: '/dashboard',
-                  })
-                }
-              >
-                Login
-              </div>
+              <div onClick={() => router.push('/login')}>Login</div>
             </NavbarItem>
             <NavbarItem className={styles.navItem}>
               <Button
-                onClick={() => {
-                  segmentTrack('click_sign_up', {
-                    location: 'nav',
-                  });
-                  signIn('google', {
-                    callbackUrl: '/dashboard',
-                  });
-                }}
+                onClick={() => router.push('/signup')}
                 color="primary"
                 variant="flat"
               >

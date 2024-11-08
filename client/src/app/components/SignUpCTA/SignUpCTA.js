@@ -1,26 +1,18 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import Button from '../Button';
+import { useRouter } from 'next/navigation';
 import styles from './SignUpCTA.module.css';
-import segmentTrack from '../../helpers/segment/segmentTrack';
 
 const SignUpCTA = ({ children, className }) => {
+  const router = useRouter();
   return (
     <Button
       className={
         className ? `${styles.SignUpCTA} ${className}` : styles.SignUpCTA
       }
-      type="submit"
-      onClick={() => {
-        segmentTrack('click_sign_up', {
-          location: 'home',
-          children,
-        });
-        signIn('google', {
-          callbackUrl: '/dashboard',
-        });
-      }}
+      type="button"
+      onClick={() => router.push('/signup')}
     >
       {children}
     </Button>
