@@ -2,6 +2,7 @@ import db from '../models';
 import bcrypt from 'bcrypt';
 import sendEmail from './sendEmail';
 import generateToken from '../helpers/generateToken';
+import sendWelcomeEmail from './sendWelcomeEmail';
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -14,7 +15,7 @@ async function hashPassword(password) {
 
 async function sendConfirmationEmail(newUser) {
   const html = `
-      <p>Hi ${newUser.first_name},</p>
+      <p>Hi ${newUser.first_name}!</p>
       <p>Please confirm your email address by clicking the link below:</p>
       <p><a href="${process.env.STELLAR_API_URL}/public/confirm-email?token=${newUser.confirmation_token}">Confirm Email</a></p>
       <p>If you did not create this account, please ignore this email.</p>
@@ -29,7 +30,6 @@ async function sendConfirmationEmail(newUser) {
 }
 
 async function createAccount({ firstName, lastName, email, password }) {
-  console.log('password aca', password);
   try {
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
@@ -46,6 +46,7 @@ async function createAccount({ firstName, lastName, email, password }) {
     });
 
     await sendConfirmationEmail(newUser);
+    await sendWelcomeEmail(newUser);
 
     return newUser;
   } catch (error) {

@@ -55,7 +55,20 @@ const SignUpForm = () => {
         'Account created. Please check your email for a confirmation link.',
       );
       setSuccess(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Automatically log in the user
+      const loginRes = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (loginRes?.error) {
+        toast.error('Failed to log in after sign up');
+      } else {
+        toast.success('Logged in successfully');
+        window.location.href = '/dashboard';
+      }
     } else {
       toast.error(resData.error || 'Failed to create account');
     }
@@ -64,7 +77,7 @@ const SignUpForm = () => {
 
   return (
     <div className={styles.container}>
-      {success && (
+      {/* {success && (
         <div className={styles.success}>
           <div className={styles.successTitle}>Almost there!</div>
           <p className={styles.successMessage}>
@@ -72,61 +85,37 @@ const SignUpForm = () => {
             complete your account setup.
           </p>
         </div>
-      )}
-      {!success && (
-        <>
-          {!isInAppBrowser() && (
-            <>
-              <Button
-                color="primary"
-                onPress={() => {
-                  segmentTrack('click_sign_up_google', {
-                    location: 'page',
-                  });
-                  signIn('google', { callbackUrl: '/dashboard' });
-                }}
-                className={`${styles.button} ${styles.google}`}
-              >
-                Sign Up with Google
-              </Button>
-              <div className={styles.divider}>or</div>
-            </>
-          )}
-          <div className={styles.row}>
-            <Input
-              clearable
-              bordered
-              fullWidth
+      )} */}
+      {/* {!success && ( */}
+      <>
+        {!isInAppBrowser() && (
+          <>
+            <Button
               color="primary"
-              size="sm"
-              placeholder="First Name"
-              className={styles.input}
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <Input
-              clearable
-              bordered
-              fullWidth
-              color="primary"
-              size="sm"
-              placeholder="Last Name"
-              className={styles.input}
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
+              onPress={() => {
+                segmentTrack('click_sign_up_google', {
+                  location: 'page',
+                });
+                signIn('google', { callbackUrl: '/dashboard' });
+              }}
+              className={`${styles.button} ${styles.google}`}
+            >
+              Sign Up with Google
+            </Button>
+            <div className={styles.divider}>or</div>
+          </>
+        )}
+        <div className={styles.row}>
           <Input
             clearable
             bordered
             fullWidth
             color="primary"
             size="sm"
-            placeholder="Email"
-            value={email}
+            placeholder="First Name"
             className={styles.input}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <Input
             clearable
@@ -134,28 +123,51 @@ const SignUpForm = () => {
             fullWidth
             color="primary"
             size="sm"
-            placeholder="Password"
-            value={password}
+            placeholder="Last Name"
             className={styles.input}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
+        </div>
+        <Input
+          clearable
+          bordered
+          fullWidth
+          color="primary"
+          size="sm"
+          placeholder="Email"
+          value={email}
+          className={styles.input}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+        />
+        <Input
+          clearable
+          bordered
+          fullWidth
+          color="primary"
+          size="sm"
+          placeholder="Password"
+          value={password}
+          className={styles.input}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+        />
 
-          {error && <div className={styles.error}>{error}</div>}
+        {error && <div className={styles.error}>{error}</div>}
 
-          <Button
-            color="primary"
-            onPress={handleSignUp}
-            className={styles.button}
-            isLoading={loading}
-          >
-            Sign Up
-          </Button>
-          <p className={styles.loginLink}>
-            Already have an account? <Link href="/login">Log in</Link>
-          </p>
-        </>
-      )}
+        <Button
+          color="primary"
+          onPress={handleSignUp}
+          className={styles.button}
+          isLoading={loading}
+        >
+          Sign Up
+        </Button>
+        <p className={styles.loginLink}>
+          Already have an account? <Link href="/login">Log in</Link>
+        </p>
+      </>
     </div>
   );
 };
