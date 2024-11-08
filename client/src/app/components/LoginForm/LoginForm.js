@@ -22,7 +22,7 @@ const LoginForm = () => {
 
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
-      toast.success('Email confirmed. You can log in now.');
+      toast.success('Email confirmed. You can now log in.');
       hasShownToast.current = true;
     }
   }, []);

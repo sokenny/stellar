@@ -55,7 +55,7 @@ const SignUpForm = () => {
         'Account created. Please check your email for a confirmation link.',
       );
       setSuccess(true);
-      // window.location.href = '/dashboard';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       toast.error(resData.error || 'Failed to create account');
     }
@@ -66,9 +66,7 @@ const SignUpForm = () => {
     <div className={styles.container}>
       {success && (
         <div className={styles.success}>
-          <div className={styles.successTitle}>
-            Account created successfully!
-          </div>
+          <div className={styles.successTitle}>Almost there!</div>
           <p className={styles.successMessage}>
             Please <span>check your email</span> for a confirmation link to
             complete your account setup.
