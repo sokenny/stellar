@@ -177,7 +177,7 @@ const CreateExperimentForm = ({ experiment }) => {
                 {formState.experiment.variants.map((variant) => (
                   <div className={styles.variant} key={variant.id}>
                     <div className={styles.cell}>{variant.name}</div>
-                    <div className={styles.cell}>
+                    <div className={`${styles.cell} ${styles.weight}`}>
                       Weight: {variant.traffic}%
                     </div>
                     <div className={styles.cell}>

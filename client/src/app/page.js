@@ -83,7 +83,7 @@ export default async function HomePage({}) {
             </h1>
             <h2 className={styles.description}>
               Your real alternative to <b>Google Optimize</b>. Clutter free and
-              to the point. The preferred choice among marketing teams.
+              to the point. The preferred choice among CRO marketers.
             </h2>
           </div>
           <div className={styles.ctaSection}>

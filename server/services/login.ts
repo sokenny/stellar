@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import db from '../models';
 
@@ -16,17 +15,7 @@ const login = async ({ email, password }) => {
     throw new Error('Invalid password');
   }
 
-  //   if (!user.confirmed_at) {
-  //     throw new Error('Please confirm your email first');
-  //   }
-
-  const token = jwt.sign(
-    { email: user.email, id: user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' },
-  );
-
-  return { user, token };
+  return { user };
 };
 
 export default login;

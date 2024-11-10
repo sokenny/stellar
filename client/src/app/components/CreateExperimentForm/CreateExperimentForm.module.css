@@ -113,3 +113,21 @@
 .changes span {
   color: var(--linkBlue);
 }
+
+@media (max-width: 720px) {
+  .fieldGroup {
+    width: 100%;
+  }
+
+  .step {
+    width: 100%;
+  }
+
+  .variant {
+    padding-right: 0;
+  }
+
+  .weight {
+    display: none;
+  }
+}

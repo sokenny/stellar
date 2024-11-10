@@ -1,0 +1,23 @@
+.cta {
+  position: sticky;
+  top: 16px;
+  padding: 16px;
+  background-color: #eaf5ff !important;
+  border-radius: 4px;
+  border: 1px solid var(--blue);
+}
+
+.cta h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  color: rgba(0, 0, 0, 0.35);
+  margin-bottom: 16px;
+}
+
+.ctaButton {
+  background-color: var(--linkBlue) !important;
+}
