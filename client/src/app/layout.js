@@ -16,14 +16,14 @@ export const metadata = {
   title: 'Stellar | A/B Test Any Website',
   description: 'Loved by Growth Marketers',
 };
+// IDEAS:
+// Copiarme de la seccion de AB Testing de optimonk
+// https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
-// TODO-p1-1: Improve snippet guide
-// TODO-p1-1: Copiarme de la seccion de AB Testing de optimonk
-// TODO-p1-1: https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
-// TODO-p1-1: Post 3 more blogs about A/B testing, having done keywords research
+// TODO-p1-1: Allow space for variant names
+// TODO-p1-1: Add more transactional emails: Upon first experiment creation. Snippet installation. Send the guide link through email. Send a test case example.
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
-// TODO-p1-1: Add more transactional emails: Upon first experiment creation. Snippet installation. Send the guide link through email. Send a test case example.
 // TODO-p1-1: Re-shoot 2 min. demo.
 // TODO-p1-1: Properly set up layouts
 // TODO-p1-1: Animar con counter y scale up el cartelito de CVR de la winning variant.
@@ -46,9 +46,6 @@ export const metadata = {
 // TODO-p1-2: Try https://www.blogseo.ai/ for content marketing
 // TODO-p1-2: Launch in AppSumo
 // TODO-p1-2: Create FAQ section (?)
-
-// TODO-p1-2: Quitar etiqueta analytics y moverla a tag manager
-// TODO-p1-2: reemplazar calls de eventos de analytics por las de segment
 
 export default function RootLayout({ children }) {
   const nextCookies = cookies();

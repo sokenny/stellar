@@ -7,6 +7,8 @@ import styles from './page.module.css';
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
 
+const noAdSlugs = ['install-stellar-snippet'];
+
 const { projectId, dataset } = client.config();
 const urlFor = (source) =>
   projectId && dataset
@@ -32,11 +34,15 @@ export default async function PostPage({ params }) {
     ? urlFor(post.image)?.width(550).height(310).url()
     : null;
 
+  const showSidebar = !noAdSlugs.includes(params.slug);
+
   return (
     <div className={styles.container}>
-      <div className={styles.sidebar}>
-        <CTA />
-      </div>
+      {showSidebar && (
+        <div className={styles.sidebar}>
+          <CTA />
+        </div>
+      )}
       <main
         className={`container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4 ${styles.main}`}
       >

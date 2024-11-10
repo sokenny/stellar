@@ -24,7 +24,7 @@ export default function CreateExperimentPage({ params }) {
       <h1 className={styles.title}>
         {isNew ? 'Create Experiment' : experiment?.name}
       </h1>
-      <CreateExperimentForm experiment={experiment} />
+      <CreateExperimentForm experimentId={id} />
     </div>
   );
 }

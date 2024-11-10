@@ -5,17 +5,24 @@ import { client as redisClient } from '../../helpers/cache';
 
 async function updateSnippetStatus(projectId: number) {
   const project = await db.Project.findByPk(projectId);
+
   if (!project) {
     return;
   }
-  project.snippet_status = 1;
-  await project.save();
+  if (project.snippet_status !== 0) {
+    project.snippet_status = 1;
+    await project.save();
+  }
 }
 
 async function getProjectExperiments(projectId: number): Promise<any[]> {
   const cacheKey = `experiments:${projectId}`;
 
   const cachedExperiments = await redisClient.get(cacheKey);
+
+  // TODO-p1-1: We need to look for a more efficient way to update the snippet status
+  updateSnippetStatus(projectId);
+
   if (cachedExperiments) {
     console.log(`Cache hit for project ${projectId}`);
     const experiments = JSON.parse(cachedExperiments);
@@ -25,8 +32,6 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
   console.log(`Cache miss for project ${projectId}`);
   const experiments = await fetchExperiments(projectId);
   redisClient.set(cacheKey, JSON.stringify(experiments));
-
-  updateSnippetStatus(projectId);
 
   return selectVariantsAtRuntime(experiments);
 }
