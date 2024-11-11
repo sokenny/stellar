@@ -21,6 +21,12 @@ export default function Dashboard() {
     window?.gtag?.('event', 'ads_conversion_Registro_1', {
       projectId: currentProject?.id,
     });
+
+    const chatOpened = localStorage.getItem('chatOpened');
+    if (!chatOpened) {
+      window?.$crisp?.push(['do', 'chat:open']);
+      localStorage.setItem('chatOpened', 'true');
+    }
   }, []);
 
   if (loading) {

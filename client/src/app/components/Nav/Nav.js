@@ -147,6 +147,7 @@ const Nav = ({ token }) => {
 
   const tabs = [
     { name: 'Dashboard', path: '/dashboard', isAuth: true, when: isHome },
+    { name: 'Pricing', path: '/#pricing', isAuth: false, when: true },
   ];
 
   const iconClasses =
@@ -279,6 +280,14 @@ const Nav = ({ token }) => {
                   <p className="font-semibold">Signed in as</p>
                   <p className="font-semibold">{session?.user?.email}</p>
                 </DropdownItem>
+                {isHome && (
+                  <DropdownItem
+                    key="go-to-app"
+                    onClick={() => router.push('/dashboard')}
+                  >
+                    Go to App
+                  </DropdownItem>
+                )}
                 <DropdownItem
                   key="account"
                   onClick={() => router.push('/account')}

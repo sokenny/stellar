@@ -14,7 +14,7 @@ const OnboardingForm = () => {
   const [discoveryMethod, setDiscoveryMethod] = useState('');
   const [monthlyTraffic, setMonthlyTraffic] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { token } = useStore();
+  const { token, session } = useStore();
 
   useEffect(() => {
     const formElement = document.querySelector(`.${styles.formContainer}`);
@@ -55,10 +55,14 @@ const OnboardingForm = () => {
         throw new Error('Failed to submit onboarding data');
       }
 
-      console.log('Onboarding data submitted successfully');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       toast.success('Onboarding data submitted successfully');
-      router.push('/dashboard');
+
+      const redirectUrl = session?.user?.email?.includes('@gostellar.app')
+        ? '/dashboard'
+        : '/dashboard?onboarded=true';
+
+      router.push(redirectUrl);
     } catch (error) {
       console.error('Error submitting onboarding data:', error);
     } finally {

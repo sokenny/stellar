@@ -32,3 +32,10 @@
   font-size: 14px;
   color: rgba(0, 0, 0, 0.3);
 }
+
+.error {
+  color: var(--error);
+  font-size: 14px;
+  margin-bottom: 12px;
+  max-width: 300px;
+}
