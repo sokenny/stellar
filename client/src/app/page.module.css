@@ -25,12 +25,17 @@
 }
 
 .header .title {
-  font-size: 48px;
+  font-size: 76px;
   line-height: 54px;
-  max-width: 675px;
+  font-weight: 600;
   margin-bottom: 24px;
   color: var(--primary);
   z-index: 1;
+  background: linear-gradient(45deg, #0072f5, #cb5edc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
 }
 
 .header .description {
@@ -317,8 +322,7 @@
   }
 
   .header .title {
-    font-size: 32px;
-    line-height: normal;
+    font-size: 48px;
     margin-bottom: 16px;
   }
 

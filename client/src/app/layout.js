@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import { Providers } from './providers';
 import Nav from './components/Nav/Nav';
 import './globals.css';
@@ -11,6 +11,7 @@ import Script from 'next/script';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata = {
   title: 'Stellar | A/B Test Any Website',
@@ -20,6 +21,9 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
+// TODO-p1-1: Upgrades to homepage using optimonk references - Consider Poppins - use this svg https://www.optimonk.com/wp-content/uploads/pp-group-lines.svg
+// TODO-p1-1: Copiar la seccion de "Run meaningful A/B tests. Find the..." de optimonk
+// TODO-p1-1: Highlight animation for "Lightest in the market at 7.5kb"
 // TODO-p1-1: Allow space for variant names
 // TODO-p1-1: Add more transactional emails: Upon first experiment creation. Snippet installation. Send the guide link through email. Send a test case example.
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
@@ -83,7 +87,7 @@ export default function RootLayout({ children }) {
       </head>
       <GoogleTagManager gtmId="GTM-5XVLW5Z9" />
       <body
-        className={`${inter.className} ${styles.layout}
+        className={`${inter.className} ${poppins.className} ${styles.layout}
         ${path === '/onboarding' ? styles.onboarding : ''}
       `}
       >

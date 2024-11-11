@@ -71,11 +71,11 @@
   transform: translate(-50%, -50%);
   left: 50%;
   font-size: 16px;
-  background-color: #e37ddc;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
   cursor: default;
+  background: linear-gradient(45deg, #d58fe0, #cb5edc) !important;
 }
 
 .varTag {
