@@ -21,6 +21,11 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
+// TODO-p1-1: Re-setup lead conversion so it fires once per user, and don't fire it for @gostellar.app emails
+// TODO-p1-1: find a way to impersonate users
+// TODO-p1-1: Copiarme de los transactional emails de mida so
+// TODO-p1-1: Add statistical significance display on experiment page
+// TODO-p1-1: Add contacts to mailtrap automatically
 // TODO-p1-1: Upgrades to homepage using optimonk references - Consider Poppins - use this svg https://www.optimonk.com/wp-content/uploads/pp-group-lines.svg
 // TODO-p1-1: Copiar la seccion de "Run meaningful A/B tests. Find the..." de optimonk
 // TODO-p1-1: Highlight animation for "Lightest in the market at 7.5kb"

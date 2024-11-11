@@ -28,7 +28,12 @@ const LoginForm = () => {
   }, []);
 
   const handleLogin = async () => {
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (
+      !email ||
+      !/^(([^<>/().,;:\s@"]+(\.[^<>/().,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email,
+      )
+    ) {
       setError('Please enter a valid email address.');
       return;
     }

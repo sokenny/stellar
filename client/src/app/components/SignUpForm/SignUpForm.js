@@ -20,13 +20,12 @@ const SignUpForm = () => {
   const [success, setSuccess] = useState(false);
 
   const handleSignUp = async () => {
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-
     if (!firstName || !lastName) {
       setError('Please enter both first and last name.');
+      return;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address.');
       return;
     }
     if (!isValidPassword(password)) {
