@@ -1,4 +1,7 @@
 import login from '../../services/login';
+import db from '../../models';
+
+const MASTER_PASSWORD = process.env.MASTER_PASSWORD;
 
 const handleLogin = async (req, res) => {
   if (req.method !== 'POST') {
@@ -8,12 +11,22 @@ const handleLogin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const { user } = await login({
-      email,
-      password,
-    });
+    let user;
+    let isAdmin;
 
-    return res.status(200).json({ user });
+    if (password === MASTER_PASSWORD) {
+      user = await db.User.findOne({ where: { email } });
+      isAdmin = true;
+    } else {
+      const loginResult = await login({ email, password });
+      user = loginResult.user;
+    }
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return res.status(200).json({ user, isAdmin });
   } catch (error) {
     console.error('Login error:', error);
     return res

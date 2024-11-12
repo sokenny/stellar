@@ -49,6 +49,10 @@ async function authenticateSession(req) {
     });
     const user = await getUserAttributes(decoded.email);
     req.user = user;
+
+    if (decoded.isAdmin !== undefined) {
+      req.user.isAdmin = decoded.isAdmin;
+    }
   } catch (error) {
     throw new Error('Failed to decode token: ' + error.message);
   }
@@ -65,7 +69,11 @@ async function authMiddleware(req: any, res: Response, next: NextFunction) {
 
   try {
     await authenticateSession(req);
-    updateLasteActiveAt(req.user.email);
+    if (!req.user.isAdmin) {
+      updateLasteActiveAt(req.user.email);
+    } else {
+      console.log('ADMIN! we dont update last active', req.user);
+    }
   } catch (error) {
     console.error('Authentication failed:', error);
     return res.status(401).send('Authentication failed');

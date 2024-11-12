@@ -23,7 +23,7 @@ export default function Dashboard() {
     });
 
     const chatOpened = localStorage.getItem('chatOpened');
-    if (!chatOpened) {
+    if (!chatOpened && user?.onboardingAnswer) {
       window?.$crisp?.push(['do', 'chat:open']);
       localStorage.setItem('chatOpened', 'true');
     }
