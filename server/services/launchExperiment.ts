@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import db from '../models';
 import { invalidateCache } from '../helpers/cache';
+import sendExperimentLaunchedEmail from './emails/sendExperimentLaunchedEmail';
 
 async function launchExperiment(experimentId) {
   const experiment = await db.Experiment.findOne({
@@ -60,6 +61,8 @@ async function launchExperiment(experimentId) {
   );
 
   await invalidateCache(`experiments:${experiment.project_id}`);
+
+  sendExperimentLaunchedEmail(experimentId);
 
   return experiment;
 }
