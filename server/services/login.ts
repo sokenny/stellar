@@ -10,6 +10,10 @@ const login = async ({ email, password }) => {
     throw new Error('User not found');
   }
 
+  if (!user.password) {
+    throw new Error('User used social login');
+  }
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new Error('Invalid password');

@@ -8,7 +8,7 @@ import ExperimentsTable from '../ExperimentsTable';
 import CreateButton from '../CreateButton';
 import styles from './TabsAndExperiments.module.css';
 
-const tabs = ['All', 'Running', 'Draft', 'Ended'];
+const tabs = ['Active', 'Draft', 'Ended', 'All'];
 
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
@@ -19,16 +19,16 @@ const TabsAndExperiments = ({ experiments }) => {
   });
 
   const experimentsByTab = {
-    [tabs[0]]: experiments,
-    [tabs[1]]: experiments.filter(
+    [tabs[0]]: experiments.filter(
       (experiment) => experiment.started_at && !experiment.ended_at,
     ),
-    [tabs[2]]: experiments.filter(
+    [tabs[1]]: experiments.filter(
       (experiment) => !experiment.ended_at && !experiment.started_at,
     ),
-    [tabs[3]]: experiments.filter(
+    [tabs[2]]: experiments.filter(
       (experiment) => experiment.ended_at && experiment.started_at,
     ),
+    [tabs[3]]: experiments,
   };
 
   return (

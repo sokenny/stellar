@@ -20,8 +20,7 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
-// TODO-p1-1: Setup tier1 transactional emails - exp launched, exp ended, snippet reminders, get started reminders
-// TODO-p1-1: Default tab should be "Active Experiments" and not show the ended ones
+// TODO-p1-1: Run optimizations for g ads campaign
 // TODO-p1-1: Introduce key error login with prefixes in main services to easily lookup on cloudwatch
 // TODO-p1-1: Copiarme de los transactional emails de mida so
 // TODO-p1-1: Upgrades to homepage using optimonk references - Consider Poppins - use this svg https://www.optimonk.com/wp-content/uploads/pp-group-lines.svg

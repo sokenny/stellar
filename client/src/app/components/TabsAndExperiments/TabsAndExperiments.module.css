@@ -32,7 +32,10 @@
 }
 
 .tab.active {
-  background-color: var(--activeTab);
+  background-color: var(--linkBlue);
+  color: white;
+  border: none;
+  text-align: center;
 }
 
 .navigation {
