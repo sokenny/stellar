@@ -52,11 +52,20 @@
   z-index: 1;
 }
 
-.lightest {
+.points {
+  display: flex;
+  margin-top: 12px;
+}
+
+.lightest, .noCard {
   font-size: 14px;
-  margin-top: 8px;
   color: gray;
   font-weight: 300;
+   border-bottom: 1px dashed gray;
+}
+
+.lightest {
+  margin-left: 16px;
 }
 
 .description b {
@@ -418,6 +427,16 @@
 
   .biteTestimonials h3 {
     font-size: 28px;
+  }
+
+  .points {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lightest {
+    margin-left: 0;
   }
 
 }

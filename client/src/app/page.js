@@ -90,8 +90,11 @@ export default async function HomePage({}) {
             <SignUpCTA className={styles.goStellarBtn}>
               Start For Free
             </SignUpCTA>
-            <div className={styles.lightest}>
-              ⚡️ Lightest in the market at 7.5kb
+            <div className={styles.points}>
+              <div className={styles.noCard}>💳 No credit card required</div>
+              <div className={styles.lightest}>
+                ⚡️ Lightest in the market at 7.5kb
+              </div>
             </div>
           </div>
 
