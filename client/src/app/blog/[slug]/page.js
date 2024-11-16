@@ -46,8 +46,8 @@ export default async function PostPage({ params }) {
       <main
         className={`container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4 ${styles.main}`}
       >
-        <Link href="/dashboard" className="hover:underline">
-          ← Back to App
+        <Link href="/blog" className="hover:underline">
+          ← Back to Blog
         </Link>
         {postImageUrl && (
           <img
