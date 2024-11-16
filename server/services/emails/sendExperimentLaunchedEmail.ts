@@ -27,7 +27,7 @@ async function sendExperimentLaunchedEmail(experimentId) {
 
   const subject = `Your experiment "${name}" has been launched!`;
   const html = `
-      <p>We are excited to inform you that your experiment "<strong>${name}</strong>" (ID: ${id}) has been successfully launched.</p>
+      <p>Your experiment "<strong>${name}</strong>" (ID: ${id}) has been successfully launched!</p>
       <p>Feel free to monitor its progress <a href="${process.env.STELLAR_CLIENT_URL}/experiment/${id}">here</a>.</p>
       <p>Thank you for choosing our platform!</p>
       <p>Best regards,</p>

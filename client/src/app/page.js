@@ -3,6 +3,7 @@ import AutoPlayVideo from './components/AutoPlayVideo';
 import Plans from './components/Plans';
 import GridBg from './components/GridBg/GridBg';
 import HomeChartSection from './components/HomeChartSection';
+import CoolLinesSVG from './components/CoolLinesSVG';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
@@ -108,6 +109,7 @@ export default async function HomePage({}) {
             ></iframe>
           </div>
           <HomeChartSection />
+          {/* <CoolLinesSVG /> */}
           <div className={styles.advantages}>
             <h3>Advantages of Stellar</h3>
             <div className={styles.list}>
