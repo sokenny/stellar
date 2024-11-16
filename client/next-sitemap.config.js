@@ -21,9 +21,18 @@ module.exports = {
   // Additional paths to include
   additionalPaths: async (config) => {
     const blogSlugs = await fetchBlogSlugs(); // Function to fetch blog slugs
-    return blogSlugs.map((slug) => ({
+    const blogPaths = blogSlugs.map((slug) => ({
       loc: `/blog/${slug}`,
       lastmod: new Date().toISOString(),
     }));
+
+    // Add additional static paths
+    const staticPaths = [
+      { loc: '/', lastmod: new Date().toISOString() },
+      { loc: '/signup', lastmod: new Date().toISOString() },
+      { loc: '/login', lastmod: new Date().toISOString() },
+    ];
+
+    return [...blogPaths, ...staticPaths];
   },
 };
