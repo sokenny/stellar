@@ -71,27 +71,6 @@ export default function StatisticalSignificance({ experiment }) {
     (variant) => variant.id === variantWithHighestConversionRate.variantId,
   );
 
-  console.log(
-    'VARIANT WITH HIGHEST CONVERSION RATE: ',
-    dataOfVariantWithHighestConversionRate,
-  );
-
-  //   let confidenceMessage;
-
-  //   if (significance >= 95) {
-  //     confidenceMessage = `The observed difference in conversion rate is ${conversionRateDifference.toFixed(
-  //       2,
-  //     )}%, which is statistically significant given then volume of data collected.`;
-  //   } else if (significance >= 80) {
-  //     confidenceMessage = `The observed difference in conversion rate is ${conversionRateDifference.toFixed(
-  //       2,
-  //     )}%, suggesting potential significance. Consider collecting more data.`;
-  //   } else {
-  //     confidenceMessage = `The observed difference in conversion rate is ${conversionRateDifference.toFixed(
-  //       2,
-  //     )}%, which isn't statistically significant given then volume of data collected. More data may be needed.`;
-  //   }
-
   function getConfidenceMessage() {
     const baseMessage = `The observed difference in conversion rate from baseline is <span>${conversionRateDifference.toFixed(
       2,
@@ -107,7 +86,7 @@ export default function StatisticalSignificance({ experiment }) {
     } else if (significance >= 80) {
       return `${baseMessage} The result suggests potential significance, but more data may be needed to confirm.`;
     } else {
-      return `${baseMessage} This result isn't statistically significant given the volume of data collected. More data may be needed.`;
+      return `${baseMessage} This result isn't statistically significant yet. More data may be needed.`;
     }
   }
 

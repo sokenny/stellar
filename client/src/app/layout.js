@@ -23,10 +23,13 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
-// TODO-p1-1: Add schedule a demo button
-// TODO-p1-1: Run optimizations for g ads campaign
-// TODO-p1-1: Add statistical significance display on experiment page
+// TODO-p1-1: A/B test testimonials on signup page.
 // TODO-p1-1: Test & launch getting started campaign and ensure emails are not close to each other
+// TODO-p1-1: Add get ai copy recommendation feature
+// TODO-p1-1: Record youtube video showing basic tutorial
+// TODO-p1-1: Improve landing page, make it look more complete and professional
+// TODO-p1-1: Add email settings in account
+// TODO-p1-1: Add schedule a demo button (I need the current ongoing experiments to end first)
 // TODO-p1-1: Outreach to digital marketing agencies offering free usage.
 // TODO-p1-1: Escribirle a youtubers como https://www.youtube.com/@AlanValdez/videos - https://www.youtube.com/@VictorPeinadoDigital/videos - https://www.youtube.com/@AaronYoungGoogleAds/videos
 // TODO-p1-1: Introduce key error login with prefixes in main services to easily lookup on cloudwatch
