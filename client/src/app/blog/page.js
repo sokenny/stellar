@@ -4,7 +4,9 @@ import styles from './page.module.css';
 
 export default async function BlogIndex() {
   const query = `*[_type == "post"]{ "slug": slug.current, title, publishedAt }`;
-  const posts = await client.fetch(query);
+  const posts = await client.fetch(query, {}, { cache: 'no-store' });
+
+  console.log(posts);
 
   return (
     <div className={styles.container}>
