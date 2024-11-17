@@ -1,11 +1,47 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import { Checkbox } from '@nextui-org/react';
 import useStore from '../store';
 import styles from './page.module.css';
 import DisplaySnippet from '../components/DisplaySnippet';
+import { toast } from 'sonner';
 
 export default function Account({}) {
-  const { user } = useStore();
+  const { user, refetchProjects } = useStore();
+  const [emailSettings, setEmailSettings] = useState({});
+
+  useEffect(() => {
+    if (user) {
+      setEmailSettings(user.email_settings);
+    }
+  }, [user]);
+
+  const handleEmailSettingsChange = async (setting) => {
+    const updatedSettings = {
+      ...emailSettings,
+      [setting]: !emailSettings[setting],
+    };
+    setEmailSettings(updatedSettings);
+
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/user/email-settings`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ emailSettings: updatedSettings }),
+        },
+      );
+      toast.success('Email settings updated successfully');
+      refetchProjects();
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to update email settings');
+    }
+  };
 
   if (!user) {
     return <div>Loading...</div>;
@@ -26,6 +62,23 @@ export default function Account({}) {
             </div>
           );
         })}
+      </div>
+      <div className={styles.emailPreferences}>
+        <h4>Email Preferences</h4>
+        <Checkbox
+          className={styles.checkbox}
+          isSelected={emailSettings.recommendations}
+          onValueChange={() => handleEmailSettingsChange('recommendations')}
+        >
+          Receive Recommendations
+        </Checkbox>
+        <Checkbox
+          className={styles.checkbox}
+          isSelected={emailSettings.reminders}
+          onValueChange={() => handleEmailSettingsChange('reminders')}
+        >
+          Receive Reminders
+        </Checkbox>
       </div>
     </div>
   );

@@ -65,12 +65,14 @@ async function handleSnippetInstallationFollowUps() {
 }
 
 async function processCampaign(campaign, fourHoursAgo) {
+  const previousCampaignId = getPreviousCampaignId(campaign.id);
+
   const dateThreshold = new Date(
     fourHoursAgo.getTime() - 1000 * 60 * 60 * 24 * campaign.daysAgo,
   );
 
   const res = await db.sequelize.query(
-    `SELECT p.*, u.id as user_id, u.email, u.first_name, u.last_name
+    `SELECT p.*, u.id as user_id, u.email, u.first_name, u.last_name, u.email_settings
        FROM projects p
        JOIN users u ON p.user_id = u.id
        LEFT JOIN transactional_emails te
@@ -78,7 +80,17 @@ async function processCampaign(campaign, fourHoursAgo) {
          AND te.campaign_id = '${campaign.id}'
        WHERE p.snippet_status IS NULL
          AND p.created_at BETWEEN '2024-10-16' AND '${dateThreshold.toISOString()}'
-         AND te.id IS NULL;`,
+         AND te.id IS NULL
+       ${
+         previousCampaignId
+           ? `AND EXISTS (
+         SELECT 1 FROM transactional_emails te_prev
+         WHERE te_prev.user_id = u.id
+         AND te_prev.campaign_id = '${previousCampaignId}'
+         AND te_prev.created_at <= '${dateThreshold.toISOString()}'
+       )`
+           : ''
+       };`,
   );
 
   const projects = res[0];
@@ -86,8 +98,18 @@ async function processCampaign(campaign, fourHoursAgo) {
   console.log(`Projects length for ${campaign.id}: `, projects.length);
 
   for (const project of projects) {
+    // Check if reminders are enabled for the user
+    if (project.email_settings && project.email_settings.reminders === false) {
+      console.log(
+        'Skipping email for user: ',
+        project.email,
+        ' due to email settings.',
+      );
+      continue;
+    }
+
     console.log(
-      'will send email ',
+      'LCDLL!! will send email ',
       campaign.id,
       ' to project ',
       project.id,
@@ -96,6 +118,16 @@ async function processCampaign(campaign, fourHoursAgo) {
     );
     await sendFollowUpEmail(project, campaign);
   }
+}
+
+function getPreviousCampaignId(currentCampaignId) {
+  const campaignOrder = [
+    'snippet-installation-follow-up-1',
+    'snippet-installation-follow-up-2',
+    // 'snippet-installation-follow-up-3',
+  ];
+  const currentIndex = campaignOrder.indexOf(currentCampaignId);
+  return currentIndex > 0 ? campaignOrder[currentIndex - 1] : null;
 }
 
 async function sendFollowUpEmail(project, campaign) {

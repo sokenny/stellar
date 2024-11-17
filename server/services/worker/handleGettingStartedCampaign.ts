@@ -54,13 +54,14 @@ async function handleGettingStartedCampaign() {
     {
       id: 'getting-started-2',
       daysAgo: 6, // 1 day + 5 days
-      subject: 'Getting Started: Your Second Tip!',
+      subject:
+        'The #1 Mistake Holding Back Your Conversions (And How to Fix It)',
       html: secondTipEmailHtml,
     },
     {
       id: 'getting-started-3',
       daysAgo: 16, // 1 day + 5 days + 10 days
-      subject: 'Getting Started: Your Third Tip!',
+      subject: '3 Simple Rules to Maximize Your A/B Testing Results',
       html: thirdTipEmailHtml,
     },
   ];
@@ -74,8 +75,12 @@ async function processCampaign(campaign, fourHoursAgo) {
   const dateThreshold = new Date(
     fourHoursAgo.getTime() - 1000 * 60 * 60 * 24 * campaign.daysAgo,
   );
+
+  // Determine the previous campaign ID
+  const previousCampaignId = getPreviousCampaignId(campaign.id);
+
   const res = await db.sequelize.query(
-    `SELECT u.id as user_id, u.email, u.first_name, u.last_name
+    `SELECT u.id as user_id, u.email, u.first_name, u.last_name, u.email_settings
        FROM users u
        LEFT JOIN transactional_emails te
          ON u.id = te.user_id
@@ -83,7 +88,16 @@ async function processCampaign(campaign, fourHoursAgo) {
        WHERE u.created_at BETWEEN '2024-10-16' AND '${dateThreshold.toISOString()}'
          AND te.id IS NULL
          AND u.email NOT LIKE '%ignorar%'
-       LIMIT 10;`, // Limit to 10 emails per run
+       ${
+         previousCampaignId
+           ? `AND EXISTS (
+         SELECT 1 FROM transactional_emails te_prev
+         WHERE te_prev.user_id = u.id
+         AND te_prev.campaign_id = '${previousCampaignId}'
+       )`
+           : ''
+       }
+       LIMIT 5;`, // Limit to 10 emails per run
   );
 
   const users = res[0];
@@ -91,9 +105,24 @@ async function processCampaign(campaign, fourHoursAgo) {
   console.log(`Users length for ${campaign.id}: `, users.length);
 
   for (const user of users) {
-    console.log('will send email ', campaign.id, ' to user: ', user.email);
-    await sendGettingStartedEmail(user, campaign);
+    if (user.email_settings.recommendations) {
+      // Check if recommendations is true
+      console.log('will send email ', campaign.id, ' to user: ', user.email);
+      await sendGettingStartedEmail(user, campaign);
+    } else {
+      console.log('Skipping user due to email settings: ', user.email);
+    }
   }
+}
+
+function getPreviousCampaignId(currentCampaignId) {
+  const campaignOrder = [
+    'getting-started-1',
+    'getting-started-2',
+    'getting-started-3',
+  ];
+  const currentIndex = campaignOrder.indexOf(currentCampaignId);
+  return currentIndex > 0 ? campaignOrder[currentIndex - 1] : null;
 }
 
 async function sendGettingStartedEmail(user, campaign) {

@@ -27,6 +27,7 @@ import autoGenerate from './handlers/autoGenerate';
 import createProject from './handlers/createProject';
 import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
 import saveOnboardingDataHandler from './handlers/saveOnboardingDataHandler';
+import updateEmailSettings from './handlers/updateEmailSettings';
 
 const router = express.Router();
 
@@ -68,5 +69,7 @@ router.get('/projects/:userEmail', getProjects);
 router.post('/check-snippet', checkSnippet);
 
 router.post('/onboarding', saveOnboardingDataHandler);
+
+router.put('/user/email-settings', updateEmailSettings);
 
 export default router;

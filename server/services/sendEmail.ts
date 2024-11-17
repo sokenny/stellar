@@ -15,11 +15,13 @@ async function sendEmail({
     name: 'Stellar AB Testing',
   };
 
+  const updatedHtml = `${html}<br><br><a href="https://gostellar.app/account">Unsubscribe</a> by updating your email preferences.`;
+
   client.send({
     from: sender,
     to: recipients,
     subject,
-    html,
+    html: updatedHtml,
     category,
   });
 }

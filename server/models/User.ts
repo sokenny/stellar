@@ -11,6 +11,7 @@ class User extends Model {
   public confirmed_at!: Date;
   public created_at!: Date;
   public updated_at!: Date;
+  public email_settings!: { recommendations: boolean; reminders: boolean };
 }
 
 export const initializeUser = (sequelize: Sequelize): typeof User => {
@@ -57,6 +58,11 @@ export const initializeUser = (sequelize: Sequelize): typeof User => {
       updated_at: {
         type: DataTypes.DATE,
         allowNull: true,
+      },
+      email_settings: {
+        type: DataTypes.JSONB,
+        allowNull: true,
+        defaultValue: { recommendations: true, reminders: true },
       },
     },
     {

@@ -3,6 +3,7 @@ import db from '../../models';
 import launchExperiment from '../launchExperiment';
 import stopExperiment from '../stopExperiment';
 import handleSnippetInstallationFollowUps from './handleSnippetInstallationFollowUps';
+import handleGettingStartedCampaign from './handleGettingStartedCampaign';
 
 async function handleScheduledExperimentsLaunch() {
   console.log('Worker job handleScheduledExperimentsLaunch started');
@@ -85,6 +86,12 @@ function runWorker() {
     handleSnippetInstallationFollowUps();
     setInterval(handleSnippetInstallationFollowUps, 1000 * 60 * 20);
   }, 1000 * 60 * 4);
+
+  // Run the third service 6 minutes after the third one, then every 20 minutes
+  setTimeout(() => {
+    handleGettingStartedCampaign();
+    setInterval(handleGettingStartedCampaign, 1000 * 60 * 20);
+  }, 1000 * 60 * 6);
 }
 
 export default runWorker;
