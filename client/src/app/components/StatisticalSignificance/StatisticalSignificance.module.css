@@ -1,6 +1,11 @@
 .confidenceMessage {
-    font-size: 16px;
-    color: rgba(0, 0, 0, 0.4) !important;
-    font-weight: 300;
-    margin-top: 12px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.4) !important;
+  font-weight: 300;
+  margin-top: 12px;
+}
+
+.confidenceMessage span {
+  font-weight: 400;
+  color: var(--linkBlue);
 }
