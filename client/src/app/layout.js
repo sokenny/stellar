@@ -23,7 +23,6 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
-// TODO-p1-1: Test & launch getting started campaign and ensure emails are not close to each other
 // TODO-p1-1: Add get ai copy recommendation feature
 // TODO-p1-1: Record youtube video showing basic tutorial
 // TODO-p1-1: Improve landing page, make it look more complete and professional

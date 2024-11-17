@@ -29,7 +29,7 @@ const Plans = () => {
           </div>
           <div className={styles.bullets}>
             <p>
-              <Check width={12} /> Up to 10k MTU
+              <Check width={12} /> Up to 25k MTU
             </p>
             <p>
               <Check width={12} /> Basic support

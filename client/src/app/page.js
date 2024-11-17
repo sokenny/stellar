@@ -8,8 +8,8 @@ import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
+import { Button } from '@nextui-org/react';
 import styles from './page.module.css';
-// import { Button } from '@nextui-org/react';
 
 const quotes = [
   {
@@ -250,10 +250,28 @@ export default async function HomePage({}) {
             </div>
           </div>
           <Plans />
-          <div className={styles.faqs}>
-            {/* <h3>FAQ</h3> */}
-            {/* <Faqs /> */}
+          <div className={styles.notSure}>
+            <h3>
+              Still not sure? <span>Let's talk</span>
+            </h3>
+            <a
+              href="https://calendly.com/juanchaher99/stellar-demo"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Button className={styles.scheduleBtn}>Schedule a Demo</Button>
+            </a>
+            {/* <div className={styles.cardContainer}>
+              <div className={styles.bgDeco}></div>
+              <div className={styles.card}>
+                <Button>Schedule a Demo</Button>
+              </div>
+            </div> */}
           </div>
+          {/* <div className={styles.faqs}> */}
+          {/* <h3>FAQ</h3> */}
+          {/* <Faqs /> */}
+          {/* </div> */}
         </div>
       </div>
     </>
