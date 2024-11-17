@@ -9,6 +9,7 @@ import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
 import Cookie from './icons/Cookie';
 import styles from './page.module.css';
+// import { Button } from '@nextui-org/react';
 
 const quotes = [
   {
@@ -88,9 +89,18 @@ export default async function HomePage({}) {
             </h2>
           </div>
           <div className={styles.ctaSection}>
-            <SignUpCTA className={styles.goStellarBtn}>
-              Start For Free
-            </SignUpCTA>
+            <div className={styles.buttons}>
+              <SignUpCTA className={styles.goStellarBtn}>
+                Start For Free
+              </SignUpCTA>
+              {/* <Button
+                className={styles.scheduleDemoBtn}
+                color="secondary"
+                variant="flat"
+              >
+                Schedule demo
+              </Button> */}
+            </div>
             <div className={styles.points}>
               <div className={styles.noCard}>💳 No credit card required</div>
               <div className={styles.lightest}>

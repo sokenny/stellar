@@ -10,7 +10,10 @@ import Script from 'next/script';
 
 import './globals.css';
 
-const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700'],
+});
 
 export const metadata = {
   title: 'Stellar | A/B Test Any Website',
@@ -20,13 +23,13 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
-// TODO-p1-1: Outreach to digital marketing agencies offering free usage.
-// TODO-p1-1: Escribirle a youtubers como https://www.youtube.com/@AlanValdez/videos - https://www.youtube.com/@VictorPeinadoDigital/videos - https://www.youtube.com/@AaronYoungGoogleAds/videos
 // TODO-p1-1: Add schedule a demo button
 // TODO-p1-1: Run optimizations for g ads campaign
-// TODO-p1-1: Test & launch getting started campaign and ensure emails are not close to each other
-// TODO-p1-1: Introduce key error login with prefixes in main services to easily lookup on cloudwatch
 // TODO-p1-1: Add statistical significance display on experiment page
+// TODO-p1-1: Test & launch getting started campaign and ensure emails are not close to each other
+// TODO-p1-1: Outreach to digital marketing agencies offering free usage.
+// TODO-p1-1: Escribirle a youtubers como https://www.youtube.com/@AlanValdez/videos - https://www.youtube.com/@VictorPeinadoDigital/videos - https://www.youtube.com/@AaronYoungGoogleAds/videos
+// TODO-p1-1: Introduce key error login with prefixes in main services to easily lookup on cloudwatch
 // TODO-p1-1: Copiar la seccion de "Run meaningful A/B tests. Find the..." de optimonk
 // TODO-p1-1: Allow space for variant names
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)

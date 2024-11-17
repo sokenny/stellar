@@ -14,6 +14,7 @@ import GoalIcon from '../../icons/Goal';
 import Calendar from '../../icons/Calendar';
 import Page from '../../icons/Page';
 import VariantsTable from '../../components/VariantsTable/VariantsTable';
+import StatisticalSignificance from '../../components/StatisticalSignificance';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useStore from '../../store';
@@ -36,8 +37,17 @@ export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
-  const { user, currentProject, refetchProjects, token, charts, setCharts } =
-    useStore();
+  const {
+    user,
+    currentProject,
+    refetchProjects,
+    token,
+    charts,
+    setCharts,
+    stats,
+  } = useStore();
+  const uvStats = stats[experimentId + '-unique-visitors'];
+
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
   const experiment = currentProject?.experiments?.find(
@@ -290,6 +300,11 @@ export default function ExperimentPage({ params, searchParams }) {
               className={styles.chart}
               variants={experiment.variants}
             />
+          )}
+          {hasStarted && (
+            <div className={styles.statSig}>
+              <StatisticalSignificance experiment={experiment} />
+            </div>
           )}
         </section>
         {showSetUpGoalModal && (
