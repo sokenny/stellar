@@ -7,8 +7,9 @@ const firstTipEmailHtml = (data) => `
   <p>When it comes to AB testing, you don’t need a complete overhaul to see results.</p> 
   <p>In fact, small changes can lead to significant improvements.</p> 
   <p>Here are three quick tests you can run right away:</p>
-  <p><strong>Headline Experiment:</strong> Test different copy on your titles. Try different angles of your offer. We found font size and color can also make a big difference.</p>
-  <p><strong>CTA Button Variations:</strong> Swap out your CTA text (e.g., "Learn More" vs. "Get Started Now") and see which drives more clicks.</p>
+  <p><strong>Headline Experiment:</strong> Test different copy on your titles, trying different angles of your offer. We also found font size and color variations can make a big difference as well.</p>
+  <p><strong>CTA Button Variations:</strong> Swap out your CTA text (e.g., "Learn More" vs. "Get Started Now") and see which drives more clicks.</p>  
+  <p><strong>Testimonials On/Off Experiment:</strong> Displaying testimonials next to your CTA can build trust and encourage conversions. Try showing a few customer quotes or reviews and see if it increases your click-through rate. Alternatively, test the impact of having no testimonials at all.</p>
   <p>You’d be surprised at the impact a small change can make. If you don't believe us, try and prove us wrong 🙏.</p>
   <p><a href="https://gostellar.app/dashboard">Start Testing</a></p>
   <p>Best, <br>Juan 👨‍🔬</p>
@@ -94,6 +95,7 @@ async function processCampaign(campaign, fourHoursAgo) {
          SELECT 1 FROM transactional_emails te_prev
          WHERE te_prev.user_id = u.id
          AND te_prev.campaign_id = '${previousCampaignId}'
+         AND te_prev.created_at <= '${dateThreshold.toISOString()}'
        )`
            : ''
        }

@@ -15,7 +15,7 @@ async function sendEmail({
     name: 'Stellar AB Testing',
   };
 
-  const updatedHtml = `${html}<br><br><a href="https://gostellar.app/account">Unsubscribe</a> by updating your email preferences.`;
+  const updatedHtml = `${html}<br><br><span style="color: #e3e3e3;"><a href="https://gostellar.app/account">Unsubscribe</a> by updating your email preferences.</span>`;
 
   client.send({
     from: sender,
