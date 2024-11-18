@@ -23,6 +23,7 @@ export const metadata = {
 // Copiarme de la seccion de AB Testing de optimonk
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
+// triggerrebuild
 // TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
 // TODO-p1-1: Allow adding global css & JS to the experiment. That way I can display:none by id.
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
