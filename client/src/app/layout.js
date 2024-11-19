@@ -24,7 +24,6 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
-// TODO-p1-1: Allow dynamic keyword insertion from url params
 // TODO-p1-1: Improve statsig calculator
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Add get ai copy recommendation feature

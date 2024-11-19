@@ -233,6 +233,14 @@
     });
   }
 
+  function replaceKeywordsWithParams(text) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return text.replace(/{{(.*?)}}/g, (match, content) => {
+      const [keyword, fallback] = content.split('||');
+      return urlParams.get(keyword) || fallback || match;
+    });
+  }
+
   function mountExperiments(experiments, callback = () => {}) {
     log('Running mountExperiments');
     const stellarData = getStellarData();
@@ -286,7 +294,9 @@
               log('Modification target element: ', targetElement);
 
               if (targetElement) {
-                targetElement.innerText = modification.innerText;
+                targetElement.innerText = replaceKeywordsWithParams(
+                  modification.innerText,
+                );
                 targetElement.style.cssText = modification.cssText;
               } else {
                 sessionIssues.push({

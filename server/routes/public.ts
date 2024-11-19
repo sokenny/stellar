@@ -19,7 +19,7 @@ import handleLogin from './handlers/handleLogin';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5,
+  max: 50,
   message: 'Too many requests from this IP, please try again after some time',
   standardHeaders: true,
   legacyHeaders: false,
