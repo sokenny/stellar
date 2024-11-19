@@ -88,10 +88,10 @@ function runWorker() {
   }, 1000 * 60 * 4);
 
   // Run the third service 6 minutes after the third one, then every 20 minutes
-  setTimeout(() => {
-    handleGettingStartedCampaign();
-    setInterval(handleGettingStartedCampaign, 1000 * 60 * 20);
-  }, 1000 * 60 * 6);
+  // setTimeout(() => {
+  //   handleGettingStartedCampaign();
+  //   setInterval(handleGettingStartedCampaign, 1000 * 60 * 20);
+  // }, 1000 * 60 * 6);
 }
 
 export default runWorker;

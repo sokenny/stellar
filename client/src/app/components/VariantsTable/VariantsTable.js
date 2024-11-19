@@ -142,11 +142,16 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
   function getVariantsRows(variants, hasStarted) {
     return variants.map((variant) => {
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
+      const changesCount =
+        (variant?.modifications?.length || 0) +
+        (variant.global_css ? 1 : 0) +
+        (variant.global_js ? 1 : 0);
+
       return {
         id: variant.id,
         name: variant.name,
         traffic: <>{variant.traffic + '%'}</>,
-        changes: variant?.modifications?.length,
+        changes: changesCount,
         ...(statsType === 'total-sessions'
           ? { sessions: hasStarted ? variantStats?.sessions : '-' }
           : {

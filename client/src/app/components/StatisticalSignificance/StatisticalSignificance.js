@@ -77,7 +77,7 @@ export default function StatisticalSignificance({ experiment }) {
     )}%</span>. There is a <span>${significance.toFixed(
       2,
     )}%</span> chance <span>${
-      dataOfVariantWithHighestConversionRate.name
+      dataOfVariantWithHighestConversionRate?.name
     }</span> is the winner of this experiment.`;
 
     // Determine additional context based on significance

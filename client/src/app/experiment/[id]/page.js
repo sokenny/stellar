@@ -110,7 +110,10 @@ export default function ExperimentPage({ params, searchParams }) {
 
   const { goal } = experiment;
   const hasCeroChanges = experiment.variants.every(
-    (variant) => variant.modifications?.length === 0,
+    (variant) =>
+      variant.modifications?.length === 0 &&
+      !variant.global_css &&
+      !variant.global_js,
   );
 
   async function handleCreateVariant() {

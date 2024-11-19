@@ -102,8 +102,11 @@ const Header = ({ experiment }) => {
   }
 
   const hasGoal = experiment.goal;
-  const hasCeroChanges = !experiment.variants.some(
-    (variant) => variant.modifications?.length > 0,
+  const hasCeroChanges = experiment.variants.every(
+    (variant) =>
+      variant.modifications?.length === 0 &&
+      !variant.global_css &&
+      !variant.global_js,
   );
 
   function getLaunchTooltipCopy() {

@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import db from '../../models';
-import { invalidateCache } from '../../helpers/cache';
 
 async function setVariantModifications(req: Request, res: Response) {
   const variantId: string = req.params.id;
-  const { modifications } = req.body;
-
-  console.log('modifications! ', modifications);
+  const { modifications, globalCss, globalJs } = req.body;
 
   const variant = await db.Variant.findOne({
     where: { id: variantId },
@@ -19,6 +16,8 @@ async function setVariantModifications(req: Request, res: Response) {
 
   const updatedVariant = await variant.update({
     modifications,
+    global_css: globalCss || null,
+    global_js: globalJs || null,
   });
 
   res.json(updatedVariant);

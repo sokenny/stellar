@@ -12,6 +12,8 @@ class Variant extends Model {
   public modifications?: any;
   public traffic: number;
   public deleted_at?: Date;
+  public global_css?: string;
+  public global_js?: string;
 }
 
 export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
@@ -54,6 +56,14 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
       },
       deleted_at: {
         type: DataTypes.DATE,
+        allowNull: true,
+      },
+      global_css: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      global_js: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     },

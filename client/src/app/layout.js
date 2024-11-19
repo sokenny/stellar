@@ -26,6 +26,8 @@ export const metadata = {
 // triggerrebuild
 // TODO-p1-1: Consider the buildr working like: if #id, use #id, else, relative selector
 // TODO-p1-1: Allow adding global css & JS to the experiment. That way I can display:none by id.
+// TODO-p1-1: Allow dynamic keyword insertion from url params
+// TODO-p1-1: Improve statsig calculator
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Add get ai copy recommendation feature
 // TODO-p1-1: Record youtube video showing basic tutorial

@@ -25,6 +25,10 @@
   let selectedElement = null;
   let loadingVariantCreation = false;
   let variantCreated = false;
+  let globalCssText: string = '';
+  let globalJsText: string = '';
+  const globalStyleElement = document.createElement('style');
+  document.head.appendChild(globalStyleElement);
 
   function showLoadingState(text) {
     const loadingElement = document.createElement('div');
@@ -246,12 +250,23 @@
                   console.error('Element not found:', mod.selector);
                 }
               });
+              if (variant.global_css) {
+                globalCssText = variant.global_css;
+                updateGlobalStyles(globalCssText);
+              }
+
+              if (variant.global_js) {
+                globalJsText = variant.global_js;
+                const scriptElement = document.createElement('script');
+                scriptElement.type = 'text/javascript';
+                scriptElement.text = globalJsText;
+                document.body.appendChild(scriptElement);
+              }
             }
 
             initializeEditedElements(variant);
             hideLoadingState();
           }
-          let customCssText: any = '';
           const styles = `.stellar-variant-editor { 
             position: fixed;
             background-color: white;
@@ -379,8 +394,13 @@
             margin-bottom: 16px;
           }
 
-          .sve-field-group textarea {
+          .sve-field-group textarea, #sve-global-code-textarea {
             resize: none;
+          }
+
+          #sve-global-code-textarea {
+            height: 400px;
+            font-size: 14px;
           }
 
           .sve-field-group label {
@@ -389,11 +409,31 @@
             font-size: 10px;
           }
 
-          .sve-field-group input, .sve-field-group textarea {
+          .sve-field-group input, .sve-field-group textarea, #sve-global-code-textarea {
             border: 1px solid rgba(0, 0, 0, 0.2);
             outline: none;
             padding: 4px;
             width: 100%;
+          }
+
+          .sve-global-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+
+          .sve-global-buttons button, #sve-cancel-global-code, #sve-save-global-code {
+            width: 48%;
+            font-size: 12px;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            background-color: rgba(60, 146, 226, 0.1);
+            border: 1px solid rgba(60, 146, 226, .25);
+          }
+
+          #sve-cancel-global-code {
+            background-color: rgba(255, 0, 0, 0.1);
           }
 
           .sve-hide-element {
@@ -410,12 +450,15 @@
 
           function actionsComponent() {
             const isSaveDisabled =
-              editedElements.length === 0 || loadingVariantCreation;
+              (editedElements.length === 0 &&
+                !globalCssText &&
+                !globalJsText) ||
+              loadingVariantCreation;
             return `<div class="sve-actions">
-                  <button id="sve-save-variant" class="${
-                    isSaveDisabled ? 'sve-disabled' : ''
-                  }"">Save And Finish</button>
-                </div>`;
+                    <button id="sve-save-variant" class="${
+                      isSaveDisabled ? 'sve-disabled' : ''
+                    }">Save And Finish</button>
+                  </div>`;
           }
 
           function editedElementsComponent() {
@@ -500,8 +543,12 @@
                     <input type="color" id="stellar-background-color" name="stellar-background-color" value=${backgroundColor}>
                   </div>
                   <div class="sve-field-group">
-                    <label>Custom CSS</label>
-                    <textarea id="stellar-custom-css" name="stellar-custom-css"></textarea>
+                    <label>Custom Element CSS</label>
+                    <textarea id="stellar-custom-element-css" name="stellar-custom-element-css" placeholder="color: red;"></textarea>
+                  </div>
+                  <div class="sve-field-group sve-global-buttons">
+                    <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator">has changes</span></button>
+                    <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator">has changes</span></button>
                   </div>
                   <div id="sve-edited-elements-entry-point"></div>
                 </div>
@@ -609,6 +656,8 @@
                 },
                 body: JSON.stringify({
                   modifications,
+                  globalCss: globalCssText,
+                  globalJs: globalJsText,
                   experimentId, // NOTE: we might not need experimentId
                 }),
               },
@@ -630,11 +679,26 @@
 
           function attachActionsListeners() {
             const saveVariant = document.getElementById('sve-save-variant');
+            const globalCssButton = document.getElementById('sve-global-css');
+            const globalJsButton = document.getElementById('sve-global-js');
+
             if (saveVariant) {
               saveVariant.addEventListener('click', function () {
                 if (!this.classList.contains('sve-disabled')) {
                   handleSaveAndFinishVariant();
                 }
+              });
+            }
+
+            if (globalCssButton) {
+              globalCssButton.addEventListener('click', function () {
+                renderGlobalCodeEditor('css');
+              });
+            }
+
+            if (globalJsButton) {
+              globalJsButton.addEventListener('click', function () {
+                renderGlobalCodeEditor('js');
               });
             }
           }
@@ -773,7 +837,7 @@
             }
 
             const customCssInput = document.getElementById(
-              'stellar-custom-css',
+              'stellar-custom-element-css',
             ) as any;
             if (customCssInput) {
               // This function handles not resetting the css set with individual style input fields
@@ -788,15 +852,15 @@
                   'stellar-font-size',
                 ) as any;
                 element.style.fontSize = stellarFontSizeEl.value + 'px';
-                element.style.cssText += ';' + customCssText;
+                element.style.cssText += ';' + globalCssText;
               }
 
               customCssInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const customCssTextEl = document.getElementById(
-                    'stellar-custom-css',
+                  const globalCssTextEl = document.getElementById(
+                    'stellar-custom-element-css',
                   ) as any;
-                  customCssText = customCssTextEl.value;
+                  globalCssText = globalCssTextEl.value;
                   applyStylesToElement(selectedElement);
                   handleElementMutation();
                 }
@@ -841,6 +905,85 @@
           if (visualEditorOn === 'true') {
             handleClickBehaviour();
           }
+
+          function renderGlobalCodeEditor(type: 'css' | 'js') {
+            const editor: any = document.querySelector(
+              '.stellar-variant-editor',
+            );
+            if (editor) {
+              const placeholderText =
+                type === 'css'
+                  ? '#element {\n  color: red;\n}'
+                  : `// Example JS\nconsole.log('Hello, World!');`;
+
+              editor.innerHTML = `
+                <div class="sve-inner-wrapper">
+                  <textarea id="sve-global-code-textarea" placeholder="${placeholderText}">${
+                type === 'css' ? globalCssText : globalJsText
+              }</textarea>
+                  <div class="sve-actions">
+                    <button id="sve-cancel-global-code">Cancel</button>
+                    <button id="sve-save-global-code">Save</button>
+                  </div>
+                </div>
+              `;
+              attachCustomCodeListeners(type);
+            }
+          }
+
+          function updateGlobalStyles(cssText) {
+            globalStyleElement.innerText = cssText;
+          }
+
+          function updateChangeIndicators() {
+            const cssChangeIndicator = document.getElementById(
+              'css-change-indicator',
+            );
+            const jsChangeIndicator = document.getElementById(
+              'js-change-indicator',
+            );
+
+            if (cssChangeIndicator) {
+              cssChangeIndicator.style.display = globalCssText.trim()
+                ? 'inline-block'
+                : 'none';
+            }
+            if (jsChangeIndicator) {
+              jsChangeIndicator.style.display = globalJsText.trim()
+                ? 'inline-block'
+                : 'none';
+            }
+          }
+
+          function attachCustomCodeListeners(type: 'css' | 'js') {
+            const saveButton = document.getElementById('sve-save-global-code');
+            const cancelButton = document.getElementById(
+              'sve-cancel-global-code',
+            );
+            const textarea = document.getElementById(
+              'sve-global-code-textarea',
+            ) as HTMLTextAreaElement;
+
+            if (saveButton) {
+              saveButton.addEventListener('click', () => {
+                if (type === 'css') {
+                  globalCssText = textarea.value;
+                  updateGlobalStyles(globalCssText);
+                } else {
+                  globalJsText = textarea.value;
+                }
+                renderEditor({ element: selectedElement });
+                updateChangeIndicators();
+              });
+            }
+
+            if (cancelButton) {
+              cancelButton.addEventListener('click', () => {
+                renderEditor({ element: selectedElement });
+                updateChangeIndicators();
+              });
+            }
+          }
         }
       }
     };
@@ -880,4 +1023,22 @@
     document.addEventListener('click', handleGoalElementSelection);
     document.addEventListener('contextmenu', handleGoalElementSelection);
   }
+
+  // Add styles for the change indicators
+  const style = document.createElement('style');
+  style.type = 'text/css';
+  style.appendChild(
+    document.createTextNode(`
+    .change-indicator {
+        display: none;
+        margin-left: 5px;
+        color: white;
+        font-size: 8px;
+        padding: 2px 4px;
+        border-radius: 2px;
+        background-color: rgba(60, 146, 226, 1);
+    }
+  `),
+  );
+  document.head.appendChild(style);
 })();

@@ -265,6 +265,20 @@
           if (variant.id === variantToUse) {
             log('Matching variant found: ', variant);
 
+            if (variant.global_css) {
+              log('global_css found: ', variant.global_css);
+              const styleElement = document.createElement('style');
+              styleElement.textContent = variant.global_css;
+              document.head.appendChild(styleElement);
+            }
+
+            if (variant.global_js) {
+              log('global_js found: ', variant.global_js);
+              const scriptElement = document.createElement('script');
+              scriptElement.textContent = variant.global_js;
+              document.body.appendChild(scriptElement);
+            }
+
             variant.modifications.forEach((modification) => {
               const targetElement = document.querySelector(
                 modification.selector,
