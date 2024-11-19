@@ -90,10 +90,20 @@
         }
 
         path.unshift(selector);
+
+        if (element.parentElement && element.parentElement.id) {
+          path.unshift(`#${element.parentElement.id}`);
+          break;
+        }
+
         element = element.parentElement;
       }
 
-      return path.join(' > '); //
+      const maxLevels = 5;
+      const startIndex = Math.max(0, path.length - maxLevels);
+      const limitedPath = path.slice(startIndex);
+
+      return limitedPath.join(' > ');
     }
 
     async function setClickGoal({ selector }) {
@@ -420,6 +430,8 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            width: 100%;
+            white-space: nowrap;
           }
 
           .sve-global-buttons button, #sve-cancel-global-code, #sve-save-global-code {
@@ -494,14 +506,21 @@
             const backgroundColor = style ? style.backgroundColor : '';
             const isHidden = style ? style.display === 'none' : false;
 
-            if (editedElements.length === 0 && element === null) {
-              return `<div class="stellar-variant-editor sve-empty-state">
-                <div>
-                  <div class="sve-identity">STELLAR</div>
-                  <div class="sve-instructions">Click on an element to start editing this page variant.</div>
-                </div>
-              </div>`;
-            }
+            const isInitialState =
+              editedElements.length === 0 && element === null;
+
+            const globalButtons = `
+              <div class="sve-field-group sve-global-buttons" style="margin-top: ${
+                isInitialState ? '16px' : '0'
+              };">
+                <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator" style="display: ${
+                  globalCssText.trim() ? 'inline-block' : 'none'
+                };">has changes</span></button>
+                <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator" style="display: ${
+                  globalJsText.trim() ? 'inline-block' : 'none'
+                };">has changes</span></button>
+              </div>
+            `;
 
             if (variantCreated) {
               return `<div class="stellar-variant-editor sve-empty-state sve-success">
@@ -509,6 +528,17 @@
                   <div class="sve-identity">STELLAR</div>
                   <div class="sve-instructions">Variant created! You can close this tab :)</div>
                 </div>
+                ${globalButtons}
+              </div>`;
+            }
+
+            if (isInitialState) {
+              return `<div class="stellar-variant-editor sve-empty-state">
+                <div>
+                  <div class="sve-identity">STELLAR</div>
+                  <div class="sve-instructions">Click on an element to start editing this page variant.</div>
+                </div>
+                ${globalButtons}
               </div>`;
             }
 
@@ -517,7 +547,7 @@
                 <div class="sve-fields">
                   <div class="sve-field-group">
                     <label>Content</label>
-                    <textarea value="${innerText}" id="stellar-element-content">${innerText}</textarea>
+                    <textarea id="stellar-element-content">${innerText}</textarea>
                   </div>
                   <div class="sve-hide-element">
                     <input type="checkbox" id="sve-hide-element" name="sve-hide-element" value="sve-hide-element" ${
@@ -528,28 +558,25 @@
                   <div class="sve-double-field-group">
                     <div class="sve-field-group">
                       <label>Font Size (px)</label>
-                      <input type="number" id="stellar-font-size" name="stellar-font-size" value=${fontSize}>
+                      <input type="number" id="stellar-font-size" name="stellar-font-size" value="${fontSize}">
                     </div>
                     <div class="sve-field-group">
                       <label>Color</label>
-                      <input type="color" id="stellar-color" name="stellar-color" value=${color.replace(
+                      <input type="color" id="stellar-color" name="stellar-color" value="${color.replace(
                         /\s/g,
                         '',
-                      )}>
+                      )}">
                     </div>
                   </div>
                   <div class="sve-field-group">
                     <label>Background Color</label>
-                    <input type="color" id="stellar-background-color" name="stellar-background-color" value=${backgroundColor}>
+                    <input type="color" id="stellar-background-color" name="stellar-background-color" value="${backgroundColor}">
                   </div>
                   <div class="sve-field-group">
                     <label>Custom Element CSS</label>
                     <textarea id="stellar-custom-element-css" name="stellar-custom-element-css" placeholder="color: red;"></textarea>
                   </div>
-                  <div class="sve-field-group sve-global-buttons">
-                    <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator">has changes</span></button>
-                    <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator">has changes</span></button>
-                  </div>
+                  ${globalButtons}
                   <div id="sve-edited-elements-entry-point"></div>
                 </div>
                 <div id="sve-actions-entry-point"></div>
@@ -935,26 +962,6 @@
             globalStyleElement.innerText = cssText;
           }
 
-          function updateChangeIndicators() {
-            const cssChangeIndicator = document.getElementById(
-              'css-change-indicator',
-            );
-            const jsChangeIndicator = document.getElementById(
-              'js-change-indicator',
-            );
-
-            if (cssChangeIndicator) {
-              cssChangeIndicator.style.display = globalCssText.trim()
-                ? 'inline-block'
-                : 'none';
-            }
-            if (jsChangeIndicator) {
-              jsChangeIndicator.style.display = globalJsText.trim()
-                ? 'inline-block'
-                : 'none';
-            }
-          }
-
           function attachCustomCodeListeners(type: 'css' | 'js') {
             const saveButton = document.getElementById('sve-save-global-code');
             const cancelButton = document.getElementById(
@@ -973,14 +980,12 @@
                   globalJsText = textarea.value;
                 }
                 renderEditor({ element: selectedElement });
-                updateChangeIndicators();
               });
             }
 
             if (cancelButton) {
               cancelButton.addEventListener('click', () => {
                 renderEditor({ element: selectedElement });
-                updateChangeIndicators();
               });
             }
           }
