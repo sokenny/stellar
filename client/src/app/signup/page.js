@@ -23,7 +23,7 @@ const SignUpPage = () => {
           <h1 className={styles.title}>Stellar Sign Up</h1>
           <SignUpForm />
         </div>
-        <div className={styles.colRight}>
+        <div className={styles.colRight} id="col-right">
           <div className={styles.testimonials}>
             <div className={styles.testimonial}>
               <p className={styles.name}>
