@@ -3,7 +3,7 @@ import AutoPlayVideo from './components/AutoPlayVideo';
 import Plans from './components/Plans';
 import GridBg from './components/GridBg/GridBg';
 import HomeChartSection from './components/HomeChartSection';
-import CoolLinesSVG from './components/CoolLinesSVG';
+import StellarSpeed from './components/StellarSpeed';
 import Bolt from './icons/Bolt';
 import Traffic from './icons/Traffic';
 import Goal from './icons/Goal';
@@ -157,46 +157,89 @@ export default async function HomePage({}) {
           </div>
           {/* <HomeChartSection /> */}
           <div className={styles.process}>
-            <div className={styles.block}>
-              <div className={styles.texts}>
-                <h3 className={styles.title}>
-                  Create variants with our visual editor.
-                </h3>
-                <p>
-                  Once you install our snippet, you'll be able to access a
-                  WYSIWYG editor inside of your website. Here you can easily
-                  make the necessary HTML / CSS adjustments to create your
-                  variants.
-                </p>
+            <div className={styles.row}>
+              <div className={styles.block}>
+                <div className={styles.texts}>
+                  <h3 className={styles.title}>
+                    Create variants with our visual editor
+                  </h3>
+                </div>
+                <div>
+                  <AutoPlayVideo
+                    src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
+                    poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                    width={'100%'}
+                    className={styles.video}
+                  />
+                </div>
               </div>
-              <div>
-                <AutoPlayVideo
-                  src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
-                  poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
-                  width={'100%'}
-                  className={styles.video}
-                />
+              <div className={styles.multiBlock}>
+                <div className={styles.card}>
+                  <h3 className={styles.cardTitle}>No-code visual editor</h3>
+                  <p>
+                    Install our snippet to access a WYSIWYG editor directly on
+                    your site. Works with any website.
+                  </p>
+                </div>
+                <div className={styles.card}>
+                  <h3 className={styles.cardTitle}>
+                    Dynamic Keyword Insertion
+                  </h3>
+                  <p>
+                    Personalize your landing pages copy with dynamic keyword
+                    insertion. Great for PPC campaigns. Zero coding required.
+                  </p>
+                </div>
+                <div className={styles.card}>
+                  <h3 className={styles.cardTitle}>Custom JS and CSS</h3>
+                  <p>
+                    Add custom JavaScript and CSS for more granular control over
+                    your page. Perfect for advanced tweaks and precise
+                    adjustments.
+                  </p>
+                </div>
               </div>
             </div>
-            <div className={styles.block}>
-              <div className={`${styles.left} ${styles.texts}`}>
-                <h3 className={styles.title}>Set your goal in seconds.</h3>
-                <p>
-                  Our goal setting is easy yet powerful. Set one based on
-                  clicks, page visits or time spent on the page. Zero coding
-                  required.
-                </p>
+
+            <div className={styles.row}>
+              <div className={styles.multiBlock}>
+                <div className={styles.card}>
+                  <h3 className={styles.cardTitle}>Easy Goal Setup</h3>
+                  <p>
+                    Set your goals in seconds with a simple interface. Choose
+                    from page visits, time spent on a page, or specific user
+                    actions—no coding needed.
+                  </p>
+                </div>
+                <div className={styles.card}>
+                  <h3 className={styles.cardTitle}>Advanced Goal Tracking</h3>
+                  <p>
+                    Track custom user events like button clicks, form
+                    submissions, or video plays. Combine multiple goals for a
+                    more comprehensive view of performance.
+                  </p>
+                </div>
               </div>
-              <div>
-                <AutoPlayVideo
-                  src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
-                  poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
-                  width={'100%'}
-                  className={styles.video}
-                />
+              <div className={styles.block}>
+                <div className={`${styles.left} ${styles.texts}`}>
+                  <h3 className={styles.title}>Set your goal in seconds.</h3>
+                  <p>
+                    Our goal setting is easy yet powerful. Set one based on
+                    clicks, page visits or time spent on the page. Zero coding
+                    required.
+                  </p>
+                </div>
+                <div>
+                  <AutoPlayVideo
+                    src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
+                    poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
+                    width={'100%'}
+                    className={styles.video}
+                  />
+                </div>
               </div>
             </div>
-            <div className={styles.block}>
+            {/* <div className={styles.block}>
               <div className={styles.texts}>
                 <h3 className={styles.title}>
                   Control your experiments and track their performance.
@@ -214,13 +257,17 @@ export default async function HomePage({}) {
                   width={'100%'}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className={`${styles.advantages} ${styles.quote}`}>
             <h3>Split test your way to market fit and beyond.</h3>
             <SignUpCTA className={styles.startFreeBtn}>
               Start For Free
             </SignUpCTA>
+          </div>
+          <div className={styles.speedContainer}>
+            <h3>Fastest in the market, Built for speed and simplicity</h3>
+            <StellarSpeed />
           </div>
           <div className={styles.biteTestimonials}>
             <h3>Why do users prefer Stellar?</h3>

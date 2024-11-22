@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  gap: 32px;
+}
+
+.container .texts {
+  width: 50%;
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+.texts h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.legend {
+  font-size: 14px;
+  color: var(--textBody);
+  font-weight: 300;
+  margin-top: 12px;
+}
+
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+@media (max-width: 720px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .container .texts {
+    width: 100%;
+  }
+
+  .chartContainer {
+    width: 100%;
+  }
+}

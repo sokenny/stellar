@@ -1,6 +1,4 @@
 .HomePage {
-  padding-left: 5vw;
-  padding-right: 5vw;
 }
 
 .goStellarBtn {
@@ -13,7 +11,7 @@
   height: 50px !important;
   font-size: 18px !important;
   border-radius: 4px !important;
-  margin-left: 12px!important;
+  margin-left: 12px !important;
 }
 
 .content {
@@ -64,11 +62,12 @@
   margin-top: 12px;
 }
 
-.lightest, .noCard {
+.lightest,
+.noCard {
   font-size: 14px;
   color: gray;
   font-weight: 300;
-   border-bottom: 1px dashed gray;
+  border-bottom: 1px dashed gray;
 }
 
 .lightest {
@@ -200,11 +199,11 @@
 }
 
 .startFreeBtn {
-  border-radius: 4px!important;
-  background-color: white!important;
+  border-radius: 4px !important;
+  background-color: white !important;
   margin-top: 32px;
-  color: var(--primary)!important;
-  font-size: 16px!important;
+  color: var(--primary) !important;
+  font-size: 16px !important;
 }
 
 .advantages.quote h3 {
@@ -218,6 +217,52 @@
   width: 100%;
 }
 
+.row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.process .row .block {
+  padding: 32px;
+  margin-bottom: 0;
+}
+
+.row .block .texts {
+  margin-bottom: 16px;
+}
+
+.row .block,
+.row .multiBlock {
+  width: 50%;
+}
+
+.multiBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  padding: 24px;
+  background-color: #fff4fe;
+  border-radius: 4px;
+  border: 1px solid #ffd0fd;
+  flex-grow: 1;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--primary);
+}
+
+.card p {
+  color: var(--textBody);
+  font-weight: 300;
+}
+
 .process .block {
   display: flex;
   flex-direction: column;
@@ -228,12 +273,17 @@
   border-radius: 4px;
 }
 
-.block:nth-child(1) {
+.row:nth-child(1) .block {
   background: linear-gradient(45deg, #f8bdf4, #ffdbfd);
 }
 
-.block:nth-child(2) {
+.row:nth-child(2) .block {
   background: linear-gradient(45deg, #7dc7ff, #a8daff);
+}
+
+.row:nth-child(2) .card {
+  background-color: #ebf6ff;
+  border: 1px solid #76b3f9;
 }
 
 .block:nth-child(3) {
@@ -331,7 +381,6 @@
 .notSure h3 {
   font-size: 32px;
   color: var(--primary);
-
 }
 
 .notSure h3 span {
@@ -343,7 +392,7 @@
 .scheduleBtn {
   /* background-color: var(--linkBlue)!important; */
   /* color: white!important; */
-  border-radius: 4px!important;
+  border-radius: 4px !important;
 }
 
 .cardContainer {
@@ -383,8 +432,22 @@
   border-radius: 16px;
 } */
 
-@media (max-width: 720px) {
+.speedContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 64px;
+}
 
+.speedContainer h3 {
+  max-width: 675px;
+  font-size: 32px;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--primary);
+}
+
+@media (max-width: 720px) {
   .HomePage {
     padding: 0;
   }
@@ -512,4 +575,20 @@
     font-size: 16px!important;
   } */
 
+  .row {
+    flex-direction: column;
+  }
+
+  .row:nth-child(2) {
+    flex-direction: column-reverse;
+  }
+
+  .process .multiBlock,
+  .process .block {
+    width: 100%;
+  }
+
+  .speedContainer {
+    margin-bottom: 32px;
+  }
 }
