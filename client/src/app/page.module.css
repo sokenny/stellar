@@ -129,7 +129,9 @@
 
 .infoBar {
   transition: opacity 0.2s;
-  background-color: var(--linkBlue);
+  /* background-color: var(--linkBlue); */
+  /* background:linear-gradient(45deg,#0053b3,#61a7e8) ; */
+  background-color: #3c80ce;
   color: white;
   position: absolute;
   top: 0;

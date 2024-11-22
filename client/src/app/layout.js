@@ -24,14 +24,15 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
+// TODO-p1-1: Fix disappearing title caused by antiflicker script
 // TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
-// TODO-p1-1: Improve statsig calculator
 // TODO-p1-1: Add get ai copy recommendation feature
-// TODO-p1-1: Record youtube video showing basic tutorial
-// TODO-p1-1: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
-// TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
-// TODO-p1-1: Set up follow up email asking for feedback on lack of activity
 // TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
+// TODO-p1-1: Set up follow up email asking for feedback on lack of activity
+// TODO-p1-1: Add icons to new sections
+// TODO-p1-1: Improve statsig calculator
+// TODO-p1-1: Record youtube video showing basic tutorial
+// TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
 
 // TECHDEBT:
 // TODO-p1-1: Try and have unique-visitors and total-sessions under 1 only service similar to how getchartdata does it
@@ -52,6 +53,7 @@ export const metadata = {
 // TODO-p1-1: Develop AI-assisted experiment creation: Suggests texts, font-colors, sizes, etc.
 // TODO-p1-1: Allow collection of clicks for goal setting
 // TODO-p1-1: Crear el loom de "See How" sobre goal setting
+// TODO-p2: Copiar https://www.mida.so y armar seccion "Works with your favorite tools". Tambien tomar ideas de su h1 y descri
 // TODO-p1-2: Try https://www.blogseo.ai/ for content marketing
 // TODO-p1-2: Launch in AppSumo
 // TODO-p1-2: Create FAQ section (?)

@@ -260,13 +260,13 @@ export default async function HomePage({}) {
             </div> */}
           </div>
           <div className={`${styles.advantages} ${styles.quote}`}>
-            <h3>Split test your way to market fit and beyond.</h3>
+            <h3>Split test your way to market fit and beyond</h3>
             <SignUpCTA className={styles.startFreeBtn}>
               Start For Free
             </SignUpCTA>
           </div>
           <div className={styles.speedContainer}>
-            <h3>Fastest in the market, Built for speed and simplicity</h3>
+            <h3>Fastest in the market, built for speed and simplicity</h3>
             <StellarSpeed />
           </div>
           <div className={styles.biteTestimonials}>

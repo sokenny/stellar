@@ -67,14 +67,14 @@ export default function Account({}) {
         <h4>Email Preferences</h4>
         <Checkbox
           className={styles.checkbox}
-          isSelected={emailSettings.recommendations}
+          isSelected={emailSettings?.recommendations}
           onValueChange={() => handleEmailSettingsChange('recommendations')}
         >
           Receive Recommendations
         </Checkbox>
         <Checkbox
           className={styles.checkbox}
-          isSelected={emailSettings.reminders}
+          isSelected={emailSettings?.reminders}
           onValueChange={() => handleEmailSettingsChange('reminders')}
         >
           Receive Reminders
