@@ -1,0 +1,37 @@
+target_rules table
+
+id
+
+experiment_id
+
+include
+
+exclude
+
+type:
+- country
+- url_params
+- referer
+- device
+
+For type device:
+device_type:
+- mobile
+- tablet
+- desktop
+
+For type url_params:
+param_name:
+param_value:
+match_type:
+- exact
+- contains
+- is_not
+
+For type referer:
+referer_value:
+match_type:
+- exact
+- contains
+- is_not
+

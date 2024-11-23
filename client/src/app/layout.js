@@ -24,8 +24,7 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
-// TODO-p1-1: Fix disappearing title caused by antiflicker script
-// TODO-p1-1: Allow segmenting audience for the experiment, based on country and device (all, mobile, tablet, desktop)
+// TODO-p1-1: Allow segmenting audience for the experiment, based on country, url params, referer and device (all, mobile, tablet, desktop)
 // TODO-p1-1: Add get ai copy recommendation feature
 // TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
