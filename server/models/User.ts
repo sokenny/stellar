@@ -12,6 +12,7 @@ class User extends Model {
   public created_at!: Date;
   public updated_at!: Date;
   public email_settings!: { recommendations: boolean; reminders: boolean };
+  public affiliate_code!: string | null;
 }
 
 export const initializeUser = (sequelize: Sequelize): typeof User => {
@@ -63,6 +64,10 @@ export const initializeUser = (sequelize: Sequelize): typeof User => {
         type: DataTypes.JSONB,
         allowNull: true,
         defaultValue: { recommendations: true, reminders: true },
+      },
+      affiliate_code: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
       },
     },
     {

@@ -1,6 +1,7 @@
 import path from 'path';
 import { Sequelize } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
+import { initializeAffiliateCode } from './AffiliateCode';
 
 dotenvConfig();
 
@@ -47,6 +48,7 @@ db.TransactionalEmail = initializeTransactionalEmail(sequelize);
 db.OnboardingAnswer = initializeOnboardingAnswer(sequelize);
 db.TargetRule = initializeTargetRule(sequelize);
 db.ExperimentTargetRule = initializeExperimentTargetRule(sequelize);
+db.AffiliateCode = initializeAffiliateCode(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;

@@ -61,3 +61,47 @@
   margin-bottom: 12px;
   max-width: 300px
 }
+
+.affiliateCodeSection {
+  background-color: #fbe0ff;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border: 1px solid #f9d1ff;
+}
+
+.affiliateCodeSection h4 {
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 6
+  00;
+}
+.affiliateCodeSection {
+  width: 100%;
+  margin: 1rem 0;
+  max-width: 300px;
+}
+
+.affiliateCodeRow {
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.affiliateInput {
+  margin-bottom: 8px;
+}
+
+.applyButton {
+  min-width: 80px;
+}
+
+.codeSuccess {
+  font-size: 14px;
+  /* margin-bottom: 12px; */
+}
+
+.successTitle {
+  font-size: 14px;
+  color: var(--green);
+  font-weight: 600;
+}

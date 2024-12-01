@@ -1,7 +1,7 @@
 import createAccount from '../../services/createAccount';
 
 async function handleCreateAccount(req, res) {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, affiliateCode } = req.body;
 
   try {
     const newUser = await createAccount({
@@ -9,6 +9,7 @@ async function handleCreateAccount(req, res) {
       lastName,
       email,
       password,
+      affiliateCode,
     });
     res.status(201).json(newUser);
   } catch (error) {

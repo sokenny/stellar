@@ -2,13 +2,14 @@
 
 import { Button, Input } from '@nextui-org/react';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 import segmentTrack from '../../helpers/segment/segmentTrack';
 import isInAppBrowser from '../../helpers/isInAppBrowser';
 import isValidPassword from '../../helpers/isValidPassword';
 import styles from './SignUpForm.module.css';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const SignUpForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -18,6 +19,20 @@ const SignUpForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [affiliateCode, setAffiliateCode] = useState('');
+  const [applyingCode, setApplyingCode] = useState(false);
+  const [codeSuccess, setCodeSuccess] = useState(false);
+  const searchParams = useSearchParams();
+  const codeValidationAttempted = useRef(false);
+
+  useEffect(() => {
+    const code = searchParams.get('affiliateCode');
+    if (code && !codeSuccess && !codeValidationAttempted.current) {
+      setAffiliateCode(code);
+      codeValidationAttempted.current = true;
+      setTimeout(() => validateAffiliateCode(code), 0);
+    }
+  }, [searchParams]);
 
   const handleSignUp = async () => {
     if (!firstName || !lastName) {
@@ -43,7 +58,13 @@ const SignUpForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, email, password }),
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          ...(codeSuccess && { affiliateCode }),
+        }),
       },
     );
 
@@ -72,6 +93,38 @@ const SignUpForm = () => {
       toast.error(resData.error || 'Failed to create account');
     }
     setLoading(false);
+  };
+
+  const validateAffiliateCode = async (codeToValidate) => {
+    const codeToUse = codeToValidate || affiliateCode;
+    if (!codeToUse) return;
+    setApplyingCode(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/public/validate-affiliate-code`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code: codeToUse }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (data.valid) {
+        console.log('esto correee data');
+        setCodeSuccess(true);
+        toast.success('Affiliate code applied successfully!');
+      } else {
+        toast.error(data.error || 'Invalid affiliate code');
+      }
+    } catch (error) {
+      toast.error('Failed to validate affiliate code');
+    } finally {
+      setApplyingCode(false);
+    }
   };
 
   return (
@@ -152,6 +205,49 @@ const SignUpForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           type="password"
         />
+
+        <div className={styles.affiliateCodeSection}>
+          <h4>Cash in your affiliate code</h4>
+          <div className={styles.affiliateCodeRow}>
+            <Input
+              clearable
+              bordered
+              color="default"
+              size="sm"
+              placeholder="Enter code"
+              value={affiliateCode}
+              className={styles.affiliateInput}
+              onChange={(e) => setAffiliateCode(e.target.value)}
+              disabled={codeSuccess}
+            />
+            {!codeSuccess && (
+              <Button
+                color="secondary"
+                size="sm"
+                className={styles.applyButton}
+                isLoading={applyingCode}
+                onClick={validateAffiliateCode}
+              >
+                Apply
+              </Button>
+            )}
+          </div>
+          {codeSuccess && (
+            <div className={styles.codeSuccess}>
+              <div className={styles.successTitle}>
+                Code applied successfully! 🎉
+              </div>
+              <div>
+                This gives you 1 year free access to pro features such as:
+                <ul>
+                  <li>✅ up to 100k monthly users</li>
+                  <li>✅ Dynamic keyword insertion</li>
+                  <li>✅ Custom audience targeting</li>
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
 
         {error && <div className={styles.error}>{error}</div>}
 

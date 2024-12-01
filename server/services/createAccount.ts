@@ -29,7 +29,13 @@ async function sendConfirmationEmail(newUser) {
   });
 }
 
-async function createAccount({ firstName, lastName, email, password }) {
+async function createAccount({
+  firstName,
+  lastName,
+  email,
+  password,
+  affiliateCode = null,
+}) {
   try {
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
@@ -43,6 +49,7 @@ async function createAccount({ firstName, lastName, email, password }) {
       email,
       password: hashedPassword,
       confirmation_token: confirmationToken,
+      affiliate_code: affiliateCode,
     });
 
     await sendConfirmationEmail(newUser);

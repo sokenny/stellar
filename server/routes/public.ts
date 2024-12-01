@@ -16,6 +16,7 @@ import handleGetExperimentChartData from './handlers/handleGetExperimentChartDat
 import handleCreateAccount from './handlers/handleCreateAccount';
 import handleConfirmEmail from './handlers/handleConfirmEmail';
 import handleLogin from './handlers/handleLogin';
+import handleValidateAffiliateCode from './handlers/handleValidateAffiliateCode';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -58,6 +59,8 @@ router.delete('/experiment/:id', publicDeleteExperiment);
 router.get('/chart/experiment/:id', handleGetExperimentChartData);
 
 router.get('/send-test-email', sendEmail);
+
+router.post('/validate-affiliate-code', handleValidateAffiliateCode);
 
 // router.delete('/hipersecretapa/:projectId', deleteProject);
 
