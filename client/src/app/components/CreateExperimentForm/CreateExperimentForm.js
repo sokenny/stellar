@@ -10,6 +10,7 @@ import Button from '../Button/Button';
 import Delete from '../../icons/Delete';
 import { Button as NextUIButton, useDisclosure } from '@nextui-org/react';
 import Input from '../Input/Input';
+import TargetAudienceForm from '../TargetAudienceForm';
 import styles from './CreateExperimentForm.module.css';
 
 const CreateExperimentForm = ({ experimentId }) => {
@@ -33,6 +34,7 @@ const CreateExperimentForm = ({ experimentId }) => {
     onOpen: onOpenSnippetModal,
     onOpenChange: onOpenSnippetModalChange,
   } = useDisclosure();
+  const [showTargetAudienceForm, setShowTargetAudienceForm] = useState(false);
 
   useEffect(() => {
     return () => clearInterval(variantsCheckIntervalRef.current);
@@ -222,6 +224,41 @@ const CreateExperimentForm = ({ experimentId }) => {
                   </NextUIButton>
                 </div>
               </div>
+            </div>
+            <div className={`${styles.variants} ${styles.step}`}>
+              <div className={styles.stepHeader}>
+                <div className={styles.texts}>
+                  <div className={styles.stepTitle}>
+                    3. Target your audience
+                  </div>
+                  {!showTargetAudienceForm && (
+                    <div className={styles.stepLegend}>
+                      Currently set to all users
+                    </div>
+                  )}
+                </div>
+                <NextUIButton
+                  size="sm"
+                  variant="flat"
+                  className={styles.addVariantButton}
+                  onPress={() =>
+                    setShowTargetAudienceForm(!showTargetAudienceForm)
+                  }
+                >
+                  {showTargetAudienceForm
+                    ? 'Disable Targeting Rules'
+                    : 'Use Targeting Rules'}
+                </NextUIButton>
+              </div>
+              {showTargetAudienceForm && (
+                <TargetAudienceForm
+                  experimentId={experimentId}
+                  saveButtonLabel="Set Targeting Rules"
+                  onSuccess={() => {
+                    router.push(`/experiment/${experiment.id}`);
+                  }}
+                />
+              )}
             </div>
             <div className={styles.actions}>
               <Button

@@ -1,0 +1,68 @@
+.targetting {
+  margin-top: 12px;
+}
+
+.ruleType {
+  border-bottom: 1px dashed gray;
+  padding: 16px 0;
+}
+
+.ruleTypeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 14px;
+  color: var(--textBody);
+}
+
+.enabled .ruleTypeRow {
+  margin-bottom: 12px;
+}
+
+.ruleTypeTitle {
+  /* font-weight: 600; */
+}
+
+.ruleTypeDetail {
+  font-size: 12px;
+  color: var(--textBodyLight);
+}
+
+.ruleTypeDetail span {
+  color: var(--blue);
+}
+
+.ruleTypeOption {
+  display: flex;
+  align-items: center;
+  font-weight: 300;
+}
+
+.ruleTypeOption .editRule {
+  margin-left: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.countries .select:last-child {
+  margin-top: 8px;
+}
+
+.tooltip {
+  max-width: 300px;
+  padding: 12px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.saveButton {
+  border-radius: 4px!important;
+  background-color: var(--blue)!important;
+}

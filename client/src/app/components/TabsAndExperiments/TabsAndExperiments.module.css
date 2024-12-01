@@ -32,7 +32,7 @@
 }
 
 .tab.active {
-  background-color: var(--linkBlue);
+  background-color: var(--blue);
   color: white;
   border: none;
   text-align: center;

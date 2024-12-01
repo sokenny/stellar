@@ -10,32 +10,32 @@ const CoolLinesSVG = () => {
       <path
         d="M1009 1C988.976 30.9099 920.612 84.2493 806.757 84.2493C691 84.2493 616.862 137.256 593 167"
         stroke="url(#paint0_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <path
         d="M553 167C569.04 132.731 626.696 51.5545 729 1"
         stroke="url(#paint1_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <path
         d="M579 1C559.667 31.6646 521 107.795 521 167"
         stroke="url(#paint2_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <path
         d="M431 1C450.333 31.6646 489 107.795 489 167"
         stroke="url(#paint3_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <path
         d="M457 167C440.96 132.731 383.304 51.5545 281 1"
         stroke="url(#paint4_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <path
         d="M1 1C21.0241 30.9099 89.3883 84.2493 203.243 84.2493C319 84.2493 393.138 137.256 417 167"
         stroke="url(#paint5_linear_13564_1310)"
-        stroke-width="2"
+        strokeWidth="2"
       ></path>
       <defs>
         <linearGradient

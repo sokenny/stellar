@@ -28,6 +28,7 @@ import createProject from './handlers/createProject';
 import handleGetExperimentChartData from './handlers/handleGetExperimentChartData';
 import saveOnboardingDataHandler from './handlers/saveOnboardingDataHandler';
 import updateEmailSettings from './handlers/updateEmailSettings';
+import setTargetRules from './handlers/setTargetRules';
 
 const router = express.Router();
 
@@ -51,6 +52,7 @@ router.post('/experiment/:id/on', turnOnExperiment);
 router.post('/experiment/:id/launch', handleLaunchExperiment);
 router.put('/experiment/:id/settings', updateExperimentSettings);
 router.delete('/experiment/:id', deleteExperiment);
+router.put('/experiment/:id/target-rules', setTargetRules);
 
 router.get('/variant/:id', getVariant);
 router.put('/variant/:id', editVariant);

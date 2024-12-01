@@ -65,6 +65,12 @@ async function fetchExperiments(projectId: number) {
         attributes: ['id'],
         where: { id: projectId },
       },
+      {
+        model: db.TargetRule,
+        as: 'targetRules',
+        required: false,
+        through: { attributes: [] },
+      },
     ],
   });
 

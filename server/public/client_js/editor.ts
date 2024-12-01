@@ -170,6 +170,10 @@
         background-color: #cfffdf!important;
         border: 1px solid #50c878!important;
       }
+
+      .sve-success .change-indicator {
+        display: none;
+      }
     `;
 
     injectStyles(styles);
@@ -310,6 +314,7 @@
             flex-direction: column;
             justify-content: space-between;
             height: 100%;
+            width: 100%;
           }
 
           .sve-instructions {
@@ -514,10 +519,10 @@
                 isInitialState ? '16px' : '0'
               };">
                 <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator" style="display: ${
-                  globalCssText.trim() ? 'inline-block' : 'none'
+                  globalCssText.trim() ? 'block' : 'none'
                 };">has changes</span></button>
                 <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator" style="display: ${
-                  globalJsText.trim() ? 'inline-block' : 'none'
+                  globalJsText.trim() ? 'block' : 'none'
                 };">has changes</span></button>
               </div>
             `;
@@ -1029,19 +1034,25 @@
     document.addEventListener('contextmenu', handleGoalElementSelection);
   }
 
-  // Add styles for the change indicators
   const style = document.createElement('style');
   style.type = 'text/css';
   style.appendChild(
     document.createTextNode(`
     .change-indicator {
         display: none;
-        margin-left: 5px;
         color: white;
         font-size: 8px;
         padding: 2px 4px;
         border-radius: 2px;
         background-color: rgba(60, 146, 226, 1);
+        margin-top: 4px;
+    }
+
+    #sve-global-css, #sve-global-js {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   `),
   );

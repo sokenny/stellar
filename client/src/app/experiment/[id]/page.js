@@ -7,6 +7,12 @@ import {
   useDisclosure,
   BreadcrumbItem,
   Breadcrumbs,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button as NextUIButton,
 } from '@nextui-org/react';
 import { toast } from 'sonner';
 import getShortId from '../../helpers/getShortId';
@@ -30,6 +36,9 @@ import SnippetInstallationModal from '../../components/Modals/SnippetInstallatio
 import ExperimentChart from '../../components/ExperimentChart';
 import StatsSwitch from '../../components/StatsSwitch/StatsSwitch';
 import styles from './page.module.css';
+import Users from '../../icons/Users';
+import Edit from '../../icons/Edit';
+import TargetAudienceForm from '../../components/TargetAudienceForm/TargetAudienceForm';
 
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();
@@ -46,7 +55,8 @@ export default function ExperimentPage({ params, searchParams }) {
     setCharts,
     stats,
   } = useStore();
-  const uvStats = stats[experimentId + '-unique-visitors'];
+
+  console.log('user! ', user);
 
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
@@ -62,6 +72,15 @@ export default function ExperimentPage({ params, searchParams }) {
   const [chartData, setChartData] = useState([]);
 
   const hasFetchedChartData = useRef(false);
+
+  const [isTargetAudienceModalOpen, setIsTargetAudienceModalOpen] =
+    useState(false);
+
+  const targetRules = experiment?.targetRules?.[0]?.rules || null;
+
+  const hasTargetRules = targetRules
+    ? Object.values(targetRules).some((rule) => rule.enabled)
+    : false;
 
   useEffect(() => {
     if (!token || hasFetchedChartData.current) return;
@@ -256,6 +275,21 @@ export default function ExperimentPage({ params, searchParams }) {
               {experiment.url}
             </a>
           </div>
+          <div className={styles.targetAudience}>
+            <div className={styles.icon}>
+              <Users width={15} height={15} />
+            </div>
+            Target audience:{' '}
+            <div className={styles.targetAudienceText}>
+              {hasTargetRules ? 'Custom rules applied' : 'Set to all users'}
+              <Edit
+                width={15}
+                height={15}
+                className={styles.editIcon}
+                onClick={() => setIsTargetAudienceModalOpen(true)}
+              />
+            </div>
+          </div>
         </div>
         <section>
           <div className={styles.tableHeader}>
@@ -319,6 +353,49 @@ export default function ExperimentPage({ params, searchParams }) {
         )}
         {/* <Experiment experiment={experiment} open={true} /> */}
       </div>
+
+      <Modal
+        isOpen={isTargetAudienceModalOpen}
+        onOpenChange={setIsTargetAudienceModalOpen}
+        isDismissable={false}
+        className={styles.targetAudienceModal}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className={`${styles.title}`}>
+                Edit Target Audience
+              </ModalHeader>
+              <ModalBody className={styles.body}>
+                <TargetAudienceForm
+                  experimentId={experimentId}
+                  targetRules={targetRules}
+                  onClose={onClose}
+                />
+              </ModalBody>
+              {/* <ModalFooter>
+                <NextUIButton
+                  variant="light"
+                  onPress={onClose}
+                  className={styles.button}
+                >
+                  Close
+                </NextUIButton>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    // Add any save logic here if needed
+                    onClose();
+                  }}
+                  className={styles.button}
+                >
+                  Save Changes
+                </Button>
+              </ModalFooter> */}
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }

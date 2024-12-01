@@ -272,12 +272,14 @@ const mockupSessions = [
 
   // For variant B (2642), increase conversions by additional 45%
   if (item.variant_id === 2642) {
-    item.conversions = Math.round(item.conversions * 1.3);
-    item.cumulative_conversions = Math.round(item.cumulative_conversions * 1.3);
-    item.conversion_rate_unique *= 1.3;
-    item.conversion_rate_visitors *= 1.3;
-    item.cumulative_conversion_rate_unique *= 1.3;
-    item.cumulative_conversion_rate_visitors *= 1.3;
+    item.conversions = Math.round(item.conversions * 1.21);
+    item.cumulative_conversions = Math.round(
+      item.cumulative_conversions * 1.21,
+    );
+    item.conversion_rate_unique *= 1.21;
+    item.conversion_rate_visitors *= 1.21;
+    item.cumulative_conversion_rate_unique *= 1.21;
+    item.cumulative_conversion_rate_visitors *= 1.21;
   }
 
   return item;
@@ -403,12 +405,12 @@ const HomeChartSection = () => {
             />
             {variant === 'b' && (
               <Tooltip
-                content="This variant achieved a 42% higher conversion rate than baseline."
+                content="This variant achieved a 21% higher conversion rate than baseline."
                 showArrow
                 className={styles.tooltip}
                 closeDelay={200}
               >
-                <div className={styles.cvr}>+42% CVR</div>
+                <div className={styles.cvr}>+21% CVR</div>
               </Tooltip>
             )}
           </div>

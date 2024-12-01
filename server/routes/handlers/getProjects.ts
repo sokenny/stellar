@@ -10,10 +10,6 @@ async function getProjects(req, res) {
       {
         model: db.Project,
         as: 'projects',
-        // TODO-p2: add deleted_at to projects and uncomment this
-        // where: {
-        //   deleted_at: null,
-        // },
         include: [
           {
             model: db.Experiment,
@@ -36,12 +32,17 @@ async function getProjects(req, res) {
                 as: 'goal',
                 required: false,
               },
+              {
+                model: db.TargetRule,
+                as: 'targetRules',
+                required: false,
+                through: { attributes: [] },
+              },
             ],
           },
         ],
-        order: [[db.Experiment, 'id', 'DESC']], // Esta mierda creo que no esta funcando
+        order: [[db.Experiment, 'id', 'DESC']],
       },
-      // also include api_key
       {
         model: db.ApiKey,
         as: 'api_keys',

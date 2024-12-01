@@ -52,7 +52,7 @@ const Goal = ({ experiment, onEdit, className }) => {
     ),
     SESSION_TIME: (
       <>
-        <span>Time spent</span> by user on the page.
+        <span>Time spent</span> by user on the page
       </>
     ),
   };

@@ -241,6 +241,62 @@
     });
   }
 
+  function getDeviceType() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent)) {
+      return 'tablet';
+    }
+    if (
+      /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        userAgent,
+      )
+    ) {
+      return 'mobile';
+    }
+    return 'desktop';
+  }
+
+  function hasValidTargetRules(experiment) {
+    if (!experiment.targetRules || !experiment.targetRules.length) {
+      return true;
+    }
+
+    const rules = experiment.targetRules[0].rules;
+
+    // Check device targeting
+    if (rules.device?.enabled) {
+      const currentDevice = getDeviceType();
+      if (!rules.device.include.includes(currentDevice)) {
+        log(
+          `Experiment ${experiment.id} not mounted: device ${currentDevice} not in target list ${rules.device.include}`,
+        );
+        return false;
+      }
+    }
+
+    // Check country targeting
+    if (rules.country?.enabled) {
+      const userCountry = navigator.language.split('-')[1]?.toUpperCase() || '';
+      if (rules.country.exclude.includes(userCountry)) {
+        log(
+          `Experiment ${experiment.id} not mounted: country ${userCountry} in exclude list`,
+        );
+        return false;
+      }
+      if (
+        rules.country.include.length > 0 &&
+        !rules.country.include.includes(userCountry)
+      ) {
+        log(
+          `Experiment ${experiment.id} not mounted: country ${userCountry} not in include list`,
+        );
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   function mountExperiments(experiments, callback = () => {}) {
     log('Running mountExperiments');
     const stellarData = getStellarData();
@@ -250,6 +306,10 @@
       experiments.forEach((experiment) => {
         if (global__mountedOnThisPageLoad[experiment.id]) {
           log(`Skipping already mounted experiment: ${experiment.id}`);
+          return;
+        }
+
+        if (!hasValidTargetRules(experiment)) {
           return;
         }
 

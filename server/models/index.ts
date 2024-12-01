@@ -21,6 +21,8 @@ import { initializeGoal } from './Goal';
 import { initializeSessionExperiment } from './SessionExperiment';
 import { initializeTransactionalEmail } from './TransactionalEmail';
 import { initializeOnboardingAnswer } from './OnboardingAnswer';
+import { initializeTargetRule } from './TargetRule';
+import { initializeExperimentTargetRule } from './ExperimentTargetRule';
 
 export const db: { [key: string]: any } = {};
 
@@ -43,6 +45,8 @@ db.Goal = initializeGoal(sequelize);
 db.SessionExperiment = initializeSessionExperiment(sequelize);
 db.TransactionalEmail = initializeTransactionalEmail(sequelize);
 db.OnboardingAnswer = initializeOnboardingAnswer(sequelize);
+db.TargetRule = initializeTargetRule(sequelize);
+db.ExperimentTargetRule = initializeExperimentTargetRule(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -158,6 +162,29 @@ const associateModels = () => {
   db.OnboardingAnswer.belongsTo(db.User, {
     foreignKey: 'user_id',
     as: 'user',
+  });
+
+  db.Project.hasOne(db.TargetRule, {
+    foreignKey: 'project_id',
+    as: 'targetRule',
+  });
+  db.TargetRule.belongsTo(db.Project, {
+    foreignKey: 'project_id',
+    as: 'project',
+  });
+
+  db.Experiment.belongsToMany(db.TargetRule, {
+    through: db.ExperimentTargetRule,
+    foreignKey: 'experiment_id',
+    otherKey: 'target_rule_id',
+    as: 'targetRules',
+  });
+
+  db.TargetRule.belongsToMany(db.Experiment, {
+    through: db.ExperimentTargetRule,
+    foreignKey: 'target_rule_id',
+    otherKey: 'experiment_id',
+    as: 'experiments',
   });
 };
 

@@ -90,8 +90,6 @@ const ExperimentChart = ({
   variants,
   className,
 }) => {
-  console.log('Data!', data);
-  console.log('variants!', variants);
   const [selectedMode, setSelectedMode] = useState(new Set([mode]));
   const [isCumulative, setIsCumulative] = useState(defaultCumulative);
 

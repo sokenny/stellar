@@ -69,12 +69,12 @@
 .goal,
 .datesData,
 .targetPage {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .startDate span,
 .endDate span {
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--textBodyLight);
   font-weight: 300;
 }
 
@@ -82,7 +82,7 @@
   font-weight: 300;
 }
 
-.targetPage {
+.targetPage, .targetAudience {
   display: flex;
   align-items: center;
 }
@@ -94,6 +94,19 @@
 
 .targetPage span {
   margin-left: 4px;
+}
+
+.targetAudienceText {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+  font-weight: 300;
+  color: var(--textBodyLight);
+}
+
+.editIcon {
+  margin-left: 4px;
+  cursor: pointer;
 }
 
 .breadCrumbs {
@@ -131,4 +144,22 @@
 
 .statSig {
   margin-top: 32px;
+}
+
+.targetAudienceModal {
+  max-width: 500px;
+  padding: 32px 32px 16px 32px;
+}
+
+.targetAudienceModal .body {
+  padding: 0;
+}
+
+.targetAudienceModal .title {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.targetAudienceModal .button {
+  border-radius: 4px!important;
 }
