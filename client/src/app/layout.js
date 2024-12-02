@@ -24,17 +24,17 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
+// TODO-p1-1: Make affiliate code widget hidden by default
 // TODO-p1-1 have experiment name editable in the create page
+// TODO-p1-1: hide Statistical Significance section if no data is there
+// TODO-p1-1: Improve statsig calculator
+// TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
+// TODO-p1-1: Create new product demo, post on youtube, advertise instream
 // TODO-p1-1: Inspo from https://www.spectaclehq.com/
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
-// TODO-p1-1: Create new product demo, post on youtube, advertise instream
-// TODO-p1-1: hide Statistical Significance section if no data is there
 // TODO-p1-1: Add get ai copy recommendation feature
-// TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
 // TODO-p1-1: Add icons to new sections
-// TODO-p1-1: Improve statsig calculator
-// TODO-p1-1: Record youtube video showing basic tutorial
 // TODO-p1-1: Allow setting a description / hypothesis / notes for the experiment
 
 // TECHDEBT:

@@ -207,7 +207,7 @@ const SignUpForm = () => {
         />
 
         <div className={styles.affiliateCodeSection}>
-          <h4>Cash in your affiliate code</h4>
+          <h4>Have an affiliate code?</h4>
           <div className={styles.affiliateCodeRow}>
             <Input
               clearable

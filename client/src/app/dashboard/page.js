@@ -37,11 +37,11 @@ export default function Dashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.tutorialLink}>
         <a
-          href="https://www.loom.com/share/e7e907a9f30746c192d09a07d72b8d3b?sid=702ebaa5-d02b-40ef-87fd-bcba8948e0c4"
+          href="https://www.loom.com/embed/c30706b01dfb436c8efcddb5e3a93600?sid=4de78133-64c7-41e6-81ae-20d0aed2ddb4"
           rel="noreferrer"
           target="_blank"
         >
-          📽⚡️ Watch 2 min. tutorial
+          📽⚡️ Watch our quick tutorial
         </a>
       </div>
       {missingSnippet && <SnippetMissing className={styles.snippet} />}
