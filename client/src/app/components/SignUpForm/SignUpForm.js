@@ -240,7 +240,7 @@ const SignUpForm = () => {
               <div>
                 This gives you 1 year free access to pro features such as:
                 <ul>
-                  <li>✅ up to 100k monthly users</li>
+                  <li>✅ Up to 100k monthly users</li>
                   <li>✅ Dynamic keyword insertion</li>
                   <li>✅ Custom audience targeting</li>
                 </ul>

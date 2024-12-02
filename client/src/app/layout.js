@@ -24,8 +24,7 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
-// TODO-p1-1: Allow segmenting audience for the experiment, based on country, url params, referer and device (all, mobile, tablet, desktop)
-// TODO-p1-1: Set up affiliate program
+// TODO-p1-1 have experiment name editable in the create page
 // TODO-p1-1: Inspo from https://www.spectaclehq.com/
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
 // TODO-p1-1: Create new product demo, post on youtube, advertise instream

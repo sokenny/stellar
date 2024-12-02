@@ -19,6 +19,7 @@ const CreateExperimentForm = ({ experimentId }) => {
   const { user, currentProject, refetchProjects } = useStore();
   const experiment =
     currentProject?.experiments?.find((e) => e.id == experimentId) || null;
+  const targetRules = experiment?.targetRules?.[0]?.rules || null;
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
   const [createExperimentLoading, setCreateExperimentLoading] = useState(false);
@@ -257,6 +258,7 @@ const CreateExperimentForm = ({ experimentId }) => {
                   onSuccess={() => {
                     router.push(`/experiment/${experiment.id}`);
                   }}
+                  targetRules={targetRules}
                 />
               )}
             </div>
