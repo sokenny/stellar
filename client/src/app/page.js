@@ -111,10 +111,21 @@ export default async function HomePage({}) {
 
           <div className={styles.loomContainer}>
             <div className={styles.infoBar}>watch our quick demo :)</div>
-            <iframe
-              src="https://www.loom.com/embed/c30706b01dfb436c8efcddb5e3a93600?sid=4de78133-64c7-41e6-81ae-20d0aed2ddb4"
+            {/* <iframe
+              src="https://youtu.be/Oxu4XWrEFY4"
               frameBorder="0"
               allowFullScreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            ></iframe> */}
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/Oxu4XWrEFY4?si=CPMzRxJdXvs3oD28"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
             ></iframe>
           </div>
 

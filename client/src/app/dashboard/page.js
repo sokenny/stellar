@@ -37,7 +37,7 @@ export default function Dashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.tutorialLink}>
         <a
-          href="https://www.loom.com/embed/c30706b01dfb436c8efcddb5e3a93600?sid=4de78133-64c7-41e6-81ae-20d0aed2ddb4"
+          href="https://www.youtube.com/watch?v=Oxu4XWrEFY4&ab_channel=JuanChaher"
           rel="noreferrer"
           target="_blank"
         >
