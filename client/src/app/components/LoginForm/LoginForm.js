@@ -64,7 +64,7 @@ const LoginForm = () => {
 
   return (
     <div className={styles.container}>
-      {!isInAppBrowser() && (
+      {/* {!isInAppBrowser() && (
         <>
           <Button
             color="primary"
@@ -80,7 +80,7 @@ const LoginForm = () => {
           </Button>
           <div className={styles.divider}>or</div>
         </>
-      )}
+      )} */}
       <Input
         clearable
         bordered

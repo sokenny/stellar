@@ -25,10 +25,12 @@ export const metadata = {
 
 // triggerrebuild
 // TODO-p1-1: Make affiliate code widget hidden by default
+// TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
+// TODO-p1-1: Add testament that adresses pains and how we solve it. Similar to foundarpal.ai
 // TODO-p1-1 have experiment name editable in the create page
+// TODO-p1-1: copiar cosas de synthesia https://www.synthesia.io/tools/ai-video-editor
 // TODO-p1-1: hide Statistical Significance section if no data is there
 // TODO-p1-1: Improve statsig calculator
-// TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
 // TODO-p1-1: Create new product demo, post on youtube, advertise instream
 // TODO-p1-1: Inspo from https://www.spectaclehq.com/
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
@@ -44,10 +46,7 @@ export const metadata = {
 // TODO-p1-1: Properly set up layouts
 
 // TODO-p1-1: Introduce key error login with prefixes in main services to easily lookup on cloudwatch
-// TODO-p1-1: Copiar la seccion de "Run meaningful A/B tests. Find the..." de optimonk
 // TODO-p1-1: Allow space for variant names
-// TODO-p1-1: Re-shoot 2 min. demo.
-// TODO-p1-1: Animar con counter y scale up el cartelito de CVR de la winning variant.
 // TODO-p1-1: Add annual / monthly pricing toggle
 
 // TODO-p1-1: Add alerts / notifs for session issues
