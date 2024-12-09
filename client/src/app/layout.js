@@ -24,7 +24,12 @@ export const metadata = {
 // https://supademo.com/?utm_source=My%20workspace&utm_medium=powered-by_web&utm_campaign=powered-by_web
 
 // triggerrebuild
+
 // TODO-p1-1: Make affiliate code widget hidden by default
+// TODO-p1-1: Fix social sign up
+// TODO-p1-1: Research marketing newsletter ads
+// TODO-p1-1: Set up retargetting campaign
+// TODO-p1-1: If email is not verified, show a message to verify email
 // TODO-p1-1: Add more thorough testimonials, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
 // TODO-p1-1: Add testament that adresses pains and how we solve it. Similar to foundarpal.ai
 // TODO-p1-1 have experiment name editable in the create page

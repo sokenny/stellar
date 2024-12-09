@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import styles from './OnboardingForm.module.css';
 import { toast } from 'sonner';
@@ -15,6 +15,35 @@ const OnboardingForm = () => {
   const [monthlyTraffic, setMonthlyTraffic] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { token, session } = useStore();
+
+  const industryOptions = useMemo(() => {
+    const regularOptions = [
+      { key: 'ecommerce', label: 'E-commerce' },
+      { key: 'finance', label: 'Finance' },
+      { key: 'software', label: 'Software' },
+      { key: 'agency', label: 'Agency' },
+      { key: 'education', label: 'Education' },
+      { key: 'nonprofit', label: 'Non-profit' },
+      { key: 'government', label: 'Government' },
+    ].sort(() => Math.random() - 0.5);
+
+    return [...regularOptions, { key: 'other', label: 'Other' }];
+  }, []);
+
+  const discoveryOptions = useMemo(() => {
+    const regularOptions = [
+      { key: 'linkedin', label: 'LinkedIn' },
+      { key: 'youtube-ads', label: 'Youtube Ads' },
+      { key: 'google-seo', label: 'Google SEO' },
+      { key: 'google-sem', label: 'Google SEM' },
+      { key: 'facebook-ads', label: 'Facebook Ads' },
+      { key: 'instagram-ads', label: 'Instagram Ads' },
+      { key: 'reddit', label: 'Reddit' },
+      { key: 'word-of-mouth', label: 'Word of mouth' },
+    ].sort(() => Math.random() - 0.5);
+
+    return [...regularOptions, { key: 'other', label: 'Other' }];
+  }, []);
 
   useEffect(() => {
     const formElement = document.querySelector(`.${styles.formContainer}`);
@@ -88,14 +117,9 @@ const OnboardingForm = () => {
               placeholder="Select your industry"
               onSelectionChange={(val) => setIndustry(val.currentKey)}
             >
-              <SelectItem key="ecommerce">E-commerce</SelectItem>
-              <SelectItem key="finance">Finance</SelectItem>
-              <SelectItem key="software">Software</SelectItem>
-              <SelectItem key="agency">Agency</SelectItem>
-              <SelectItem key="education">Education</SelectItem>
-              <SelectItem key="nonprofit">Non-profit</SelectItem>
-              <SelectItem key="government">Government</SelectItem>
-              <SelectItem key="other">Other</SelectItem>
+              {industryOptions.map((option) => (
+                <SelectItem key={option.key}>{option.label}</SelectItem>
+              ))}
             </Select>
           </div>
 
@@ -121,14 +145,9 @@ const OnboardingForm = () => {
               placeholder="Select an option"
               onSelectionChange={(val) => setDiscoveryMethod(val.currentKey)}
             >
-              <SelectItem key="linkedin">LinkedIn</SelectItem>
-              <SelectItem key="google-seo">Google SEO</SelectItem>
-              <SelectItem key="google-sem">Google SEM</SelectItem>
-              <SelectItem key="facebook-ads">Facebook Ads</SelectItem>
-              <SelectItem key="instagram-ads">Instagram Ads</SelectItem>
-              <SelectItem key="reddit">Reddit</SelectItem>
-              <SelectItem key="word-of-mouth">Word of mouth</SelectItem>
-              <SelectItem key="other">Other</SelectItem>
+              {discoveryOptions.map((option) => (
+                <SelectItem key={option.key}>{option.label}</SelectItem>
+              ))}
             </Select>
           </div>
 
