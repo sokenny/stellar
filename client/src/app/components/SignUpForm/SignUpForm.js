@@ -140,7 +140,7 @@ const SignUpForm = () => {
       )} */}
       {/* {!success && ( */}
       <>
-        {/* {!isInAppBrowser() && (
+        {!isInAppBrowser() && (
           <>
             <Button
               color="primary"
@@ -156,7 +156,7 @@ const SignUpForm = () => {
             </Button>
             <div className={styles.divider}>or</div>
           </>
-        )} */}
+        )}
         <div className={styles.row}>
           <Input
             clearable

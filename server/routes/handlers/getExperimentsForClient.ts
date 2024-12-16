@@ -106,7 +106,13 @@ function weightedRandomSelection(variants) {
 }
 
 async function getExperimentsForClient(req, res) {
-  const apiKey = req.header('Authorization').substring(7);
+  const authHeader = req.header('Authorization');
+
+  if (!authHeader) {
+    return res.status(401).send('Authorization header is required');
+  }
+
+  const apiKey = authHeader.substring(7); // Remove 'Bearer ' prefix
 
   if (!apiKey) {
     return res.status(401).send('API key is required');

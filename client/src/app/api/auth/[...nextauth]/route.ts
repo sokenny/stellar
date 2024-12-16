@@ -43,7 +43,6 @@ const handler = NextAuth({
         const data = await response.json();
 
         if (response.ok && data) {
-          console.log('datusarda , ', data);
           return { ...data.user, isAdmin: data.isAdmin || false };
         } else {
           throw new Error(data.error);
@@ -52,6 +51,48 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn(data) {
+      const { user, account, profile } = data;
+      console.log('data USER!', data);
+
+      // Only proceed with account creation for Google sign-in
+      if (account?.provider === 'google') {
+        try {
+          const response = await fetch(
+            process.env.NEXT_PUBLIC_STELLAR_API +
+              '/public/create-account-social',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...user,
+                first_name: profile.name,
+              }),
+            },
+          );
+
+          console.log('response!', response);
+
+          if (response.status === 401) {
+            console.log('User already exists');
+            // Still return true to allow sign-in even if user exists
+            return true;
+          }
+
+          if (!response.ok) {
+            console.error('Failed to create account');
+            return false;
+          }
+        } catch (error) {
+          console.error('Error during account creation:', error);
+          return false;
+        }
+      }
+
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.isAdmin = user.isAdmin || false;

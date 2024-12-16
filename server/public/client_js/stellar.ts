@@ -467,6 +467,12 @@
         }
         log('Using cached experiments');
       } else {
+        if (!apiKey) {
+          console.error('No API key found - skipping experiments fetch');
+          removeAntiFlickerOverlay();
+          return;
+        }
+
         const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
           method: 'GET',
           headers: {
