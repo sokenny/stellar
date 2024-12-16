@@ -60,7 +60,7 @@ const Plans = () => {
             </p>
           </div>
         </div>
-        <div className={styles.plan}>
+        <div className={`${styles.plan} ${styles.enterprise}`}>
           <div className={styles.main}>
             <h4>Enterprise</h4>
             <div className={styles.price}>

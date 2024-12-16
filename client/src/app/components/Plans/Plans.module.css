@@ -27,7 +27,8 @@
 }
 
 .plan {
-  border: 1px solid black;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1);
+  border: 1px solid rgb(209, 209, 209);
   padding: 32px;
   border-radius: 4px;
   text-align: left;
@@ -37,10 +38,16 @@
   flex-direction: column;
   justify-content: space-between;
   width: 275px;
+  /* background: linear-gradient(45deg, #ffffff, #dde6f5); */
 }
 
 .plan.growth {
-  background: linear-gradient(45deg, #ffffff, #dde6f5);
+  background: linear-gradient(#dde6f5,#fff 90%);
+}
+
+.plan.enterprise {
+  background: linear-gradient(#ffd7f99e,#fff 90%);
+  /* background: linear-gradient(#ffbe30,#fff 90%); */
 }
 
 .plan h4 {
