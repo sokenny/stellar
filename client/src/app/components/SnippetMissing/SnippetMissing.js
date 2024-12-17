@@ -16,6 +16,7 @@ const SnippetMissing = ({ className, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [withAntiFlicker, setWithAntiFlicker] = useState(true);
   const { user, refetchProjects, currentProject } = useStore();
+  console.log('user', user);
   console.log('currentProject', currentProject);
   const apiKey = user?.api_keys.find(
     (key) => key.project_id === currentProject.id,

@@ -7,6 +7,7 @@ import TabsAndExperiments from '../components/TabsAndExperiments/TabsAndExperime
 import SnippetMissing from '../components/SnippetMissing';
 import CreateSimpleProjectForm from '../components/CreateSimpleProjectForm';
 import styles from './page.module.css';
+import EmailVerificationRequired from '../components/EmailVerificationRequired';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
@@ -33,6 +34,9 @@ export default function Dashboard() {
     return <div>Loading...</div>;
   }
 
+  // needs email verification if user.password exists and !user.confirmed_at
+  const needsEmailVerification = user.password && !user.confirmed_at;
+
   return (
     <div className={styles.Dashboard}>
       <div className={styles.tutorialLink}>
@@ -44,7 +48,11 @@ export default function Dashboard() {
           📽⚡️ Watch our quick tutorial
         </a>
       </div>
-      {missingSnippet && <SnippetMissing className={styles.snippet} />}
+
+      <div className={styles.banners}>
+        {needsEmailVerification && <EmailVerificationRequired />}
+        {missingSnippet && <SnippetMissing className={styles.snippet} />}
+      </div>
       {currentProject && (
         <TabsAndExperiments experiments={currentProject.experiments} />
       )}

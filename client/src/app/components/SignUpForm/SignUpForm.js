@@ -22,12 +22,16 @@ const SignUpForm = () => {
   const [affiliateCode, setAffiliateCode] = useState('');
   const [applyingCode, setApplyingCode] = useState(false);
   const [codeSuccess, setCodeSuccess] = useState(false);
+  const [showAffiliateSection, setShowAffiliateSection] = useState(false);
   const searchParams = useSearchParams();
   const codeValidationAttempted = useRef(false);
+
+  console.log('affiliateCode', affiliateCode);
 
   useEffect(() => {
     const code = searchParams.get('affiliateCode');
     if (code && !codeSuccess && !codeValidationAttempted.current) {
+      setShowAffiliateSection(true);
       setAffiliateCode(code);
       codeValidationAttempted.current = true;
       setTimeout(() => validateAffiliateCode(code), 0);
@@ -99,6 +103,7 @@ const SignUpForm = () => {
     const codeToUse = codeToValidate || affiliateCode;
     if (!codeToUse) return;
     setApplyingCode(true);
+    console.log('codeToUse', codeToUse);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_STELLAR_API}/public/validate-affiliate-code`,
@@ -121,6 +126,7 @@ const SignUpForm = () => {
         toast.error(data.error || 'Invalid affiliate code');
       }
     } catch (error) {
+      console.log('error', error);
       toast.error('Failed to validate affiliate code');
     } finally {
       setApplyingCode(false);
@@ -207,45 +213,58 @@ const SignUpForm = () => {
         />
 
         <div className={styles.affiliateCodeSection}>
-          <h4>Have an affiliate code?</h4>
-          <div className={styles.affiliateCodeRow}>
-            <Input
-              clearable
-              bordered
-              color="default"
-              size="sm"
-              placeholder="Enter code"
-              value={affiliateCode}
-              className={styles.affiliateInput}
-              onChange={(e) => setAffiliateCode(e.target.value)}
-              disabled={codeSuccess}
+          <div className={styles.checkboxContainer}>
+            <input
+              type="checkbox"
+              id="showAffiliateCode"
+              checked={showAffiliateSection}
+              onChange={(e) => setShowAffiliateSection(e.target.checked)}
             />
-            {!codeSuccess && (
-              <Button
-                color="secondary"
-                size="sm"
-                className={styles.applyButton}
-                isLoading={applyingCode}
-                onClick={validateAffiliateCode}
-              >
-                Apply
-              </Button>
-            )}
+            <label htmlFor="showAffiliateCode">Have an affiliate code?</label>
           </div>
-          {codeSuccess && (
-            <div className={styles.codeSuccess}>
-              <div className={styles.successTitle}>
-                Code applied successfully! 🎉
+
+          {showAffiliateSection && (
+            <>
+              <div className={styles.affiliateCodeRow}>
+                <Input
+                  clearable
+                  bordered
+                  color="default"
+                  size="sm"
+                  placeholder="Enter code"
+                  value={affiliateCode}
+                  className={styles.affiliateInput}
+                  onChange={(e) => setAffiliateCode(e.target.value)}
+                  disabled={codeSuccess}
+                />
+                {!codeSuccess && (
+                  <Button
+                    color="secondary"
+                    size="sm"
+                    className={styles.applyButton}
+                    isLoading={applyingCode}
+                    onClick={() => validateAffiliateCode()}
+                  >
+                    Apply
+                  </Button>
+                )}
               </div>
-              <div>
-                This gives you 1 year free access to pro features such as:
-                <ul>
-                  <li>✅ Up to 100k monthly users</li>
-                  <li>✅ Dynamic keyword insertion</li>
-                  <li>✅ Custom audience targeting</li>
-                </ul>
-              </div>
-            </div>
+              {codeSuccess && (
+                <div className={styles.codeSuccess}>
+                  <div className={styles.successTitle}>
+                    Code applied successfully! 🎉
+                  </div>
+                  <div>
+                    This gives you 1 year free access to pro features such as:
+                    <ul>
+                      <li>✅ Up to 100k monthly users</li>
+                      <li>✅ Dynamic keyword insertion</li>
+                      <li>✅ Custom audience targeting</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
 

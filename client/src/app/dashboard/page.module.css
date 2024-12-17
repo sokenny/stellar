@@ -25,3 +25,10 @@
 .tutorialLink a {
     text-decoration: underline;
 }
+
+/* banners can have potential cards inside, if so, they should have a gap in between and be stacked vertically */
+.banners {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
