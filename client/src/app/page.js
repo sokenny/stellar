@@ -282,7 +282,7 @@ export default async function HomePage({}) {
           </div>
           <div className={styles.biteTestimonials}>
             <h3>Why do users prefer Stellar?</h3>
-            <div className={styles.bitesContainer}>
+            {/* <div className={styles.bitesContainer} id="bites-testimonials">
               {quotes.map((q, i) => (
                 <div
                   className={styles.bite}
@@ -305,6 +305,172 @@ export default async function HomePage({}) {
                   <div className={styles.quote}>"{q.quote}"</div>
                 </div>
               ))}
+            </div> */}
+            <div className={styles.testimonials}>
+              <div
+                className={styles.testimonial}
+                style={{
+                  borderColor: quotes[0].color,
+                  // backgroundColor: `${quotes[0].color}11`,
+                }}
+              >
+                <div className={styles.testimonialHeader}>
+                  <div
+                    className={styles.avPic}
+                    style={{
+                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test1.webp)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
+                  <div>
+                    <p className={styles.name}>
+                      <strong>Anna R. — CRO Specialist</strong>
+                    </p>
+                    <p>⭐️⭐️⭐️⭐️⭐️</p>
+                  </div>
+                </div>
+                <p className={styles.quote}>
+                  "Stellar is exactly what we needed. We switched from other
+                  testing tools because they were too complex and costly. With
+                  Stellar, we ran our first test in under 10 minutes, no
+                  developer required. Our conversions increased by 30% in just a
+                  few weeks. It’s fast, lightweight, and the support team is
+                  amazing."
+                </p>
+              </div>
+              <div
+                className={styles.testimonial}
+                style={{
+                  borderColor: quotes[1].color,
+                  // backgroundColor: `${quotes[1].color}11`,
+                }}
+              >
+                <div className={styles.testimonialHeader}>
+                  <div
+                    className={styles.avPic}
+                    style={{
+                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test3.webp)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
+                  <div>
+                    <p className={styles.name}>
+                      <strong>David L. — Growth Marketer</strong>
+                    </p>
+                    <p>⭐️⭐️⭐️⭐️⭐️</p>
+                  </div>
+                </div>
+
+                <p className={styles.quote}>
+                  "I’ve tried VWO and Optimizely, but Stellar stands out for its
+                  ease of use and simplicity. The script is super lightweight,
+                  and there’s no impact on our site speed. Setting up tests was
+                  quick, and the visual editor made it easy to adjust our pages
+                  without any coding. It’s been a game-changer for our marketing
+                  team."
+                </p>
+              </div>
+              <div
+                className={styles.testimonial}
+                style={{
+                  borderColor: quotes[2].color,
+                  // backgroundColor: `${quotes[2].color}11`,
+                }}
+              >
+                <div className={styles.testimonialHeader}>
+                  <div
+                    className={styles.avPic}
+                    style={{
+                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test2.webp)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
+                  <div>
+                    <p className={styles.name}>
+                      <strong>Sarah M. — E-commerce Owner</strong>
+                    </p>
+                    <p>⭐️⭐️⭐️⭐️⭐️</p>
+                  </div>
+                </div>
+
+                <p className={styles.quote}>
+                  "We needed a Google Optimize replacement, and Stellar exceeded
+                  our expectations. The tool is intuitive, and the onboarding
+                  was seamless. The reporting is clear, and the results helped
+                  us increase our sales by 20% in the first month. Highly
+                  recommend for anyone serious about improving their website
+                  performance."
+                </p>
+              </div>
+              <div
+                className={styles.testimonial}
+                style={{
+                  borderColor: quotes[3].color,
+                  // backgroundColor: `${quotes[3].color}11`,
+                }}
+              >
+                <div className={styles.testimonialHeader}>
+                  <div
+                    className={styles.avPic}
+                    style={{
+                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test4.webp)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
+                  <div>
+                    <p className={styles.name}>
+                      <strong>Alex T. — Product Manager</strong>
+                    </p>
+                    <p>⭐️⭐️⭐️⭐️⭐️</p>
+                  </div>
+                </div>
+
+                <p className={styles.quote}>
+                  "Stellar is the best A/B testing platform I’ve used. It’s
+                  lightweight, fast, and integrates perfectly with our existing
+                  setup. The visual editor is fantastic—our team was able to
+                  create and launch experiments without any dev assistance. We
+                  saw a 25% uplift in our signup conversion rate within weeks.
+                  Great tool!"
+                </p>
+              </div>
+              <div
+                className={styles.testimonial}
+                style={{
+                  borderColor: quotes[5].color,
+                  // backgroundColor: `${quotes[5].color}11`,
+                }}
+              >
+                <div className={styles.testimonialHeader}>
+                  <div
+                    className={styles.avPic}
+                    style={{
+                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test7.webp)`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
+                  <div>
+                    <p className={styles.name}>
+                      <strong>Maria P. — Digital Marketing Director</strong>
+                    </p>
+                    <p>⭐️⭐️⭐️⭐️⭐️</p>
+                  </div>
+                </div>
+
+                <p className={styles.quote}>
+                  "Stellar is a breath of fresh air. It’s clutter-free and does
+                  exactly what you need without the unnecessary features. The
+                  script is small and doesn’t slow down our site, which was a
+                  big concern for us. The support team is responsive and
+                  knowledgeable. We’ve already recommended Stellar to other
+                  teams."
+                </p>
+              </div>
             </div>
           </div>
           <Plans />

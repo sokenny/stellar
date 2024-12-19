@@ -25,13 +25,11 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Reply to Anton
 // TODO-p1-1: Add Faqs
-// TODO-p1-1: If email is not verified, show a message to verify email
+// TODO-p1-1: Create testimonials experiments when they come into view
 // TODO-p1-1: Research marketing newsletter ads
 // TODO-p1-1: Set up retargetting campaign
 // TODO-p1-1: Set up a share experiment view
-// TODO-p1-1: Add more thorough testimonials in homepage, similar to the ones on signup experiment which I got from this convo https://chatgpt.com/c/673a4c37-a780-8009-a1b3-964e912a2502
 // TODO-p1-1: Add testament that adresses pains and how we solve it. Similar to foundarpal.ai
 // TODO-p1-1 have experiment name editable in the create page
 // TODO-p1-1: copiar cosas de synthesia https://www.synthesia.io/tools/ai-video-editor

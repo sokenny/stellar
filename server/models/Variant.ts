@@ -3,10 +3,6 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 class Variant extends Model {
   public id!: number;
   public name!: string;
-  public text?: string;
-  public font_size?: string;
-  public color?: string;
-  public background_color?: string;
   public experiment_id!: number;
   public is_control?: boolean;
   public modifications?: any;
@@ -28,10 +24,6 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      text: DataTypes.STRING,
-      font_size: DataTypes.STRING,
-      color: DataTypes.STRING,
-      background_color: DataTypes.STRING,
       experiment_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
