@@ -84,8 +84,8 @@ export default async function HomePage({}) {
               <span className={styles.varB}>B</span> test any website.
             </h1>
             <h2 className={styles.description}>
-              Your real alternative to <b>Google Optimize</b>. Clutter free and
-              to the point. The preferred choice among CRO marketers.
+              Built for speed and simplicity. The ideal A/B testing tool for
+              marketing teams.
             </h2>
           </div>
           <div className={styles.ctaSection}>
