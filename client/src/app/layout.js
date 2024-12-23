@@ -26,6 +26,8 @@ export const metadata = {
 // triggerrebuild
 
 // TODO-p1-1: Add Faqs
+// TODO-p1-1: A way to fav or flag experiments
+// TODO-p1-1: Hacer DKI email mkt send para PPC campaigns
 // TODO-p1-1: Create testimonials experiments when they come into view
 // TODO-p1-1: Research marketing newsletter ads
 // TODO-p1-1: Set up retargetting campaign

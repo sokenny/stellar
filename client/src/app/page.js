@@ -155,7 +155,7 @@ export default async function HomePage({}) {
                   <Traffic color="white" width={15} height={15} />
                 </div>
                 <div className={styles.text}>
-                  Unlimitted traffic, experiments and variations.
+                  Free forever, under 25k monthly users.
                 </div>
               </div>
               <div className={styles.advantage}>

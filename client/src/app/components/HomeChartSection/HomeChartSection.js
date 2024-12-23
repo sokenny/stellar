@@ -402,6 +402,7 @@ const HomeChartSection = () => {
             <img
               src={`https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/var-${variant}.webp`}
               alt={'varant' + variant}
+              id={`img-variant-${variant}`}
             />
             {variant === 'b' && (
               <Tooltip
