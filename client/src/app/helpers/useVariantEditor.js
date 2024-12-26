@@ -17,27 +17,27 @@ function useVariantEditor({ experiment, onSuccess }) {
       clearInterval(variantsCheckIntervalRef.current); // Ensure no intervals are duplicated
     }
 
-    variantsCheckIntervalRef.current = setInterval(async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
-      );
-      const experimentJson = await res.json();
-      const variant = experimentJson.variants.find((v) => v.id === variantId);
-      const prevVariant = experiment.variants.find((v) => v.id === variantId);
-      const variantModified =
-        prevVariant && variant && prevVariant.updated_at !== variant.updated_at;
+    // variantsCheckIntervalRef.current = setInterval(async () => {
+    //   const res = await fetch(
+    //     `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
+    //   );
+    //   const experimentJson = await res.json();
+    //   const variant = experimentJson.variants.find((v) => v.id === variantId);
+    //   const prevVariant = experiment.variants.find((v) => v.id === variantId);
+    //   const variantModified =
+    //     prevVariant && variant && prevVariant.updated_at !== variant.updated_at;
 
-      if (variantModified) {
-        clearInterval(variantsCheckIntervalRef.current);
-        toast.success('Variant modified successfully!');
-        onSuccess && onSuccess();
-        refetchProjects();
-        if (typeof onVariantModifiedCallback === 'function') {
-          onVariantModifiedCallback(experimentJson);
-        }
-        variantWindow.close();
-      }
-    }, 1500);
+    //   if (variantModified) {
+    //     clearInterval(variantsCheckIntervalRef.current);
+    //     toast.success('Variant modified successfully!');
+    //     onSuccess && onSuccess();
+    //     refetchProjects();
+    //     if (typeof onVariantModifiedCallback === 'function') {
+    //       onVariantModifiedCallback(experimentJson);
+    //     }
+    //     variantWindow.close();
+    //   }
+    // }, 1500);
   };
 
   return { handleEditVariant };
