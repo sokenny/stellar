@@ -174,6 +174,33 @@
       .sve-success .change-indicator {
         display: none;
       }
+
+      .sve-attribute-fields {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .sve-attribute-fields .sve-src-field {
+        flex: 2;
+        min-width: 0;
+      }
+
+      .sve-attribute-fields .sve-dimension-field {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .sve-attribute-fields label {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+
+      .sve-attribute-fields input {
+        width: 100%;
+      }
     `;
 
     injectStyles(styles);
@@ -259,11 +286,21 @@
                   elementsPristineState[mod.selector] = element.cloneNode(true);
                   element.innerText = mod.innerText;
                   element.style.cssText = mod.cssText;
+
+                  if (mod.attributes) {
+                    Object.keys(mod.attributes).forEach((attr) => {
+                      if (mod.attributes[attr] !== undefined) {
+                        element[attr] = mod.attributes[attr];
+                      }
+                    });
+                  }
+
                   editedElements.push(stellarElementId);
                 } else {
                   console.error('Element not found:', mod.selector);
                 }
               });
+
               if (variant.global_css) {
                 globalCssText = variant.global_css;
                 updateGlobalStyles(globalCssText);
@@ -284,8 +321,8 @@
           const styles = `.stellar-variant-editor { 
             position: fixed;
             background-color: white;
-            width: 250px;
-            height: 80vh;
+            width: 320px;
+            height: 85vh;
             z-index: 10000;
             top: 50%;
             right: 40px;
@@ -415,7 +452,12 @@
 
           #sve-global-code-textarea {
             height: 400px;
-            font-size: 14px;
+            font-size: 11px;
+            font-family: monospace;
+            line-height: 1.4;
+            tab-size: 2;
+            background-color: #f8f9fa;
+            color: #212529;
           }
 
           .sve-field-group label {
@@ -468,8 +510,8 @@
           function actionsComponent() {
             const isSaveDisabled =
               (editedElements.length === 0 &&
-                !globalCssText &&
-                !globalJsText) ||
+                !globalCssText.trim() &&
+                !globalJsText.trim()) ||
               loadingVariantCreation;
             return `<div class="sve-actions">
                     <button id="sve-save-variant" class="${
@@ -519,22 +561,57 @@
                 isInitialState ? '16px' : '0'
               };">
                 <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator" style="display: ${
-                  globalCssText.trim() ? 'block' : 'none'
+                  globalCssText.trim() ? 'inline-block' : 'none'
                 };">has changes</span></button>
                 <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator" style="display: ${
-                  globalJsText.trim() ? 'block' : 'none'
+                  globalJsText.trim() ? 'inline-block' : 'none'
                 };">has changes</span></button>
               </div>
             `;
 
-            if (variantCreated) {
-              return `<div class="stellar-variant-editor sve-empty-state sve-success">
-                <div>
-                  <div class="sve-identity">STELLAR</div>
-                  <div class="sve-instructions">Variant created! You can close this tab :)</div>
-                </div>
-                ${globalButtons}
-              </div>`;
+            let attributeFields = '';
+            if (element) {
+              if (element.tagName === 'IMG') {
+                attributeFields = `
+                  <div class="sve-field-group">
+                    <label>Image Attributes</label>
+                    <div class="sve-attribute-fields">
+                      <div class="sve-src-field">
+                        <label>Source URL</label>
+                        <input type="text" id="stellar-src" placeholder="Source URL" value="${
+                          element.src || ''
+                        }">
+                      </div>
+                      <div class="sve-dimension-field">
+                        <label>Width</label>
+                        <input type="number" id="stellar-width" placeholder="Width" value="${
+                          element.width || ''
+                        }">
+                      </div>
+                      <div class="sve-dimension-field">
+                        <label>Height</label>
+                        <input type="number" id="stellar-height" placeholder="Height" value="${
+                          element.height || ''
+                        }">
+                      </div>
+                    </div>
+                  </div>
+                `;
+              } else if (element.tagName === 'A') {
+                attributeFields = `
+                  <div class="sve-field-group">
+                    <label>Link Attributes</label>
+                    <div class="sve-attribute-fields">
+                      <div class="sve-src-field">
+                        <label>URL</label>
+                        <input type="text" id="stellar-href" placeholder="Link URL" value="${
+                          element.href || ''
+                        }">
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }
             }
 
             if (isInitialState) {
@@ -544,12 +621,14 @@
                   <div class="sve-instructions">Click on an element to start editing this page variant.</div>
                 </div>
                 ${globalButtons}
+                <div id="sve-actions-entry-point"></div>
               </div>`;
             }
 
             return `<div class="stellar-variant-editor">
               <div class="sve-inner-wrapper">
                 <div class="sve-fields">
+                  ${attributeFields}
                   <div class="sve-field-group">
                     <label>Content</label>
                     <textarea id="stellar-element-content">${innerText}</textarea>
@@ -675,6 +754,21 @@
                 cssText: el.style.cssText,
                 innerText: el.innerText,
               };
+
+              // Add specific attributes for images and links
+              if (el.tagName === 'IMG') {
+                newStyle['attributes'] = {
+                  src: el.src,
+                  width: el.width,
+                  height: el.height,
+                  srcset: el.hasAttribute('srcset') ? el.srcset : undefined,
+                };
+              } else if (el.tagName === 'A') {
+                newStyle['attributes'] = {
+                  href: el.href,
+                };
+              }
+
               modifications.push(newStyle);
             }
             confirm('Are you sure you want to save this variant?');
@@ -894,6 +988,72 @@
                   ) as any;
                   globalCssText = globalCssTextEl.value;
                   applyStylesToElement(selectedElement);
+                  handleElementMutation();
+                }
+              });
+            }
+
+            // Add new attribute listeners
+            const srcInput = document.getElementById(
+              'stellar-src',
+            ) as HTMLInputElement;
+            const widthInput = document.getElementById(
+              'stellar-width',
+            ) as HTMLInputElement;
+            const heightInput = document.getElementById(
+              'stellar-height',
+            ) as HTMLInputElement;
+            const hrefInput = document.getElementById(
+              'stellar-href',
+            ) as HTMLInputElement;
+
+            if (srcInput) {
+              srcInput.addEventListener('input', function () {
+                if (selectedElement) {
+                  const imgElement = document.querySelector(
+                    selectedElement,
+                  ) as HTMLImageElement;
+                  imgElement.src = this.value;
+                  // Also update srcset if it exists
+                  if (imgElement.hasAttribute('srcset')) {
+                    imgElement.srcset = this.value;
+                  }
+                  handleElementMutation();
+                }
+              });
+            }
+
+            if (widthInput) {
+              widthInput.addEventListener('input', function () {
+                if (selectedElement) {
+                  const imgElement = document.querySelector(
+                    selectedElement,
+                  ) as HTMLImageElement;
+                  imgElement.width = parseInt(this.value) || 0;
+                  handleElementMutation();
+                }
+              });
+            }
+
+            if (heightInput) {
+              heightInput.addEventListener('input', function () {
+                if (selectedElement) {
+                  const imgElement = document.querySelector(
+                    selectedElement,
+                  ) as HTMLImageElement;
+                  imgElement.height = parseInt(this.value) || 0;
+                  handleElementMutation();
+                }
+              });
+            }
+
+            if (hrefInput) {
+              hrefInput.addEventListener('input', function () {
+                if (selectedElement) {
+                  const linkElement = document.querySelector(
+                    selectedElement,
+                  ) as HTMLAnchorElement;
+                  linkElement.href = this.value;
                   handleElementMutation();
                 }
               });

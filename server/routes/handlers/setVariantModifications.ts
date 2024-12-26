@@ -5,6 +5,8 @@ async function setVariantModifications(req: Request, res: Response) {
   const variantId: string = req.params.id;
   const { modifications, globalCss, globalJs } = req.body;
 
+  console.log('modifications', modifications);
+
   const variant = await db.Variant.findOne({
     where: { id: variantId },
     include: [{ model: db.Experiment, as: 'experiment', required: true }],

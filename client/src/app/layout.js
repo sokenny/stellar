@@ -25,12 +25,11 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: After call with Razane, add html attr modification, learn more about P value
-// TODO-p1-1: Be able to save changes after making global css changes
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments
 // TODO-p1-1: Hacer DKI email mkt send para PPC campaigns
 // TODO-p1-1: Create testimonials experiments when they come into view
+// TODO-p1-1: Work on assisted changes like copilot, like query generator in log insights but for css and js changes on an element
 // TODO-p1-1: Research marketing newsletter ads
 // TODO-p1-1: Set up retargetting campaign
 // TODO-p1-1: Set up a share experiment view

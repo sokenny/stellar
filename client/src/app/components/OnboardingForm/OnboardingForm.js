@@ -33,6 +33,7 @@ const OnboardingForm = () => {
   const discoveryOptions = useMemo(() => {
     const regularOptions = [
       { key: 'linkedin', label: 'LinkedIn' },
+      { key: 'udemy', label: 'Udemy Courses' },
       { key: 'youtube-ads', label: 'Youtube Ads' },
       { key: 'google-seo', label: 'Google SEO' },
       { key: 'google-sem', label: 'Google SEM' },

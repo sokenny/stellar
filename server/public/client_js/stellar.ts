@@ -358,6 +358,15 @@
                   modification.innerText,
                 );
                 targetElement.style.cssText = modification.cssText;
+
+                // Set attributes if they exist
+                if (modification.attributes) {
+                  Object.keys(modification.attributes).forEach((attr) => {
+                    if (modification.attributes[attr] !== undefined) {
+                      targetElement[attr] = modification.attributes[attr];
+                    }
+                  });
+                }
               } else {
                 sessionIssues.push({
                   type: 'MODIFICATION',
