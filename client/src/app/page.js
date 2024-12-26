@@ -88,18 +88,11 @@ export default async function HomePage({}) {
               marketing teams.
             </h2>
           </div>
-          <div className={styles.ctaSection}>
+          <div className={styles.ctaSection} id="cta-section">
             <div className={styles.buttons}>
               <SignUpCTA className={styles.goStellarBtn}>
                 Start For Free
               </SignUpCTA>
-              {/* <Button
-                className={styles.scheduleDemoBtn}
-                color="secondary"
-                variant="flat"
-              >
-                Schedule demo
-              </Button> */}
             </div>
             <div className={styles.points}>
               <div className={styles.noCard}>💳 No credit card required</div>
@@ -109,14 +102,9 @@ export default async function HomePage({}) {
             </div>
           </div>
 
-          <div className={styles.loomContainer}>
+          <div className={styles.loomContainer} id="loom-demo-1">
             <div className={styles.infoBar}>watch our quick demo :)</div>
-            {/* <iframe
-              src="https://youtu.be/Oxu4XWrEFY4"
-              frameBorder="0"
-              allowFullScreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            ></iframe> */}
+
             <iframe
               width="560"
               height="315"
@@ -130,7 +118,22 @@ export default async function HomePage({}) {
           </div>
 
           <HomeChartSection />
-          {/* <CoolLinesSVG /> */}
+
+          <div className={styles.loomContainer} id="loom-demo-2">
+            <div className={styles.infoBar}>watch our quick demo :)</div>
+
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/Oxu4XWrEFY4?si=CPMzRxJdXvs3oD28"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+
           <div className={styles.advantages}>
             <h3>Advantages of Stellar</h3>
             <div className={styles.list}>

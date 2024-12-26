@@ -25,6 +25,8 @@ export const metadata = {
 
 // triggerrebuild
 
+// TODO-p1-1: After call with Razane, add html attr modification, learn more about P value
+// TODO-p1-1: fix stupid bug that trips and thinks variant has been edited
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments
 // TODO-p1-1: Hacer DKI email mkt send para PPC campaigns
