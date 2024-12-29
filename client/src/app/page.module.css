@@ -490,6 +490,9 @@
   align-items: center;
 }
 
+#loom-demo-2 {
+  margin-top: 0;
+}
 
 @media (max-width: 720px) {
   .HomePage {
