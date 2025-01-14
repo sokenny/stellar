@@ -51,7 +51,12 @@ export default function Dashboard() {
 
       <div className={styles.banners}>
         {needsEmailVerification && <EmailVerificationRequired />}
-        {missingSnippet && <SnippetMissing className={styles.snippet} />}
+        {missingSnippet && (
+          <SnippetMissing
+            className={styles.snippet}
+            cardTitle="Install our snippet to get started"
+          />
+        )}
       </div>
       {currentProject && (
         <TabsAndExperiments experiments={currentProject.experiments} />

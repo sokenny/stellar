@@ -25,7 +25,7 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: If its an img tag lets hide the content textarea in the editor
+// TODO-p1-1: Allow targeting url groups for an experiment
 // TODO-p1-1: Add p value info on statistical significance component
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-1: Add Faqs

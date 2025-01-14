@@ -12,7 +12,11 @@ import { toast } from 'sonner';
 import styles from './SnippetMissing.module.css';
 import getStellarClientCode from '../../helpers/getStellarClientCode';
 
-const SnippetMissing = ({ className, onSuccess }) => {
+const SnippetMissing = ({
+  className,
+  onSuccess,
+  cardTitle = 'Snippet missing',
+}) => {
   const [loading, setLoading] = useState(false);
   const [withAntiFlicker, setWithAntiFlicker] = useState(true);
   const { user, refetchProjects, currentProject } = useStore();
@@ -77,7 +81,7 @@ const SnippetMissing = ({ className, onSuccess }) => {
       {
         <div className={styles.cardBody}>
           <div>
-            <div className={styles.cardTitle}>Snippet missing</div>
+            <div className={styles.cardTitle}>{cardTitle}</div>
             <div>
               Place this snippet inside the {'<head>'} tag of your website to
               start tracking and running your experiments:

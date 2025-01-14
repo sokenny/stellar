@@ -119,7 +119,10 @@ export default async function HomePage({}) {
 
           <HomeChartSection />
 
-          <div className={styles.loomContainer} id="loom-demo-2">
+          <div
+            className={`${styles.loomContainer} ${styles.loomDemo2}`}
+            id="loom-demo-2"
+          >
             <div className={styles.infoBar}>watch our quick demo :)</div>
 
             <iframe

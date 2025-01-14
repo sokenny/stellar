@@ -1,6 +1,5 @@
 import { invalidateCache } from '../../helpers/cache';
 import db from '../../models';
-import puppeteer from 'puppeteer';
 
 async function checkSnippet(req, res) {
   const { url } = req.body;
@@ -25,13 +24,6 @@ async function checkSnippet(req, res) {
 
 async function performSnippetCheck(url, projectId) {
   await invalidateCache(`experiments:${projectId}`);
-  const browser = await puppeteer.launch({
-    args: ['--disable-logging'],
-  });
-  const browserPage = await browser.newPage();
-  await browserPage.goto(`${url}?stellarMode=true&checkingSnippet=true`);
-
-  console.log('Page loaded, checking for snippet request...');
 
   // Poll for the snippet_status in the database every second, with a max of 10 attempts (10 seconds)
   const maxAttempts = 10;
@@ -49,19 +41,16 @@ async function performSnippetCheck(url, projectId) {
 
         if (project && project.snippet_status === 1) {
           clearInterval(interval);
-          await browser.close();
           resolve(void 0); // Snippet was detected successfully
         } else if (attempts >= maxAttempts) {
           clearInterval(interval);
-          await browser.close();
           reject(new Error('Snippet not detected within the expected time.'));
         }
       } catch (error) {
         clearInterval(interval);
-        await browser.close();
         reject(new Error('Error checking snippet status.'));
       }
-    }, 1000); // Check every 1 second
+    }, 1000);
   });
 }
 

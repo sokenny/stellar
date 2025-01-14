@@ -54,7 +54,11 @@
     (typeof (window as any).rmo === 'function' && visualEditorOn) ||
     isSettingGoal
   ) {
-    (window as any).rmo();
+    try {
+      (window as any).rmo();
+    } catch (error) {
+      console.error('Error executing rmo:', error);
+    }
   }
 
   function hideLoadingState() {
@@ -331,6 +335,17 @@
             border-radius: 4px;
             padding: 16px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+          }
+
+          @media (max-width: 720px) {
+            .stellar-variant-editor {
+              height: 60vh;
+              overflow-y: auto;
+              top: auto;
+              bottom: 10%;
+              transform: translateY(0);
+            }
           }
 
           .sve-empty-state {
@@ -412,6 +427,12 @@
           #sve-save-variant {
             background-color: rgba(60, 146, 226, 1);
             color: white;
+          }
+
+          @media (max-width: 720px) {
+            #sve-save-variant {
+              margin-bottom: 16px;
+            }
           }
 
           #sve-save-variant.sve-disabled {
@@ -552,6 +573,7 @@
             const color = style ? style.color : '';
             const backgroundColor = style ? style.backgroundColor : '';
             const isHidden = style ? style.display === 'none' : false;
+            const isImage = element && element.tagName === 'IMG';
 
             const isInitialState =
               editedElements.length === 0 && element === null;
@@ -629,10 +651,16 @@
               <div class="sve-inner-wrapper">
                 <div class="sve-fields">
                   ${attributeFields}
-                  <div class="sve-field-group">
-                    <label>Content</label>
-                    <textarea id="stellar-element-content">${innerText}</textarea>
-                  </div>
+                  ${
+                    !isImage
+                      ? `
+                    <div class="sve-field-group">
+                      <label>Content</label>
+                      <textarea id="stellar-element-content">${innerText}</textarea>
+                    </div>
+                  `
+                      : ''
+                  }
                   <div class="sve-hide-element">
                     <input type="checkbox" id="sve-hide-element" name="sve-hide-element" value="sve-hide-element" ${
                       isHidden ? 'checked' : ''
@@ -875,24 +903,65 @@
 
           function attachEditorListeners() {
             const el: any = document.querySelector('.stellar-variant-editor');
-            el.addEventListener('mousedown', function (e) {
-              var offsetX =
-                e.clientX - parseInt(window.getComputedStyle(this).left);
-              var offsetY =
-                e.clientY - parseInt(window.getComputedStyle(this).top);
 
-              function mouseMoveHandler(e) {
-                el.style.top = e.clientY - offsetY + 'px';
-                el.style.left = e.clientX - offsetX + 'px';
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            function dragStart(e) {
+              // Get the current transform values before starting the drag
+              const transform = window.getComputedStyle(el).transform;
+              const matrix = new DOMMatrix(transform);
+              xOffset = matrix.m41; // Get the current X translation
+              yOffset = matrix.m42; // Get the current Y translation
+
+              if (e.type === 'touchstart') {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+              } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
               }
 
-              function reset() {
-                window.removeEventListener('mousemove', mouseMoveHandler);
-                window.removeEventListener('mouseup', reset);
+              isDragging = true;
+            }
+
+            function drag(e) {
+              if (isDragging) {
+                e.preventDefault();
+
+                if (e.type === 'touchmove') {
+                  currentX = e.touches[0].clientX - initialX;
+                  currentY = e.touches[0].clientY - initialY;
+                } else {
+                  currentX = e.clientX - initialX;
+                  currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
               }
-              window.addEventListener('mousemove', mouseMoveHandler);
-              window.addEventListener('mouseup', reset);
-            });
+            }
+
+            function dragEnd() {
+              isDragging = false;
+            }
+
+            // Mouse events
+            el.addEventListener('mousedown', dragStart);
+            window.addEventListener('mousemove', drag);
+            window.addEventListener('mouseup', dragEnd);
+
+            // Touch events
+            el.addEventListener('touchstart', dragStart);
+            window.addEventListener('touchmove', drag);
+            window.addEventListener('touchend', dragEnd);
 
             const textarea = document.getElementById(
               'stellar-element-content',

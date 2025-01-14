@@ -24,7 +24,11 @@
 
   function removeAntiFlickerOverlay() {
     if (typeof (window as any).rmo === 'function') {
-      (window as any).rmo();
+      try {
+        (window as any).rmo();
+      } catch (error) {
+        console.error('Error executing rmo:', error);
+      }
     }
   }
 
