@@ -534,6 +534,19 @@
           .sve-hide-element input {
             margin-right: 8px;
           }
+
+          .sve-element-selector {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 24px;
+          }
+
+          .sve-element-selector code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+          }
           `;
 
           function actionsComponent() {
@@ -663,6 +676,13 @@
                     !isImage
                       ? `
                     <div class="sve-field-group">
+                      <div class="sve-element-selector">
+                        <label>Element Selector</label>
+                        <div class="sve-selector-input-wrapper">
+                          <input type="text" id="stellar-element-selector" value="${elementSelector}">
+                          <div class="sve-selector-validation"></div>
+                        </div>
+                      </div>
                       <label>Content</label>
                       <textarea id="stellar-element-content">${innerText}</textarea>
                     </div>
@@ -705,6 +725,7 @@
           }
 
           function renderEditor({ element = null }) {
+            console.log('selected element!!', selectedElement);
             const editor: any = document.querySelector(
               '.stellar-variant-editor',
             );
@@ -1161,6 +1182,50 @@
                 }
               });
             }
+
+            const selectorInput = document.getElementById(
+              'stellar-element-selector',
+            ) as HTMLInputElement;
+            const selectorValidation = document.querySelector(
+              '.sve-selector-validation',
+            );
+
+            if (selectorInput && selectorValidation) {
+              let validationTimeout;
+
+              selectorInput.addEventListener('input', function () {
+                if (validationTimeout) {
+                  clearTimeout(validationTimeout);
+                }
+
+                validationTimeout = setTimeout(() => {
+                  const result = validateSelector(this.value);
+
+                  selectorValidation.textContent = result.message;
+
+                  // Remove all validation classes from input
+                  selectorInput.classList.remove('valid', 'warning', 'invalid');
+                  selectorValidation.classList.remove(
+                    'valid',
+                    'warning',
+                    'invalid',
+                  );
+
+                  // Add appropriate class based on validation result
+                  const validationClass = result.isValid
+                    ? result.count > 0
+                      ? 'valid'
+                      : 'warning'
+                    : 'invalid';
+                  selectorInput.classList.add(validationClass);
+                  selectorValidation.classList.add(validationClass);
+
+                  if (result.isValid && result.count > 0) {
+                    selectedElement = this.value;
+                  }
+                }, 300);
+              });
+            }
           }
 
           const style = document.createElement('style');
@@ -1257,6 +1322,28 @@
               });
             }
           }
+
+          function validateSelector(selector) {
+            try {
+              const elements = document.querySelectorAll(selector);
+              return {
+                isValid: true,
+                count: elements.length,
+                message:
+                  elements.length > 0
+                    ? `Matches ${elements.length} element${
+                        elements.length === 1 ? '' : 's'
+                      }`
+                    : 'No matching elements found',
+              };
+            } catch (e) {
+              return {
+                isValid: false,
+                count: 0,
+                message: 'Invalid selector syntax',
+              };
+            }
+          }
         }
       }
     };
@@ -1316,6 +1403,70 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+    }
+
+    .sve-element-selector {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .sve-element-selector code {
+      background: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+
+    .sve-element-selector {
+      margin-bottom: 16px;
+    }
+    
+    .sve-selector-input-wrapper {
+      position: relative;
+    }
+    
+    #stellar-element-selector {
+      width: 100%;
+      font-family: monospace;
+      padding: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      font-size: 12px;
+      transition: border-color 0.2s ease;
+    }
+    
+    #stellar-element-selector.valid {
+      border-color: #2ecc71;
+    }
+    
+    #stellar-element-selector.warning {
+      border-color: #e67e22;
+    }
+    
+    #stellar-element-selector.invalid {
+      border-color: #e74c3c;
+    }
+    
+    .sve-selector-validation {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    
+    .sve-selector-validation.valid {
+      color: #2ecc71;
+    }
+    
+    .sve-selector-validation.warning {
+      color: #e67e22;
+    }
+    
+    .sve-selector-validation.invalid {
+      color: #e74c3c;
     }
   `),
   );
