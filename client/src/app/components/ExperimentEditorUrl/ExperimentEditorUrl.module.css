@@ -1,0 +1,55 @@
+.editorUrl {
+  background: var(--background-light);
+  border-radius: 8px;
+}
+
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stepTitle {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.stepLegend {
+  color: var(--textBodyLight);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.editorUrlInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.editorUrlInput {
+  margin-top: 1rem;
+  max-width: 600px;
+  width: 350px;
+  font-size: 20px;
+  flex: 1;
+}
+
+.editorUrlSaveButton {
+  font-size: 12px;
+  height: auto;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.875rem;
+  font-weight: 300;
+}
+
+@media (max-width: 720px) {
+  .editorUrlInput {
+    width: 100%;
+  }
+}

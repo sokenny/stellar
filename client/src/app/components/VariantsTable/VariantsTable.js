@@ -125,7 +125,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
   const { stats, getExperimentStats, currentProject, token } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
   const thisStats = stats[experiment.id + '-' + statsType];
-  console.log('thisStats!', thisStats);
+
   const {
     isOpen: isSnippetModalOpen,
     onOpen: onOpenSnippetModal,
@@ -177,7 +177,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
 
   function handleOnView(variantId) {
     window.open(
-      `${experiment.url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`,
+      `${experiment.editor_url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`,
       '_blank',
     );
   }
@@ -266,6 +266,8 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                           content={
                             hasStarted
                               ? 'Can not edit a variant after the experiment has started.'
+                              : item._isControl
+                              ? 'Can not edit control variant'
                               : 'Visual Editor'
                           }
                           showArrow
@@ -277,10 +279,16 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                               className={styles.editIcon}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                if (hasStarted) return;
+                                if (hasStarted || item._isControl) return;
                                 missingSnippet
                                   ? onOpenSnippetModal()
                                   : handleEditVariant(item.id);
+                              }}
+                              style={{
+                                cursor:
+                                  hasStarted || item._isControl
+                                    ? 'not-allowed'
+                                    : 'pointer',
                               }}
                             />
                           </span>

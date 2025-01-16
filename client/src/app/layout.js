@@ -25,7 +25,11 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Allow targeting url groups for an experiment
+// TODO-p1-1: Allow multi element editing
+// TODO-p1-1: Allow previewing different urls
+// TODO-p1-1: Create BE service to update urlRules - finish all related to this
+// TODO-p1-1: Record tutorial of new features (url rules, targeting, DKI) and send mass email
+
 // TODO-p1-1: Add p value info on statistical significance component
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-1: Add Faqs

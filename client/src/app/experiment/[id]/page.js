@@ -11,7 +11,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button as NextUIButton,
 } from '@nextui-org/react';
 import { toast } from 'sonner';
@@ -39,6 +38,9 @@ import styles from './page.module.css';
 import Users from '../../icons/Users';
 import Edit from '../../icons/Edit';
 import TargetAudienceForm from '../../components/TargetAudienceForm/TargetAudienceForm';
+import ExperimentUrlRules from '../../components/ExperimentUrlRules/ExperimentUrlRules';
+import ExperimentEditorUrl from '../../components/ExperimentEditorUrl/ExperimentEditorUrl';
+import colors from '../../helpers/colors';
 
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();
@@ -81,6 +83,9 @@ export default function ExperimentPage({ params, searchParams }) {
   const hasTargetRules = targetRules
     ? Object.values(targetRules).some((rule) => rule.enabled)
     : false;
+
+  const [isUrlRulesModalOpen, setIsUrlRulesModalOpen] = useState(false);
+  const [isEditorUrlModalOpen, setIsEditorUrlModalOpen] = useState(false);
 
   useEffect(() => {
     if (!token || hasFetchedChartData.current) return;
@@ -271,9 +276,25 @@ export default function ExperimentPage({ params, searchParams }) {
               <Page width={15} height={15} />
             </div>
             Target page:{' '}
-            <a href={experiment.url} target="_blank" rel="noopener noreferrer">
-              {experiment.url}
-            </a>
+            {experiment.url ? (
+              <a
+                href={experiment.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {experiment.url}
+              </a>
+            ) : (
+              <div className={styles.advancedUrlRulesText}>
+                Advanced URL rules applied
+              </div>
+            )}
+            <Edit
+              width={15}
+              height={15}
+              className={styles.editIcon}
+              onClick={() => setIsUrlRulesModalOpen(true)}
+            />
           </div>
           <div className={styles.targetAudience}>
             <div className={styles.icon}>
@@ -287,6 +308,31 @@ export default function ExperimentPage({ params, searchParams }) {
                 height={15}
                 className={styles.editIcon}
                 onClick={() => setIsTargetAudienceModalOpen(true)}
+              />
+            </div>
+          </div>
+          <div className={styles.editorUrl}>
+            <div className={styles.icon}>
+              <Edit width={15} height={15} color={colors.linkBlue} />
+            </div>
+            Editor URL:{' '}
+            <div className={styles.editorUrlText}>
+              {experiment.editor_url ? (
+                <a
+                  href={experiment.editor_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {experiment.editor_url}
+                </a>
+              ) : (
+                <span className={styles.notSet}>Not set</span>
+              )}
+              <Edit
+                width={15}
+                height={15}
+                className={styles.editIcon}
+                onClick={() => setIsEditorUrlModalOpen(true)}
               />
             </div>
           </div>
@@ -373,25 +419,48 @@ export default function ExperimentPage({ params, searchParams }) {
                   onClose={onClose}
                 />
               </ModalBody>
-              {/* <ModalFooter>
-                <NextUIButton
-                  variant="light"
-                  onPress={onClose}
-                  className={styles.button}
-                >
-                  Close
-                </NextUIButton>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    // Add any save logic here if needed
-                    onClose();
-                  }}
-                  className={styles.button}
-                >
-                  Save Changes
-                </Button>
-              </ModalFooter> */}
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isUrlRulesModalOpen}
+        onOpenChange={setIsUrlRulesModalOpen}
+        isDismissable={false}
+        className={styles.urlRulesModal}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className={styles.body}>
+                <div className={styles.title}>Edit Target URL Rules</div>
+                <ExperimentUrlRules
+                  experiment={experiment}
+                  onSuccess={onClose}
+                />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isEditorUrlModalOpen}
+        onOpenChange={setIsEditorUrlModalOpen}
+        isDismissable={false}
+        className={styles.editorUrlModal}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className={styles.body}>
+                <div className={styles.title}>Edit Editor URL</div>
+                <ExperimentEditorUrl
+                  experiment={experiment}
+                  onSuccess={onClose}
+                />
+              </ModalBody>
             </>
           )}
         </ModalContent>

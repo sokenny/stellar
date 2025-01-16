@@ -20,7 +20,7 @@ import handleValidateAffiliateCode from './handlers/handleValidateAffiliateCode'
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 50,
+  max: process.env.NODE_ENV === 'development' ? 1000 : 50,
   message: 'Too many requests from this IP, please try again after some time',
   standardHeaders: true,
   legacyHeaders: false,

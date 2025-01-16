@@ -51,8 +51,8 @@ const goals = [
 ];
 
 const GoalsForm = ({ experiment, goal, onClose }) => {
-  const { refetchProjects, token } = useStore();
-  const domain = getDomainFromUrl(experiment.url);
+  const { refetchProjects, token, currentProject } = useStore();
+  const domain = currentProject.domain;
   const goalCheckIntervalRef = useRef(null);
   const toastSuccessCalledRef = useRef(false);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
@@ -149,13 +149,10 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   }
 
   async function onGoToUrl() {
+    console.log('onGoToUrl!', domain);
     const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
-      `http://${
-        getDomainFromUrl(experiment.url) + '/' + formData.elementUrl
-      }?stellarMode=true&experimentId=${
-        experiment.id
-      }&isSettingGoal=true&token=${token}`,
+      `https://${domain}/${formData.elementUrl}?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true&token=${token}`,
       '_blank',
     );
 
@@ -176,11 +173,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     }, 1500);
   }
 
-  // TODO: validate the url entered
-  function onSetUrl() {
-    // test that formData.visitUrl is a valid url
-  }
-
   const isClickAndManualSelect =
     formData.goalType === GoalTypesEnum.CLICK &&
     selectedClickOption === 'manual';
@@ -192,17 +184,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   return (
     <section className={styles.GoalsForm}>
       <div className={styles.goals}>
-        {/* <Tooltip
-          content={'This feature will soon be available'}
-          showArrow
-          className={styles.tooltip}
-          closeDelay={200}
-        >
-          <div className={styles.gaGoal}>
-            <GA width={30} height={30} />
-            Import from Google Analytics
-          </div>
-        </Tooltip> */}
         <div className={styles.classicGoals}>
           {goals.map((goal) => (
             <div
@@ -260,7 +241,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   <div className={styles.subTitle}>
                     After typing in your URL, we'll take you there so you can
                     select this element for us to track.{' '}
-                    {/* <span className={styles.link}>See how</span>. */}
                   </div>
                   <div className={styles.row}>
                     <div className={styles.domain}>{domain}/</div>

@@ -29,6 +29,8 @@ import handleGetExperimentChartData from './handlers/handleGetExperimentChartDat
 import saveOnboardingDataHandler from './handlers/saveOnboardingDataHandler';
 import updateEmailSettings from './handlers/updateEmailSettings';
 import setTargetRules from './handlers/setTargetRules';
+import editExperimentUrlRules from './handlers/editExperimentUrlRules';
+import updateEditorUrl from './handlers/updateEditorUrl';
 
 const router = express.Router();
 
@@ -43,6 +45,8 @@ router.post('/kickstart-project', autoGenerate);
 router.post('/experiments', createExperiment);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
+router.put('/experiment/:id/url-rules', editExperimentUrlRules);
+router.put('/experiment/:id/editor-url', updateEditorUrl);
 router.put('/experiment/:id/name', updateExperimentName);
 router.get('/experiment/:id/stats/:type', getExperimentStatsHandler);
 router.get('/chart/experiment/:id', handleGetExperimentChartData);

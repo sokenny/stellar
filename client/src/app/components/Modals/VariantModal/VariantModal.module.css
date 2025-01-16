@@ -19,6 +19,10 @@
   margin-bottom: 4px;
 }
 
+.label span {
+  color: var(--linkBlue);
+}
+
 .actions {
   display: flex;
   align-items: center;

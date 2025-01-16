@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import useStore from '../../../../store';
 import styles from './ExperimentName.module.css';
 
-const ExperimentName = ({ name, experimentId }) => {
+const ExperimentName = ({ name, experimentId, className }) => {
   const { refetchProjects } = useStore();
   const [isEditingName, setIsEditingName] = useState(false);
   const nameRef = useRef(null);
@@ -63,7 +63,7 @@ const ExperimentName = ({ name, experimentId }) => {
       contentEditable={isEditingName}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      className={styles.title}
+      className={`${styles.title} ${className}`}
       onClick={() => !isEditingName && setIsEditingName(true)}
       style={{ cursor: 'text', display: 'inline-block' }} // Styles for better usability
     >

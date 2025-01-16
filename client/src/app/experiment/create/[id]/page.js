@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import ExperimentName from '../../[id]/Header/ExperimentName';
 import CreateExperimentForm from '../../../components/CreateExperimentForm';
 import useStore from '../../../store';
 
@@ -21,9 +21,16 @@ export default function CreateExperimentPage({ params }) {
 
   return (
     <div className={styles.CreateExperiment}>
-      <h1 className={styles.title}>
-        {isNew ? 'Create Experiment' : experiment?.name}
-      </h1>
+      {isNew ? (
+        <h1 className={styles.title}>Create Experiment</h1>
+      ) : (
+        <ExperimentName
+          name={experiment?.name}
+          experimentId={id}
+          className={styles.title}
+        />
+      )}
+
       <CreateExperimentForm experimentId={id} />
     </div>
   );

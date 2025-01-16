@@ -4,7 +4,7 @@ import db from '../../models';
 import createVariantsFromElement from '../../services/createVariantsFromElement';
 
 async function createExperiment(req, res) {
-  const { name, url, projectId } = req.body;
+  const { name, url, projectId, advanced_url_rules } = req.body;
 
   const sanitizedUrl = removeUrlParams(url);
 
@@ -16,7 +16,6 @@ async function createExperiment(req, res) {
   let page = await db.Page.findOne({ where: { url } });
 
   if (!page) {
-    console.log('no hay page!!');
     page = await db.Page.create({
       url,
       name: url,
@@ -29,6 +28,8 @@ async function createExperiment(req, res) {
     url: sanitizedUrl,
     name,
     page_id: page.id,
+    advanced_url_rules,
+    editor_url: url || null,
   });
 
   const variants = await createVariantsFromElement({

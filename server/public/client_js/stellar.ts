@@ -301,6 +301,57 @@
     return true;
   }
 
+  function shouldMountExperimentForUrl(experiment) {
+    const currentUrl = window.location.href;
+
+    // If using basic URL targeting
+    if (experiment.url) {
+      return getPathFromURL(currentUrl) === getPathFromURL(experiment.url);
+    }
+
+    // If using advanced URL rules
+    if (experiment.advanced_url_rules) {
+      const { exclude, include } = experiment.advanced_url_rules;
+
+      // Check exclude rules first
+      if (exclude?.length > 0) {
+        for (const rule of exclude) {
+          if (rule.type === 'contains' && currentUrl.includes(rule.url)) {
+            log(
+              `Experiment ${experiment.id} not mounted: URL matches exclude rule (contains) ${rule.url}`,
+            );
+            return false;
+          }
+          if (rule.type === 'exact' && currentUrl === rule.url) {
+            log(
+              `Experiment ${experiment.id} not mounted: URL matches exclude rule (exact) ${rule.url}`,
+            );
+            return false;
+          }
+        }
+      }
+
+      // Check include rules
+      if (include?.length > 0) {
+        return include.some((rule) => {
+          if (rule.type === 'contains' && currentUrl.includes(rule.url)) {
+            return true;
+          }
+          if (rule.type === 'exact' && currentUrl === rule.url) {
+            return true;
+          }
+          return false;
+        });
+      }
+
+      // If no include rules specified, allow by default after exclude checks
+      return true;
+    }
+
+    // If neither url nor advanced_url_rules are specified, allow by default
+    return true;
+  }
+
   function mountExperiments(experiments, callback = () => {}) {
     log('Running mountExperiments');
     const stellarData = getStellarData();
@@ -317,11 +368,8 @@
           return;
         }
 
-        if (
-          getPathFromURL(window.location.href) !==
-          getPathFromURL(experiment.url)
-        ) {
-          log('Skipping experiment as it is not for this page :):', experiment);
+        if (!shouldMountExperimentForUrl(experiment)) {
+          log('Skipping experiment due to URL targeting rules:', experiment);
           return;
         }
 
@@ -358,10 +406,15 @@
               log('Modification target element: ', targetElement);
 
               if (targetElement) {
-                targetElement.innerText = replaceKeywordsWithParams(
-                  modification.innerText,
-                );
-                targetElement.style.cssText = modification.cssText;
+                // Only apply modifications that are explicitly defined
+                if (modification.innerText !== undefined) {
+                  targetElement.innerText = replaceKeywordsWithParams(
+                    modification.innerText,
+                  );
+                }
+                if (modification.cssText !== undefined) {
+                  targetElement.style.cssText = modification.cssText;
+                }
 
                 // Set attributes if they exist
                 if (modification.attributes) {

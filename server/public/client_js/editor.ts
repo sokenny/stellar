@@ -287,10 +287,18 @@
                 const stellarElementId = generateUniqueId();
                 if (element) {
                   element.setAttribute('stellar-element-id', stellarElementId);
-                  elementsPristineState[mod.selector] = element.cloneNode(true);
-                  element.innerText = mod.innerText;
-                  element.style.cssText = mod.cssText;
+                  elementsPristineState[stellarElementId] =
+                    element.cloneNode(true);
 
+                  // Only apply modifications that are explicitly defined
+                  if (mod.innerText !== undefined) {
+                    element.innerText = mod.innerText;
+                  }
+                  if (mod.cssText !== undefined) {
+                    element.style.cssText = mod.cssText;
+                  }
+
+                  // Set attributes if they exist
                   if (mod.attributes) {
                     Object.keys(mod.attributes).forEach((attr) => {
                       if (mod.attributes[attr] !== undefined) {
@@ -582,10 +590,10 @@
               <div class="sve-field-group sve-global-buttons" style="margin-top: ${
                 isInitialState ? '16px' : '0'
               };">
-                <button id="sve-global-css">Global CSS <span id="css-change-indicator" class="change-indicator" style="display: ${
+                <button id="sve-global-css">Edit Global CSS <span id="css-change-indicator" class="change-indicator" style="display: ${
                   globalCssText.trim() ? 'inline-block' : 'none'
                 };">has changes</span></button>
-                <button id="sve-global-js">Global JS <span id="js-change-indicator" class="change-indicator" style="display: ${
+                <button id="sve-global-js">Edit Global JS <span id="js-change-indicator" class="change-indicator" style="display: ${
                   globalJsText.trim() ? 'inline-block' : 'none'
                 };">has changes</span></button>
               </div>
@@ -773,32 +781,57 @@
             loadingVariantCreation = true;
             renderActions();
             const modifications = [];
+
             for (let i = 0; i < editedElements.length; i++) {
-              const el: any = document.querySelector(
+              const el = document.querySelector(
                 `[stellar-element-id="${editedElements[i]}"]`,
-              );
-              const newStyle = {
+              ) as HTMLElement;
+              const pristineEl = elementsPristineState[
+                editedElements[i]
+              ] as HTMLElement;
+              const modification: any = {
                 selector: getSelector(el),
-                cssText: el.style.cssText,
-                innerText: el.innerText,
               };
 
-              // Add specific attributes for images and links
-              if (el.tagName === 'IMG') {
-                newStyle['attributes'] = {
-                  src: el.src,
-                  width: el.width,
-                  height: el.height,
-                  srcset: el.hasAttribute('srcset') ? el.srcset : undefined,
-                };
-              } else if (el.tagName === 'A') {
-                newStyle['attributes'] = {
-                  href: el.href,
-                };
+              // Only include style changes if they differ from pristine state
+              if (el?.style?.cssText !== pristineEl?.style?.cssText) {
+                modification.cssText = el?.style?.cssText;
               }
 
-              modifications.push(newStyle);
+              // Only include text changes if they differ from pristine state
+              if (el?.innerText !== pristineEl?.innerText) {
+                modification.innerText = el?.innerText;
+              }
+
+              // Handle specific attributes for images and links
+              if (el.tagName === 'IMG') {
+                const imgAttrs = {};
+                ['src', 'width', 'height', 'srcset'].forEach((attr) => {
+                  if (el[attr] !== pristineEl[attr]) {
+                    imgAttrs[attr] = el[attr];
+                  }
+                });
+                if (Object.keys(imgAttrs).length > 0) {
+                  modification.attributes = imgAttrs;
+                }
+              } else if (el.tagName === 'A') {
+                if (
+                  (el as HTMLAnchorElement).href !==
+                  (pristineEl as HTMLAnchorElement).href
+                ) {
+                  modification.attributes = {
+                    href: (el as HTMLAnchorElement).href,
+                  };
+                }
+              }
+
+              // Only include modification if there are actual changes
+              if (Object.keys(modification).length > 1) {
+                // > 1 because selector is always included
+                modifications.push(modification);
+              }
             }
+
             confirm('Are you sure you want to save this variant?');
             const response = await fetch(
               `${STELLAR_API_URL}/variant/${variantId}/modifications`,
@@ -884,18 +917,19 @@
           }
 
           function handleElementMutation() {
-            const stellatElementId = document
-              .querySelector(selectedElement)
-              .getAttribute('stellar-element-id');
-            if (selectedElement && !editedElements.includes(stellatElementId)) {
-              const stellarElementId = generateUniqueId();
-              document
-                .querySelector(selectedElement)
-                .setAttribute('stellar-element-id', stellarElementId);
-              elementsPristineState[stellarElementId] = document
-                .querySelector(selectedElement)
-                .cloneNode(true);
-              editedElements.push(stellarElementId);
+            const selectedElementNode = document.querySelector(selectedElement);
+            const stellarElementId =
+              selectedElementNode.getAttribute('stellar-element-id');
+
+            if (selectedElement && !editedElements.includes(stellarElementId)) {
+              const newStellarElementId = generateUniqueId();
+              selectedElementNode.setAttribute(
+                'stellar-element-id',
+                newStellarElementId,
+              );
+              elementsPristineState[newStellarElementId] =
+                selectedElementNode.cloneNode(true);
+              editedElements.push(newStellarElementId);
             }
             renderEditedElements();
             renderActions();

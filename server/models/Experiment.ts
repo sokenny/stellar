@@ -1,5 +1,15 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
+interface UrlRule {
+  type: 'exact' | 'contains';
+  url: string;
+}
+
+interface AdvancedUrlRules {
+  include: UrlRule[];
+  exclude: UrlRule[];
+}
+
 class Experiment extends Model {
   public id!: number;
   public name!: string;
@@ -18,6 +28,8 @@ class Experiment extends Model {
   public scheduled_end_date!: Date;
   public allow_parallel!: boolean;
   public queue_after!: number;
+  public advanced_url_rules!: AdvancedUrlRules | null;
+  public editor_url!: string;
 }
 
 export const initializeExperiment = (
@@ -118,6 +130,26 @@ export const initializeExperiment = (
             return 'pending';
           }
         },
+      },
+      advanced_url_rules: {
+        type: DataTypes.JSONB,
+        allowNull: true,
+        validate: {
+          isValidStructure(value: AdvancedUrlRules | null) {
+            if (value === null) return;
+
+            if (!value.include || !Array.isArray(value.include)) {
+              throw new Error('include must be an array');
+            }
+            if (!value.exclude || !Array.isArray(value.exclude)) {
+              throw new Error('exclude must be an array');
+            }
+          },
+        },
+      },
+      editor_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

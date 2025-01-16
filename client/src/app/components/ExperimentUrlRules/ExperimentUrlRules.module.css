@@ -1,0 +1,67 @@
+.title label {
+  margin-bottom: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #bababa;
+  margin-top: 6px;
+}
+
+.urlInput {
+  width: 350px;
+  max-width: 500px;
+  margin-top: 8px;
+}
+
+.advancedUrlRulesSwitch {
+  margin-top: 12px;
+}
+
+.advancedUrlRules {
+  margin-top: 32px;
+}
+
+.urlRulesSection {
+  margin-bottom: 24px;
+}
+
+.urlRulesSection h4 {
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.urlRule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.urlRule svg {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.urlRule svg:hover {
+  opacity: 1;
+}
+
+.urlRule select {
+  width: 200px;
+}
+
+.urlRule input {
+  flex: 1;
+}
+
+.tooltip {
+  padding: 12px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.urlAction {
+  margin-top: 24px;
+}

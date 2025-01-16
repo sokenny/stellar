@@ -139,7 +139,9 @@ const VariantModal = ({
           </div>
 
           <div className={styles.fieldGroup}>
-            <label className={styles.label}>Traffic:</label>
+            <label className={styles.label}>
+              <span>{thisVariant.name}</span> Traffic:
+            </label>
             <Input
               type="number"
               value={formData?.[`traffic_${thisVariant.id}`]}
@@ -159,7 +161,9 @@ const VariantModal = ({
               }`}
               key={v.id}
             >
-              <label className={styles.label}>{v.name} Traffic:</label>
+              <label className={styles.label}>
+                <span>{v.name}</span> Traffic:
+              </label>
               <Input
                 type="number"
                 value={formData?.[`traffic_${v.id}`]}

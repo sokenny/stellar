@@ -58,11 +58,17 @@
   margin-top: 16px;
 }
 
+.furtherEdits {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #bababa;
+}
+
 .variant {
   display: flex;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .variant:last-child {
@@ -84,10 +90,13 @@
 .step {
   width: 500px;
   margin-bottom: 46px;
-  border-left: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
   padding-left: 12px;
 }
 
+.stepTitle.targetaudience {
+  margin-bottom: 4px;
+}
 
 .actions {
   display: flex;
@@ -125,6 +134,9 @@
   font-weight: 300;
 }
 
+.advancedTargetingRulesSwitch {
+  margin-top: 12px;
+}
 
 @media (max-width: 720px) {
   .fieldGroup {
@@ -143,3 +155,4 @@
     display: none;
   }
 }
+

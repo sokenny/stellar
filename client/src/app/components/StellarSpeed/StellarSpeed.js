@@ -82,7 +82,7 @@ export default function StellarSpeed({ className }) {
           />
           <Progress
             color="warning"
-            label={`Optimize (${progressValues.optimize}%)`}
+            label={`Optimizely (${progressValues.optimize}%)`}
             value={progressValues.optimize}
             maxValue={758}
             className="w-full"
