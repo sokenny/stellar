@@ -400,30 +400,32 @@
             }
 
             variant.modifications.forEach((modification) => {
-              const targetElement = document.querySelector(
+              const targetElements = document.querySelectorAll(
                 modification.selector,
               );
-              log('Modification target element: ', targetElement);
+              log('Modification target elements: ', targetElements);
 
-              if (targetElement) {
-                // Only apply modifications that are explicitly defined
-                if (modification.innerText !== undefined) {
-                  targetElement.innerText = replaceKeywordsWithParams(
-                    modification.innerText,
-                  );
-                }
-                if (modification.cssText !== undefined) {
-                  targetElement.style.cssText = modification.cssText;
-                }
+              if (targetElements.length > 0) {
+                targetElements.forEach((targetElement) => {
+                  // Only apply modifications that are explicitly defined
+                  if (modification.innerText !== undefined) {
+                    targetElement.innerText = replaceKeywordsWithParams(
+                      modification.innerText,
+                    );
+                  }
+                  if (modification.cssText !== undefined) {
+                    targetElement.style.cssText = modification.cssText;
+                  }
 
-                // Set attributes if they exist
-                if (modification.attributes) {
-                  Object.keys(modification.attributes).forEach((attr) => {
-                    if (modification.attributes[attr] !== undefined) {
-                      targetElement[attr] = modification.attributes[attr];
-                    }
-                  });
-                }
+                  // Set attributes if they exist
+                  if (modification.attributes) {
+                    Object.keys(modification.attributes).forEach((attr) => {
+                      if (modification.attributes[attr] !== undefined) {
+                        targetElement[attr] = modification.attributes[attr];
+                      }
+                    });
+                  }
+                });
               } else {
                 sessionIssues.push({
                   type: 'MODIFICATION',
@@ -442,19 +444,21 @@
               (currentPageUrl.includes(experiment.goal.url_match_value) ||
                 experiment.goal.url_match_value === '*')
             ) {
-              const selectorElement = document.querySelector(
+              const selectorElements = document.querySelectorAll(
                 experiment.goal.selector,
               );
-              if (selectorElement) {
-                selectorElement.addEventListener('click', function () {
-                  const expRun = activeExperiments.find(
-                    (e) =>
-                      e.experiment === experiment.id &&
-                      e.variant === variant.id,
-                  );
-                  if (expRun) {
-                    expRun.converted = true;
-                  }
+              if (selectorElements.length > 0) {
+                selectorElements.forEach((selectorElement) => {
+                  selectorElement.addEventListener('click', function () {
+                    const expRun = activeExperiments.find(
+                      (e) =>
+                        e.experiment === experiment.id &&
+                        e.variant === variant.id,
+                    );
+                    if (expRun) {
+                      expRun.converted = true;
+                    }
+                  });
                 });
               } else {
                 sessionIssues.push({

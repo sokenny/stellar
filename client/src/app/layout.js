@@ -25,9 +25,8 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Allow multi element editing
+// TODO/p1-1: swithc to project after creating it
 // TODO-p1-1: Allow previewing different urls
-// TODO-p1-1: Create BE service to update urlRules - finish all related to this
 // TODO-p1-1: Record tutorial of new features (url rules, targeting, DKI) and send mass email
 
 // TODO-p1-1: Add p value info on statistical significance component

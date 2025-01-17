@@ -21,11 +21,11 @@ const ExperimentUrlRules = ({
   onSuccess,
   isCreatePage,
 }) => {
-  const router = useRouter();
   const [urlRules, setUrlRules] = useState({
     include: [{ type: 'exact', url: '' }],
     exclude: [{ type: 'exact', url: '' }],
   });
+
   const { currentProject, refetchProjects } = useStore();
   const [experimentUrl, setExperimentUrl] = useState(
     experiment ? experiment.url : `https://${currentProject.domain}`,
@@ -196,7 +196,7 @@ const ExperimentUrlRules = ({
               <div key={index} className={styles.urlRule}>
                 <Select
                   size="sm"
-                  defaultSelectedKeys={[rule.type]}
+                  selectedKeys={[rule.type]}
                   onChange={(e) =>
                     handleUrlChange('include', index, 'type', e.target.value)
                   }
@@ -240,7 +240,7 @@ const ExperimentUrlRules = ({
               <div key={index} className={styles.urlRule}>
                 <Select
                   size="sm"
-                  defaultSelectedKeys={[rule.type]}
+                  selectedKeys={[rule.type]}
                   onChange={(e) =>
                     handleUrlChange('exclude', index, 'type', e.target.value)
                   }

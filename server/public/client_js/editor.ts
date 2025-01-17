@@ -20,7 +20,7 @@
   const visualEditorOn = urlParams.get('visualEditorOn');
   const previewMode = urlParams.get('previewMode');
   const fromUrl = urlParams.get('fromUrl');
-  let editedElements = [];
+  let global__editedElements = [];
   let elementsPristineState = {};
   let selectedElement = null;
   let loadingVariantCreation = false;
@@ -74,6 +74,11 @@
 
   if (stellarMode === 'true') {
     function getSelector(element) {
+      const attr = element.getAttribute('stellar-selector-ref');
+      if (attr) {
+        return attr;
+      }
+
       if (element.id) {
         return `#${element.id}`;
       }
@@ -283,10 +288,12 @@
 
             function initializeEditedElements(variant) {
               variant.modifications.forEach((mod) => {
-                const element = document.querySelector(mod.selector);
-                const stellarElementId = generateUniqueId();
-                if (element) {
+                const elements = document.querySelectorAll(mod.selector);
+
+                elements.forEach((element) => {
+                  const stellarElementId = generateUniqueId();
                   element.setAttribute('stellar-element-id', stellarElementId);
+                  element.setAttribute('stellar-selector-ref', mod.selector);
                   elementsPristineState[stellarElementId] =
                     element.cloneNode(true);
 
@@ -294,6 +301,7 @@
                   if (mod.innerText !== undefined) {
                     element.innerText = mod.innerText;
                   }
+
                   if (mod.cssText !== undefined) {
                     element.style.cssText = mod.cssText;
                   }
@@ -307,9 +315,17 @@
                     });
                   }
 
-                  editedElements.push(stellarElementId);
-                } else {
-                  console.error('Element not found:', mod.selector);
+                  global__editedElements.push({
+                    selector: mod.selector,
+                    stellarElementId: stellarElementId,
+                  });
+                });
+
+                if (elements.length === 0) {
+                  console.error(
+                    'No elements found for selector:',
+                    mod.selector,
+                  );
                 }
               });
 
@@ -330,6 +346,7 @@
             initializeEditedElements(variant);
             hideLoadingState();
           }
+          let customCssText: any = '';
           const styles = `.stellar-variant-editor { 
             position: fixed;
             background-color: white;
@@ -551,7 +568,7 @@
 
           function actionsComponent() {
             const isSaveDisabled =
-              (editedElements.length === 0 &&
+              (global__editedElements.length === 0 &&
                 !globalCssText.trim() &&
                 !globalJsText.trim()) ||
               loadingVariantCreation;
@@ -564,22 +581,23 @@
 
           function editedElementsComponent() {
             let editedElementsMarkup = '';
-            for (let i = 0; i < editedElements.length; i++) {
+            for (let i = 0; i < global__editedElements.length; i++) {
               const el: any = document.querySelector(
-                `[stellar-element-id="${editedElements[i]}"]`,
+                `[stellar-element-id="${global__editedElements[i].stellarElementId}"]`,
               );
-              editedElementsMarkup += `<div class="sve-edited-element" stellar-element-id-ref="${editedElements[i]}">
-                <div class="sve-edited-element-info"><b>${el.tagName}</b> - ${el.innerText}</div>
-                <div class="sve-edited-element-delete" stellar-element-id-ref="${editedElements[i]}">x</div>
+              editedElementsMarkup += `<div class="sve-edited-element" stellar-selector-ref="${global__editedElements[i].selector}">
+                <div class="sve-edited-element-info"><b>${global__editedElements[i].selector}</b> - ${el.innerText}</div>
+                
               </div>`;
+              // <div class="sve-edited-element-delete" stellar-selector-ref="${global__editedElements[i].selector}">x</div>
             }
 
-            if (editedElements.length === 0) {
+            if (global__editedElements.length === 0) {
               return '';
             }
 
             return `<div class="sve-edited-elements">
-                  <div class="sve-edited-elements-title">Edited Elements (${editedElements.length})</div>
+                  <div class="sve-edited-elements-title">Editions (${global__editedElements.length})</div>
                   <div class="sve-edited-elements-list">
                     ${editedElementsMarkup}
                   </div>
@@ -588,16 +606,48 @@
 
           function editorComponent(elementSelector) {
             const element = document.querySelector(elementSelector);
+            const matchCount = elementSelector
+              ? document.querySelectorAll(elementSelector).length
+              : 0;
+            const selectorDisplay = elementSelector
+              ? `<div class="sve-element-selector">
+                <label>Element Selector (matches ${matchCount} element${
+                  matchCount === 1 ? '' : 's'
+                })</label>
+                <div class="sve-selector-input-wrapper">
+                  <input type="text" id="stellar-element-selector" value="${elementSelector}">
+                  <div class="sve-selector-validation"></div>
+                </div>
+              </div>`
+              : '';
             const innerText = element ? element.innerText : '';
             const style = element ? window.getComputedStyle(element) : null;
             const fontSize = style ? parseInt(style.fontSize) : '';
-            const color = style ? style.color : '';
-            const backgroundColor = style ? style.backgroundColor : '';
+
+            // Convert RGB color to hex format
+            const rgbToHex = (rgb) => {
+              if (!rgb || rgb === 'initial' || rgb === 'inherit')
+                return '#000000';
+              const rgbMatch = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+              if (!rgbMatch) return rgb; // Return as-is if not RGB format
+              const r = parseInt(rgbMatch[1]);
+              const g = parseInt(rgbMatch[2]);
+              const b = parseInt(rgbMatch[3]);
+              return (
+                '#' +
+                ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+              );
+            };
+
+            const color = style ? rgbToHex(style.color) : '#000000';
+            const backgroundColor = style
+              ? rgbToHex(style.backgroundColor)
+              : '#ffffff';
             const isHidden = style ? style.display === 'none' : false;
             const isImage = element && element.tagName === 'IMG';
 
             const isInitialState =
-              editedElements.length === 0 && element === null;
+              global__editedElements.length === 0 && element === null;
 
             const globalButtons = `
               <div class="sve-field-group sve-global-buttons" style="margin-top: ${
@@ -671,24 +721,18 @@
             return `<div class="stellar-variant-editor">
               <div class="sve-inner-wrapper">
                 <div class="sve-fields">
-                  ${attributeFields}
                   ${
                     !isImage
                       ? `
                     <div class="sve-field-group">
-                      <div class="sve-element-selector">
-                        <label>Element Selector</label>
-                        <div class="sve-selector-input-wrapper">
-                          <input type="text" id="stellar-element-selector" value="${elementSelector}">
-                          <div class="sve-selector-validation"></div>
-                        </div>
-                      </div>
+                      ${selectorDisplay}
                       <label>Content</label>
                       <textarea id="stellar-element-content">${innerText}</textarea>
                     </div>
                   `
                       : ''
                   }
+                  ${attributeFields}
                   <div class="sve-hide-element">
                     <input type="checkbox" id="sve-hide-element" name="sve-hide-element" value="sve-hide-element" ${
                       isHidden ? 'checked' : ''
@@ -702,10 +746,7 @@
                     </div>
                     <div class="sve-field-group">
                       <label>Color</label>
-                      <input type="color" id="stellar-color" name="stellar-color" value="${color.replace(
-                        /\s/g,
-                        '',
-                      )}">
+                      <input type="color" id="stellar-color" name="stellar-color" value="${color}">
                     </div>
                   </div>
                   <div class="sve-field-group">
@@ -725,7 +766,6 @@
           }
 
           function renderEditor({ element = null }) {
-            console.log('selected element!!', selectedElement);
             const editor: any = document.querySelector(
               '.stellar-variant-editor',
             );
@@ -740,8 +780,8 @@
             }
 
             document.body.innerHTML += editorComponent(element);
-            renderEditedElements();
             renderActions();
+            renderEditedElements();
             attachEditorListeners();
 
             if (editorPosition) {
@@ -776,26 +816,21 @@
           }
 
           function handleDeleteEditedElement(stellarElementId) {
-            const el: any = document.querySelector(
-              `[stellar-element-id="${stellarElementId}"]`,
-            );
-
-            el.innerText = elementsPristineState[stellarElementId].innerText;
-
-            const index = editedElements.indexOf(stellarElementId);
-            if (index > -1) {
-              editedElements.splice(index, 1);
-            }
-
-            const pristineStyle = elementsPristineState[stellarElementId].style;
-            for (let i = 0; i < pristineStyle.length; i++) {
-              const propName = pristineStyle[i];
-              el.style[propName] = pristineStyle.getPropertyValue(propName);
-            }
-
-            elementsPristineState[stellarElementId] = null;
-
-            renderEditor({ element: selectedElement });
+            // const el: any = document.querySelector(
+            //   `[stellar-element-id="${stellarElementId}"]`,
+            // );
+            // el.innerText = elementsPristineState[stellarElementId].innerText;
+            // const index = editedElements.indexOf(stellarElementId);
+            // if (index > -1) {
+            //   editedElements.splice(index, 1);
+            // }
+            // const pristineStyle = elementsPristineState[stellarElementId].style;
+            // for (let i = 0; i < pristineStyle.length; i++) {
+            //   const propName = pristineStyle[i];
+            //   el.style[propName] = pristineStyle.getPropertyValue(propName);
+            // }
+            // elementsPristineState[stellarElementId] = null;
+            // renderEditor({ element: selectedElement });
           }
 
           async function handleSaveAndFinishVariant() {
@@ -803,15 +838,21 @@
             renderActions();
             const modifications = [];
 
-            for (let i = 0; i < editedElements.length; i++) {
+            for (let i = 0; i < global__editedElements.length; i++) {
+              const stellarElementId =
+                global__editedElements[i].stellarElementId;
+              const innerTextModified =
+                global__editedElements[i].innerTextModified;
               const el = document.querySelector(
-                `[stellar-element-id="${editedElements[i]}"]`,
+                `[stellar-element-id="${stellarElementId}"]`,
               ) as HTMLElement;
               const pristineEl = elementsPristineState[
-                editedElements[i]
+                stellarElementId
               ] as HTMLElement;
+
               const modification: any = {
-                selector: getSelector(el),
+                // Use stored custom selector if it exists, otherwise fall back to generated selector
+                selector: global__editedElements[i].selector,
               };
 
               // Only include style changes if they differ from pristine state
@@ -820,7 +861,10 @@
               }
 
               // Only include text changes if they differ from pristine state
-              if (el?.innerText !== pristineEl?.innerText) {
+              if (
+                el?.innerText !== pristineEl?.innerText &&
+                innerTextModified
+              ) {
                 modification.innerText = el?.innerText;
               }
 
@@ -917,10 +961,9 @@
             );
             modifiedElements.forEach((el) => {
               el.addEventListener('click', function () {
-                const attr = this.getAttribute('stellar-element-id-ref');
-                const editedEl: any = document.querySelector(
-                  `[stellar-element-id="${attr}"]`,
-                );
+                const attr = this.getAttribute('stellar-selector-ref');
+                const editedEl: any = document.querySelector(attr);
+                editedEl.setAttribute('stellar-selector-ref', attr);
                 editedEl.click();
               });
             });
@@ -931,18 +974,28 @@
             deleteEditedElement.forEach((el) => {
               el.addEventListener('click', function (e) {
                 e.stopPropagation();
-                const attrVal = this.getAttribute('stellar-element-id-ref');
+                const attrVal = this.getAttribute('stellar-selector-ref');
                 handleDeleteEditedElement(attrVal);
               });
             });
           }
 
-          function handleElementMutation() {
+          function handleElementMutation(innerTextModified: boolean = false) {
+            console.log(
+              'handleElementMutation edited elemnts',
+              global__editedElements,
+            );
+            console.log('selectedElement', selectedElement);
             const selectedElementNode = document.querySelector(selectedElement);
             const stellarElementId =
               selectedElementNode.getAttribute('stellar-element-id');
 
-            if (selectedElement && !editedElements.includes(stellarElementId)) {
+            if (
+              selectedElement &&
+              !global__editedElements.some(
+                (el) => el.stellarElementId === stellarElementId,
+              )
+            ) {
               const newStellarElementId = generateUniqueId();
               selectedElementNode.setAttribute(
                 'stellar-element-id',
@@ -950,7 +1003,11 @@
               );
               elementsPristineState[newStellarElementId] =
                 selectedElementNode.cloneNode(true);
-              editedElements.push(newStellarElementId);
+              global__editedElements.push({
+                selector: selectedElement,
+                stellarElementId: newStellarElementId,
+                innerTextModified,
+              });
             }
             renderEditedElements();
             renderActions();
@@ -1024,9 +1081,10 @@
             if (textarea) {
               textarea.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelector(selectedElement).innerText =
-                    this.value;
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.innerText = this.value;
+                    handleElementMutation(true);
+                  });
                 }
               });
             }
@@ -1037,13 +1095,10 @@
             if (hideElementCheckbox) {
               hideElementCheckbox.addEventListener('change', function () {
                 if (selectedElement) {
-                  if (this.checked) {
-                    document.querySelector(selectedElement).style.display =
-                      'none';
-                  } else {
-                    document.querySelector(selectedElement).style.display = '';
-                  }
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.style.display = this.checked ? 'none' : '';
+                    handleElementMutation();
+                  });
                 }
               });
             }
@@ -1054,9 +1109,10 @@
             if (fontSizeInput) {
               fontSizeInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelector(selectedElement).style.fontSize =
-                    this.value + 'px';
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.style.fontSize = this.value + 'px';
+                    handleElementMutation();
+                  });
                 }
               });
             }
@@ -1065,9 +1121,10 @@
             if (colorInput) {
               colorInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelector(selectedElement).style.color =
-                    this.value;
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.style.color = this.value;
+                    handleElementMutation();
+                  });
                 }
               });
             }
@@ -1078,10 +1135,10 @@
             if (backgroundColorInput) {
               backgroundColorInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelector(
-                    selectedElement,
-                  ).style.backgroundColor = this.value;
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.style.backgroundColor = this.value;
+                    handleElementMutation();
+                  });
                 }
               });
             }
@@ -1102,15 +1159,15 @@
                   'stellar-font-size',
                 ) as any;
                 element.style.fontSize = stellarFontSizeEl.value + 'px';
-                element.style.cssText += ';' + globalCssText;
+                element.style.cssText += ';' + customCssText;
               }
 
               customCssInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const globalCssTextEl = document.getElementById(
+                  const customCssTextEl = document.getElementById(
                     'stellar-custom-element-css',
                   ) as any;
-                  globalCssText = globalCssTextEl.value;
+                  customCssText = customCssTextEl.value;
                   applyStylesToElement(selectedElement);
                   handleElementMutation();
                 }
@@ -1134,14 +1191,13 @@
             if (srcInput) {
               srcInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const imgElement = document.querySelector(
-                    selectedElement,
-                  ) as HTMLImageElement;
-                  imgElement.src = this.value;
-                  // Also update srcset if it exists
-                  if (imgElement.hasAttribute('srcset')) {
-                    imgElement.srcset = this.value;
-                  }
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    (el as HTMLImageElement).src = this.value;
+                    // Also update srcset if it exists
+                    if ((el as HTMLImageElement).hasAttribute('srcset')) {
+                      (el as HTMLImageElement).srcset = this.value;
+                    }
+                  });
                   handleElementMutation();
                 }
               });
@@ -1150,11 +1206,10 @@
             if (widthInput) {
               widthInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const imgElement = document.querySelector(
-                    selectedElement,
-                  ) as HTMLImageElement;
-                  imgElement.width = parseInt(this.value) || 0;
-                  handleElementMutation();
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    (el as HTMLImageElement).width = parseInt(this.value) || 0;
+                    handleElementMutation();
+                  });
                 }
               });
             }
@@ -1162,10 +1217,9 @@
             if (heightInput) {
               heightInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const imgElement = document.querySelector(
-                    selectedElement,
-                  ) as HTMLImageElement;
-                  imgElement.height = parseInt(this.value) || 0;
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    (el as HTMLImageElement).height = parseInt(this.value) || 0;
+                  });
                   handleElementMutation();
                 }
               });
@@ -1174,10 +1228,9 @@
             if (hrefInput) {
               hrefInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  const linkElement = document.querySelector(
-                    selectedElement,
-                  ) as HTMLAnchorElement;
-                  linkElement.href = this.value;
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    (el as HTMLAnchorElement).href = this.value;
+                  });
                   handleElementMutation();
                 }
               });
@@ -1202,8 +1255,6 @@
                   const result = validateSelector(this.value);
 
                   selectorValidation.textContent = result.message;
-
-                  // Remove all validation classes from input
                   selectorInput.classList.remove('valid', 'warning', 'invalid');
                   selectorValidation.classList.remove(
                     'valid',
@@ -1211,7 +1262,6 @@
                     'invalid',
                   );
 
-                  // Add appropriate class based on validation result
                   const validationClass = result.isValid
                     ? result.count > 0
                       ? 'valid'
@@ -1222,6 +1272,7 @@
 
                   if (result.isValid && result.count > 0) {
                     selectedElement = this.value;
+                    renderEditor({ element: selectedElement });
                   }
                 }, 300);
               });
