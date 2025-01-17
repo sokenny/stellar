@@ -116,10 +116,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
           body: JSON.stringify({
             experiment_id: experiment.id,
             type: formData.goalType,
-            url_match_type:
-              formData.goalType === GoalTypesEnum.SESSION_TIME
-                ? matchType
-                : UrlMatchTypesEnum.CONTAINS,
+            url_match_type: matchType,
             url_match_value: isQuerySelector
               ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
               : formData.urlMatchValue,
@@ -309,9 +306,6 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   </Select>
                 </div>
                 <div className={styles.row}>
-                  {matchType === UrlMatchTypesEnum.EXACT && (
-                    <div className={styles.domain}>{domain}/</div>
-                  )}
                   <Input
                     className={styles.input}
                     type="text"
@@ -322,7 +316,11 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                         urlMatchValue: e.target.value,
                       })
                     }
-                    placeholder="thank-you"
+                    placeholder={
+                      matchType === UrlMatchTypesEnum.EXACT
+                        ? `https://www.${domain}/thank-you`
+                        : 'thank-you'
+                    }
                   />
                 </div>
               </div>

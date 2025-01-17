@@ -16,13 +16,19 @@ const Goal = ({ experiment, onEdit, className }) => {
     PAGE_VISIT: (
       <>
         User visits to{' '}
-        <a
-          href={`${url}${goal.url_match_value}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {goal.url_match_value}
-        </a>
+        {goal.url_match_type === 'CONTAINS' ? (
+          <>
+            a page containing "<strong>{goal.url_match_value}</strong>"
+          </>
+        ) : (
+          <a
+            href={`${goal.url_match_value}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {goal.url_match_value}
+          </a>
+        )}
       </>
     ),
     CLICK: (

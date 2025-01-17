@@ -13,20 +13,7 @@ const tabs = ['Active', 'Draft', 'Ended', 'All'];
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
 
-  const getInitialTab = () => {
-    const hasActive = experiments.some(
-      (exp) => exp.started_at && !exp.ended_at,
-    );
-    const hasDraft = experiments.some(
-      (exp) => !exp.ended_at && !exp.started_at,
-    );
-
-    if (hasActive) return tabs[0]; // 'Active'
-    if (hasDraft) return tabs[1]; // 'Draft'
-    return tabs[3]; // 'All'
-  };
-
-  const [activeTab, setActiveTab] = useState(getInitialTab());
+  const [activeTab, setActiveTab] = useState(tabs[0]);
 
   experiments.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);

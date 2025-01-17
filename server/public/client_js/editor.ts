@@ -210,6 +210,42 @@
       .sve-attribute-fields input {
         width: 100%;
       }
+
+      .sve-html-editor {
+        margin-top: 8px;
+      }
+
+      .sve-html-editor-disabled-message {
+        font-size: 10px;
+        color: black;
+        opacity: .2;
+        margin-top: -6px;
+        margin-bottom: 6px;
+        letter-spacing: normal;
+      }
+
+      .sve-html-editor button {
+        background-color: rgba(60, 146, 226, 0.1);
+        border: 1px solid rgba(60, 146, 226, .25);
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-bottom: 8px;
+      }
+
+      .sve-html-editor button:hover {
+        background-color: rgba(60, 146, 226, 0.2);
+      }
+
+      #sve-html-content {
+        width: 100%;
+        min-height: 100px;
+        font-family: monospace;
+        font-size: 12px;
+        padding: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        resize: vertical;
+      }
     `;
 
     injectStyles(styles);
@@ -302,6 +338,10 @@
                     element.innerText = mod.innerText;
                   }
 
+                  if (mod.innerHTML !== undefined) {
+                    element.innerHTML = mod.innerHTML;
+                  }
+
                   if (mod.cssText !== undefined) {
                     element.style.cssText = mod.cssText;
                   }
@@ -320,6 +360,11 @@
                     stellarElementId: stellarElementId,
                   });
                 });
+
+                // Initialize editor with first modification's selector
+                if (!selectedElement && elements.length > 0) {
+                  selectedElement = mod.selector;
+                }
 
                 if (elements.length === 0) {
                   console.error(
@@ -555,7 +600,6 @@
           .sve-element-selector {
             font-size: 12px;
             color: #666;
-            margin-bottom: 24px;
           }
 
           .sve-element-selector code {
@@ -585,11 +629,12 @@
               const el: any = document.querySelector(
                 `[stellar-element-id="${global__editedElements[i].stellarElementId}"]`,
               );
-              editedElementsMarkup += `<div class="sve-edited-element" stellar-selector-ref="${global__editedElements[i].selector}">
-                <div class="sve-edited-element-info"><b>${global__editedElements[i].selector}</b> - ${el.innerText}</div>
-                
-              </div>`;
-              // <div class="sve-edited-element-delete" stellar-selector-ref="${global__editedElements[i].selector}">x</div>
+              if (el) {
+                editedElementsMarkup += `<div class="sve-edited-element" stellar-selector-ref="${global__editedElements[i].selector}">
+                  <div class="sve-edited-element-info"><b>${global__editedElements[i].selector}</b> - ${el.innerText}</div>
+                </div>`;
+                // <div class="sve-edited-element-delete" stellar-selector-ref="${global__editedElements[i].selector}">x</div>
+              }
             }
 
             if (global__editedElements.length === 0) {
@@ -611,9 +656,9 @@
               : 0;
             const selectorDisplay = elementSelector
               ? `<div class="sve-element-selector">
-                <label>Element Selector (matches ${matchCount} element${
+                <label>Selector: <span class="sve-element-selector-count">(Targets ${matchCount} element${
                   matchCount === 1 ? '' : 's'
-                })</label>
+                })</span></label>
                 <div class="sve-selector-input-wrapper">
                   <input type="text" id="stellar-element-selector" value="${elementSelector}">
                   <div class="sve-selector-validation"></div>
@@ -726,7 +771,25 @@
                       ? `
                     <div class="sve-field-group">
                       ${selectorDisplay}
-                      <label>Content</label>
+                      <div class="sve-html-editor">
+                        <button id="sve-toggle-html-editor" 
+                          ${
+                            matchCount > 1
+                              ? 'disabled title="Can not edit HTML for multiple elements. Use a more specific selector to edit HTML."'
+                              : ''
+                          }>
+                          Edit HTML
+                        </button>
+                        ${
+                          matchCount > 1
+                            ? '<div class="sve-html-editor-disabled-message">HTML edition disabled when targeting multiple elements.</div>'
+                            : ''
+                        }
+                        <textarea id="sve-html-content" style="display: none;">${
+                          element ? element.innerHTML : ''
+                        }</textarea>
+                      </div>
+                      <label>Inner Text</label>
                       <textarea id="stellar-element-content">${innerText}</textarea>
                     </div>
                   `
@@ -843,6 +906,8 @@
                 global__editedElements[i].stellarElementId;
               const innerTextModified =
                 global__editedElements[i].innerTextModified;
+              const innerHtmlModified =
+                global__editedElements[i].innerHtmlModified;
               const el = document.querySelector(
                 `[stellar-element-id="${stellarElementId}"]`,
               ) as HTMLElement;
@@ -860,12 +925,20 @@
                 modification.cssText = el?.style?.cssText;
               }
 
-              // Only include text changes if they differ from pristine state
+              // Only include text changes if they differ from pristine state and were explicitly modified
               if (
                 el?.innerText !== pristineEl?.innerText &&
                 innerTextModified
               ) {
                 modification.innerText = el?.innerText;
+              }
+
+              // Only include HTML changes if they differ from pristine state and were explicitly modified
+              if (
+                el?.innerHTML !== pristineEl?.innerHTML &&
+                innerHtmlModified
+              ) {
+                modification.innerHTML = el?.innerHTML;
               }
 
               // Handle specific attributes for images and links
@@ -980,12 +1053,10 @@
             });
           }
 
-          function handleElementMutation(innerTextModified: boolean = false) {
-            console.log(
-              'handleElementMutation edited elemnts',
-              global__editedElements,
-            );
-            console.log('selectedElement', selectedElement);
+          function handleElementMutation(
+            innerTextModified: boolean = false,
+            innerHtmlModified: boolean = false,
+          ) {
             const selectedElementNode = document.querySelector(selectedElement);
             const stellarElementId =
               selectedElementNode.getAttribute('stellar-element-id');
@@ -1007,7 +1078,19 @@
                 selector: selectedElement,
                 stellarElementId: newStellarElementId,
                 innerTextModified,
+                innerHtmlModified,
               });
+            } else if (selectedElement) {
+              // Update existing element's modification flags
+              const editedElement = global__editedElements.find(
+                (el) => el.stellarElementId === stellarElementId,
+              );
+              if (editedElement) {
+                editedElement.innerTextModified =
+                  editedElement.innerTextModified || innerTextModified;
+                editedElement.innerHtmlModified =
+                  editedElement.innerHtmlModified || innerHtmlModified;
+              }
             }
             renderEditedElements();
             renderActions();
@@ -1277,6 +1360,48 @@
                 }, 300);
               });
             }
+
+            // Add HTML editor listeners
+            const toggleHtmlButton = document.getElementById(
+              'sve-toggle-html-editor',
+            );
+            const htmlTextarea = document.getElementById(
+              'sve-html-content',
+            ) as HTMLTextAreaElement;
+            const contentTextarea = document.getElementById(
+              'stellar-element-content',
+            ) as HTMLTextAreaElement;
+
+            if (toggleHtmlButton && htmlTextarea) {
+              toggleHtmlButton.addEventListener('click', function () {
+                const isVisible = htmlTextarea.style.display === 'block';
+                htmlTextarea.style.display = isVisible ? 'none' : 'block';
+                toggleHtmlButton.textContent = isVisible
+                  ? 'Edit HTML'
+                  : 'Hide HTML Editor';
+
+                if (!isVisible) {
+                  // When showing HTML editor, update it with current innerHTML
+                  const element = document.querySelector(selectedElement);
+                  if (element) {
+                    htmlTextarea.value = element.innerHTML;
+                  }
+                }
+              });
+
+              htmlTextarea.addEventListener('input', function () {
+                if (selectedElement) {
+                  document.querySelectorAll(selectedElement).forEach((el) => {
+                    el.innerHTML = this.value;
+                    // Update the content textarea with the new text content
+                    if (contentTextarea) {
+                      contentTextarea.value = el.innerText;
+                    }
+                    handleElementMutation(false, true);
+                  });
+                }
+              });
+            }
           }
 
           const style = document.createElement('style');
@@ -1285,7 +1410,7 @@
           document.head.appendChild(style);
 
           if (visualEditorOn === 'true') {
-            renderEditor({});
+            renderEditor({ element: selectedElement });
           }
 
           function handleClickBehaviour() {
@@ -1468,10 +1593,6 @@
       border-radius: 3px;
       font-family: monospace;
     }
-
-    .sve-element-selector {
-      margin-bottom: 16px;
-    }
     
     .sve-selector-input-wrapper {
       position: relative;
@@ -1490,6 +1611,11 @@
     #stellar-element-selector.valid {
       border-color: #2ecc71;
     }
+
+    .sve-element-selector-count {
+      font-weight: 600;
+      color: rgba(60, 146, 226, 1);
+    }
     
     #stellar-element-selector.warning {
       border-color: #e67e22;
@@ -1500,16 +1626,14 @@
     }
     
     .sve-selector-validation {
-      position: absolute;
-      left: 0;
-      top: 100%;
-      font-size: 10px;
-      padding: 2px 6px;
+      font-size: 12px;
+      padding: 2px 0;
       border-radius: 3px;
+      font-weight: 500;
     }
     
     .sve-selector-validation.valid {
-      color: #2ecc71;
+      color: #27ae60;
     }
     
     .sve-selector-validation.warning {

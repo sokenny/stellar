@@ -174,7 +174,14 @@ const ExperimentUrlRules = ({
       </Tooltip>
       <div className={styles.urlSettings}>
         <span className={styles.hint}>
-          Must be part of {currentProject.domain}
+          Must be part of{' '}
+          <a
+            href={`https://${currentProject.domain}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {currentProject.domain}
+          </a>
         </span>
         <div className={styles.advancedUrlRulesSwitch}>
           <Switch

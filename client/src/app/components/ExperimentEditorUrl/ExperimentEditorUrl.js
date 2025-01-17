@@ -78,7 +78,14 @@ const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
         <div className={styles.hint}>
           {!isEditorUrlValid() && editorUrl && (
             <div className={styles.error}>
-              URL must be part of {currentProject.domain}
+              URL must be part of{' '}
+              <a
+                href={`https://${currentProject.domain}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {currentProject.domain}
+              </a>
             </div>
           )}
         </div>

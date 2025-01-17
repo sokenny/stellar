@@ -120,6 +120,10 @@
   font-size: 20px;
 }
 
+.row .input {
+  width: 350px;
+}
+
 .clickData .input,
 .clickData .goButton {
   height: 36px;
