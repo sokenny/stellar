@@ -93,6 +93,11 @@
   align-items: center;
 }
 
+.testimonialsB {display: block!important}
+
+.testimonials {display: none!important}
+
+
 @media (max-width: 1100px) {
   .container {
     flex-direction: column;
