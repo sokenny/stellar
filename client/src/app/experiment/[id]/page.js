@@ -275,7 +275,7 @@ export default function ExperimentPage({ params, searchParams }) {
             <div className={styles.icon}>
               <Page width={15} height={15} />
             </div>
-            Target page:{' '}
+            Target URL(s):{' '}
             {experiment.url ? (
               <a
                 href={experiment.url}
@@ -289,12 +289,14 @@ export default function ExperimentPage({ params, searchParams }) {
                 Advanced URL rules applied
               </div>
             )}
-            <Edit
-              width={15}
-              height={15}
-              className={styles.editIcon}
-              onClick={() => setIsUrlRulesModalOpen(true)}
-            />
+            {!experiment.ended_at && (
+              <Edit
+                width={15}
+                height={15}
+                className={styles.editIcon}
+                onClick={() => setIsUrlRulesModalOpen(true)}
+              />
+            )}
           </div>
           <div className={styles.targetAudience}>
             <div className={styles.icon}>
@@ -303,12 +305,14 @@ export default function ExperimentPage({ params, searchParams }) {
             Target audience:{' '}
             <div className={styles.targetAudienceText}>
               {hasTargetRules ? 'Custom rules applied' : 'Set to all users'}
-              <Edit
-                width={15}
-                height={15}
-                className={styles.editIcon}
-                onClick={() => setIsTargetAudienceModalOpen(true)}
-              />
+              {!experiment.ended_at && (
+                <Edit
+                  width={15}
+                  height={15}
+                  className={styles.editIcon}
+                  onClick={() => setIsTargetAudienceModalOpen(true)}
+                />
+              )}
             </div>
           </div>
           <div className={styles.editorUrl}>

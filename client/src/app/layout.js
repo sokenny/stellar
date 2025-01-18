@@ -25,14 +25,16 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: When page visit goal is set to contains, the preview on exp profile page still says "Page visits to [string]"
+// TODO-p1-1: Add p value info on statistical significance component
+// TODO-p1-1: Decide that target audience rules is taken care of with the url rules
+// TODO-p1-1: Launch new testimonials experiment
 // TODO/p1-1: swithc to project after creating it
 // Que lo de parallel experiments no cuente si url es null
+// TODO-p1-1: Allow ai prompting while editing
 // TODO-p1-1: Dotn allow editing rules after launching
 // TODO-p1-1: Allow previewing different urls
 // TODO-p1-1: Record tutorial of new features (url rules, targeting, DKI) and send mass email
 
-// TODO-p1-1: Add p value info on statistical significance component
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments

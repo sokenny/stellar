@@ -324,7 +324,7 @@ const SettingsForm = ({ experiment }) => {
           </Switch>
           <div className={styles.detail}>
             By enabling this option, you allow other experiments to run along
-            side this one on a same page (not recommended).
+            side this one on a same page.
           </div>
         </div>
       </div>

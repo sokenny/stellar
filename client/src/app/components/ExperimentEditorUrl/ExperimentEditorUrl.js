@@ -4,6 +4,7 @@ import Input from '../Input/Input';
 import Button from '../Button/Button';
 import styles from './ExperimentEditorUrl.module.css';
 import isUrlFromDomain from '../../helpers/isUrlFromDomain';
+import urlMatchesTargetCriteria from '../../helpers/urlMatchesTargetCriteria';
 import useStore from '../../store';
 
 const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
@@ -19,7 +20,12 @@ const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
 
   const isEditorUrlValid = () => {
     if (!editorUrl) return false;
-    return isUrlFromDomain(editorUrl, currentProject.domain);
+    const isDomainValid = isUrlFromDomain(editorUrl, currentProject.domain);
+    const matchesTargetRules = urlMatchesTargetCriteria(
+      editorUrl,
+      experiment?.advanced_url_rules,
+    );
+    return isDomainValid && matchesTargetRules;
   };
 
   async function handleEditorUrlSubmit() {
@@ -78,14 +84,20 @@ const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
         <div className={styles.hint}>
           {!isEditorUrlValid() && editorUrl && (
             <div className={styles.error}>
-              URL must be part of{' '}
-              <a
-                href={`https://${currentProject.domain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {currentProject.domain}
-              </a>
+              {!isUrlFromDomain(editorUrl, currentProject.domain) ? (
+                <>
+                  URL must be part of{' '}
+                  <a
+                    href={`https://${currentProject.domain}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {currentProject.domain}
+                  </a>
+                </>
+              ) : (
+                'URL does not match the experiment URL targeting rules'
+              )}
             </div>
           )}
         </div>

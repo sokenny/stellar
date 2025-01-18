@@ -28,6 +28,19 @@ import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
 import styles from './VariantsTable.module.css';
 import useVariantEditor from '../../helpers/useVariantEditor';
 
+const dummyKeyboardDelegate = Object.fromEntries(
+  [
+    'getKeyBelow',
+    'getKeyAbove',
+    'getKeyLeftOf',
+    'getKeyRightOf',
+    'getKeyPageBelow',
+    'getKeyPageAbove',
+    'getFirstKey',
+    'getLastKey',
+  ].map((name) => [name, () => null]),
+);
+
 const columns = (statsType) => [
   {
     key: 'name',
@@ -202,6 +215,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
         />
       )}
       <Table
+        keyboardDelegate={dummyKeyboardDelegate}
         className={`${styles.table} ${rows.length ? '' : styles.empty} ${
           hasStarted ? styles.hasStarted : ''
         }`}

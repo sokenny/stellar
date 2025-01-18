@@ -246,6 +246,12 @@
         border: 1px solid rgba(0, 0, 0, 0.2);
         resize: vertical;
       }
+
+      .sve-affects-count {
+        font-size: 10px;
+        color: rgba(60, 146, 226, 1);
+        font-weight: 600;
+      }
     `;
 
     injectStyles(styles);
@@ -633,16 +639,37 @@
                 editedElementsMarkup += `<div class="sve-edited-element" stellar-selector-ref="${global__editedElements[i].selector}">
                   <div class="sve-edited-element-info"><b>${global__editedElements[i].selector}</b> - ${el.innerText}</div>
                 </div>`;
-                // <div class="sve-edited-element-delete" stellar-selector-ref="${global__editedElements[i].selector}">x</div>
               }
             }
 
-            if (global__editedElements.length === 0) {
+            // Add global CSS and JS items if they exist
+            if (globalCssText.trim()) {
+              editedElementsMarkup += `<div class="sve-edited-element sve-global-edit">
+                <div class="sve-edited-element-info"><b>Global CSS</b> - ${globalCssText.length} characters</div>
+              </div>`;
+            }
+
+            if (globalJsText.trim()) {
+              editedElementsMarkup += `<div class="sve-edited-element sve-global-edit">
+                <div class="sve-edited-element-info"><b>Global JavaScript</b> - ${globalJsText.length} characters</div>
+              </div>`;
+            }
+
+            if (
+              global__editedElements.length === 0 &&
+              !globalCssText.trim() &&
+              !globalJsText.trim()
+            ) {
               return '';
             }
 
+            const totalEdits =
+              global__editedElements.length +
+              (globalCssText.trim() ? 1 : 0) +
+              (globalJsText.trim() ? 1 : 0);
+
             return `<div class="sve-edited-elements">
-                  <div class="sve-edited-elements-title">Editions (${global__editedElements.length})</div>
+                  <div class="sve-edited-elements-title">Editions (${totalEdits})</div>
                   <div class="sve-edited-elements-list">
                     ${editedElementsMarkup}
                   </div>
@@ -789,7 +816,11 @@
                           element ? element.innerHTML : ''
                         }</textarea>
                       </div>
-                      <label>Inner Text</label>
+                      <label>Inner Text ${
+                        matchCount > 1
+                          ? `<span class="sve-affects-count">(Affects ${matchCount} elements)</span>`
+                          : ''
+                      }</label>
                       <textarea id="stellar-element-content">${innerText}</textarea>
                     </div>
                   `
@@ -1459,7 +1490,7 @@
               }</textarea>
                   <div class="sve-actions">
                     <button id="sve-cancel-global-code">Cancel</button>
-                    <button id="sve-save-global-code">Save</button>
+                    <button id="sve-save-global-code">Apply</button>
                   </div>
                 </div>
               `;
