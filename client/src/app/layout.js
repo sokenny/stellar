@@ -25,7 +25,6 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Add p value info on statistical significance component
 // TODO-p1-1: Decide that target audience rules is taken care of with the url rules
 // TODO-p1-1: Launch new testimonials experiment
 // TODO/p1-1: swithc to project after creating it

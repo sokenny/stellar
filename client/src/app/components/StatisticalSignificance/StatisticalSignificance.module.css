@@ -9,3 +9,13 @@
   font-weight: 400;
   color: var(--linkBlue);
 }
+
+.tooltip {
+  max-width: 500px;
+  padding: 12px;
+  text-align: center;
+}
+
+.tooltipContent span {
+  color: var(--linkBlue);
+}

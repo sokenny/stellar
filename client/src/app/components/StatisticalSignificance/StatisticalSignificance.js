@@ -2,9 +2,11 @@
 
 import React, { useEffect } from 'react';
 import useStore from '../../store';
-import { Progress } from '@nextui-org/react';
+import { Progress, Tooltip } from '@nextui-org/react';
 import calculateSignificance from '../../helpers/calculateSignificance';
+import Info from '../../icons/Info/Info';
 import styles from './StatisticalSignificance.module.css';
+
 export default function StatisticalSignificance({ experiment }) {
   const { stats, getExperimentStats } = useStore();
   useEffect(() => {
@@ -101,7 +103,29 @@ export default function StatisticalSignificance({ experiment }) {
           label: 'tracking-wider font-medium text-default-600',
           value: 'text-foreground/60',
         }}
-        label="Statistical Significance"
+        label={
+          <div className="flex items-center gap-1">
+            <span>Statistical Significance</span>
+            <Tooltip
+              content={
+                <div className={styles.tooltipContent}>
+                  Statistical significance is calculated using{' '}
+                  <span>p-value</span>, which measures how likely the observed
+                  differences between variants occurred by chance. A higher
+                  percentage indicates stronger evidence that the results are
+                  not random."
+                </div>
+              }
+              showArrow
+              closeDelay={200}
+              className={styles.tooltip}
+            >
+              <div>
+                <Info />
+              </div>
+            </Tooltip>
+          </div>
+        }
         value={significance}
         showValueLabel={true}
       />

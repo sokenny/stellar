@@ -11,7 +11,7 @@ import Cookie from './icons/Cookie';
 import { Button } from '@nextui-org/react';
 import styles from './page.module.css';
 
-const quotes = [
+export const quotes = [
   {
     quote: 'Exactly what my marketing team needed. AB testing without the BS.',
     color: '#FF92C2',
@@ -288,36 +288,12 @@ export default async function HomePage({}) {
           </div>
           <div className={styles.biteTestimonials}>
             <h3>Why do users prefer Stellar?</h3>
-            {/* <div className={styles.bitesContainer} id="bites-testimonials">
-              {quotes.map((q, i) => (
-                <div
-                  className={styles.bite}
-                  key={i}
-                  style={{
-                    borderColor: q.color,
-                    backgroundColor: `${q.color}11`,
-                  }}
-                >
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test${
-                        i + 1
-                      }.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div className={styles.quote}>"{q.quote}"</div>
-                </div>
-              ))}
-            </div> */}
+
             <div className={styles.testimonials}>
               <div
                 className={styles.testimonial}
                 style={{
                   borderColor: quotes[0].color,
-                  // backgroundColor: `${quotes[0].color}11`,
                 }}
               >
                 <div className={styles.testimonialHeader}>
@@ -349,7 +325,6 @@ export default async function HomePage({}) {
                 className={styles.testimonial}
                 style={{
                   borderColor: quotes[1].color,
-                  // backgroundColor: `${quotes[1].color}11`,
                 }}
               >
                 <div className={styles.testimonialHeader}>
@@ -382,7 +357,6 @@ export default async function HomePage({}) {
                 className={styles.testimonial}
                 style={{
                   borderColor: quotes[2].color,
-                  // backgroundColor: `${quotes[2].color}11`,
                 }}
               >
                 <div className={styles.testimonialHeader}>
@@ -415,7 +389,6 @@ export default async function HomePage({}) {
                 className={styles.testimonial}
                 style={{
                   borderColor: quotes[3].color,
-                  // backgroundColor: `${quotes[3].color}11`,
                 }}
               >
                 <div className={styles.testimonialHeader}>
@@ -448,7 +421,6 @@ export default async function HomePage({}) {
                 className={styles.testimonial}
                 style={{
                   borderColor: quotes[5].color,
-                  // backgroundColor: `${quotes[5].color}11`,
                 }}
               >
                 <div className={styles.testimonialHeader}>
