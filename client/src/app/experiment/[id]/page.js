@@ -125,7 +125,7 @@ export default function ExperimentPage({ params, searchParams }) {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner size="xl" color="primary" />;
   }
 
   if (!experiment) {

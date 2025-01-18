@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Checkbox } from '@nextui-org/react';
+import { Checkbox, Spinner } from '@nextui-org/react';
 import useStore from '../store';
 import styles from './page.module.css';
 import DisplaySnippet from '../components/DisplaySnippet';
@@ -44,7 +44,7 @@ export default function Account({}) {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <Spinner size="xl" color="primary" />;
   }
 
   return (

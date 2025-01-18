@@ -8,6 +8,7 @@ import SnippetMissing from '../components/SnippetMissing';
 import CreateSimpleProjectForm from '../components/CreateSimpleProjectForm';
 import styles from './page.module.css';
 import EmailVerificationRequired from '../components/EmailVerificationRequired';
+import { Spinner } from '@nextui-org/react';
 
 // TODO-p2: Probarlo para in-product ab tests como dijo Adrian
 
@@ -31,7 +32,7 @@ export default function Dashboard() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner size="xl" color="primary" />;
   }
 
   // needs email verification if user.password exists and !user.confirmed_at

@@ -90,6 +90,19 @@ export default async function HomePage({}) {
           </div>
           <div className={styles.ctaSection} id="cta-section">
             <div className={styles.buttons}>
+              <a
+                href="https://calendly.com/juanchaher99/stellar-demo"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Button
+                  className={styles.bookDemoBtn}
+                  color="primary"
+                  variant="bordered"
+                >
+                  Book a Demo
+                </Button>
+              </a>
               <SignUpCTA className={styles.goStellarBtn}>
                 Start For Free
               </SignUpCTA>
@@ -461,19 +474,9 @@ export default async function HomePage({}) {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <Button className={styles.scheduleBtn}>Schedule a Demo</Button>
+              <Button className={styles.scheduleBtn}>Book a Demo</Button>
             </a>
-            {/* <div className={styles.cardContainer}>
-              <div className={styles.bgDeco}></div>
-              <div className={styles.card}>
-                <Button>Schedule a Demo</Button>
-              </div>
-            </div> */}
           </div>
-          {/* <div className={styles.faqs}> */}
-          {/* <h3>FAQ</h3> */}
-          {/* <Faqs /> */}
-          {/* </div> */}
         </div>
       </div>
     </>

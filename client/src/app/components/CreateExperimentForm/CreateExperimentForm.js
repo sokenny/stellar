@@ -117,7 +117,9 @@ const CreateExperimentForm = ({ experimentId }) => {
 
   const shouldShowRemainingSteps = experiment?.editor_url;
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return <Spinner size="xl" color="primary" />;
+  }
 
   return (
     <>

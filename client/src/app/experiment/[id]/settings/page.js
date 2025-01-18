@@ -22,7 +22,7 @@ export default function SettingsPage({ params }) {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner size="xl" color="primary" />;
   }
 
   return (

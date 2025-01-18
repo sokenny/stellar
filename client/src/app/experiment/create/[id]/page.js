@@ -1,6 +1,7 @@
 'use client';
 import ExperimentName from '../../[id]/Header/ExperimentName';
 import CreateExperimentForm from '../../../components/CreateExperimentForm';
+import { Spinner } from '@nextui-org/react';
 import useStore from '../../../store';
 
 import styles from './page.module.css';
@@ -12,7 +13,7 @@ export default function CreateExperimentPage({ params }) {
   const isNew = id === 'new';
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner size="xl" color="primary" />;
   }
 
   const experiment = isNew

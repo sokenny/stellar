@@ -455,6 +455,12 @@
   justify-content: center;
 }
 
+.bookDemoBtn {
+  height: 50px;
+  border-radius: 4px;
+  margin-right: 12px;
+  font-size: 18px;
+}
 
 .testimonials .testimonial {
   background-color: rgba(255, 255, 255, 0.1);
