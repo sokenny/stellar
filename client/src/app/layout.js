@@ -25,8 +25,9 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Add ai prompting for html edits
+// TODO-p1-1: Come up w tidier way of filtering out IPs
 // TODO-p1-1: Decide that target audience rules is taken care of with the url rules
+// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-p1: If G-ads is not working on the weekends, set chedule to pause it those days
 // TODO-p1-1: Setup retargeting campaign in g ads w video
 // TODO-p1-1: Try out Supa Demo
