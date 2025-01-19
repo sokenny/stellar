@@ -150,6 +150,38 @@ export default async function HomePage({}) {
             ></iframe>
           </div>
 
+          <div
+            style={{
+              position: 'relative',
+              boxSizing: 'content-box',
+              maxHeight: '80vh',
+              maxHeight: '80svh',
+              width: '675px',
+              maxWidth: '100%',
+              aspectRatio: '1.764294049008168',
+              padding: '40px 0 40px 0',
+            }}
+            className={styles.supademo}
+            id="supademo"
+          >
+            <iframe
+              src="https://app.supademo.com/embed/cm648ecrn0d30h0o82hp4mx8a?embed_v=2"
+              loading="lazy"
+              title="Gostellar Demo"
+              allow="clipboard-write"
+              frameborder="0"
+              webkitallowfullscreen="true"
+              mozallowfullscreen="true"
+              allowfullscreen
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+              }}
+            ></iframe>
+          </div>
           <div className={styles.advantages}>
             <h3>Advantages of Stellar</h3>
             <div className={styles.list}>
@@ -330,7 +362,7 @@ export default async function HomePage({}) {
                   testing tools because they were too complex and costly. With
                   Stellar, we ran our first test in under 10 minutes, no
                   developer required. Our conversions increased by 30% in just a
-                  few weeks. It’s fast, lightweight, and the support team is
+                  few weeks. It's fast, lightweight, and the support team is
                   amazing."
                 </p>
               </div>
@@ -358,11 +390,11 @@ export default async function HomePage({}) {
                 </div>
 
                 <p className={styles.quote}>
-                  "I’ve tried VWO and Optimizely, but Stellar stands out for its
+                  "I've tried VWO and Optimizely, but Stellar stands out for its
                   ease of use and simplicity. The script is super lightweight,
-                  and there’s no impact on our site speed. Setting up tests was
+                  and there's no impact on our site speed. Setting up tests was
                   quick, and the visual editor made it easy to adjust our pages
-                  without any coding. It’s been a game-changer for our marketing
+                  without any coding. It's been a game-changer for our marketing
                   team."
                 </p>
               </div>
@@ -422,7 +454,7 @@ export default async function HomePage({}) {
                 </div>
 
                 <p className={styles.quote}>
-                  "Stellar is the best A/B testing platform I’ve used. It’s
+                  "Stellar is the best A/B testing platform I've used. It's
                   lightweight, fast, and integrates perfectly with our existing
                   setup. The visual editor is fantastic—our team was able to
                   create and launch experiments without any dev assistance. We
@@ -454,11 +486,11 @@ export default async function HomePage({}) {
                 </div>
 
                 <p className={styles.quote}>
-                  "Stellar is a breath of fresh air. It’s clutter-free and does
+                  "Stellar is a breath of fresh air. It's clutter-free and does
                   exactly what you need without the unnecessary features. The
-                  script is small and doesn’t slow down our site, which was a
+                  script is small and doesn't slow down our site, which was a
                   big concern for us. The support team is responsive and
-                  knowledgeable. We’ve already recommended Stellar to other
+                  knowledgeable. We've already recommended Stellar to other
                   teams."
                 </p>
               </div>
