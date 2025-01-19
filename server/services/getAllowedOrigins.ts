@@ -50,16 +50,6 @@ async function getAllowedOrigins() {
     EX: 60 * 60,
   });
 
-  // check if https://lingobites.io is in allowedOrigins
-  console.log(
-    'all allowedOrigins: ',
-    allAllowedOrigins.filter((origin) => origin.includes('lingobites')),
-  );
-  console.log(
-    'allowedOrigins: ',
-    allAllowedOrigins.includes('https://lingobites.io'),
-  );
-
   return allAllowedOrigins;
 }
 

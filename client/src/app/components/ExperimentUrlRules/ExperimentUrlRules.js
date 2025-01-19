@@ -196,7 +196,6 @@ const ExperimentUrlRules = ({
       </div>
       {advancedUrlRules && (
         <div className={`${styles.advancedUrlRules} ${className}`}>
-          {/* todo-p1-1 have select initialize to selected value */}
           <div className={styles.urlRulesSection}>
             <h4>✅ Run experiment on ANY of these pages:</h4>
             {urlRules.include.map((rule, index) => (

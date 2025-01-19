@@ -17,6 +17,7 @@ import handleCreateAccount from './handlers/handleCreateAccount';
 import handleConfirmEmail from './handlers/handleConfirmEmail';
 import handleLogin from './handlers/handleLogin';
 import handleValidateAffiliateCode from './handlers/handleValidateAffiliateCode';
+import publishUserSession from './handlers/publishUserSession';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -41,11 +42,11 @@ router.get('/confirm-email', handleConfirmEmail);
 router.post('/create-account-social', createAccountSocial);
 
 router.get('/experiments/client', getExperimentsForClient);
-
 router.post(
   '/experiments/end-session',
+  // strictLimiter, // I might need this soon, perhaps not too strict
   express.text({ type: '*/*' }),
-  processUserSession,
+  publishUserSession,
 );
 
 router.get('/clientjs', sendStellarJSBundle);

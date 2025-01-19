@@ -26,10 +26,12 @@ export const metadata = {
 // triggerrebuild
 
 // TODO-p1-1: Introduce split url exps
-// TODO-p1-1: Allow editing global JS and global CSS from the table
 // TODO-p1-1: Add ai prompting for html edits
+// TODO-p1-1: Allow editing global JS and global CSS from the table
 // TODO-p1-1: LEts use a custom fetch instead of interceptFetch since it affects other reqs like segment's
 // TODO-p1-1: Have styles from the editor be appplied w !important
+// TODO-p1-1: resume handleGettingStartedCampaign testing carefully / re-check emails make sense
+// TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-p1: If G-ads is not working on the weekends, set chedule to pause it those days
 // TODO-p1-1: Setup retargeting campaign in g ads w video
 // TODO-p1-1: Try out Supa Demo
@@ -45,7 +47,6 @@ export const metadata = {
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
 
 // TODO-p1-1: Improve statsig calculator / improve displaying of NaN or no data
-// TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments
 // TODO-p1-1: Hacer DKI email mkt send para PPC campaigns

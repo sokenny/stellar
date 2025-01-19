@@ -4,6 +4,7 @@ import launchExperiment from '../launchExperiment';
 import stopExperiment from '../stopExperiment';
 import handleSnippetInstallationFollowUps from './handleSnippetInstallationFollowUps';
 import handleGettingStartedCampaign from './handleGettingStartedCampaign';
+import handleSQSPolling from './handleSQSPolling';
 
 async function handleScheduledExperimentsLaunch() {
   console.log('Worker job handleScheduledExperimentsLaunch started');
@@ -92,6 +93,8 @@ function runWorker() {
   //   handleGettingStartedCampaign();
   //   setInterval(handleGettingStartedCampaign, 1000 * 60 * 20);
   // }, 1000 * 60 * 6);
+
+  handleSQSPolling();
 }
 
 export default runWorker;

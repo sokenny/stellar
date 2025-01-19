@@ -128,6 +128,9 @@ const CreateExperimentForm = ({ experimentId }) => {
         onOpenChange={onOpenSnippetModalChange}
       />
       <div className={styles.CreateExperimentForm}>
+        {/* <div className={`${styles.fieldGroup} ${styles.step}`}>
+          <div className={styles.stepTitle}>1. Experiment type</div>
+        </div> */}
         <div className={`${styles.fieldGroup} ${styles.step}`}>
           <ExperimentUrlRules
             className={styles.advancedUrlRules}
