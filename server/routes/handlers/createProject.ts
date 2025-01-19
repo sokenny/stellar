@@ -48,7 +48,7 @@ async function createProject(req, res) {
     key: apiKey,
   });
 
-  res.json({ success: true });
+  res.json({ success: true, project });
 }
 
 export default createProject;

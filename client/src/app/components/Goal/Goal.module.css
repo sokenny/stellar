@@ -17,10 +17,10 @@
 }
 
 .edit {
-  margin-left: 8px;
-  color: gray;
+  margin-left: 4px;
   cursor: pointer;
   line-height: 0;
+  opacity: .6;
 }
 
 .goalDescription {

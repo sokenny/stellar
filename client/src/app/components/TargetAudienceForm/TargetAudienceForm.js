@@ -304,28 +304,6 @@ const TargetAudienceForm = ({
           </>
         )}
       </div>
-      <div className={`${styles.ruleType}`}>
-        <div className={styles.ruleTypeRow}>
-          <div className={styles.ruleLeft}>
-            <div className={styles.ruleTypeTitle}>URL parameter rules</div>
-            <div className={styles.ruleTypeDetail}>
-              Currently set to users with <span>any URL parameters</span>
-            </div>
-          </div>
-          <div className={styles.ruleTypeOption}>
-            <Tooltip
-              content="This feature is coming soon."
-              showArrow
-              className={styles.tooltip}
-              closeDelay={200}
-            >
-              <div>
-                <Switch isDisabled />
-              </div>
-            </Tooltip>
-          </div>
-        </div>
-      </div>
 
       <div className={styles.buttonContainer}>
         {onClose && (

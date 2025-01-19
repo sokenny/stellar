@@ -38,7 +38,10 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
           success: async (response) => {
             setLoading(false);
             const parsedResponse = await response.json();
-            console.log(parsedResponse);
+            localStorage.setItem(
+              'lastSelectedProject',
+              parsedResponse.project.id,
+            );
             window?.location?.reload();
             return 'Project created successfully';
           },

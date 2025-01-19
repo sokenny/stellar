@@ -7,6 +7,10 @@
   padding: 16px 0;
 }
 
+.ruleType.countries {
+  border-bottom: none;
+}
+
 .ruleTypeRow {
   display: flex;
   align-items: center;

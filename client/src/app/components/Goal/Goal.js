@@ -77,7 +77,7 @@ const Goal = ({ experiment, onEdit, className }) => {
           closeDelay={0}
         >
           <div className={styles.edit} onClick={onEdit}>
-            <Edit width={17} height={17} />
+            <Edit width={15} height={15} />
           </div>
         </Tooltip>
       )}

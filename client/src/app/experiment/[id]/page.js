@@ -407,7 +407,7 @@ export default function ExperimentPage({ params, searchParams }) {
       <Modal
         isOpen={isTargetAudienceModalOpen}
         onOpenChange={setIsTargetAudienceModalOpen}
-        isDismissable={false}
+        isDismissable
         className={styles.targetAudienceModal}
       >
         <ModalContent>
@@ -431,7 +431,7 @@ export default function ExperimentPage({ params, searchParams }) {
       <Modal
         isOpen={isUrlRulesModalOpen}
         onOpenChange={setIsUrlRulesModalOpen}
-        isDismissable={false}
+        isDismissable
         className={styles.urlRulesModal}
       >
         <ModalContent>
@@ -452,7 +452,7 @@ export default function ExperimentPage({ params, searchParams }) {
       <Modal
         isOpen={isEditorUrlModalOpen}
         onOpenChange={setIsEditorUrlModalOpen}
-        isDismissable={false}
+        isDismissable
         className={styles.editorUrlModal}
       >
         <ModalContent>

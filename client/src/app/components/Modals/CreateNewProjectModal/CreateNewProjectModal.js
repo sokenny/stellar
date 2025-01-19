@@ -1,22 +1,9 @@
 'use client';
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from '@nextui-org/react';
+import { Modal, ModalContent } from '@nextui-org/react';
 import styles from './CreateNewProjectModal.module.css';
-import segmentTrack from '../../../helpers/segment/segmentTrack';
 import CreateSimpleProjectForm from '../../CreateSimpleProjectForm';
 
-const CreateNewProjectModal = ({
-  isOpen,
-  onOpenChange,
-  onLaunch,
-  experimentId,
-}) => {
+const CreateNewProjectModal = ({ isOpen, onOpenChange }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -27,7 +14,7 @@ const CreateNewProjectModal = ({
       size="xl"
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <CreateSimpleProjectForm />
           </>

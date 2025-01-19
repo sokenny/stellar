@@ -57,7 +57,8 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   const toastSuccessCalledRef = useRef(false);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
   const [submiting, setSubmiting] = useState(false);
-  const [selectedClickOption, setSelectedClickOption] = useState('manual');
+  const [selectedClickOption, setSelectedClickOption] =
+    useState('query-selector');
   const [querySelector, setQuerySelector] = useState('');
   const [matchType, setMatchType] = useState(UrlMatchTypesEnum.CONTAINS);
 
@@ -208,8 +209,8 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                 value={selectedClickOption}
                 onValueChange={setSelectedClickOption}
               >
-                <Radio value="manual">Manual select</Radio>
                 <Radio value="query-selector">Query selector</Radio>
+                <Radio value="manual">Manual select</Radio>
               </RadioGroup>
               {selectedClickOption === 'query-selector' && (
                 <div className={styles.querySelect}>
