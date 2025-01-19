@@ -25,11 +25,11 @@ export const metadata = {
 
 // triggerrebuild
 
-// TODO-p1-1: Default select query selector for goal
+// TODO-p1-1: Introduce split url exps
+// TODO-p1-1: Allow editing global JS and global CSS from the table
+// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: LEts use a custom fetch instead of interceptFetch since it affects other reqs like segment's
 // TODO-p1-1: Have styles from the editor be appplied w !important
-// TODO-p1-1: Come up w tidier way of filtering out IPs
-// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-p1: If G-ads is not working on the weekends, set chedule to pause it those days
 // TODO-p1-1: Setup retargeting campaign in g ads w video
 // TODO-p1-1: Try out Supa Demo

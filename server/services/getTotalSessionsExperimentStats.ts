@@ -1,6 +1,7 @@
 import GoalTypesEnum from '../helpers/enums/GoalTypesEnum';
 import db from '../models';
 import { Op } from 'sequelize';
+import juansIps from '../helpers/juansIps';
 
 const goalFunctionMapper = {
   [GoalTypesEnum.SESSION_TIME]: getTotalSessionsGoalSessionTimeStats,
@@ -42,9 +43,11 @@ async function getTotalSessionsGoalSessionTimeStats(experimentId, variantIds) {
           as: 'session',
           attributes: [],
           // where: {
-          //   ip: {
-          //     [Op.notLike]: '%181.171.202.49%',
-          //   },
+          //   [Op.and]: juansIps.map((ip) => ({
+          //     ip: {
+          //       [Op.notLike]: `%${ip}%`,
+          //     },
+          //   })),
           // },
           required: true,
         },
@@ -120,9 +123,11 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
           as: 'session',
           attributes: [],
           // where: {
-          //   ip: {
-          //     [Op.notLike]: '%181.171.202.49%',
-          //   },
+          //   [Op.and]: juansIps.map((ip) => ({
+          //     ip: {
+          //       [Op.notLike]: `%${ip}%`,
+          //     },
+          //   })),
           // },
           required: true,
         },

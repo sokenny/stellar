@@ -42,7 +42,7 @@ export default function Dashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.tutorialLink}>
         <a
-          href="https://www.youtube.com/watch?v=Oxu4XWrEFY4&ab_channel=JuanChaher"
+          href="https://youtu.be/dpDv5s4CZGA?si=Lt3N4TYgHeey4K4X"
           rel="noreferrer"
           target="_blank"
         >

@@ -121,7 +121,7 @@ export default async function HomePage({}) {
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/lea7Sx089Yc?si=wwJFb91TC1oZH1kX"
+              src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -141,7 +141,7 @@ export default async function HomePage({}) {
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/lea7Sx089Yc?si=wwJFb91TC1oZH1kX"
+              src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
