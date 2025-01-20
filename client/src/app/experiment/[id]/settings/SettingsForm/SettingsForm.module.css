@@ -27,7 +27,7 @@
 
 .tooltip {
   padding: 12px;
-  max-width: 250px;
+  max-width: 350px;
   text-align: center;
 }
 
@@ -36,3 +36,10 @@
   font-size: 14px;
   color: rgba(0, 0, 0, 0.4);
 }
+
+.infoIcon {
+  width: 16px;
+  height: 16px;
+  transform: translateY(-4px);
+}
+

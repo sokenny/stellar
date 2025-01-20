@@ -201,7 +201,8 @@
     window.addEventListener('beforeunload', () => {
       if (!isInternalNavigation) {
         const hasConvertedOrMounted = activeExperiments.some(
-          (experiment) => experiment.converted || experiment.experimentMounted,
+          // (experiment) => experiment.converted || experiment.experimentMounted,
+          (experiment) => experiment.converted || experiment.visualized,
         );
 
         if (hasConvertedOrMounted) {
@@ -389,8 +390,51 @@
           'Variant to use - storedVariantId || experiment.variant_to_use: ',
           variantToUse,
         );
+        function handleVisualized(variant) {
+          if (variant.global_css) {
+            activeExperiments.find(
+              (e) => e.experiment === experiment.id,
+            ).visualized = true;
+            console.log('global_css found! visualized is now true');
+          }
+
+          if (variant.global_js) {
+            activeExperiments.find(
+              (e) => e.experiment === experiment.id,
+            ).visualized = true;
+            console.log('global_js found! visualized is now true');
+          }
+
+          variant.modifications.forEach((modification) => {
+            const targetElements = document.querySelectorAll(
+              modification.selector,
+            );
+            if (targetElements.length > 0) {
+              const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    const expRun = activeExperiments.find(
+                      (e) => e.experiment === experiment.id,
+                    );
+                    if (expRun) {
+                      expRun.visualized = true;
+                      console.log('experiment visualized!', expRun.visualized);
+                    }
+                    console.log('disconnecting observer', activeExperiments);
+                    observer.disconnect();
+                  }
+                });
+              });
+
+              targetElements.forEach((element) => {
+                observer.observe(element);
+              });
+            }
+          });
+        }
 
         experiment.variants.forEach((variant) => {
+          handleVisualized(variant);
           if (variant.id === variantToUse) {
             log('Matching variant found: ', variant);
 
@@ -415,31 +459,39 @@
               log('Modification target elements: ', targetElements);
 
               if (targetElements.length > 0) {
-                targetElements.forEach((targetElement) => {
-                  // Only apply modifications that are explicitly defined
-                  if (modification.innerText !== undefined) {
+                // Only apply modifications that are explicitly defined
+                if (modification.innerText !== undefined) {
+                  targetElements.forEach((targetElement) => {
                     targetElement.innerText = replaceKeywordsWithParams(
                       modification.innerText,
                     );
-                  }
-                  if (modification.innerHTML !== undefined) {
+                  });
+                }
+
+                if (modification.innerHTML !== undefined) {
+                  targetElements.forEach((targetElement) => {
                     targetElement.innerHTML = replaceKeywordsWithParams(
                       modification.innerHTML,
                     );
-                  }
-                  if (modification.cssText !== undefined) {
-                    targetElement.style.cssText = modification.cssText;
-                  }
+                  });
+                }
 
-                  // Set attributes if they exist
-                  if (modification.attributes) {
+                if (modification.cssText !== undefined) {
+                  targetElements.forEach((targetElement) => {
+                    targetElement.style.cssText = modification.cssText;
+                  });
+                }
+
+                // Set attributes if they exist
+                if (modification.attributes) {
+                  targetElements.forEach((targetElement) => {
                     Object.keys(modification.attributes).forEach((attr) => {
                       if (modification.attributes[attr] !== undefined) {
                         targetElement[attr] = modification.attributes[attr];
                       }
                     });
-                  }
-                });
+                  });
+                }
               } else {
                 sessionIssues.push({
                   type: 'MODIFICATION',
@@ -581,11 +633,13 @@
       activeExperiments = data.map((experiment) => {
         const stellarData = getStellarData();
         const storedVariantId = stellarData[experiment.id];
+
         return {
           experiment: experiment.id,
           variant: storedVariantId || experiment.variant_to_use,
           converted: false,
           experimentMounted: false,
+          visualized: !experiment.smart_trigger, // If smart_trigger is set, we initialize to false, because we will wait for observer to trigger visualized to true
           goalType: experiment.goal.type,
           goalElementUrl: experiment.goal.url_match_value,
           goalUrlMatchType: experiment.goal.url_match_type,

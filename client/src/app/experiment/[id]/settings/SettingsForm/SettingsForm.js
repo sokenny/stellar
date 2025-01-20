@@ -7,6 +7,7 @@ import { Input, Switch, Tooltip, Select, SelectItem } from '@nextui-org/react';
 import Button from '../../../../components/Button';
 import useStore from '../../../../store';
 import styles from './SettingsForm.module.css';
+import Info from '../../../../icons/Info/Info';
 
 const startTriggerTypes = [
   {
@@ -71,6 +72,7 @@ const SettingsForm = ({ experiment }) => {
     scheduled_start_date,
     scheduled_end_date,
     queue_after,
+    smart_trigger,
   } = experiment;
 
   const [settingsForm, setSettingsForm] = useState({
@@ -81,6 +83,7 @@ const SettingsForm = ({ experiment }) => {
     queue_after,
     auto_finalize,
     allow_parallel,
+    smart_trigger,
   });
   const [submitting, setSubmitting] = useState(false);
   const pristineFormState = useRef(settingsForm);
@@ -325,6 +328,44 @@ const SettingsForm = ({ experiment }) => {
           <div className={styles.detail}>
             By enabling this option, you allow other experiments to run along
             side this one on a same page.
+          </div>
+        </div>
+      </div>
+      <div className={`${styles.settingItem} ${styles.autoFinalizeContainer}`}>
+        <div className={styles.autoFinalize}>
+          <Switch
+            defaultSelected={settingsForm.smart_trigger}
+            onValueChange={(val) =>
+              setSettingsForm({
+                ...settingsForm,
+                smart_trigger: val,
+              })
+            }
+            isDisabled={false}
+          >
+            <div className="flex items-center gap-1">
+              <span>Smart Trigger</span>
+              <Tooltip
+                content={
+                  <div className={styles.tooltipContent}>
+                    Sessions are counted only when the targeted element is
+                    visible, reducing skew from users who don’t engage with the
+                    experiment.
+                  </div>
+                }
+                showArrow
+                closeDelay={200}
+                className={styles.tooltip}
+              >
+                <div className={styles.infoIcon}>
+                  <Info />
+                </div>
+              </Tooltip>
+            </div>
+          </Switch>
+          <div className={styles.detail}>
+            Specially useful for experiments targeting elements outside the
+            viewport.
           </div>
         </div>
       </div>
