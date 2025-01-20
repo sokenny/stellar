@@ -30,6 +30,7 @@ class Experiment extends Model {
   public queue_after!: number;
   public advanced_url_rules!: AdvancedUrlRules | null;
   public editor_url!: string;
+  public smart_trigger!: boolean | null;
 }
 
 export const initializeExperiment = (
@@ -150,6 +151,11 @@ export const initializeExperiment = (
       editor_url: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      smart_trigger: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: null,
       },
     },
     {

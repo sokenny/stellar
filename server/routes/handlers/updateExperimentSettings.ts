@@ -40,6 +40,7 @@ async function updateExperimentSettings(req, res) {
     scheduled_start_date: settings.scheduled_start_date,
     scheduled_end_date: settings.scheduled_end_date,
     allow_parallel: settings.allow_parallel,
+    smart_trigger: settings.smart_trigger,
   });
 
   console.log('settings --- !', settings);

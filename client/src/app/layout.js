@@ -17,7 +17,7 @@ const poppins = Poppins({
 
 export const metadata = {
   title: 'Stellar | A/B Test Any Website',
-  description: 'Loved by Growth Marketers',
+  description: 'Fastes on the market | Loved by CRO marketers',
 };
 // IDEAS:
 // Copiarme de la seccion de AB Testing de optimonk
