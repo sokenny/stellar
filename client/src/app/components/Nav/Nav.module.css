@@ -28,10 +28,11 @@
 
 .statusBar {
   font-size: 12px;
-  padding: 2px;
+  padding: 4px;
   background: linear-gradient(220deg, #0072f5, #cb5edc);
   color: white;
   text-align: center;
+
 }
 
 .statusBar a {
