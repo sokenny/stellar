@@ -28,10 +28,12 @@
 .hasStarted .editIcon,
 .hasStarted .deleteIcon {
   opacity: 0.25;
+  cursor: not-allowed;
 }
 
-.hasStarted .gearIcon {
+.hasEnded .gearIcon {
   opacity: 0.15;
+  cursor: not-allowed;
 }
 
 .tooltip {

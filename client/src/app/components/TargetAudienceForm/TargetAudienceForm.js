@@ -53,6 +53,7 @@ const TargetAudienceForm = ({
   onClose,
   saveButtonLabel = 'Save Changes',
   onSuccess,
+  disabledEditing = false,
 }) => {
   console.log('targetRules111', targetRules);
   const { refetchProjects } = useStore();
@@ -167,6 +168,7 @@ const TargetAudienceForm = ({
           <div className={styles.ruleTypeOption}>
             <Switch
               defaultSelected={deviceRulesEnabled}
+              isDisabled={disabledEditing}
               onChange={(e) => {
                 setDeviceRulesEnabled(e.target.checked);
                 if (!e.target.checked) {
@@ -184,6 +186,7 @@ const TargetAudienceForm = ({
             size="sm"
             defaultSelectedKeys={selectedDevices}
             onSelectionChange={handleDeviceSelectionChange}
+            isDisabled={disabledEditing}
           >
             {deviceOptions.map((device) => (
               <SelectItem key={device.key} startContent={device.icon}>
@@ -237,6 +240,7 @@ const TargetAudienceForm = ({
           <div className={styles.ruleTypeOption}>
             <Switch
               defaultSelected={countryRulesEnabled}
+              isDisabled={disabledEditing}
               onChange={(e) => {
                 setCountryRulesEnabled(e.target.checked);
                 if (!e.target.checked) {
@@ -254,6 +258,7 @@ const TargetAudienceForm = ({
               selectionMode="multiple"
               className={`max-w-xs ${styles.select}`}
               size="sm"
+              isDisabled={disabledEditing}
               defaultSelectedKeys={includedCountries.map(
                 (code) =>
                   countryOptions.find((country) => country.code === code)?.key,
@@ -280,6 +285,7 @@ const TargetAudienceForm = ({
               selectionMode="multiple"
               className={`max-w-xs ${styles.select}`}
               size="sm"
+              isDisabled={disabledEditing}
               defaultSelectedKeys={excludedCountries.map(
                 (code) =>
                   countryOptions.find((country) => country.code === code)?.key,
@@ -305,21 +311,23 @@ const TargetAudienceForm = ({
         )}
       </div>
 
-      <div className={styles.buttonContainer}>
-        {onClose && (
-          <NextUIButton variant="light" onClick={onClose}>
-            Close
+      {!disabledEditing && (
+        <div className={styles.buttonContainer}>
+          {onClose && (
+            <NextUIButton variant="light" onClick={onClose}>
+              Close
+            </NextUIButton>
+          )}
+          <NextUIButton
+            color="primary"
+            onClick={saveRules}
+            isLoading={isSaving}
+            className={styles.saveButton}
+          >
+            {saveButtonLabel}
           </NextUIButton>
-        )}
-        <NextUIButton
-          color="primary"
-          onClick={saveRules}
-          isLoading={isSaving}
-          className={styles.saveButton}
-        >
-          {saveButtonLabel}
-        </NextUIButton>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -329,6 +337,7 @@ TargetAudienceForm.propTypes = {
   targetRules: PropTypes.object,
   onClose: PropTypes.func,
   saveButtonLabel: PropTypes.string,
+  disabledEditing: PropTypes.bool,
 };
 
 export default TargetAudienceForm;

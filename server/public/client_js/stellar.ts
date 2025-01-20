@@ -304,6 +304,9 @@
   function shouldMountExperimentForUrl(experiment) {
     const currentUrl = window.location.href;
 
+    // Helper function to normalize URLs by removing trailing slashes
+    const normalizeUrl = (url) => url.replace(/\/+$/, '');
+
     // If using basic URL targeting
     if (experiment.url) {
       return getPathFromURL(currentUrl) === getPathFromURL(experiment.url);
@@ -322,7 +325,10 @@
             );
             return false;
           }
-          if (rule.type === 'exact' && currentUrl === rule.url) {
+          if (
+            rule.type === 'exact' &&
+            normalizeUrl(currentUrl) === normalizeUrl(rule.url)
+          ) {
             log(
               `Experiment ${experiment.id} not mounted: URL matches exclude rule (exact) ${rule.url}`,
             );
@@ -337,7 +343,10 @@
           if (rule.type === 'contains' && currentUrl.includes(rule.url)) {
             return true;
           }
-          if (rule.type === 'exact' && currentUrl === rule.url) {
+          if (
+            rule.type === 'exact' &&
+            normalizeUrl(currentUrl) === normalizeUrl(rule.url)
+          ) {
             return true;
           }
           return false;

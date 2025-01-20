@@ -41,6 +41,7 @@ import TargetAudienceForm from '../../components/TargetAudienceForm/TargetAudien
 import ExperimentUrlRules from '../../components/ExperimentUrlRules/ExperimentUrlRules';
 import ExperimentEditorUrl from '../../components/ExperimentEditorUrl/ExperimentEditorUrl';
 import colors from '../../helpers/colors';
+import EyeIcon from '../../icons/Eye/Eye';
 
 export default function ExperimentPage({ params, searchParams }) {
   const router = useRouter();
@@ -289,11 +290,18 @@ export default function ExperimentPage({ params, searchParams }) {
                 Advanced URL rules applied
               </div>
             )}
-            {!experiment.ended_at && (
+            {!experiment.started_at ? (
               <Edit
                 width={15}
                 height={15}
                 className={styles.editIcon}
+                onClick={() => setIsUrlRulesModalOpen(true)}
+              />
+            ) : (
+              <EyeIcon
+                width={15}
+                height={15}
+                className={styles.eyeIcon}
                 onClick={() => setIsUrlRulesModalOpen(true)}
               />
             )}
@@ -305,13 +313,22 @@ export default function ExperimentPage({ params, searchParams }) {
             Target audience:{' '}
             <div className={styles.targetAudienceText}>
               {hasTargetRules ? 'Custom rules applied' : 'Set to all users'}
-              {!experiment.ended_at && (
+              {!experiment.ended_at ? (
                 <Edit
                   width={15}
                   height={15}
                   className={styles.editIcon}
                   onClick={() => setIsTargetAudienceModalOpen(true)}
                 />
+              ) : (
+                hasTargetRules && (
+                  <EyeIcon
+                    width={15}
+                    height={15}
+                    className={styles.eyeIcon}
+                    onClick={() => setIsTargetAudienceModalOpen(true)}
+                  />
+                )
               )}
             </div>
           </div>
@@ -332,12 +349,14 @@ export default function ExperimentPage({ params, searchParams }) {
               ) : (
                 <span className={styles.notSet}>Not set</span>
               )}
-              <Edit
-                width={15}
-                height={15}
-                className={styles.editIcon}
-                onClick={() => setIsEditorUrlModalOpen(true)}
-              />
+              {!experiment.ended_at && (
+                <Edit
+                  width={15}
+                  height={15}
+                  className={styles.editIcon}
+                  onClick={() => setIsEditorUrlModalOpen(true)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -414,13 +433,16 @@ export default function ExperimentPage({ params, searchParams }) {
           {(onClose) => (
             <>
               <ModalHeader className={`${styles.title}`}>
-                Edit Target Audience
+                {experiment.ended_at
+                  ? 'Target Audience'
+                  : 'Edit Target Audience'}
               </ModalHeader>
               <ModalBody className={styles.body}>
                 <TargetAudienceForm
                   experimentId={experimentId}
                   targetRules={targetRules}
                   onClose={onClose}
+                  disabledEditing={!!experiment.ended_at}
                 />
               </ModalBody>
             </>
@@ -438,10 +460,15 @@ export default function ExperimentPage({ params, searchParams }) {
           {(onClose) => (
             <>
               <ModalBody className={styles.body}>
-                <div className={styles.title}>Edit Target URL Rules</div>
+                <div className={styles.title}>
+                  {experiment.started_at
+                    ? 'Target URL Rules'
+                    : 'Edit Target URL Rules'}
+                </div>
                 <ExperimentUrlRules
                   experiment={experiment}
                   onSuccess={onClose}
+                  disabledEditing={!!experiment.started_at}
                 />
               </ModalBody>
             </>

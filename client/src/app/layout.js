@@ -25,24 +25,33 @@ export const metadata = {
 
 // triggerrebuild
 
+// Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
+
+// TODO-p1-1: Finish smart trigger stuff
+// TODO-p1-1: Set up and test queued start trigger
+// TODO-p1-1: Improve aws infra. Set 2 instances, with policy that does not have downtime. Check current costs of t3small to see if we decrease. Resume this convo https://chatgpt.com/g/g-qblR7wlE7-aws-architect/c/678db96a-df38-8009-80d5-c1d8a5d40e7f
+// TODO-p1-1: AB test google button
+// TODO-p1-1: Escribir a: Lilly, Stefan, Jackie,
+// TODO-p1-1: Have styles from the editor be appplied w !important
+// TODO-p1-1: Followup Martie guys
+// TODO-p1-1: Schedule mass email of new features (url rules, targeting, DKI) w yt video
+// TODO-p1-1: Follow up w walter low
+// TODO-p1-1: Add 1 month free trial disclaimer on plans, make it a smart trigger experiment
 // TODO-p1-1: Introduce split url exps
 // TODO-p1-1: Add ai prompting for html edits
-// TODO-p1-1: Allow editing global JS and global CSS from the table
 // TODO-p1-1: LEts use a custom fetch instead of interceptFetch since it affects other reqs like segment's
-// TODO-p1-1: Have styles from the editor be appplied w !important
 // TODO-p1-1: resume handleGettingStartedCampaign testing carefully / re-check emails make sense
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
+// TODO-p1-1: Allow editing global JS and global CSS from the table
 // TODO-p1-p1: If G-ads is not working on the weekends, set chedule to pause it those days
 // TODO-p1-1: Setup retargeting campaign in g ads w video
 // TODO-p1-1: Try out Supa Demo
-// TODO-p1-1: Create testimonials experiments when they come into view
 // TODO-p1-1: Allow reusing goals / implement left sidebar (?)
 // TODO/p1-1: swithc to project after creating it
 // Que lo de parallel experiments no cuente si url es null
 // TODO-p1-1: Allow ai prompting while editing
 // TODO-p1-1: Dont allow editing rules after launching
 // TODO-p1-1: Allow previewing different urls
-// TODO-p1-1: Record tutorial of new features (url rules, targeting, DKI) and send mass email
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
 

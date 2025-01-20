@@ -134,7 +134,8 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
   const [variantToEdit, setVariantToEdit] = useState(null);
   const [variantToDelete, setVariantToDelete] = useState(null);
   const [page, setPage] = React.useState(1);
-  const hasStarted = experiment.started_at;
+  const hasStarted = !!experiment.started_at;
+  const hasEnded = !!experiment.ended_at;
   const { stats, getExperimentStats, currentProject, token } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
   const thisStats = stats[experiment.id + '-' + statsType];
@@ -218,7 +219,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
         keyboardDelegate={dummyKeyboardDelegate}
         className={`${styles.table} ${rows.length ? '' : styles.empty} ${
           hasStarted ? styles.hasStarted : ''
-        }`}
+        } ${hasEnded ? styles.hasEnded : ''}`}
         aria-label="Variants Table"
         bottomContent={
           pages > 1 ? (
@@ -309,8 +310,8 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                         </Tooltip>
                         <Tooltip
                           content={
-                            hasStarted
-                              ? 'Can not edit a variant after the experiment has started.'
+                            hasEnded
+                              ? "Can not edit a variant's config after the experiment has ended."
                               : 'Settings'
                           }
                           showArrow
@@ -324,7 +325,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                               className={styles.gearIcon}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                if (hasStarted) return;
+                                if (hasEnded) return;
                                 missingSnippet
                                   ? onOpenSnippetModal()
                                   : setVariantToEdit(item.id);

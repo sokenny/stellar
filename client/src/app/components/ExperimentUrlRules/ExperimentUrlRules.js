@@ -19,7 +19,7 @@ const ExperimentUrlRules = ({
   className,
   experiment,
   onSuccess,
-  isCreatePage,
+  disabledEditing,
 }) => {
   const [urlRules, setUrlRules] = useState({
     include: [{ type: 'exact', url: '' }],
@@ -127,10 +127,6 @@ const ExperimentUrlRules = ({
     // Check if there's at least one include rule with a non-empty URL
     return urlRules.include.some((rule) => rule.url.trim() !== '');
   };
-
-  // For now we disable fields if we are on the create page with an experiment set
-  // const disabledEditing = isCreatePage && experiment;
-  const disabledEditing = false; // For now lets have this as false
 
   const isPristine = experiment
     ? !advancedUrlRules

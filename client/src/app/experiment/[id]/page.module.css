@@ -106,11 +106,15 @@
   color: var(--textBodyLight);
 }
 
-.targetPage .editIcon {
+.targetAudienceText .eyeIcon {
+  opacity: 1;
+}
+
+.targetPage .editIcon, .eyeIcon {
   opacity: 0.4;
 }
 
-.editIcon {
+.editIcon, .eyeIcon {
   margin-left: 4px;
   cursor: pointer;
 }
