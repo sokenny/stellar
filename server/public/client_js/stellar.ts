@@ -413,6 +413,11 @@
                       modification.innerText,
                     );
                   }
+                  if (modification.innerHTML !== undefined) {
+                    targetElement.innerHTML = replaceKeywordsWithParams(
+                      modification.innerHTML,
+                    );
+                  }
                   if (modification.cssText !== undefined) {
                     targetElement.style.cssText = modification.cssText;
                   }
