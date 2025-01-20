@@ -212,7 +212,10 @@
             clickCount,
             scrollDepth,
             idempotencyKey: visitorId, // not sure if this is right or needed
-            activeExperiments,
+            // TODO-p1-1: Rename these to visualizedExperiments
+            activeExperiments: activeExperiments.filter(
+              (experiment) => experiment.visualized,
+            ),
             visitedPages,
             sessionIssues,
           };
@@ -395,14 +398,14 @@
             activeExperiments.find(
               (e) => e.experiment === experiment.id,
             ).visualized = true;
-            console.log('global_css found! visualized is now true');
+            log('global_css found! visualized is now true');
           }
 
           if (variant.global_js) {
             activeExperiments.find(
               (e) => e.experiment === experiment.id,
             ).visualized = true;
-            console.log('global_js found! visualized is now true');
+            log('global_js found! visualized is now true');
           }
 
           variant.modifications.forEach((modification) => {
@@ -418,9 +421,9 @@
                     );
                     if (expRun) {
                       expRun.visualized = true;
-                      console.log('experiment visualized!', expRun.visualized);
+                      log('experiment visualized!', expRun.visualized);
                     }
-                    console.log('disconnecting observer', activeExperiments);
+                    log('disconnecting observer', activeExperiments);
                     observer.disconnect();
                   }
                 });

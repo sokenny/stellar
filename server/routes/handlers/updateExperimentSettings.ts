@@ -1,8 +1,9 @@
 import { Op } from 'sequelize';
 import db from '../../models';
+import { invalidateCache } from '../../helpers/cache';
 
 async function updateExperimentSettings(req, res) {
-  const { id } = req.params;
+  const { id, projectId } = req.params;
 
   const settings = req.body;
 
@@ -44,6 +45,8 @@ async function updateExperimentSettings(req, res) {
   });
 
   console.log('settings --- !', settings);
+  // invalidate cache here
+  await invalidateCache(`experiments:${projectId}`);
 
   // respond with success
   res.json({ success: true });

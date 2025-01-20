@@ -27,7 +27,6 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Finish smart trigger stuff
 // TODO-p1-1: Set up and test queued start trigger
 // TODO-p1-1: Improve aws infra. Set 2 instances, with policy that does not have downtime. Check current costs of t3small to see if we decrease. Resume this convo https://chatgpt.com/g/g-qblR7wlE7-aws-architect/c/678db96a-df38-8009-80d5-c1d8a5d40e7f
 // TODO-p1-1: AB test google button
