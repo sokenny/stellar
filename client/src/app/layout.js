@@ -31,6 +31,7 @@ export const metadata = {
 // TODO-p1-1: Set up and test queued start trigger
 // TODO-p1-1: Improve aws infra. Set 2 instances, with policy that does not have downtime. Check current costs of t3small to see if we decrease. Resume this convo https://chatgpt.com/g/g-qblR7wlE7-aws-architect/c/678db96a-df38-8009-80d5-c1d8a5d40e7f
 // TODO-p1-1: AB test google button
+// TODO-p1-1: Be able to filter chart data per dates
 // TODO-p1-1: Escribir a: Lilly, Stefan, Jackie,
 // TODO-p1-1: Have styles from the editor be appplied w !important
 // TODO-p1-1: Followup Martie guys

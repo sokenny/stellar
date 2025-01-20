@@ -502,7 +502,7 @@
 
 .supademo {
   margin-bottom: 64px;
-  display: none;
+  /* display: none; */
 }
 
 @media (max-width: 720px) {
