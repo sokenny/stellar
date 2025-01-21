@@ -62,7 +62,7 @@ const Plans = () => {
           </div>
         </div>
         <div className={`${styles.plan} ${styles.growth}`}>
-          <div className={styles.chipContainer}>
+          <div className={styles.chipContainer} id="growth-chip">
             <Chip color="primary" variant="flat" size="sm">
               1 month free trial
             </Chip>
@@ -96,7 +96,7 @@ const Plans = () => {
           </div>
         </div>
         <div className={`${styles.plan} ${styles.enterprise}`}>
-          <div className={styles.chipContainer}>
+          <div className={styles.chipContainer} id="enterprise-chip">
             <Chip color="primary" variant="flat" size="sm">
               1 month free trial
             </Chip>

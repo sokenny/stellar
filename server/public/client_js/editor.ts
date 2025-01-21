@@ -1012,13 +1012,13 @@
               },
             );
 
-            // if (response.status === 200) {
-            //   if (fromUrl) {
-            //     window.location.href = `${fromUrl}?variantEdited=${variantId}`;
-            //   } else {
-            //     window.close();
-            //   }
-            // }
+            if (response.status === 200) {
+              if (fromUrl) {
+                window.location.href = `${fromUrl}?variantEdited=${variantId}`;
+              } else {
+                window.close();
+              }
+            }
 
             // Sometimes the window won't close so we perform the handling below
             loadingVariantCreation = false;
