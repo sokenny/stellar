@@ -939,6 +939,7 @@
                 global__editedElements[i].innerTextModified;
               const innerHtmlModified =
                 global__editedElements[i].innerHtmlModified;
+              const displayModified = global__editedElements[i].displayModified;
               const el = document.querySelector(
                 `[stellar-element-id="${stellarElementId}"]`,
               ) as HTMLElement;
@@ -947,28 +948,23 @@
               ] as HTMLElement;
 
               const modification: any = {
-                // Use stored custom selector if it exists, otherwise fall back to generated selector
                 selector: global__editedElements[i].selector,
               };
 
-              // Only include style changes if they differ from pristine state
-              if (el?.style?.cssText !== pristineEl?.style?.cssText) {
+              // Include display:none if specifically modified through hide checkbox
+              if (displayModified) {
+                modification.cssText = el?.style?.cssText || 'display: none;';
+              }
+              // Include other style changes if they exist
+              else if (el?.style?.cssText) {
                 modification.cssText = el?.style?.cssText;
               }
 
-              // Only include text changes if they differ from pristine state and were explicitly modified
-              if (
-                el?.innerText !== pristineEl?.innerText &&
-                innerTextModified
-              ) {
+              if (el?.innerText && innerTextModified) {
                 modification.innerText = el?.innerText;
               }
 
-              // Only include HTML changes if they differ from pristine state and were explicitly modified
-              if (
-                el?.innerHTML !== pristineEl?.innerHTML &&
-                innerHtmlModified
-              ) {
+              if (el?.innerHTML && innerHtmlModified) {
                 modification.innerHTML = el?.innerHTML;
               }
 
@@ -976,27 +972,24 @@
               if (el.tagName === 'IMG') {
                 const imgAttrs = {};
                 ['src', 'width', 'height', 'srcset'].forEach((attr) => {
-                  if (el[attr] !== pristineEl[attr]) {
+                  if (el[attr]) {
                     imgAttrs[attr] = el[attr];
                   }
                 });
                 if (Object.keys(imgAttrs).length > 0) {
                   modification.attributes = imgAttrs;
                 }
-              } else if (el.tagName === 'A') {
-                if (
-                  (el as HTMLAnchorElement).href !==
-                  (pristineEl as HTMLAnchorElement).href
-                ) {
-                  modification.attributes = {
-                    href: (el as HTMLAnchorElement).href,
-                  };
-                }
+              } else if (
+                el.tagName === 'A' &&
+                (el as HTMLAnchorElement)?.href
+              ) {
+                modification.attributes = {
+                  href: (el as HTMLAnchorElement).href,
+                };
               }
 
               // Only include modification if there are actual changes
               if (Object.keys(modification).length > 1) {
-                // > 1 because selector is always included
                 modifications.push(modification);
               }
             }
@@ -1019,13 +1012,13 @@
               },
             );
 
-            if (response.status === 200) {
-              if (fromUrl) {
-                window.location.href = `${fromUrl}?variantEdited=${variantId}`;
-              } else {
-                window.close();
-              }
-            }
+            // if (response.status === 200) {
+            //   if (fromUrl) {
+            //     window.location.href = `${fromUrl}?variantEdited=${variantId}`;
+            //   } else {
+            //     window.close();
+            //   }
+            // }
 
             // Sometimes the window won't close so we perform the handling below
             loadingVariantCreation = false;
@@ -1087,6 +1080,7 @@
           function handleElementMutation(
             innerTextModified: boolean = false,
             innerHtmlModified: boolean = false,
+            displayModified: boolean = false,
           ) {
             const selectedElementNode = document.querySelector(selectedElement);
             const stellarElementId =
@@ -1110,6 +1104,7 @@
                 stellarElementId: newStellarElementId,
                 innerTextModified,
                 innerHtmlModified,
+                displayModified,
               });
             } else if (selectedElement) {
               // Update existing element's modification flags
@@ -1121,6 +1116,8 @@
                   editedElement.innerTextModified || innerTextModified;
                 editedElement.innerHtmlModified =
                   editedElement.innerHtmlModified || innerHtmlModified;
+                editedElement.displayModified =
+                  editedElement.displayModified || displayModified;
               }
             }
             renderEditedElements();
@@ -1211,7 +1208,7 @@
                 if (selectedElement) {
                   document.querySelectorAll(selectedElement).forEach((el) => {
                     el.style.display = this.checked ? 'none' : '';
-                    handleElementMutation();
+                    handleElementMutation(false, false, this.checked);
                   });
                 }
               });

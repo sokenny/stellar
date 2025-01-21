@@ -26,9 +26,9 @@
 }
 
 .tooltip {
-  padding: 12px;
-  max-width: 350px;
-  text-align: center;
+  padding: 12px!important;
+  max-width: 350px!important;
+  text-align: center!important;
 }
 
 .detail {

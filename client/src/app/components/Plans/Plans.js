@@ -1,17 +1,42 @@
 'use client';
 
-import { Button } from '@nextui-org/react';
+import { Button, Switch, Chip } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Check from '../../icons/Check';
 import styles from './Plans.module.css';
 import segmentTrack from '../../helpers/segment/segmentTrack';
+import { useState } from 'react';
 
 const Plans = () => {
   const router = useRouter();
+  const [isAnnual, setIsAnnual] = useState(true);
+
+  const prices = {
+    growth: {
+      annual: 69,
+      monthly: 104,
+    },
+    enterprise: {
+      annual: 129,
+      monthly: 194,
+    },
+  };
+
   return (
     <div className={styles.pricing} id="pricing">
       <h3>Pricing</h3>
+      <div className={styles.billingToggle}>
+        <Switch
+          defaultSelected={isAnnual}
+          onValueChange={setIsAnnual}
+          classNames={{
+            wrapper: styles.switchWrapper,
+          }}
+        >
+          Bill annually (save 33%)
+        </Switch>
+      </div>
       <div className={styles.plans}>
         <div className={styles.plan}>
           <div className={styles.main}>
@@ -37,12 +62,22 @@ const Plans = () => {
           </div>
         </div>
         <div className={`${styles.plan} ${styles.growth}`}>
+          <div className={styles.chipContainer}>
+            <Chip color="primary" variant="flat" size="sm">
+              1 month free trial
+            </Chip>
+          </div>
           <div className={styles.main}>
             <h4>Growth</h4>
             <div className={styles.price}>
-              <span>$69</span> USD/mo.
+              <span>
+                ${isAnnual ? prices.growth.annual : prices.growth.monthly}
+              </span>{' '}
+              USD/mo.
             </div>
-            <div className={styles.payment}>billed annually</div>
+            <div className={styles.payment}>
+              billed {isAnnual ? 'annually' : 'monthly'}
+            </div>
             <Button
               className={styles.planButton}
               color="primary"
@@ -61,12 +96,25 @@ const Plans = () => {
           </div>
         </div>
         <div className={`${styles.plan} ${styles.enterprise}`}>
+          <div className={styles.chipContainer}>
+            <Chip color="primary" variant="flat" size="sm">
+              1 month free trial
+            </Chip>
+          </div>
           <div className={styles.main}>
             <h4>Enterprise</h4>
             <div className={styles.price}>
-              <span>$129</span> USD/mo.
+              <span>
+                $
+                {isAnnual
+                  ? prices.enterprise.annual
+                  : prices.enterprise.monthly}
+              </span>{' '}
+              USD/mo.
             </div>
-            <div className={styles.payment}>billed annually</div>
+            <div className={styles.payment}>
+              billed {isAnnual ? 'annually' : 'monthly'}
+            </div>
             <Button
               className={styles.planButton}
               onClick={() => router.push('/signup')}
