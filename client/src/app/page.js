@@ -123,10 +123,10 @@ export default async function HomePage({}) {
               height="315"
               src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
               title="YouTube video player"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
             ></iframe>
           </div>
 
@@ -143,10 +143,10 @@ export default async function HomePage({}) {
               height="315"
               src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
               title="YouTube video player"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
             ></iframe>
           </div>
 
@@ -169,10 +169,10 @@ export default async function HomePage({}) {
               loading="lazy"
               title="Gostellar Demo"
               allow="clipboard-write"
-              frameborder="0"
+              frameBorder="0"
               webkitallowfullscreen="true"
               mozallowfullscreen="true"
-              allowfullscreen
+              allowFullScreen
               style={{
                 position: 'absolute',
                 top: 0,
