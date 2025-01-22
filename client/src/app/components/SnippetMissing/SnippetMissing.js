@@ -32,6 +32,8 @@ const SnippetMissing = ({
       (currentProject.domain.includes('localhost') ? 'http://' : 'https://') +
       currentProject.domain;
 
+    console.log('url', url);
+
     const windowWidth = 500;
     const windowHeight = 600;
     const left = window.screenX + (window.innerWidth - windowWidth) / 2;

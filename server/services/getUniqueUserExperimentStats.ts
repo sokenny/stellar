@@ -80,13 +80,13 @@ async function getUniqueUserGoalSessionTimeStats(experimentId, variantIds) {
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],
@@ -166,13 +166,13 @@ async function getUniqueUserGoalClickAndPageVisitStats(
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],

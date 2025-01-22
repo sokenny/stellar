@@ -4,14 +4,16 @@ import { decryptApiKey } from '../../helpers/crypto';
 import { client as redisClient } from '../../helpers/cache';
 
 async function updateSnippetStatus(projectId: number) {
+  console.log('WE IN HERE! updateSnippetStatus', projectId);
   const statusCacheKey = `snippet_status:${projectId}`;
 
   // Check cache first
   const cachedStatus = await redisClient.get(statusCacheKey);
-  if (cachedStatus) {
-    console.log(`Cache hit for snippet status of project: ${projectId}`);
-    return; // Status already tracked, no need to check DB
-  }
+  console.log('cachedStatus', cachedStatus);
+  // if (cachedStatus) {
+  //   console.log(`Cache hit for snippet status of project: ${projectId}`);
+  //   return; // Status already tracked, no need to check DB
+  // }
 
   // If not in cache, check DB and update if needed
   const project = await db.Project.findByPk(projectId);
@@ -19,13 +21,15 @@ async function updateSnippetStatus(projectId: number) {
     return;
   }
 
-  if (project.snippet_status === 0) {
+  console.log('project found', project);
+
+  if (project.snippet_status !== 1) {
     project.snippet_status = 1;
     await project.save();
   }
 
-  // Cache the status for 24 hours
-  await redisClient.set(statusCacheKey, '1', { EX: 86400 });
+  // Cache the status for 1 hour
+  await redisClient.set(statusCacheKey, '1', { EX: 3600 });
 }
 
 async function getProjectExperiments(projectId: number): Promise<any[]> {
