@@ -27,16 +27,16 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Set uplift column
+// TODO-p1-1: See how mida tracks mtu
 // TODO-p1-1: Refes de https://customer.io/
-// TODO-p1-1: Finish squashed conversions work
+// TODO-p1-1: Check billing is good across all infra
 // TODO-p1-1: Call it domains instead of projects
 // TODO-p1-1: Introduce split url exps
 // TODO-p1-1: Call the winner ad of fb ads campaign
-// TODO-p1-1: Look intro product hunt
 // TODO-p1-1: Follow up w walter low
 // TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: Considerar mandar mas guita de lo que hoy mando a la bolsa, a G ads
-// TODO-p1-1: Set uplif column
 // TODO-p1-1: Analizar varybee y copiarme https://www.varybee.com/features - seccion use on any platform
 // TODO-p1-1: Launch shopify g ads campaign
 // TODO-p1-1: Followup Joe Doveton with my progress
@@ -60,7 +60,6 @@ export const metadata = {
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
 // TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
 
-// TODO-p1-1: Improve statsig calculator / improve displaying of NaN or no data
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments
 // TODO-p1-1: Hacer DKI email mkt send para PPC campaigns

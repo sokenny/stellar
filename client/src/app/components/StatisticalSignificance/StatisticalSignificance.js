@@ -16,17 +16,22 @@ export default function StatisticalSignificance({ experiment }) {
   if (!stats) return null;
 
   const uvStats = stats[experiment.id + '-unique-visitors'];
-  if (!uvStats) return null;
+  if (!uvStats || uvStats.length === 0) return null;
 
   const controlVStats = uvStats.find(
     (stat) =>
       stat.variantId === experiment.variants.find((v) => v.is_control).id,
   );
+  if (!controlVStats) return null;
+
   const otherVariants = uvStats
     .filter((stat) => stat.variantId !== controlVStats.variantId)
     .map((stat) => {
       return uvStats.find((s) => s.variantId === stat.variantId);
     });
+
+  if (!otherVariants.length) return null;
+
   const highestCRVStats = otherVariants.reduce(
     (max, v) => (v.conversionRate > max.conversionRate ? v : max),
     otherVariants[0],
@@ -74,12 +79,22 @@ export default function StatisticalSignificance({ experiment }) {
   );
 
   function getConfidenceMessage() {
-    const baseMessage = `The observed difference in conversion rate from baseline is <span>${conversionRateDifference.toFixed(
-      2,
-    )}%</span>. There is a <span>${significance.toFixed(
-      2,
-    )}%</span> chance <span>${
-      dataOfVariantWithHighestConversionRate?.name
+    if (
+      !controlConversionRate ||
+      !highestConversionRate ||
+      isNaN(significance)
+    ) {
+      return 'Not enough data has been collected yet to calculate statistical significance.';
+    }
+
+    const baseMessage = `The observed difference in conversion rate from baseline is <span>${
+      isNaN(conversionRateDifference)
+        ? '0'
+        : conversionRateDifference.toFixed(2)
+    }%</span>. There is a <span>${
+      isNaN(significance) ? '0' : significance.toFixed(2)
+    }%</span> chance <span>${
+      dataOfVariantWithHighestConversionRate?.name || 'a variant'
     }</span> is the winner of this experiment.`;
 
     // Determine additional context based on significance
@@ -90,6 +105,10 @@ export default function StatisticalSignificance({ experiment }) {
     } else {
       return `${baseMessage} This result isn't statistically significant yet. More data may be needed.`;
     }
+  }
+
+  if (isNaN(significance)) {
+    return null;
   }
 
   return (
