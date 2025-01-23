@@ -1,7 +1,6 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import getExperimentsForClient from './handlers/getExperimentsForClient';
-import processUserSession from './handlers/processUserSession';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import autoGenerate from './handlers/autoGenerate';
 import createAccountSocial from './handlers/createAccountSocial';

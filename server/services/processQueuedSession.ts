@@ -39,6 +39,7 @@ async function processQueuedSession(messageBody: string) {
           converted: experiment.converted,
           experiment_mounted: experiment.experimentMounted,
           had_issues: message?.sessionIssues?.length > 0 || false,
+          visitor_id: message.visitorId,
         });
       },
     );
