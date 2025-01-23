@@ -160,6 +160,15 @@ async function getUniqueUserGoalClickAndPageVisitStats(
           ),
           'conversions',
         ],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.literal(
+              'DISTINCT CASE WHEN converted = TRUE THEN session.visitor_id END',
+            ),
+          ),
+          'squashedConversions',
+        ],
       ],
       include: [
         {
@@ -184,11 +193,16 @@ async function getUniqueUserGoalClickAndPageVisitStats(
       const conversionRate = parseFloat(
         ((stat.conversions / stat.unique_visitors) * 100).toFixed(2),
       );
+      const squashedConversionRate = parseFloat(
+        ((stat.squashedConversions / stat.unique_visitors) * 100).toFixed(2),
+      );
       return {
         variantId: stat.variantId,
         unique_visitors: parseInt(stat.unique_visitors, 10),
         conversions: parseInt(stat.conversions, 10),
+        squashedConversions: parseInt(stat.squashedConversions, 10),
         conversionRate: conversionRate,
+        squashedConversionRate: squashedConversionRate,
       };
     });
 
@@ -204,7 +218,9 @@ async function getUniqueUserGoalClickAndPageVisitStats(
         variantId: variantId,
         unique_visitors: 0,
         conversions: 0,
+        squashedConversions: 0,
         conversionRate: 0,
+        squashedConversionRate: 0,
       });
     });
 

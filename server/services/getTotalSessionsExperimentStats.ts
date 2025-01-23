@@ -42,13 +42,13 @@ async function getTotalSessionsGoalSessionTimeStats(experimentId, variantIds) {
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],
@@ -116,19 +116,28 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
           ),
           'conversions',
         ],
+        [
+          db.sequelize.fn(
+            'COUNT',
+            db.sequelize.literal(
+              'DISTINCT CASE WHEN converted = TRUE THEN session.visitor_id END',
+            ),
+          ),
+          'squashedConversions',
+        ],
       ],
       include: [
         {
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],
@@ -140,11 +149,16 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
       const conversionRate = parseFloat(
         ((stat.conversions / stat.sessions) * 100).toFixed(2),
       );
+      const squashedConversionRate = parseFloat(
+        ((stat.squashedConversions / stat.sessions) * 100).toFixed(2),
+      );
       return {
         variantId: stat.variantId,
         sessions: parseInt(stat.sessions, 10),
         conversions: parseInt(stat.conversions, 10),
+        squashedConversions: parseInt(stat.squashedConversions, 10),
         conversionRate: conversionRate,
+        squashedConversionRate: squashedConversionRate,
       };
     });
 
@@ -160,7 +174,9 @@ async function getTotalSessionsGoalClickAndPageVisitStats(
         variantId: variantId,
         sessions: 0,
         conversions: 0,
+        squashedConversions: 0,
         conversionRate: 0,
+        squashedConversionRate: 0,
       });
     });
 

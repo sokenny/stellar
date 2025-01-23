@@ -8,8 +8,6 @@ async function processUserSession(req: Request, res: Response) {
     const payloadString = req.body.toString();
     const payload = JSON.parse(payloadString);
 
-    console.log('payload that arrived: ', payload);
-
     const session = await db.Session.create({
       visitor_id: payload.visitorId,
       length: payload.timeOnPage,
@@ -29,6 +27,7 @@ async function processUserSession(req: Request, res: Response) {
           converted: experiment.converted,
           experiment_mounted: experiment.experimentMounted,
           had_issues: payload?.sessionIssues?.length > 0 || false,
+          visitor_id: payload.visitorId,
         });
       },
     );
