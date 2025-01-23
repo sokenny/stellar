@@ -27,24 +27,23 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Refes de https://customer.io/
 // TODO-p1-1: Finish squashed conversions work
 // TODO-p1-1: Call it domains instead of projects
-// TODO-p1-1: Have a way to only count as much as 1 conversion per user in the displayed data
+// TODO-p1-1: Introduce split url exps
+// TODO-p1-1: Call the winner ad of fb ads campaign
+// TODO-p1-1: Look intro product hunt
+// TODO-p1-1: Follow up w walter low
+// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: Considerar mandar mas guita de lo que hoy mando a la bolsa, a G ads
 // TODO-p1-1: Set uplif column
 // TODO-p1-1: Analizar varybee y copiarme https://www.varybee.com/features - seccion use on any platform
 // TODO-p1-1: Launch shopify g ads campaign
 // TODO-p1-1: Followup Joe Doveton with my progress
-// TODO-p1-1: Escribir a: Lilly ✅, Stefan ✅, Jackie ✅, Ray Mandaro (?), Joe Shiraz (?)
 // TODO-p1-1: Be able to filter chart data per dates
 // TODO-p1-1: Set up and test queued start trigger
 // TODO-p1-1: AB test google button
 // TODO-p1-1: Have styles from the editor be appplied w !important
-// TODO-p1-1: Schedule mass email of new features (url rules, targeting, DKI) w yt video
-// TODO-p1-1: Follow up w walter low
-// TODO-p1-1: Add 1 month free trial disclaimer on plans, make it a smart trigger experiment
-// TODO-p1-1: Introduce split url exps
-// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: LEts use a custom fetch instead of interceptFetch since it affects other reqs like segment's
 // TODO-p1-1: resume handleGettingStartedCampaign testing carefully / re-check emails make sense
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too

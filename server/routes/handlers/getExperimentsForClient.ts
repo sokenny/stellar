@@ -7,13 +7,13 @@ async function updateSnippetStatus(projectId: number) {
   console.log('WE IN HERE! updateSnippetStatus', projectId);
   const statusCacheKey = `snippet_status:${projectId}`;
 
-  // Check cache first
   const cachedStatus = await redisClient.get(statusCacheKey);
   console.log('cachedStatus', cachedStatus);
-  // if (cachedStatus) {
-  //   console.log(`Cache hit for snippet status of project: ${projectId}`);
-  //   return; // Status already tracked, no need to check DB
-  // }
+
+  if (cachedStatus) {
+    console.log(`Cache hit for snippet status of project: ${projectId}`);
+    return; // Status already tracked, no need to check DB
+  }
 
   // If not in cache, check DB and update if needed
   const project = await db.Project.findByPk(projectId);
