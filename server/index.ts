@@ -23,7 +23,6 @@ const PORT = process.env.PORT || 3000;
 const corsOptions = {
   origin: async function (origin, callback) {
     const allowedOrigins = await getAllowedOrigins();
-
     const normalizedOrigin = normalizeUrl(origin);
 
     console.log('normalized origin: ', origin);
@@ -31,7 +30,7 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(null, false);
     }
   },
   methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
