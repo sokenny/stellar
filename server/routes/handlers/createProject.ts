@@ -4,11 +4,11 @@ import normalizeUrl from '../../helpers/normalizeUrl';
 import db from '../../models';
 
 async function createProject(req, res) {
-  const { url } = req.body;
+  const { domain } = req.body;
   const userId = req.user.id;
-  const domain = normalizeUrl(
-    url.replace('https://', '').replace('http://', '').replace('www.', ''),
-  ).replace(/\/$/, '');
+  // const domain = normalizeUrl(
+  //   url.replace('https://', '').replace('http://', '').replace('www.', ''),
+  // ).replace(/\/$/, '');
 
   const [project, created] = await db.Project.findOrCreate({
     where: { domain, user_id: userId },
@@ -19,12 +19,12 @@ async function createProject(req, res) {
     },
   });
 
-  await db.Page.create({
-    name: url,
-    url: url,
-    project_id: project.id,
-    context: '',
-  });
+  // await db.Page.create({
+  //   name: url,
+  //   url: url,
+  //   project_id: project.id,
+  //   context: '',
+  // });
 
   if (!created) {
     return res.status(400).json({ error: 'Project already exists' });

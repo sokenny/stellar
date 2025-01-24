@@ -70,3 +70,19 @@
 .gearIcon {
   opacity: 0.4;
 }
+
+.uplift-positive {
+  color: #18c964;
+}
+
+.uplift-negative {
+  color: #ef4444; /* red */
+}
+
+.uplift-baseline {
+  color: var(--linkBlue);
+}
+
+.highestUplift {
+  background-color: rgba(0, 255, 0, 0.05);
+}

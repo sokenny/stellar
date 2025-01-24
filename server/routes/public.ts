@@ -20,7 +20,7 @@ import publishUserSession from './handlers/publishUserSession';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: process.env.NODE_ENV === 'development' ? 1000 : 100,
+  max: process.env.NODE_ENV === 'development' ? 1000 : 200,
   message: 'Too many requests from this IP, please try again after some time',
   standardHeaders: true,
   legacyHeaders: false,

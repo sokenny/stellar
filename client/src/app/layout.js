@@ -27,22 +27,16 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Hacer un carrousel a lo lemlist pero de Work with your favorite tools: https://www.lemlist.com/es Sacar mas ideas de lemlist
 // TODO-p1-1: Ability to reuse goals and track multiple ones per session
-// TODO-p1-1: Make the project input make more sense. It sats domain but only accepts urls
-// TODO-p1-1: Relax rate limiter
-// TODO-p1-1: Ab test having the without money... pics in the first viewport
+// TODO-p1-1: Introduce split url exps
+// TODO-p1-1: Add ai prompting for html edits
+// TODO-p1-1: Hacer un carrousel a lo lemlist pero de Work with your favorite tools: https://www.lemlist.com/es Sacar mas ideas de lemlist
+// TODO-p1-1 Introduce layout with sidebar
 // TODO-p1-1: Find shopify influencers
-// TODO-p1-1: Unfilter my ip from stats
-// TODO-p1-1: Set uplift column
-// TODO-p1-1: See how mida tracks mtu
+// TODO-p1-1: Ab test having the without money... pics in the first viewport
 // TODO-p1-1: Refes de https://customer.io/
 // TODO-p1-1: Check billing is good across all infra
-// TODO-p1-1: Call it domains instead of projects
-// TODO-p1-1: Introduce split url exps
-// TODO-p1-1: Call the winner ad of fb ads campaign
 // TODO-p1-1: Follow up w walter low
-// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: Considerar mandar mas guita de lo que hoy mando a la bolsa, a G ads
 // TODO-p1-1: Analizar varybee y copiarme https://www.varybee.com/features - seccion use on any platform
 // TODO-p1-1: Launch shopify g ads campaign

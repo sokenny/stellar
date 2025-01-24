@@ -98,6 +98,11 @@ const columns = (statsType) => [
         },
       ]),
   {
+    key: 'uplift',
+    label: 'Uplift',
+    goalTypes: [GoalTypesEnum.CLICK, GoalTypesEnum.PAGE_VISIT, undefined],
+  },
+  {
     key: 'conversions',
     label: 'Conversions',
     goalTypes: [GoalTypesEnum.CLICK, GoalTypesEnum.PAGE_VISIT, undefined],
@@ -129,6 +134,38 @@ const columns = (statsType) => [
   },
 ];
 
+const getUpliftClassName = (columnKey, value, isControl) => {
+  if (columnKey !== 'uplift') return '';
+
+  if (isControl) return styles['uplift-baseline'];
+
+  const numericValue = parseFloat(value);
+  if (isNaN(numericValue)) return '';
+
+  return numericValue > 0
+    ? styles['uplift-positive']
+    : numericValue < 0
+    ? styles['uplift-negative']
+    : '';
+};
+
+const getHighestUpliftId = (rows) => {
+  let highestUplift = -Infinity;
+  let highestUpliftId = null;
+
+  rows.forEach((row) => {
+    if (!row._isControl) {
+      const upliftValue = parseFloat(row.uplift);
+      if (!isNaN(upliftValue) && upliftValue > highestUplift) {
+        highestUplift = upliftValue;
+        highestUpliftId = row.id;
+      }
+    }
+  });
+
+  return highestUpliftId;
+};
+
 const VariantsTable = ({ variants = [], experiment, statsType }) => {
   variants.sort((a, b) => a.id - b.id);
   const [variantToEdit, setVariantToEdit] = useState(null);
@@ -154,12 +191,28 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
   }, [hasStarted, getExperimentStats, statsType]);
 
   function getVariantsRows(variants, hasStarted) {
+    const controlStats = thisStats?.find(
+      (v) => v.variantId === variants.find((v) => v.is_control)?.id,
+    );
+    const controlConversionRate = controlStats?.conversionRate || 0;
+
     return variants.map((variant) => {
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
       const changesCount =
         (variant?.modifications?.length || 0) +
         (variant.global_css ? 1 : 0) +
         (variant.global_js ? 1 : 0);
+
+      const uplift =
+        hasStarted && variantStats?.conversionRate && !variant.is_control
+          ? (
+              ((variantStats.conversionRate - controlConversionRate) /
+                controlConversionRate) *
+              100
+            ).toFixed(2) + '%'
+          : variant.is_control
+          ? 'baseline'
+          : '-';
 
       return {
         id: variant.id,
@@ -171,6 +224,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
           : {
               unique_visitors: hasStarted ? variantStats?.unique_visitors : '-',
             }),
+        uplift,
         conversions: hasStarted ? variantStats?.conversions : '-',
         conversion_rate:
           hasStarted && variantStats?.conversionRate
@@ -254,7 +308,12 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
           loadingContent={<Spinner />}
         >
           {(item) => (
-            <TableRow key={item?.id} className={styles.row}>
+            <TableRow
+              key={item?.id}
+              className={`${styles.row} ${
+                item.id === getHighestUpliftId(rows) ? styles.highestUplift : ''
+              }`}
+            >
               {(columnKey) => {
                 if (columnKey === 'actions') {
                   return (
@@ -376,7 +435,11 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                   <TableCell
                     className={`${styles['cell-' + columnKey]} ${
                       item._isControl ? styles['cell-control'] : ''
-                    }`}
+                    } ${getUpliftClassName(
+                      columnKey,
+                      item.uplift,
+                      item._isControl,
+                    )}`}
                   >
                     {getKeyValue(item, columnKey)}
                   </TableCell>
