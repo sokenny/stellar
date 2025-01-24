@@ -1,6 +1,11 @@
 .container {
   width: 100%;
   margin-bottom: 64px;
+
+  background-color: #f3f9ff;
+  border: 1px solid #b7d9ff;
+  padding: 48px;
+  border-radius: 8px;
 }
 
 .title {
@@ -11,10 +16,10 @@
 }
 
 .title span {
-    background: linear-gradient(45deg, #d58fe0, #cb5edc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: linear-gradient(45deg, #d58fe0, #cb5edc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .chart {

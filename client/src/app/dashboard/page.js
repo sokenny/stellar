@@ -64,9 +64,9 @@ export default function Dashboard() {
       )}
       {emptyState && (
         <div className={styles.setUpProjectFlow}>
-          <h3 className={styles.title}>Let's set up your first project! 🚀</h3>
+          <h3 className={styles.title}>Let's set up your first domain! 🚀</h3>
           <div className={styles.description}>
-            Enter your website's domain to get started.
+            Enter your website's url to get started.
           </div>
           <CreateSimpleProjectForm
             className={styles.urlForm}

@@ -180,6 +180,11 @@ const Nav = ({ token }) => {
                 alt="Stellar"
                 style={{ height: 18 }}
               />
+              {/* <img
+                src="/Logo_CMYK_icon_blue.png"
+                alt="Stellar"
+                style={{ height: 38 }}
+              /> */}
               Stellar
             </div>
           </Link>

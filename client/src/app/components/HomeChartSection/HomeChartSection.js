@@ -365,7 +365,7 @@ const chartOptions = {
         display: true,
       },
       grid: {
-        color: 'rgba(0, 0, 0, 0.05)',
+        color: 'rgba(0, 0, 0, 0.15)',
         borderDash: [5, 5],
       },
       ticks: {
@@ -378,7 +378,7 @@ const chartOptions = {
         display: true,
       },
       grid: {
-        color: 'rgba(0, 0, 0, 0.05)',
+        color: 'rgba(0, 0, 0, 0.15)',
         borderDash: [5, 5],
       },
       ticks: {
