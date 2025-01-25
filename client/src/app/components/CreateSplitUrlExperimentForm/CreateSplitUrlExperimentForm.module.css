@@ -1,0 +1,113 @@
+.createSplitUrlForm {
+  width: 450px;
+  margin-bottom: 46px;
+}
+
+.section {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 12px;
+  margin-bottom: 46px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #bababa;
+  margin-top: 6px;
+}
+
+.hint a {
+  color: var(--linkBlue);
+  text-decoration: none;
+}
+
+.hint a:hover {
+  text-decoration: underline;
+}
+
+.variantRow {
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 16px 0;
+}
+
+.variantRow:last-child {
+  border-bottom: none;
+}
+
+.variantControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--textBody);
+}
+
+.deleteIcon {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.deleteIcon:hover {
+  opacity: 1;
+}
+
+.addVariantButton {
+  margin-top: 16px;
+  border-radius: 4px;
+}
+
+.targetingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  margin-top: 32px;
+}
+
+@media (max-width: 720px) {
+  .createSplitUrlForm {
+    width: 100%;
+  }
+
+  .section {
+    width: 100%;
+  }
+
+  .variantControls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.urlInput {
+  width: 350px;
+  max-width: 500px;
+}
+
+.tooltipContent {
+  max-width: 400px;
+  padding: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.tooltip {
+  cursor: help;
+}
+
+.tooltipContent .highlight {
+  color: var(--linkBlue);
+}

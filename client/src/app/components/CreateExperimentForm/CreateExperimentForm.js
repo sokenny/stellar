@@ -139,6 +139,9 @@ const CreateExperimentForm = ({ experimentId }) => {
             }
             experiment={experiment}
             isCreatePage={true}
+            onSuccess={(experimentId) => {
+              router.push(`/experiment/create/ab/${experimentId}`);
+            }}
           />
         </div>
         {experiment && (
@@ -250,7 +253,7 @@ const CreateExperimentForm = ({ experimentId }) => {
                       experimentId={experimentId}
                       saveButtonLabel="Set Targeting Rules"
                       onSuccess={() => {
-                        router.push(`/experiment/${experiment.id}`);
+                        router.push(`/experiment/create/ab/${experiment.id}`);
                       }}
                       targetRules={targetRules}
                     />

@@ -134,8 +134,9 @@
   let visitedPages = [];
 
   let isInternalNavigation = false;
-  let pagesWithExperiments = [];
   let hasFetchedExperiments = false;
+
+  let global__isSplitUrlRedirect = false;
 
   function startTimeTracking() {
     setInterval(() => {
@@ -169,7 +170,6 @@
       scrollDepth,
       activeExperiments,
       visitedPages,
-      pagesWithExperiments,
       hasFetchedExperiments,
     };
     sessionStorage.setItem('stellarSessionData', JSON.stringify(sessionData));
@@ -184,7 +184,6 @@
         scrollDepth: storedDepth,
         activeExperiments: storedExperiments,
         visitedPages: storedVisitedPages,
-        pagesWithExperiments: storedPagesWithExperiments,
         hasFetchedExperiments: storedHasFetchedExperiments,
       } = JSON.parse(storedData);
       timeOnPage = storedTime;
@@ -192,16 +191,14 @@
       scrollDepth = storedDepth;
       activeExperiments = storedExperiments;
       visitedPages = storedVisitedPages;
-      pagesWithExperiments = storedPagesWithExperiments;
       hasFetchedExperiments = storedHasFetchedExperiments;
     }
   }
 
   function sendDataOnLeave() {
     window.addEventListener('beforeunload', () => {
-      if (!isInternalNavigation) {
+      if (!isInternalNavigation && !global__isSplitUrlRedirect) {
         const hasConvertedOrMounted = activeExperiments.some(
-          // (experiment) => experiment.converted || experiment.experimentMounted,
           (experiment) => experiment.converted || experiment.visualized,
         );
 
@@ -211,8 +208,8 @@
             timeOnPage,
             clickCount,
             scrollDepth,
-            idempotencyKey: visitorId, // not sure if this is right or needed
-            // TODO-p1-1: Rename these to visualizedExperiments
+            idempotencyKey: visitorId, // not sure if this is needed
+            // TODO-p1-1 Rename these to visualizedExperiments
             activeExperiments: activeExperiments.filter(
               (experiment) => experiment.visualized,
             ),
@@ -389,10 +386,7 @@
         const storedVariantId = stellarData[experiment.id];
         let variantToUse = storedVariantId || experiment.variant_to_use;
 
-        log(
-          'Variant to use - storedVariantId || experiment.variant_to_use: ',
-          variantToUse,
-        );
+        log('Variant to use: ', variantToUse);
         function handleVisualized(variant) {
           if (variant.global_css) {
             activeExperiments.find(
@@ -578,18 +572,6 @@
   async function fetchExperiments() {
     log('fetchExperiments run! - ', hasFetchedExperiments);
 
-    // const pageUrl = window.location.href;
-    // if (
-    //   !pagesWithExperiments.includes(pageUrl) && // This could be a good optimization, but needs better handling to avoid missing new experiments.
-    //   visitedPages.length > 1 &&
-    //   hasFetchedExperiments
-    // ) {
-    //   log('removeAntiFlickerOverlay 1');
-    //   removeAntiFlickerOverlay();
-    //   return;
-    // }
-    log('fetching!');
-
     const apiKey = await getApiKeyWithRetry();
 
     try {
@@ -627,9 +609,7 @@
         data = await response.json();
       }
 
-      log('Datusarda: ', data);
-
-      pagesWithExperiments = data.map((experiment) => experiment.url);
+      log('Experiments data retrieved: ', data);
 
       global__experimentsToMount = data;
 
@@ -651,9 +631,20 @@
       });
 
       setStellarCache(global__experimentsToMount);
-
       log('global__experimentsToMount', global__experimentsToMount);
-      mountExperiments(global__experimentsToMount, removeAntiFlickerOverlay);
+
+      const splitUrlExperimentsToMount = global__experimentsToMount.filter(
+        (experiment) => experiment.type === 'SPLIT_URL',
+      );
+      const abExperimentsToMount = global__experimentsToMount.filter(
+        (experiment) => experiment.type === 'AB',
+      );
+
+      // Mount split URL experiments first
+      mountSplitUrlExperiments(splitUrlExperimentsToMount);
+
+      // Then mount AB experiments
+      mountExperiments(abExperimentsToMount, removeAntiFlickerOverlay);
       trackPageVisit();
     } catch (error) {
       console.error('Error fetching experiments:', error);
@@ -748,6 +739,73 @@
     } else {
       domContentLoadedActions();
     }
+  }
+
+  function mountSplitUrlExperiments(experiments) {
+    log('Running mountSplitUrlExperiments');
+    const stellarData = getStellarData();
+    const currentUrl = window.location.href;
+
+    experiments.forEach((experiment) => {
+      if (global__mountedOnThisPageLoad[experiment.id]) {
+        log(`Skipping already mounted split URL experiment: ${experiment.id}`);
+        return;
+      }
+
+      if (!hasValidTargetRules(experiment)) {
+        return;
+      }
+
+      const storedVariantId = stellarData[experiment.id];
+      const variantToUse = storedVariantId || experiment.variant_to_use;
+      const selectedVariant = experiment.variants.find(
+        (v) => v.id === variantToUse,
+      );
+      log('Variant to use: ', selectedVariant);
+
+      // Find if we're on the control URL (experiment.url)
+      if (shouldMountExperimentForUrl(experiment)) {
+        log('On control URL, checking if redirect needed');
+
+        // If we're on control URL and have a non-control variant to use, redirect
+        if (
+          selectedVariant &&
+          selectedVariant.url &&
+          selectedVariant.url !== experiment.url
+        ) {
+          log(`Redirecting to variant URL: ${selectedVariant.url}`);
+          global__isSplitUrlRedirect = true;
+          window.location.href = selectedVariant.url;
+          return;
+        }
+        log('no redirect needed');
+      }
+
+      // If we're on the variant URL, mark as visualized
+      if (
+        selectedVariant &&
+        selectedVariant.url &&
+        currentUrl.includes(selectedVariant.url)
+      ) {
+        log('On variant URL, marking as visualized');
+        const expRun = activeExperiments.find(
+          (e) => e.experiment === experiment.id,
+        );
+        if (expRun) {
+          expRun.visualized = true;
+          global__mountedOnThisPageLoad[experiment.id] = true;
+          expRun.experimentMounted = true;
+        }
+
+        log('activeExperiments now', activeExperiments);
+
+        // Store the variant ID if not already stored
+        if (!storedVariantId) {
+          stellarData[experiment.id] = variantToUse;
+          setStellarData(stellarData);
+        }
+      }
+    });
   }
 
   initializeScript();

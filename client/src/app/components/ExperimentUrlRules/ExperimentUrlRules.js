@@ -73,7 +73,10 @@ const ExperimentUrlRules = ({
       const payload = {
         url: advancedUrlRules ? '' : experimentUrl,
         advanced_url_rules: advancedUrlRules ? urlRules : null,
+        type: 'AB',
       };
+
+      let newExperiment;
 
       // If experiment exists, update it
       if (experiment) {
@@ -105,15 +108,14 @@ const ExperimentUrlRules = ({
             }),
           },
         );
-        const newExperiment = await response.json();
+        newExperiment = await response.json();
         toast.success('Experiment created successfully');
-        // router.push(`/experiment/create/${newExperiment.id}`);
-        window.location.href = `/experiment/create/${newExperiment.id}`;
       }
 
       await refetchProjects();
-      onSuccess && onSuccess();
+      onSuccess && onSuccess(newExperiment.id);
     } catch (error) {
+      console.error(error);
       toast.error('Failed to save URL rules');
     } finally {
       setLoading(false);

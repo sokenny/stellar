@@ -49,7 +49,7 @@ const TabsAndExperiments = ({ experiments }) => {
               <div className={styles.createNewExperiment}>
                 <CreateButton
                   onClick={() => {
-                    router.push('/experiment/create/new');
+                    router.push('/experiment/create');
                     segmentTrack('click_create_new_experiment');
                   }}
                 />

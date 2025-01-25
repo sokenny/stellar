@@ -31,6 +31,7 @@ import updateEmailSettings from './handlers/updateEmailSettings';
 import setTargetRules from './handlers/setTargetRules';
 import editExperimentUrlRules from './handlers/editExperimentUrlRules';
 import updateEditorUrl from './handlers/updateEditorUrl';
+import createSplitUrlExperiment from './handlers/createSplitUrlExperiment';
 
 const router = express.Router();
 
@@ -43,6 +44,7 @@ router.post('/kickstart-project', autoGenerate);
 
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
+router.post('/experiments/split-url', createSplitUrlExperiment);
 router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/url-rules', editExperimentUrlRules);

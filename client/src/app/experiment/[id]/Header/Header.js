@@ -108,12 +108,18 @@ const Header = ({ experiment }) => {
       !variant.global_css &&
       !variant.global_js,
   );
+  const hasMissingVariantURLs =
+    experiment.type === 'SPLIT_URL' &&
+    experiment.variants.some((variant) => !variant.url);
 
   function getLaunchTooltipCopy() {
     if (!experiment.goal) {
       return 'Set up a goal before launching your experiment';
     }
-    if (hasCeroChanges) {
+    if (experiment.type === 'SPLIT_URL' && hasMissingVariantURLs) {
+      return 'Add URLs to all variants before launching';
+    }
+    if (experiment.type !== 'SPLIT_URL' && hasCeroChanges) {
       return 'Add at least one change to your experiment before launching';
     }
     if (queuedAfter) {
@@ -122,11 +128,32 @@ const Header = ({ experiment }) => {
     return '';
   }
 
-  const canLaunchExperiment = hasGoal && !hasCeroChanges && !queuedAfter;
+  const canLaunchExperiment =
+    hasGoal &&
+    (experiment.type === 'SPLIT_URL'
+      ? !hasMissingVariantURLs
+      : !hasCeroChanges) &&
+    !queuedAfter;
   const showSwitch = experiment.started_at && !experiment.ended_at;
 
+  const getStatusClass = () => {
+    if (experiment.status === ExperimentStatusesEnum.RUNNING) {
+      return styles.running;
+    }
+    if (experiment.status === ExperimentStatusesEnum.PAUSED) {
+      return styles.paused;
+    }
+    if (experiment.status === ExperimentStatusesEnum.ENDED) {
+      return styles.ended;
+    }
+    if (experiment.status === ExperimentStatusesEnum.DRAFT) {
+      return styles.draft;
+    }
+    return '';
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${getStatusClass()}`}>
       <div className={styles.colLeft}>
         <ExperimentName name={experiment.name} experimentId={experiment.id} />
         <StatusChip status={experiment.status} size="md" />

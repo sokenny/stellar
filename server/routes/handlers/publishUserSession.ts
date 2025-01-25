@@ -26,6 +26,8 @@ async function publishUserSession(req: Request, res: Response) {
       })
       .promise();
 
+    console.log('publishUserSession - message sent!');
+
     res.status(202).send('Accepted');
   } catch (error) {
     console.error('Error publishing session data:', error);

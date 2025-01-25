@@ -80,9 +80,37 @@
 }
 
 .uplift-baseline {
-  color: var(--linkBlue);
+  /* color: var(--linkBlue); */
+  color: rgba(0, 0, 0, 0.35);
 }
 
 .highestUplift {
-  background-color: rgba(0, 255, 0, 0.05);
+  background-color: rgba(24, 201, 100, 0.05); /* Using the same green as uplift-positive but with low opacity */
+}
+
+.cell-url {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  color: var(--linkBlue);
+}
+
+.cell-url a {
+  color: var(--linkBlue);
+  text-decoration: none;
+}
+
+.cell-url a:hover {
+  text-decoration: underline;
+}
+
+.cell-url .url-not-set {
+  color: #f31260; /* NextUI's default danger color */
+  text-decoration: none!important;
+}
+
+.urlTooltip {
+  max-width: 450px;
 }

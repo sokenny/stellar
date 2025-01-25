@@ -10,6 +10,8 @@ class Variant extends Model {
   public deleted_at?: Date;
   public global_css?: string;
   public global_js?: string;
+  public preserve_url_params?: boolean | null;
+  public url?: string;
 }
 
 export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
@@ -56,6 +58,14 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
       },
       global_js: {
         type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      preserve_url_params: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      url: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
     },

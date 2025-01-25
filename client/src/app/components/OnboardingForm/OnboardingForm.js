@@ -40,6 +40,7 @@ const OnboardingForm = () => {
       { key: 'facebook-ads', label: 'Facebook Ads' },
       { key: 'instagram-ads', label: 'Instagram Ads' },
       { key: 'reddit', label: 'Reddit' },
+      { key: 'twitter', label: 'Twitter' },
       { key: 'word-of-mouth', label: 'Word of mouth' },
     ].sort(() => Math.random() - 0.5);
 

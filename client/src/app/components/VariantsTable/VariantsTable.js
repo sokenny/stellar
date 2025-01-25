@@ -41,7 +41,7 @@ const dummyKeyboardDelegate = Object.fromEntries(
   ].map((name) => [name, () => null]),
 );
 
-const columns = (statsType) => [
+const columns = (statsType, experimentType) => [
   {
     key: 'name',
     label: 'Name',
@@ -62,16 +62,29 @@ const columns = (statsType) => [
       undefined,
     ],
   },
-  {
-    key: 'changes',
-    label: 'Changes',
-    goalTypes: [
-      GoalTypesEnum.CLICK,
-      GoalTypesEnum.PAGE_VISIT,
-      GoalTypesEnum.SESSION_TIME,
-      undefined,
-    ],
-  },
+  ...((experimentType === 'SPLIT_URL' && [
+    {
+      key: 'url',
+      label: 'URL',
+      goalTypes: [
+        GoalTypesEnum.CLICK,
+        GoalTypesEnum.PAGE_VISIT,
+        GoalTypesEnum.SESSION_TIME,
+        undefined,
+      ],
+    },
+  ]) || [
+    {
+      key: 'changes',
+      label: 'Changes',
+      goalTypes: [
+        GoalTypesEnum.CLICK,
+        GoalTypesEnum.PAGE_VISIT,
+        GoalTypesEnum.SESSION_TIME,
+        undefined,
+      ],
+    },
+  ]),
   ...(statsType === 'total-sessions'
     ? [
         {
@@ -150,7 +163,7 @@ const getUpliftClassName = (columnKey, value, isControl) => {
 };
 
 const getHighestUpliftId = (rows) => {
-  let highestUplift = -Infinity;
+  let highestUplift = 0;
   let highestUpliftId = null;
 
   rows.forEach((row) => {
@@ -198,33 +211,34 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
 
     return variants.map((variant) => {
       const variantStats = thisStats?.find((v) => v.variantId === variant.id);
-      const changesCount =
-        (variant?.modifications?.length || 0) +
-        (variant.global_css ? 1 : 0) +
-        (variant.global_js ? 1 : 0);
-
-      const uplift =
-        hasStarted && variantStats?.conversionRate && !variant.is_control
-          ? (
-              ((variantStats.conversionRate - controlConversionRate) /
-                controlConversionRate) *
-              100
-            ).toFixed(2) + '%'
-          : variant.is_control
-          ? 'baseline'
-          : '-';
 
       return {
         id: variant.id,
         name: variant.name,
         traffic: <>{variant.traffic + '%'}</>,
-        changes: changesCount,
+        ...((experiment.type === 'SPLIT_URL' && {
+          url: variant.url,
+        }) || {
+          changes:
+            (variant?.modifications?.length || 0) +
+            (variant.global_css ? 1 : 0) +
+            (variant.global_js ? 1 : 0),
+        }),
         ...(statsType === 'total-sessions'
           ? { sessions: hasStarted ? variantStats?.sessions : '-' }
           : {
               unique_visitors: hasStarted ? variantStats?.unique_visitors : '-',
             }),
-        uplift,
+        uplift:
+          hasStarted && variantStats?.conversionRate && !variant.is_control
+            ? (
+                ((variantStats.conversionRate - controlConversionRate) /
+                  controlConversionRate) *
+                100
+              ).toFixed(2) + '%'
+            : variant.is_control
+            ? 'baseline'
+            : '-',
         conversions: hasStarted ? variantStats?.conversions : '-',
         conversion_rate:
           hasStarted && variantStats?.conversionRate
@@ -244,10 +258,18 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
   const pages = rows.length ? Math.ceil(rows.length / rowsPerPage) : 0;
 
   function handleOnView(variantId) {
-    window.open(
-      `${experiment.editor_url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`,
-      '_blank',
-    );
+    const variant = variants.find((v) => v.id === variantId);
+    let url;
+
+    if (experiment.type === 'SPLIT_URL') {
+      url = `${variant.url}?stellarMode=true`;
+    }
+
+    if (experiment.type !== 'SPLIT_URL') {
+      url = `${experiment.editor_url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`;
+    }
+
+    window.open(url, '_blank');
   }
 
   return (
@@ -266,6 +288,9 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
           initialValues={{
             name: variants.find((v) => v.id === variantToEdit).name,
             ...getVariantsTrafficInitialValues(variants),
+            ...(experiment.type === 'SPLIT_URL' && {
+              url: variants.find((v) => v.id === variantToEdit).url,
+            }),
           }}
         />
       )}
@@ -293,7 +318,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
         }
       >
         <TableHeader className={styles.tableHeader}>
-          {columns(statsType)
+          {columns(statsType, experiment.type)
             .filter((col) => col.goalTypes.includes(experiment?.goal?.type))
             .map((column) => {
               return (
@@ -336,37 +361,39 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                             />
                           </span>
                         </Tooltip>
-                        <Tooltip
-                          content={
-                            hasStarted
-                              ? 'Can not edit a variant after the experiment has started.'
-                              : item._isControl
-                              ? 'Can not edit control variant'
-                              : 'Visual Editor'
-                          }
-                          showArrow
-                          className={styles.tooltip}
-                          closeDelay={200}
-                        >
-                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                            <EditIcon
-                              className={styles.editIcon}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (hasStarted || item._isControl) return;
-                                missingSnippet
-                                  ? onOpenSnippetModal()
-                                  : handleEditVariant(item.id);
-                              }}
-                              style={{
-                                cursor:
-                                  hasStarted || item._isControl
-                                    ? 'not-allowed'
-                                    : 'pointer',
-                              }}
-                            />
-                          </span>
-                        </Tooltip>
+                        {experiment.type !== 'SPLIT_URL' && (
+                          <Tooltip
+                            content={
+                              hasStarted
+                                ? 'Can not edit a variant after the experiment has started.'
+                                : item._isControl
+                                ? 'Can not edit control variant'
+                                : 'Visual Editor'
+                            }
+                            showArrow
+                            className={styles.tooltip}
+                            closeDelay={200}
+                          >
+                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                              <EditIcon
+                                className={styles.editIcon}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (hasStarted || item._isControl) return;
+                                  missingSnippet
+                                    ? onOpenSnippetModal()
+                                    : handleEditVariant(item.id);
+                                }}
+                                style={{
+                                  cursor:
+                                    hasStarted || item._isControl
+                                      ? 'not-allowed'
+                                      : 'pointer',
+                                }}
+                              />
+                            </span>
+                          </Tooltip>
+                        )}
                         <Tooltip
                           content={
                             hasEnded
@@ -428,6 +455,38 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                       }`}
                     >
                       <VariantName name={item.name} variantId={item.id} />
+                    </TableCell>
+                  );
+                }
+                if (columnKey === 'url') {
+                  return (
+                    <TableCell className={styles['cell-url']}>
+                      {getKeyValue(item, columnKey) ? (
+                        <Tooltip
+                          content={getKeyValue(item, columnKey)}
+                          className={`${styles.tooltip} ${styles.urlTooltip}`}
+                          closeDelay={50}
+                        >
+                          <a
+                            href={getKeyValue(item, columnKey)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {getKeyValue(item, columnKey).replace(
+                              /^https?:\/\/[^/]+/,
+                              '',
+                            )}
+                          </a>
+                        </Tooltip>
+                      ) : (
+                        <span
+                          className={styles['url-not-set']}
+                          onClick={() => setVariantToEdit(item.id)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          URL not set
+                        </span>
+                      )}
                     </TableCell>
                   );
                 }

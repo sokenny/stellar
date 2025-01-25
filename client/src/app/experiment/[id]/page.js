@@ -141,6 +141,15 @@ export default function ExperimentPage({ params, searchParams }) {
       !variant.global_js,
   );
 
+  const hasMissingUrls =
+    experiment.type === 'SPLIT_URL' &&
+    experiment.variants.some((variant) => !variant.url);
+
+  const showModificationsWarning =
+    !experiment.goal ||
+    (experiment.type !== 'SPLIT_URL' && hasCeroChanges) ||
+    (experiment.type === 'SPLIT_URL' && hasMissingUrls);
+
   async function handleCreateVariant() {
     setCreatingVariant(true);
     try {
@@ -188,7 +197,7 @@ export default function ExperimentPage({ params, searchParams }) {
       <div className={styles.Experiment}>
         <Notifications searchParams={searchParams} />
         <Header experiment={experiment} className={styles.header} />
-        {noGoalOrZeroChanges && (
+        {showModificationsWarning && (
           <div className={styles.infoSection}>
             {!experiment.goal && (
               <InfoCard className={styles.setGoalCard}>
@@ -210,16 +219,24 @@ export default function ExperimentPage({ params, searchParams }) {
                 }
               </InfoCard>
             )}
-            {hasCeroChanges && (
+            {experiment.type !== 'SPLIT_URL' && hasCeroChanges && (
               <InfoCard className={styles.setGoalCard}>
-                {
-                  <div className={styles.cardBody}>
-                    <div>
-                      Modify at least one variant before launching your
-                      experiment.
-                    </div>
+                <div className={styles.cardBody}>
+                  <div>
+                    Modify at least one variant before launching your
+                    experiment.
                   </div>
-                }
+                </div>
+              </InfoCard>
+            )}
+            {experiment.type === 'SPLIT_URL' && hasMissingUrls && (
+              <InfoCard className={styles.setGoalCard}>
+                <div className={styles.cardBody}>
+                  <div>
+                    Ensure all variants have URLs set before launching your
+                    experiment.
+                  </div>
+                </div>
               </InfoCard>
             )}
           </div>
@@ -272,40 +289,57 @@ export default function ExperimentPage({ params, searchParams }) {
               </div>
             )}
           </div>
-          <div className={styles.targetPage}>
-            <div className={styles.icon}>
-              <Page width={15} height={15} />
+          {experiment.type !== 'SPLIT_URL' && (
+            <div className={styles.targetPage}>
+              <div className={styles.icon}>
+                <Page width={15} height={15} />
+              </div>
+              Target URL(s):{' '}
+              {experiment.url ? (
+                <a
+                  href={experiment.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {experiment.url}
+                </a>
+              ) : (
+                <div className={styles.advancedUrlRulesText}>
+                  Advanced URL rules applied
+                </div>
+              )}
+              {!experiment.started_at ? (
+                <Edit
+                  width={15}
+                  height={15}
+                  className={styles.editIcon}
+                  onClick={() => setIsUrlRulesModalOpen(true)}
+                />
+              ) : (
+                <EyeIcon
+                  width={15}
+                  height={15}
+                  className={styles.eyeIcon}
+                  onClick={() => setIsUrlRulesModalOpen(true)}
+                />
+              )}
             </div>
-            Target URL(s):{' '}
-            {experiment.url ? (
+          )}
+          {experiment.type === 'SPLIT_URL' && (
+            <div className={styles.targetPage}>
+              <div className={styles.icon}>
+                <Page width={15} height={15} />
+              </div>
+              Base URL:{' '}
               <a
                 href={experiment.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {experiment.url}
+                {experiment.variants.find((v) => v.is_control)?.url}
               </a>
-            ) : (
-              <div className={styles.advancedUrlRulesText}>
-                Advanced URL rules applied
-              </div>
-            )}
-            {!experiment.started_at ? (
-              <Edit
-                width={15}
-                height={15}
-                className={styles.editIcon}
-                onClick={() => setIsUrlRulesModalOpen(true)}
-              />
-            ) : (
-              <EyeIcon
-                width={15}
-                height={15}
-                className={styles.eyeIcon}
-                onClick={() => setIsUrlRulesModalOpen(true)}
-              />
-            )}
-          </div>
+            </div>
+          )}
           <div className={styles.targetAudience}>
             <div className={styles.icon}>
               <Users width={15} height={15} />
@@ -332,33 +366,35 @@ export default function ExperimentPage({ params, searchParams }) {
               )}
             </div>
           </div>
-          <div className={styles.editorUrl}>
-            <div className={styles.icon}>
-              <Edit width={15} height={15} color={colors.linkBlue} />
+          {experiment.type !== 'SPLIT_URL' && (
+            <div className={styles.editorUrl}>
+              <div className={styles.icon}>
+                <Edit width={15} height={15} color={colors.linkBlue} />
+              </div>
+              Editor URL:{' '}
+              <div className={styles.editorUrlText}>
+                {experiment.editor_url ? (
+                  <a
+                    href={experiment.editor_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {experiment.editor_url}
+                  </a>
+                ) : (
+                  <span className={styles.notSet}>Not set</span>
+                )}
+                {!experiment.ended_at && (
+                  <Edit
+                    width={15}
+                    height={15}
+                    className={styles.editIcon}
+                    onClick={() => setIsEditorUrlModalOpen(true)}
+                  />
+                )}
+              </div>
             </div>
-            Editor URL:{' '}
-            <div className={styles.editorUrlText}>
-              {experiment.editor_url ? (
-                <a
-                  href={experiment.editor_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {experiment.editor_url}
-                </a>
-              ) : (
-                <span className={styles.notSet}>Not set</span>
-              )}
-              {!experiment.ended_at && (
-                <Edit
-                  width={15}
-                  height={15}
-                  className={styles.editIcon}
-                  onClick={() => setIsEditorUrlModalOpen(true)}
-                />
-              )}
-            </div>
-          </div>
+          )}
         </div>
         <section>
           <div className={styles.tableHeader}>

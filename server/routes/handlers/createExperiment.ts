@@ -13,23 +13,13 @@ async function createExperiment(req, res) {
     return;
   }
 
-  let page = await db.Page.findOne({ where: { url } });
-
-  if (!page) {
-    page = await db.Page.create({
-      url,
-      name: url,
-      project_id: projectId,
-    });
-  }
-
   const experiment = await db.Experiment.create({
     project_id: projectId,
     url: sanitizedUrl,
     name,
-    page_id: page.id,
     advanced_url_rules,
     editor_url: url || null,
+    type: 'AB',
   });
 
   const variants = await createVariantsFromElement({

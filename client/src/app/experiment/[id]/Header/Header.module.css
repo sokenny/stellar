@@ -25,6 +25,12 @@
   margin-right: 8px;
 }
 
+.running,
+.paused,
+.ended {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 @media (max-width: 720px) {
   .container {
     flex-direction: column;

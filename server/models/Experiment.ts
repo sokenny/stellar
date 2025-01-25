@@ -32,7 +32,6 @@ class Experiment extends Model {
   public editor_url!: string;
   public smart_trigger!: boolean | null;
   public type!: string;
-  public preserve_url_params!: boolean | null;
 }
 
 export const initializeExperiment = (
@@ -162,11 +161,6 @@ export const initializeExperiment = (
       type: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      preserve_url_params: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        defaultValue: null,
       },
     },
     {

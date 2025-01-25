@@ -1,4 +1,7 @@
 function isUrlFromDomain(url, domain) {
+  if (!url) {
+    return false;
+  }
   if (process.env.NODE_ENV === 'development' && url.includes('localhost')) {
     return true;
   }
