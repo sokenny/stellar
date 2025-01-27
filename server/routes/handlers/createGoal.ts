@@ -4,7 +4,7 @@ import db from '../../models';
 async function createGoal(req, res) {
   const projectId = req.projectId;
   const {
-    experimentId,
+    experiment_id,
     type,
     selector,
     url_match_type,
@@ -13,16 +13,16 @@ async function createGoal(req, res) {
     name,
   } = req.body;
 
-  if (experimentId) {
+  if (experiment_id) {
     const experiment = await db.Experiment.findOne({
       where: {
-        id: experimentId,
+        id: experiment_id,
       },
     });
 
     if (!experiment) {
       return res.status(404).json({
-        error: 'Experiment not found for id ' + experimentId,
+        error: 'Experiment not found for id ' + experiment_id,
       });
     }
 
@@ -41,15 +41,15 @@ async function createGoal(req, res) {
     url_match_value,
     element_url,
     project_id: projectId,
-    name,
+    name: name || 'Untitled Goal',
   });
 
-  if (experimentId) {
+  if (experiment_id) {
     await db.GoalExperiment.update(
       { deleted_at: new Date() },
       {
         where: {
-          experiment_id: experimentId,
+          experiment_id: experiment_id,
           is_main: true,
           deleted_at: null,
         },
@@ -57,7 +57,7 @@ async function createGoal(req, res) {
     );
 
     await db.GoalExperiment.create({
-      experiment_id: experimentId,
+      experiment_id: experiment_id,
       goal_id: goal.id,
       is_main: true,
     });

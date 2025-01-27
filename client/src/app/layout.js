@@ -27,14 +27,14 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: End experiments on gostellar and set winning variants
+// TODO-p1-1 Introduce layout with sidebar
+// TODO-p1-1: Set logo
+// TODO-p1-1: HAve sessions be created with a created_ad that is passed from the FE, so if the queue is stalled, it eventually shows the right data in the chart
+// TODO-p1-1: Be able to edit custom js from the table
 // TODO-p1-1: mass email about split url testing
-// TODO-p1-1: Invalidate cache on edit variant / traffic change
-// TODO-p1-1: Improve "Which URL is the element at?" input
 // TODO-p1-1: Create backdoor to flush redis
 // TODO-p1-1: Tidy up auto-name generation for experiments
 // TODO-p1-1: In edit variant modal, have focus of attention placed in the edited variant fields
-// TODO-p1-1 Introduce layout with sidebar
 // TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: UI for squashed convs
 // TODO-p1-1: Hacer un carrousel a lo lemlist pero de Work with your favorite tools: https://www.lemlist.com/es Sacar mas ideas de lemlist

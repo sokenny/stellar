@@ -255,3 +255,13 @@
 .matchTypeSelectContainer > div {
   border-radius: 8px;
 }
+
+.error {
+  font-size: 14px;
+  margin-top: 4px;
+  color: var(--textBodyLight);
+}
+
+.manualSelect .row {
+  width: 100%;
+}

@@ -14,6 +14,7 @@
   const experimentId = urlParams.get('experimentId');
   const variantId = urlParams.get('variantId');
   const isSettingGoal = urlParams.get('isSettingGoal');
+  const goalName = urlParams.get('goalName');
   const elementToHighlight = urlParams.get('elementToHighlight');
   const modificationType = urlParams.get('modificationType');
   const text = urlParams.get('text');
@@ -129,6 +130,7 @@
           selector,
           // TODO-p2: Make sure this is only the path
           url_match_value: pageUrl,
+          name: goalName,
         }),
       });
 
@@ -1515,6 +1517,15 @@
                   updateGlobalStyles(globalCssText);
                 } else {
                   globalJsText = textarea.value;
+                  // Execute the JS code immediately
+                  try {
+                    const scriptElement = document.createElement('script');
+                    scriptElement.type = 'text/javascript';
+                    scriptElement.text = globalJsText;
+                    document.body.appendChild(scriptElement);
+                  } catch (error) {
+                    console.error('Error executing custom JS:', error);
+                  }
                 }
                 renderEditor({ element: selectedElement });
               });
@@ -1575,7 +1586,9 @@
         if (confirmElement) {
           const response = await setClickGoal({ selector });
           if (response.status === 200) {
-            window.close();
+            if (fromUrl) {
+              window.location.href = fromUrl + '?goalCreated=true';
+            }
           }
         } else {
           const target = event.target;

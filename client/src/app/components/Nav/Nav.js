@@ -47,6 +47,7 @@ const Nav = ({ token }) => {
   } = useStore();
   const initializedProjects = useRef(false);
   const variantEditedEffectRan = useRef(false);
+  const goalCreatedEffectRan = useRef(false);
 
   async function initializeProjects() {
     setToken(token);
@@ -108,6 +109,23 @@ const Nav = ({ token }) => {
         );
       }
       variantEditedEffectRan.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!goalCreatedEffectRan.current) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const goalCreated = urlParams.get('goalCreated');
+      if (goalCreated) {
+        toast.success('Goal set successfully!');
+        urlParams.delete('goalCreated');
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
+      }
+      goalCreatedEffectRan.current = true;
     }
   }, []);
 

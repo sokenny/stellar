@@ -24,6 +24,7 @@ import Input from '../Input/Input';
 import styles from './GoalsForm.module.css';
 import Page from '../../icons/Page';
 import segmentTrack from '../../helpers/segment/segmentTrack';
+import isUrlFromDomain from '../../helpers/isUrlFromDomain';
 
 const matchTypes = [
   { key: UrlMatchTypesEnum.CONTAINS, label: 'Contains' },
@@ -135,7 +136,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
         },
         body: JSON.stringify({
           id: goal?.id,
-          experimentId: experiment?.id,
+          experiment_id: experiment?.id,
           name: formData.name.trim(),
           type: formData.goalType,
           url_match_type: matchType,
@@ -167,10 +168,9 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   }
 
   async function onGoToUrl() {
-    console.log('onGoToUrl!', domain);
     const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
-      `https://${domain}/${formData.elementUrl}?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true&token=${token}`,
+      `${formData.elementUrl}?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true&token=${token}&goalName=${formData.name}&fromUrl=${window.location.href}`,
       '_blank',
     );
 
@@ -284,10 +284,9 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   </div>
                   <div className={styles.detail}>
                     After typing in your URL, we'll take you there so you can
-                    select this element for us to track.{' '}
+                    select this element for us to track.
                   </div>
                   <div className={styles.row}>
-                    <div className={styles.domain}>{domain}/</div>
                     <Input
                       className={styles.input}
                       type="text"
@@ -295,15 +294,32 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                       onChange={(e) =>
                         setFormData({ ...formData, elementUrl: e.target.value })
                       }
+                      placeholder={`https://${domain}/your-page`}
                     />
                     <Button
                       onClick={onGoToUrl}
-                      disabled={false}
+                      disabled={
+                        !formData.elementUrl ||
+                        !isUrlFromDomain(formData.elementUrl, domain)
+                      }
                       className={styles.goButton}
                     >
                       Go
                     </Button>
                   </div>
+                  {formData.elementUrl &&
+                    !isUrlFromDomain(formData.elementUrl, domain) && (
+                      <div className={styles.error}>
+                        URL must be part of{' '}
+                        <a
+                          href={`https://${domain}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {domain}
+                        </a>
+                      </div>
+                    )}
                 </div>
               )}
             </div>

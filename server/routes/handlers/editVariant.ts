@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import validateTraffic from '../../helpers/validateTraffic';
 import db from '../../models';
+import { invalidateCache } from '../../helpers/cache';
 
-async function editVariant(req: Request, res: Response) {
+async function editVariant(req, res) {
+  const projectId: string = req.projectId;
   const variantId: string = req.params.id;
   const { name, url } = req.body;
 
@@ -47,6 +49,8 @@ async function editVariant(req: Request, res: Response) {
       ),
     ),
   );
+
+  await invalidateCache(`experiments:${projectId}`);
 
   res.json(updatedVariant);
 }
