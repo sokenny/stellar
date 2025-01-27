@@ -27,6 +27,9 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: End experiments on gostellar and set winning variants
+// TODO-p1-1: mass email about split url testing
+// TODO-p1-1: Invalidate cache on edit variant / traffic change
 // TODO-p1-1: Improve "Which URL is the element at?" input
 // TODO-p1-1: Create backdoor to flush redis
 // TODO-p1-1: Tidy up auto-name generation for experiments

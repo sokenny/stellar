@@ -317,7 +317,7 @@ const Nav = ({ token }) => {
       </Navbar>
       <div className={styles.statusBar} data-testid="status-bar">
         <div>
-          Currently on limited open beta.{' '}
+          #1 Fastest on the market.{' '}
           <a
             href="https://forms.gle/h2ytTVbdYLH5ZWKs9"
             target="_blank"

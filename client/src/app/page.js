@@ -133,24 +133,6 @@ export default async function HomePage({}) {
           <HomeChartSection />
 
           <div
-            className={`${styles.loomContainer} ${styles.loomDemo2}`}
-            id="loom-demo-2"
-          >
-            <div className={styles.infoBar}>watch our quick demo :)</div>
-
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          </div>
-
-          <div
             style={{
               position: 'relative',
               boxSizing: 'content-box',
