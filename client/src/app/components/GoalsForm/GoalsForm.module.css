@@ -200,7 +200,7 @@
 }
 
 .matchTypeSelect {
-  width: 120px;
+  width: 120px!important;
 }
 
 .pageVisitUrlContainer {
@@ -239,12 +239,12 @@
 }
 
 .matchTypeSelectContainer > div {
-  height: 48px;
-  overflow: hidden;
+  height: 48px !important;
+  overflow: hidden !important;
 }
 
 .matchTypeSelectContainer button {
-  padding-top: 4px;
+  padding-top: 4px !important;
 }
 /* 
 .pageVisitUrlContainer div[data-slot="popover"] {

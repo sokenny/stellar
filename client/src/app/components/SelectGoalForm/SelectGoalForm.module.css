@@ -132,15 +132,15 @@
 }
 
 .modal {
-  max-width: 400px;
-  padding: 24px 8px;
+  max-width: 400px !important;
+  padding: 24px 8px !important;
 }
 
 .modalHeader {
-  font-size: 32px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: black;
+  font-size: 32px !important;
+  font-weight: 500 !important;
+  margin-bottom: 8px !important;
+  color: black !important;
 }
 
 .modalFooter {
