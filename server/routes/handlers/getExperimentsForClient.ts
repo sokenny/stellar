@@ -71,8 +71,14 @@ async function fetchExperiments(projectId: number) {
       },
       {
         model: db.Goal,
-        as: 'goal',
+        as: 'goals',
         required: true,
+        through: {
+          model: db.GoalExperiment,
+          where: {
+            deleted_at: null,
+          },
+        },
       },
       {
         model: db.Project,
@@ -90,9 +96,17 @@ async function fetchExperiments(projectId: number) {
     ],
   });
 
-  const experiments = experimentInstances.map((experiment) =>
-    experiment.toJSON(),
-  );
+  const experiments = experimentInstances.map((experiment) => {
+    const expJson = experiment.toJSON();
+    // Find the main goal and set it as the 'goal' property
+    const mainGoal = expJson.goals.find((g) => g.GoalExperiment.is_main);
+    return {
+      ...expJson,
+      goal: mainGoal, // Add the main goal as 'goal'
+      goals: expJson.goals, // Keep all goals in 'goals'
+    };
+  });
+
   return experiments;
 }
 

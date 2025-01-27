@@ -621,7 +621,9 @@
           experiment: experiment.id,
           variant: storedVariantId || experiment.variant_to_use,
           converted: false,
-          experimentMounted: false,
+          experimentMounted: activeExperiments.some((exp) => {
+            return exp.experiment === experiment.id && exp.experimentMounted;
+          }),
           visualized: !experiment.smart_trigger, // If smart_trigger is set, we initialize to false, because we will wait for observer to trigger visualized to true
           goalType: experiment.goal.type,
           goalElementUrl: experiment.goal.url_match_value,

@@ -1,0 +1,37 @@
+.Goals {
+  max-width: 930px;
+}
+
+.title {
+  font-weight: 400;
+  font-size: 32px;
+  margin-right: 12px;
+  color: var(--primary);
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.colLeft {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .colLeft {
+    margin-bottom: 8px;
+  }
+}

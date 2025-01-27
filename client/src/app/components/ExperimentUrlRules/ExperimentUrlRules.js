@@ -104,7 +104,6 @@ const ExperimentUrlRules = ({
             body: JSON.stringify({
               ...payload,
               projectId: currentProject.id,
-              name: `Experiment for ${experimentUrl}`,
             }),
           },
         );

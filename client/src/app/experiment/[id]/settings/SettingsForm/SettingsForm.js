@@ -331,44 +331,48 @@ const SettingsForm = ({ experiment }) => {
           </div>
         </div>
       </div>
-      <div className={`${styles.settingItem} ${styles.autoFinalizeContainer}`}>
-        <div className={styles.autoFinalize}>
-          <Switch
-            defaultSelected={settingsForm.smart_trigger}
-            onValueChange={(val) =>
-              setSettingsForm({
-                ...settingsForm,
-                smart_trigger: val,
-              })
-            }
-            isDisabled={false}
-          >
-            <div className="flex items-center gap-1">
-              <span>Smart Trigger</span>
-              <Tooltip
-                content={
-                  <div className={styles.tooltipContent}>
-                    Sessions are counted only when the targeted element is
-                    visible, reducing skew from users who don’t engage with the
-                    experiment.
+      {experiment.type !== 'SPLIT_URL' && (
+        <div
+          className={`${styles.settingItem} ${styles.autoFinalizeContainer}`}
+        >
+          <div className={styles.autoFinalize}>
+            <Switch
+              defaultSelected={settingsForm.smart_trigger}
+              onValueChange={(val) =>
+                setSettingsForm({
+                  ...settingsForm,
+                  smart_trigger: val,
+                })
+              }
+              isDisabled={false}
+            >
+              <div className="flex items-center gap-1">
+                <span>Smart Trigger</span>
+                <Tooltip
+                  content={
+                    <div className={styles.tooltipContent}>
+                      Sessions are counted only when the targeted element is
+                      visible, reducing skew from users who don't engage with
+                      the experiment.
+                    </div>
+                  }
+                  showArrow
+                  closeDelay={200}
+                  className={styles.tooltip}
+                >
+                  <div className={styles.infoIcon}>
+                    <Info />
                   </div>
-                }
-                showArrow
-                closeDelay={200}
-                className={styles.tooltip}
-              >
-                <div className={styles.infoIcon}>
-                  <Info />
-                </div>
-              </Tooltip>
+                </Tooltip>
+              </div>
+            </Switch>
+            <div className={styles.detail}>
+              Specially useful for experiments targeting elements outside the
+              viewport.
             </div>
-          </Switch>
-          <div className={styles.detail}>
-            Specially useful for experiments targeting elements outside the
-            viewport.
           </div>
         </div>
-      </div>
+      )}
       <div className={styles.actions}>
         <Button
           onClick={onSubmit}

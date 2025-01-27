@@ -5,28 +5,31 @@ import { Tooltip } from '@nextui-org/react';
 import Edit from '../../icons/Edit';
 import styles from './Goal.module.css';
 import useStore from '../../store';
+import getMainGoal from '../../helpers/getMainGoal';
 
 const Goal = ({ experiment, onEdit, className }) => {
   const { token } = useStore();
   if (!experiment) return;
 
-  const { goal, url, status } = experiment;
+  const experimentGoal = getMainGoal(experiment);
+  const { status } = experiment;
   const canEditGoal = status === ExperimentStatusesEnum.PENDING;
   const goalDescriptionMapper = {
     PAGE_VISIT: (
       <>
         User visits to{' '}
-        {goal.url_match_type === 'CONTAINS' ? (
+        {experimentGoal.url_match_type === 'CONTAINS' ? (
           <>
-            a page containing "<strong>{goal.url_match_value}</strong>"
+            a page containing "<strong>{experimentGoal.url_match_value}</strong>
+            "
           </>
         ) : (
           <a
-            href={`${goal.url_match_value}`}
+            href={`${experimentGoal.url_match_value}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {goal.url_match_value}
+            {experimentGoal.url_match_value}
           </a>
         )}
       </>
@@ -34,18 +37,18 @@ const Goal = ({ experiment, onEdit, className }) => {
     CLICK: (
       <>
         User clicks on a{' '}
-        {goal.url_match_value === '*' ? (
+        {experimentGoal.url_match_value === '*' ? (
           <>
-            specific element: <span>{goal.selector}</span>
+            specific element: <span>{experimentGoal.selector}</span>
           </>
         ) : (
           <a
             href={`${
-              typeof goal.url_match_value === 'string'
-                ? goal.url_match_value
+              typeof experimentGoal.url_match_value === 'string'
+                ? experimentGoal.url_match_value
                 : ''
             }?stellarMode=true&elementToHighlight=${
-              goal.selector
+              experimentGoal.selector
             }&token=${token}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -64,10 +67,13 @@ const Goal = ({ experiment, onEdit, className }) => {
   };
 
   return (
-    <div className={`${styles.Goal} ${className ? className : ''}`}>
+    <div
+      className={`${styles.Goal} ${className ? className : ''}`}
+      data-goal-id={experimentGoal.id}
+    >
       <div className={styles.title}>Goal:</div>
       <div className={styles.goalDescription}>
-        {goalDescriptionMapper[goal.type]}
+        {goalDescriptionMapper[experimentGoal.type]}
       </div>
       {canEditGoal && (
         <Tooltip

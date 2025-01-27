@@ -15,6 +15,7 @@ import {
 } from '@nextui-org/react';
 import { toast } from 'sonner';
 import getShortId from '../../helpers/getShortId';
+import getMainGoal from '../../helpers/getMainGoal';
 import GoalIcon from '../../icons/Goal';
 import Calendar from '../../icons/Calendar';
 import Page from '../../icons/Page';
@@ -25,6 +26,7 @@ import Link from 'next/link';
 import useStore from '../../store';
 import Notifications from '../Notifications';
 import GoalSetupModal from '../../components/Modals/GoalSetupModal/GoalSetupModal';
+import SelectGoalForm from '../../components/SelectGoalForm/SelectGoalForm';
 import InfoCard from '../../components/InfoCard';
 import Goal from '../../components/Goal';
 import Button from '../../components/Button';
@@ -60,12 +62,15 @@ export default function ExperimentPage({ params, searchParams }) {
   } = useStore();
 
   console.log('user! ', user);
+  console.log('currentProject! ', currentProject);
 
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
   const experiment = currentProject?.experiments?.find(
     (e) => e.id == experimentId,
   );
+  const experimentGoal = getMainGoal(experiment);
+  console.log('experimentGoal! ', experimentGoal);
   const {
     isOpen: isSnippetModalOpen,
     onOpen: onOpenSnippetModal,
@@ -79,6 +84,8 @@ export default function ExperimentPage({ params, searchParams }) {
   const [isTargetAudienceModalOpen, setIsTargetAudienceModalOpen] =
     useState(false);
 
+  const [isSelectGoalModalOpen, setIsSelectGoalModalOpen] = useState(false);
+
   const targetRules = experiment?.targetRules?.[0]?.rules || null;
 
   const hasTargetRules = targetRules
@@ -87,6 +94,7 @@ export default function ExperimentPage({ params, searchParams }) {
 
   const [isUrlRulesModalOpen, setIsUrlRulesModalOpen] = useState(false);
   const [isEditorUrlModalOpen, setIsEditorUrlModalOpen] = useState(false);
+  const [goalToEdit, setGoalToEdit] = useState(null);
 
   useEffect(() => {
     if (!token || hasFetchedChartData.current) return;
@@ -133,7 +141,7 @@ export default function ExperimentPage({ params, searchParams }) {
     return <div>Experiment not found</div>;
   }
 
-  const { goal } = experiment;
+  // const { goal } = experiment;
   const hasCeroChanges = experiment.variants.every(
     (variant) =>
       variant.modifications?.length === 0 &&
@@ -146,7 +154,7 @@ export default function ExperimentPage({ params, searchParams }) {
     experiment.variants.some((variant) => !variant.url);
 
   const showModificationsWarning =
-    !experiment.goal ||
+    !experimentGoal ||
     (experiment.type !== 'SPLIT_URL' && hasCeroChanges) ||
     (experiment.type === 'SPLIT_URL' && hasMissingUrls);
 
@@ -179,7 +187,7 @@ export default function ExperimentPage({ params, searchParams }) {
   const hasStarted =
     experiment.status !== ExperimentStatusesEnum.PENDING &&
     experiment.status !== ExperimentStatusesEnum.QUEUED;
-  const noGoalOrZeroChanges = !experiment.goal || hasCeroChanges;
+  // const noGoalOrZeroChanges = !experiment.goal || hasCeroChanges;
 
   return (
     <>
@@ -199,7 +207,7 @@ export default function ExperimentPage({ params, searchParams }) {
         <Header experiment={experiment} className={styles.header} />
         {showModificationsWarning && (
           <div className={styles.infoSection}>
-            {!experiment.goal && (
+            {!experimentGoal && (
               <InfoCard className={styles.setGoalCard}>
                 {
                   <div className={styles.cardBody}>
@@ -209,7 +217,9 @@ export default function ExperimentPage({ params, searchParams }) {
                         onClick={() =>
                           missingSnippet
                             ? onOpenSnippetModal()
-                            : setShowSetUpGoalModal(true)
+                            : currentProject.goals?.length === 0
+                            ? setShowSetUpGoalModal(true)
+                            : setIsSelectGoalModalOpen(true)
                         }
                       >
                         Set Up Goal
@@ -242,7 +252,7 @@ export default function ExperimentPage({ params, searchParams }) {
           </div>
         )}
         <div className={styles.generalInfoSection}>
-          {experiment.goal && (
+          {experimentGoal && (
             <div className={styles.goal}>
               <div className={styles.icon}>
                 <GoalIcon width={15} height={15} />
@@ -250,7 +260,7 @@ export default function ExperimentPage({ params, searchParams }) {
               <Goal
                 className={styles.goalCard}
                 experiment={experiment}
-                onEdit={() => setShowSetUpGoalModal(true)}
+                onEdit={() => setIsSelectGoalModalOpen(true)}
               />
             </div>
           )}
@@ -453,7 +463,27 @@ export default function ExperimentPage({ params, searchParams }) {
           <GoalSetupModal
             experiment={experiment}
             onClose={() => setShowSetUpGoalModal(false)}
-            goal={goal}
+            goal={goalToEdit}
+          />
+        )}
+
+        {isSelectGoalModalOpen && (
+          <SelectGoalForm
+            currentProject={currentProject}
+            selectedGoal={null}
+            onOpenChange={setIsSelectGoalModalOpen}
+            experimentId={experimentId}
+            onCreateNewGoal={() => {
+              setIsSelectGoalModalOpen(false);
+              setShowSetUpGoalModal(true);
+              setGoalToEdit(null);
+            }}
+            goals={experiment.goals}
+            onEditGoal={(goal) => {
+              setIsSelectGoalModalOpen(false);
+              setShowSetUpGoalModal(true);
+              setGoalToEdit(goal);
+            }}
           />
         )}
         {/* <Experiment experiment={experiment} open={true} /> */}

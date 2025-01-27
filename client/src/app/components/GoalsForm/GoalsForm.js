@@ -9,6 +9,7 @@ import {
   Input as NInput,
   Select,
   SelectItem,
+  Button as NextUIButton,
   Tooltip,
 } from '@nextui-org/react';
 import GoalTypesEnum from '../../helpers/enums/GoalTypesEnum';
@@ -33,26 +34,27 @@ const goals = [
   {
     title: 'Clicks',
     description: 'Clicks on a particular element of your website',
-    icon: <Click width={25} height={25} />,
+    icon: <Click width={22} height={22} />,
     value: GoalTypesEnum.CLICK,
   },
   {
     title: 'Page Visit',
     description: 'Visits to a particular page on your website',
-    icon: <Page width={25} height={25} />,
+    icon: <Page width={22} height={22} />,
     value: GoalTypesEnum.PAGE_VISIT,
   },
-  {
-    title: 'Time on Page',
-    description: 'How long users spend on a particular page',
-    icon: <Time width={25} height={25} />,
-    value: GoalTypesEnum.SESSION_TIME,
-  },
+  // {
+  //   title: 'Time on Page',
+  //   description: 'How long users spend on a particular page',
+  //   icon: <Time width={22} height={22} />,
+  //   value: GoalTypesEnum.SESSION_TIME,
+  // },
 ];
 
 const GoalsForm = ({ experiment, goal, onClose }) => {
   const { refetchProjects, token, currentProject } = useStore();
   const domain = currentProject.domain;
+  const initialGoalName = goal?.name ? goal.name : 'Untitled Goal';
   const goalCheckIntervalRef = useRef(null);
   const toastSuccessCalledRef = useRef(false);
   const [wantsToUpdateGoal, setWantsToUpdateGoal] = useState(false);
@@ -71,11 +73,21 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     urlMatchType: goal?.url_match_type ? goal.url_match_type : '',
     urlMatchValue: goal?.url_match_value ? goal.url_match_value : '',
     elementUrl: goal?.element_url ? goal.element_url : '',
+    name: goal?.name ? goal.name : 'Untitled Goal',
   });
+
+  const isGoalNamePristine = formData.name === initialGoalName;
+  const isEditingName = goal && !isGoalNamePristine;
+
+  console.log('isGoalNamePristine:', isGoalNamePristine);
 
   console.log('formData.urlMatchValue:', formData.urlMatchValue);
 
-  function canContinue() {
+  function canSubmit() {
+    if (!formData.name.trim()) {
+      return false;
+    }
+
     if (formData.goalType === GoalTypesEnum.SESSION_TIME) {
       if (formData.goalType === goal?.type) {
         return false;
@@ -98,6 +110,12 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     ) {
       return true;
     }
+
+    if (isEditingName) {
+      return true;
+    }
+
+    return false;
   }
 
   async function onSetGoal() {
@@ -107,29 +125,31 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
         formData.goalType === GoalTypesEnum.CLICK;
 
       setSubmiting(true);
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_STELLAR_API + '/api/goals',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            experiment_id: experiment.id,
-            type: formData.goalType,
-            url_match_type: matchType,
-            url_match_value: isQuerySelector
-              ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
-              : formData.urlMatchValue,
-            element_url: '/' + formData.elementUrl,
-            selector: isQuerySelector ? querySelector : null,
-          }),
+      const baseUrl = process.env.NEXT_PUBLIC_STELLAR_API + '/api/goals';
+      const urlToUse = goal?.id ? `${baseUrl}/${goal.id}` : baseUrl;
+
+      const response = await fetch(urlToUse, {
+        method: goal?.id ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          id: goal?.id,
+          experimentId: experiment?.id,
+          name: formData.name.trim(),
+          type: formData.goalType,
+          url_match_type: matchType,
+          url_match_value: isQuerySelector
+            ? '*' // For now, query selectors provided here have effect on every page. So ideally they must be unique
+            : formData.urlMatchValue,
+          element_url: '/' + formData.elementUrl,
+          selector: isQuerySelector ? querySelector : null,
+        }),
+      });
 
       if (response.status === 200) {
         await refetchProjects();
-        console.log('caca1');
+
         if (!toastSuccessCalledRef.current) {
           toast.success('Goal set successfully');
           toastSuccessCalledRef.current = true;
@@ -175,12 +195,38 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
     formData.goalType === GoalTypesEnum.CLICK &&
     selectedClickOption === 'manual';
 
-  const showSetGoal =
+  const showActions =
     (!isClickAndManualSelect && goal?.type !== formData.goalType) ||
-    wantsToUpdateGoal;
+    wantsToUpdateGoal ||
+    isEditingName;
 
   return (
     <section className={styles.GoalsForm}>
+      <div className={styles.goalNameInput}>
+        <label className={styles.goalNameLabel}>Goal Name</label>
+        <NInput
+          size="sm"
+          type="text"
+          placeholder="e.g. Checkout Complete"
+          className={styles.querySelectorInput}
+          onValueChange={(value) => setFormData({ ...formData, name: value })}
+          value={formData.name}
+        />
+      </div>
+      {experiment && (
+        <div className={styles.subTitle}>
+          What valuable action should we track to measure success in your{' '}
+          <Link
+            href={`/experiment/${experiment.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {experiment.name}
+          </Link>{' '}
+          experiment?
+        </div>
+      )}
+
       <div className={styles.goals}>
         <div className={styles.classicGoals}>
           {goals.map((goal) => (
@@ -217,7 +263,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   <div className={styles.title}>
                     Provide a valid query selector for the element.
                   </div>
-                  <div className={styles.subTitle}>
+                  <div className={styles.detail}>
                     A conversion will be triggered once a user clicks on this
                     element.
                   </div>
@@ -236,7 +282,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                   <div className={styles.title}>
                     Which URL is the element at?
                   </div>
-                  <div className={styles.subTitle}>
+                  <div className={styles.detail}>
                     After typing in your URL, we'll take you there so you can
                     select this element for us to track.{' '}
                   </div>
@@ -291,7 +337,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
               </div>
 
               <div className={styles.pageVisitUrlContainer}>
-                <div>
+                <div className={styles.matchTypeSelectContainer}>
                   <Select
                     label="Match type"
                     radius="none"
@@ -306,24 +352,23 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
                     ))}
                   </Select>
                 </div>
-                <div className={styles.row}>
-                  <Input
-                    className={styles.input}
-                    type="text"
-                    value={formData.urlMatchValue}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        urlMatchValue: e.target.value,
-                      })
-                    }
-                    placeholder={
-                      matchType === UrlMatchTypesEnum.EXACT
-                        ? `https://www.${domain}/thank-you`
-                        : 'thank-you'
-                    }
-                  />
-                </div>
+                <NInput
+                  className={styles.pageVisitUrlInput}
+                  size="sm"
+                  type="text"
+                  value={formData.urlMatchValue}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      urlMatchValue: e.target.value,
+                    })
+                  }
+                  placeholder={
+                    matchType === UrlMatchTypesEnum.EXACT
+                      ? `https://www.${domain}/thank-you`
+                      : 'thank-you'
+                  }
+                />
               </div>
             </div>
           )}
@@ -344,25 +389,26 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
             </div>
           )}
       </div>
-      {showSetGoal && (
+      {showActions && (
         <div className={styles.actions}>
+          <NextUIButton
+            variant="light"
+            onPress={onClose}
+            className={styles.button}
+          >
+            Cancel
+          </NextUIButton>
           <Button
             className={styles.continueButton}
             loading={submiting}
-            disabled={!canContinue() || submiting}
+            disabled={!canSubmit() || submiting}
             onClick={() => {
-              segmentTrack('experiment_goal_set', {
-                experimentId: experiment.id,
-                goalType: formData.goalType,
-              });
               onSetGoal();
             }}
           >
-            Set Goal
+            {/* Create Goal */}
+            {goal ? 'Update Goal' : 'Create Goal'}
           </Button>
-          <div className={styles.cancel} onClick={onClose}>
-            cancel
-          </div>
         </div>
       )}
     </section>

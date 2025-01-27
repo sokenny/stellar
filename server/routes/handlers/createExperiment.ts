@@ -4,7 +4,7 @@ import db from '../../models';
 import createVariantsFromElement from '../../services/createVariantsFromElement';
 
 async function createExperiment(req, res) {
-  const { name, url, projectId, advanced_url_rules } = req.body;
+  const { url, projectId, advanced_url_rules } = req.body;
 
   const sanitizedUrl = removeUrlParams(url);
 
@@ -16,7 +16,7 @@ async function createExperiment(req, res) {
   const experiment = await db.Experiment.create({
     project_id: projectId,
     url: sanitizedUrl,
-    name,
+    name: `AB Test - ${new Date().toLocaleDateString()}`,
     advanced_url_rules,
     editor_url: url || null,
     type: 'AB',

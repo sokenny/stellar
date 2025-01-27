@@ -29,8 +29,16 @@ async function getProjects(req, res) {
               },
               {
                 model: db.Goal,
-                as: 'goal',
+                as: 'primaryGoal',
                 required: false,
+              },
+              {
+                model: db.Goal,
+                as: 'goals',
+                required: false,
+                through: {
+                  attributes: ['is_main'],
+                },
               },
               {
                 model: db.TargetRule,
@@ -39,6 +47,11 @@ async function getProjects(req, res) {
                 through: { attributes: [] },
               },
             ],
+          },
+          {
+            model: db.Goal,
+            as: 'goals',
+            required: false,
           },
         ],
         order: [[db.Experiment, 'id', 'DESC']],

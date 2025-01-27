@@ -2,6 +2,7 @@ import path from 'path';
 import { Sequelize } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
 import { initializeAffiliateCode } from './AffiliateCode';
+import { initializeGoalExperiment } from './GoalExperiment';
 
 dotenvConfig();
 
@@ -49,6 +50,7 @@ db.OnboardingAnswer = initializeOnboardingAnswer(sequelize);
 db.TargetRule = initializeTargetRule(sequelize);
 db.ExperimentTargetRule = initializeExperimentTargetRule(sequelize);
 db.AffiliateCode = initializeAffiliateCode(sequelize);
+db.GoalExperiment = initializeGoalExperiment(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -122,14 +124,6 @@ const associateModels = () => {
     foreignKey: 'user_id',
     as: 'api_keys',
   });
-  db.Experiment.hasOne(db.Goal, {
-    foreignKey: 'experiment_id',
-    as: 'goal',
-  });
-  db.Goal.belongsTo(db.Experiment, {
-    foreignKey: 'experiment_id',
-    as: 'experiment',
-  });
   db.SessionExperiment.belongsTo(db.Session, {
     foreignKey: 'session_id',
     as: 'session',
@@ -185,6 +179,38 @@ const associateModels = () => {
   db.TargetRule.belongsToMany(db.Experiment, {
     through: db.ExperimentTargetRule,
     foreignKey: 'target_rule_id',
+    otherKey: 'experiment_id',
+    as: 'experiments',
+  });
+
+  db.Project.hasMany(db.Goal, {
+    foreignKey: 'project_id',
+    as: 'goals',
+  });
+  db.Goal.belongsTo(db.Project, {
+    foreignKey: 'project_id',
+    as: 'project',
+  });
+
+  db.Goal.belongsTo(db.Experiment, {
+    foreignKey: 'experiment_id',
+    as: 'experiment',
+  });
+  db.Experiment.hasOne(db.Goal, {
+    foreignKey: 'experiment_id',
+    as: 'primaryGoal',
+  });
+
+  db.Experiment.belongsToMany(db.Goal, {
+    through: db.GoalExperiment,
+    foreignKey: 'experiment_id',
+    otherKey: 'goal_id',
+    as: 'goals',
+  });
+
+  db.Goal.belongsToMany(db.Experiment, {
+    through: db.GoalExperiment,
+    foreignKey: 'goal_id',
     otherKey: 'experiment_id',
     as: 'experiments',
   });

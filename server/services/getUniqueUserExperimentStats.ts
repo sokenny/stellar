@@ -26,17 +26,25 @@ async function getUniqueUserExperimentStats(experimentId) {
         },
         {
           model: db.Goal,
-          as: 'goal',
+          as: 'goals',
           required: true,
+          through: {
+            model: db.GoalExperiment,
+            where: {
+              is_main: true,
+              deleted_at: null,
+            },
+          },
         },
       ],
     });
 
-    if (!experiment) {
+    if (!experiment || !experiment.goals || experiment.goals.length === 0) {
       throw new Error('Experiment not found');
     }
 
-    const goalType = experiment.goal.type;
+    const primaryGoal = experiment.goals[0];
+    const goalType = primaryGoal.type;
     const variantIds = experiment.variants.map((variant) => variant.id);
     const functionToCall = goalFunctionMapper[goalType];
     const variantStats = await functionToCall(experimentId, variantIds);
@@ -80,13 +88,13 @@ async function getUniqueUserGoalSessionTimeStats(experimentId, variantIds) {
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],
@@ -175,13 +183,13 @@ async function getUniqueUserGoalClickAndPageVisitStats(
           model: db.Session,
           as: 'session',
           attributes: [],
-          // where: {
-          //   [Op.and]: juansIps.map((ip) => ({
-          //     ip: {
-          //       [Op.notLike]: `%${ip}%`,
-          //     },
-          //   })),
-          // },
+          where: {
+            [Op.and]: juansIps.map((ip) => ({
+              ip: {
+                [Op.notLike]: `%${ip}%`,
+              },
+            })),
+          },
           required: true,
         },
       ],

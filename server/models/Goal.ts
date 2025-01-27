@@ -3,7 +3,9 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Goal extends Model {
   public id!: number;
-  public experiment_id!: number;
+  public experiment_id: number;
+  public project_id?: number;
+  public name: string;
   public type!: keyof typeof GoalTypesEnum;
   public selector!: string;
   public url_match_type?: 'contains' | 'exact' | 'regex';
@@ -21,11 +23,23 @@ export const initializeGoal = (sequelize: Sequelize): typeof Goal => {
       },
       experiment_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'experiments',
           key: 'id',
         },
+      },
+      project_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'projects',
+          key: 'id',
+        },
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       type: {
         type: DataTypes.ENUM(...Object.values(GoalTypesEnum)),

@@ -56,7 +56,11 @@ export default function Account({}) {
             (key) => key.project_id === project.id,
           )?.key;
           return (
-            <div key={project.id} className={styles.project}>
+            <div
+              key={project.id}
+              className={styles.project}
+              data-project-id={project.id}
+            >
               <h4>{project.name}</h4>
               <DisplaySnippet apiKey={apiKey} />
             </div>

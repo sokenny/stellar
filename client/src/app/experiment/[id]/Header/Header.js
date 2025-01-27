@@ -11,8 +11,10 @@ import ThreeDotActions from './ThreeDotActions';
 import ExperimentName from './ExperimentName';
 import StatusChip from '../../../components/StatusChip';
 import styles from './Header.module.css';
+import getMainGoal from '../../../helpers/getMainGoal';
 
 const Header = ({ experiment }) => {
+  const experimentGoal = getMainGoal(experiment);
   const { refetchProjects, currentProject, setErrorModal } = useStore();
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
   const queuedAfter = currentProject?.experiments?.find(
@@ -101,7 +103,7 @@ const Header = ({ experiment }) => {
     );
   }
 
-  const hasGoal = experiment.goal;
+  const hasGoal = !!experimentGoal;
   const hasCeroChanges = experiment.variants.every(
     (variant) =>
       variant.modifications?.length === 0 &&
@@ -113,7 +115,7 @@ const Header = ({ experiment }) => {
     experiment.variants.some((variant) => !variant.url);
 
   function getLaunchTooltipCopy() {
-    if (!experiment.goal) {
+    if (!hasGoal) {
       return 'Set up a goal before launching your experiment';
     }
     if (experiment.type === 'SPLIT_URL' && hasMissingVariantURLs) {
@@ -176,7 +178,7 @@ const Header = ({ experiment }) => {
                   experiment.status === ExperimentStatusesEnum.RUNNING
                 }
                 onValueChange={handleSwitchChange}
-                isDisabled={!experiment.goal}
+                isDisabled={!hasGoal}
               />
             </span>
           </Tooltip>

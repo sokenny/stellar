@@ -1,7 +1,7 @@
 import express from 'express';
 // import deleteProject from './handlers/deleteProject';
-import getExperiment from './handlers/getExperiment';
-import setGoal from './handlers/setGoal';
+// import getExperiment from './handlers/getExperiment';
+import createGoal from './handlers/createGoal';
 import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
 import getVariant from './handlers/getVariant';
@@ -32,6 +32,9 @@ import setTargetRules from './handlers/setTargetRules';
 import editExperimentUrlRules from './handlers/editExperimentUrlRules';
 import updateEditorUrl from './handlers/updateEditorUrl';
 import createSplitUrlExperiment from './handlers/createSplitUrlExperiment';
+import setExperimentGoals from './handlers/setExperimentGoals';
+import updateGoal from './handlers/updateGoal';
+import deleteGoal from './handlers/deleteGoal';
 
 const router = express.Router();
 
@@ -45,7 +48,7 @@ router.post('/kickstart-project', autoGenerate);
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
 router.post('/experiments/split-url', createSplitUrlExperiment);
-router.get('/experiment/:id', getExperiment);
+// router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/url-rules', editExperimentUrlRules);
 router.put('/experiment/:id/editor-url', updateEditorUrl);
@@ -67,7 +70,9 @@ router.delete('/variant/:id', deleteVariant);
 router.post('/variant/:experimentId', createVariant);
 router.put('/variant/:id/name', updateVariantName);
 
-router.post('/goals', setGoal);
+router.post('/goals', createGoal);
+router.put('/goals/:id', updateGoal);
+router.delete('/goals/:id', deleteGoal);
 
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
@@ -79,5 +84,7 @@ router.post('/check-snippet', checkSnippet);
 router.post('/onboarding', saveOnboardingDataHandler);
 
 router.put('/user/email-settings', updateEmailSettings);
+
+router.post('/experiment/:id/goals', setExperimentGoals);
 
 export default router;

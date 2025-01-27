@@ -4,7 +4,6 @@ import getExperimentsForClient from './handlers/getExperimentsForClient';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import autoGenerate from './handlers/autoGenerate';
 import createAccountSocial from './handlers/createAccountSocial';
-import getExperiments from './handlers/getExperiments';
 import getVariantScreenshot from './handlers/getVariantScreenshot';
 import deleteExperiment from './handlers/deleteExperiment';
 import publicDeleteExperiment from './handlers/publicDeleteExperiment';
@@ -49,8 +48,6 @@ router.post(
 );
 
 router.get('/clientjs', sendStellarJSBundle);
-
-router.get('/onboard/:projectId/experiments', getExperiments);
 
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
 router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);
