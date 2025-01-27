@@ -38,6 +38,8 @@
     }
   }
 
+  log('stellar version: 26-01-2025');
+
   function getPathFromURL(url) {
     const a = document.createElement('a');
     a.href = url;
@@ -172,6 +174,7 @@
       visitedPages,
       hasFetchedExperiments,
     };
+    log('setting in cache', sessionData);
     sessionStorage.setItem('stellarSessionData', JSON.stringify(sessionData));
   }
 
@@ -215,6 +218,7 @@
             ),
             visitedPages,
             sessionIssues,
+            userAgent: window?.navigator?.userAgent,
           };
 
           // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
@@ -620,7 +624,12 @@
         return {
           experiment: experiment.id,
           variant: storedVariantId || experiment.variant_to_use,
-          converted: false,
+          converted:
+            activeExperiments.find((exp) => exp.experiment === experiment.id)
+              ?.converted || false,
+          conversions:
+            activeExperiments.find((exp) => exp.experiment === experiment.id)
+              ?.conversions || [], // This will later be stored in a sessions_conversions table for more powerful analytics
           experimentMounted: activeExperiments.some((exp) => {
             return exp.experiment === experiment.id && exp.experimentMounted;
           }),
@@ -655,43 +664,58 @@
   }
 
   function hasPageVisitGoalConverted(experiment) {
+    const fullDataExperiment = global__experimentsToMount.find(
+      (e) => e.id === experiment.experiment,
+    );
+    const pageVisitGoals = fullDataExperiment.goals.filter(
+      (goal) => goal.type === 'PAGE_VISIT',
+    );
+
+    log('pageVisitGoals ', pageVisitGoals);
+
     const currentPage = window.location.href;
-    if (experiment.goalType === 'PAGE_VISIT') {
-      log('primer if dentro');
+    const convertedGoals = [];
+    for (const goal of pageVisitGoals) {
       if (
-        experiment.goalUrlMatchType === 'CONTAINS' &&
-        currentPage.includes(experiment.goalUrlMatchValue)
+        goal.url_match_type === 'CONTAINS' &&
+        currentPage.includes(goal.url_match_value)
       ) {
-        return true;
+        log('converted goal! ', goal);
+        convertedGoals.push(goal);
       }
       if (
-        experiment.goalUrlMatchType === 'EXACT' &&
-        currentPage === experiment.goalUrlMatchValue
+        goal.url_match_type === 'EXACT' &&
+        currentPage === goal.url_match_value
       ) {
-        return true;
+        log('converted goal! ', goal);
+        convertedGoals.push(goal);
       }
     }
-    return false;
+    return convertedGoals;
   }
 
   function trackPageVisit() {
     log('track page visit run! ', activeExperiments);
     const currentPage = window.location.pathname;
-    if (visitedPages.length === 1 && visitedPages[0] === currentPage) {
-      return;
-    }
+
     visitedPages.push(currentPage);
-    updateSessionStorage();
 
     log('currentPage: ', currentPage);
 
     activeExperiments.forEach((experiment) => {
       log('foriching: ', experiment, hasPageVisitGoalConverted(experiment));
-      if (hasPageVisitGoalConverted(experiment)) {
-        log('converted page visit!');
-        experiment.converted = true;
+      const convertedGoals = hasPageVisitGoalConverted(experiment);
+      if (convertedGoals.length > 0) {
+        log('convertedGoals! ', convertedGoals);
+        experiment.converted = convertedGoals.some(
+          (goal) => goal.GoalExperiment.is_main,
+        );
+        convertedGoals.forEach((goal) => {
+          experiment.conversions.push(goal.id);
+        });
       }
     });
+    isInternalNavigation = false;
   }
 
   // Wrap history methods to detect SPA navigation
@@ -699,23 +723,75 @@
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = function () {
+    function remountExperiments() {
       // We need to flush these on every page navigation
       global__mountedOnThisPageLoad = {};
-      originalPushState.apply(this, arguments);
-      trackPageVisit();
+
       if (global__experimentsToMount) {
-        mountExperiments(global__experimentsToMount);
+        const splitUrlExperiments = global__experimentsToMount.filter(
+          (experiment) => experiment.type === 'SPLIT_URL',
+        );
+        const abExperiments = global__experimentsToMount.filter(
+          (experiment) => experiment.type === 'AB',
+        );
+
+        // Mount split URL experiments first
+        mountSplitUrlExperiments(splitUrlExperiments);
+        // Then mount AB experiments
+        mountExperiments(abExperiments);
       }
+    }
+
+    history.pushState = function () {
+      log('Stellar: pushState called');
+      originalPushState.apply(this, arguments);
+      // Add small delay to ensure URL has updated
+      setTimeout(() => {
+        log('Stellar: pushState timeout triggered');
+        trackPageVisit();
+        remountExperiments();
+      }, 50);
     };
 
     history.replaceState = function () {
+      log('Stellar: replaceState called');
       originalReplaceState.apply(this, arguments);
-      trackPageVisit();
+      setTimeout(() => {
+        log('Stellar: replaceState timeout triggered');
+        trackPageVisit();
+        remountExperiments();
+      }, 50);
     };
 
-    window.addEventListener('popstate', function () {
-      trackPageVisit();
+    // Listen for both popstate and the custom navigation event
+    ['popstate', 'locationchange'].forEach((event) => {
+      window.addEventListener(event, function () {
+        log(`Stellar: ${event} triggered`);
+        setTimeout(() => {
+          trackPageVisit();
+          remountExperiments();
+        }, 50);
+      });
+    });
+
+    // Create a custom event for navigation changes
+    let oldHref = window.location.href;
+    const observer = new MutationObserver(function (mutations) {
+      if (oldHref !== window.location.href) {
+        log(
+          'Stellar: URL changed from observer:',
+          oldHref,
+          'to',
+          window.location.href,
+        );
+        oldHref = window.location.href;
+        window.dispatchEvent(new Event('locationchange'));
+      }
+    });
+
+    observer.observe(document, {
+      subtree: true,
+      childList: true,
     });
   }
 
@@ -775,9 +851,18 @@
           selectedVariant.url &&
           selectedVariant.url !== experiment.url
         ) {
-          log(`Redirecting to variant URL: ${selectedVariant.url}`);
+          let redirectUrl = selectedVariant.url;
+          if (selectedVariant.preserve_url_params) {
+            const currentParams = new URLSearchParams(window.location.search);
+            const variantUrlObj = new URL(selectedVariant.url);
+            currentParams.forEach((value, key) => {
+              variantUrlObj.searchParams.set(key, value);
+            });
+            redirectUrl = variantUrlObj.toString();
+          }
+          log(`Redirecting to variant URL: ${redirectUrl}`);
           global__isSplitUrlRedirect = true;
-          window.location.href = selectedVariant.url;
+          window.location.href = redirectUrl;
           return;
         }
         log('no redirect needed');

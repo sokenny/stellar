@@ -47,7 +47,7 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
 
   console.log(`Cache miss for project ${projectId}`);
   const experiments = await fetchExperiments(projectId);
-  redisClient.set(cacheKey, JSON.stringify(experiments));
+  redisClient.set(cacheKey, JSON.stringify(experiments), { EX: 3600 });
 
   return selectVariantsAtRuntime(experiments);
 }
@@ -78,6 +78,7 @@ async function fetchExperiments(projectId: number) {
           where: {
             deleted_at: null,
           },
+          attributes: ['is_main'],
         },
       },
       {

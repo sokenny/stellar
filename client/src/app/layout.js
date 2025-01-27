@@ -28,12 +28,7 @@ export const metadata = {
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
 // TODO-p1-1: write migration to create goals_experiments for all goals with an experiment_id -
-// TODO-p1-1: Continue returning goal for experiments in getpublicexps but also goals
-// TODO-p1-1: Make sure preserve url params is working
-// TODO-p1-1: Hide chart for session time goals
-// TODO-p1-1: Make sure that getexpsforclient cache has not more than 1 hour ttl
 // TODO-p1-1: Create backdoor to flush redis
-// TODO-p1-1: Ability to reuse goals and track multiple ones per session
 // TODO-p1-1: Tidy up auto-name generation for experiments
 // TODO-p1-1: In edit variant modal, have focus of attention placed in the edited variant fields
 // TODO-p1-1 Introduce layout with sidebar

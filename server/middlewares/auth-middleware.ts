@@ -18,7 +18,7 @@ async function getUserAttributes(email) {
     throw new Error('User not found');
   }
 
-  await redisClient.set(key, JSON.stringify(user), { EX: 10 });
+  await redisClient.set(key, JSON.stringify(user), { EX: 3600 });
   return user.toJSON();
 }
 
