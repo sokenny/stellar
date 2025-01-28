@@ -166,7 +166,7 @@ const VariantModal = ({
               {urlError && <div className={styles.error}>{urlError}</div>}
             </div>
           )}
-          <div className={styles.fieldGroup}>
+          <div className={`${styles.fieldGroup} ${styles.thisVariant}`}>
             <label className={styles.label}>
               <span>{thisVariant.name}</span> Traffic:
             </label>

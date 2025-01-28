@@ -27,6 +27,10 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Be able to delete goal from the edit modal
+// TODO-p1-1: Be able to edit split test var url from the table
+// TODO-p1-1: Create a dashboard
+// TODO-p1-1: I think track page visit is pushing more routes than it should, so we should check that
 // TODO-p1-1 Introduce layout with sidebar
 // TODO-p1-1: Set logo
 // TODO-p1-1: HAve sessions be created with a created_ad that is passed from the FE, so if the queue is stalled, it eventually shows the right data in the chart
@@ -145,7 +149,7 @@ export default function RootLayout({ children }) {
         </noscript>
         <Providers>
           <Nav token={nextAuthSessionToken?.value} />
-          <div className={styles.pageContent}>{children}</div>
+          <div>{children}</div>
           <footer className={styles.footer}>hello@gostellar.app</footer>
         </Providers>
       </body>

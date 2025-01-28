@@ -2,7 +2,7 @@ import { invalidateCache } from '../../helpers/cache';
 import db from '../../models';
 
 async function createGoal(req, res) {
-  const projectId = req.projectId;
+  let projectId = req.projectId || req.body.project_id; // If coming from the editor, projectId might not be there
   const {
     experiment_id,
     type,
@@ -19,6 +19,8 @@ async function createGoal(req, res) {
         id: experiment_id,
       },
     });
+
+    projectId = experiment.project_id;
 
     if (!experiment) {
       return res.status(404).json({

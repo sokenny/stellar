@@ -168,27 +168,15 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
   }
 
   async function onGoToUrl() {
-    const initialGoalUpdatedAt = goal?.updated_at;
+    // const initialGoalUpdatedAt = goal?.updated_at;
     window.open(
-      `${formData.elementUrl}?stellarMode=true&experimentId=${experiment.id}&isSettingGoal=true&token=${token}&goalName=${formData.name}&fromUrl=${window.location.href}`,
+      `${formData.elementUrl}?stellarMode=true${
+        experiment ? `&experimentId=${experiment.id}` : ''
+      }&isSettingGoal=true&token=${token}&goalName=${formData.name}&projectId=${
+        currentProject?.id
+      }&fromUrl=${window.location.href}`,
       '_blank',
     );
-
-    goalCheckIntervalRef.current = setInterval(async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experiment.id}`,
-      );
-      const experimentJson = await res.json();
-      if (experimentJson?.goal?.updated_at !== initialGoalUpdatedAt) {
-        clearInterval(goalCheckIntervalRef.current);
-        onClose();
-        refetchProjects();
-        if (!toastSuccessCalledRef.current) {
-          toast.success('Goal set successfully');
-          toastSuccessCalledRef.current = true;
-        }
-      }
-    }, 1500);
   }
 
   const isClickAndManualSelect =

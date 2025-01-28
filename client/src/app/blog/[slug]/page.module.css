@@ -1,5 +1,7 @@
 .container {
   display: flex;
+  padding-top: 64px;
+  padding-left: 120px;
 }
 
 .container,

@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex: 1;
+  min-height: 88vh;
+}
+
+.sidebar {
+  width: 175px;
+  height: 100%;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px;
+
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+}
+
+.sidebarContent {
+  position: fixed;
+}
+
+.menuItem {
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--primary);
+}
+
+
+.main {
+  flex: 1;
+  padding: 24px;
+  padding-left: 250px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.menuItem.active {
+  /* background-color: rgba(0, 0, 0, 0.05); */
+  font-weight: 500;
+  color: var(--linkBlue);
+}
+

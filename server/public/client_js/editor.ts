@@ -12,6 +12,7 @@
   const token = urlParams.get('token');
   const stellarMode = urlParams.get('stellarMode');
   const experimentId = urlParams.get('experimentId');
+  const projectId = urlParams.get('projectId');
   const variantId = urlParams.get('variantId');
   const isSettingGoal = urlParams.get('isSettingGoal');
   const goalName = urlParams.get('goalName');
@@ -131,6 +132,7 @@
           // TODO-p2: Make sure this is only the path
           url_match_value: pageUrl,
           name: goalName,
+          project_id: projectId,
         }),
       });
 
