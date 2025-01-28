@@ -27,6 +27,8 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Create maintenance banner
+// TODO-p1-1: Dummyproof multi element selection in editor
 // TODO-p1-1: Be able to delete goal from the edit modal
 // TODO-p1-1: Be able to edit split test var url from the table
 // TODO-p1-1: Create a dashboard

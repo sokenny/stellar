@@ -194,15 +194,10 @@ const Nav = ({ token }) => {
           <Link href={session ? '/dashboard' : '/'}>
             <div className={styles.id}>
               <img
-                src="/stellar-logo.png"
+                src="/stellar-logo-blue.svg"
                 alt="Stellar"
-                style={{ height: 18 }}
+                style={{ height: 28 }}
               />
-              {/* <img
-                src="/Logo_CMYK_icon_blue.png"
-                alt="Stellar"
-                style={{ height: 38 }}
-              /> */}
               Stellar
             </div>
           </Link>
