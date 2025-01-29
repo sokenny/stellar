@@ -157,7 +157,11 @@ const Header = ({ experiment }) => {
   return (
     <div className={`${styles.container} ${getStatusClass()}`}>
       <div className={styles.colLeft}>
-        <ExperimentName name={experiment.name} experimentId={experiment.id} />
+        <ExperimentName
+          name={experiment.name}
+          experimentId={experiment.id}
+          type={experiment.type}
+        />
         <StatusChip status={experiment.status} size="md" />
       </div>
       <div className={styles.colRight}>

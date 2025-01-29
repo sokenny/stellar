@@ -74,13 +74,38 @@
     return 'stellarElementId_' + Math.random().toString(36).substr(2, 9);
   }
 
+  // TODO-p1-1: Sanitize tailwind classes
   if (stellarMode === 'true') {
+    // Load CSSPath library
+    const script = document.createElement('script');
+    script.src =
+      'https://d3niuqph2rteir.cloudfront.net/client_js/csspathlib.js';
+    script.async = true;
+    document.head.appendChild(script);
+
     function getSelector(element) {
+      // First check for existing stellar-selector-ref
       const attr = element.getAttribute('stellar-selector-ref');
       if (attr) {
         return attr;
       }
 
+      try {
+        // Try using CSSPath library first
+        const cssPath = new (window as any).CSSPath({});
+        const selector = cssPath.getSelector(element);
+
+        if (selector && cssPath.testSelector(element, selector)) {
+          return selector;
+        }
+      } catch (error) {
+        console.warn(
+          'CSSPath library failed, falling back to default selector logic:',
+          error,
+        );
+      }
+
+      // Fallback to original selector logic
       if (element.id) {
         return `#${element.id}`;
       }

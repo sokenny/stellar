@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../../../store';
 import styles from './ExperimentName.module.css';
+import ExperimentIcon from '../../../../../icons/Experiment';
+import ShuffleIcon from '../../../../../icons/Shuffle';
 
-const ExperimentName = ({ name, experimentId, className }) => {
+const ExperimentName = ({ name, experimentId, className, type }) => {
   const { refetchProjects } = useStore();
   const [isEditingName, setIsEditingName] = useState(false);
   const nameRef = useRef(null);
@@ -58,17 +60,24 @@ const ExperimentName = ({ name, experimentId, className }) => {
   };
 
   return (
-    <h1
-      ref={nameRef}
-      contentEditable={isEditingName}
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-      className={`${styles.title} ${className}`}
-      onClick={() => !isEditingName && setIsEditingName(true)}
-      style={{ cursor: 'text', display: 'inline-block' }} // Styles for better usability
-    >
-      {name}
-    </h1>
+    <div className="flex items-center gap-2">
+      {type === 'AB' ? (
+        <ExperimentIcon height={20} width={20} />
+      ) : (
+        <ShuffleIcon height={20} width={20} />
+      )}
+      <h1
+        ref={nameRef}
+        contentEditable={isEditingName}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className={`${styles.title} ${className}`}
+        onClick={() => !isEditingName && setIsEditingName(true)}
+        style={{ cursor: 'text', display: 'inline-block' }}
+      >
+        {name}
+      </h1>
+    </div>
   );
 };
 

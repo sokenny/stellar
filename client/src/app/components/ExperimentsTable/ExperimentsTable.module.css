@@ -42,3 +42,7 @@
 .row.hasStarted .deleteIcon {
   opacity: 0.25;
 }
+
+.icon {
+  opacity: .25!important;
+}

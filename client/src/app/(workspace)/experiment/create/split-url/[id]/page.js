@@ -41,6 +41,7 @@ export default function CreateExperimentPage({ params }) {
           name={experiment?.name}
           experimentId={id}
           className={styles.title}
+          type="SPLIT_URL"
         />
       )}
 

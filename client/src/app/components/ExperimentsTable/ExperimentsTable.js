@@ -21,6 +21,8 @@ import styles from './ExperimentsTable.module.css';
 import StatusChip from '../StatusChip';
 import ExperimentStatusesEnum from '../../helpers/enums/ExperimentStatusesEnum';
 import DeleteExperimentModal from '../Modals/DeleteExperimentModal/DeleteExperimentModal';
+import ExperimentIcon from '../../icons/Experiment';
+import ShuffleIcon from '../../icons/Shuffle';
 
 const ExperimentsTable = ({ experiments = [] }) => {
   const router = useRouter();
@@ -51,7 +53,26 @@ const ExperimentsTable = ({ experiments = [] }) => {
 
         return {
           id: experiment.id,
-          name: experiment.name,
+          name: (
+            <div className="flex items-center gap-2">
+              {experiment.type === 'AB' ? (
+                <ExperimentIcon
+                  height={13}
+                  width={13}
+                  className={styles.icon}
+                  color={'black'}
+                />
+              ) : (
+                <ShuffleIcon
+                  height={13}
+                  width={13}
+                  className={styles.icon}
+                  color={'black'}
+                />
+              )}
+              {experiment.name}
+            </div>
+          ),
           status: <StatusChip status={experiment.status} />,
           variants: experiment.variants.length,
           sessions: loadingStats ? (
