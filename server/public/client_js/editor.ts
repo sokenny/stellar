@@ -1247,7 +1247,7 @@
               textarea.addEventListener('input', function () {
                 if (selectedElement) {
                   getTargetElements(selectedElement).forEach((el) => {
-                    (el as HTMLElement).style.color = this.value;
+                    (el as HTMLElement).innerText = this.value;
                     handleElementMutation();
                   });
                 }
