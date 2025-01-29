@@ -10,9 +10,6 @@ import authMiddleware from './middlewares/auth-middleware';
 import normalizeUrl from './helpers/normalizeUrl';
 import runWorker from './services/worker';
 
-// TODO-p1-1: Have element selection for goal setting be more intuitive
-// TODO-p1-2: Launch my campaign with lingobites!
-
 dotenv.config();
 // TODO-p2: Si alguien pone url de un project que ya existe en el autogenerate, que cree uno nuevo o que no traiga los exps creados anteriormente
 //   - A menos que este logeado y esa url pertenezca a un proyecto suyo.

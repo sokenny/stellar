@@ -94,7 +94,9 @@ function runWorker() {
   //   setInterval(handleGettingStartedCampaign, 1000 * 60 * 20);
   // }, 1000 * 60 * 6);
 
+  // if (process.env.NODE_ENV !== 'development') {
   handleSQSPolling();
+  // }
 }
 
 export default runWorker;

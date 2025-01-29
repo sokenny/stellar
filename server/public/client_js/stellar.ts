@@ -206,6 +206,17 @@
         );
 
         if (hasConvertedOrMounted) {
+          const uniqueSessionIssues = [];
+          const issueSet = new Set();
+
+          sessionIssues.forEach((issue) => {
+            const issueString = `${issue.type}-${issue.message}`;
+            if (!issueSet.has(issueString)) {
+              issueSet.add(issueString);
+              uniqueSessionIssues.push(issue);
+            }
+          });
+
           const data = {
             visitorId,
             timeOnPage,
@@ -217,8 +228,9 @@
               (experiment) => experiment.visualized,
             ),
             visitedPages,
-            sessionIssues,
+            sessionIssues: uniqueSessionIssues,
             userAgent: window?.navigator?.userAgent,
+            sessionEndedAt: new Date().toISOString(), // This carries timezone info in ISO 8601 format (UTC)
           };
 
           // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
@@ -523,14 +535,10 @@
                         e.variant === variant.id,
                     );
                     if (expRun) {
-                      expRun.converted = true;
+                      expRun.converted = experiment.goal.GoalExperiment.is_main;
+                      expRun.conversions.push(experiment.goal.id);
                     }
                   });
-                });
-              } else {
-                sessionIssues.push({
-                  type: 'GOAL',
-                  message: `Element not found for goal selector: ${experiment.goal.selector}`,
                 });
               }
             }
@@ -696,7 +704,7 @@
 
   function trackPageVisit() {
     log('track page visit run! ', activeExperiments);
-    const currentPage = window.location.pathname;
+    const currentPage = window.location.pathname + window.location.search;
 
     visitedPages.push(currentPage);
 

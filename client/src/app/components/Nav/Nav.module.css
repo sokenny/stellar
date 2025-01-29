@@ -78,18 +78,19 @@
 .id {
   display: flex;
   align-items: center;
+  font-size: 15px;
 }
 
 .id img {
 }
 
 .logo {
-  height: 24px;
+  /* height: 24px;
   width: 24px;
   background: linear-gradient(45deg, #0072f5 0%, #cb5edc 100%);
-  border-radius: 4px;
+  border-radius: 4px; */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
+  margin-right: 4px;
 }

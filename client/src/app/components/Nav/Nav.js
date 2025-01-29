@@ -197,8 +197,9 @@ const Nav = ({ token }) => {
                 src="/stellar-logo-blue.svg"
                 alt="Stellar"
                 style={{ height: 28 }}
+                className={styles.logo}
               />
-              Stellar
+              <div>Stellar</div>
             </div>
           </Link>
         </NavbarBrand>

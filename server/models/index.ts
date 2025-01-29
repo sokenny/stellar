@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
 import { initializeAffiliateCode } from './AffiliateCode';
 import { initializeGoalExperiment } from './GoalExperiment';
+import { initializeConversion } from './Conversion';
 
 dotenvConfig();
 
@@ -51,6 +52,7 @@ db.TargetRule = initializeTargetRule(sequelize);
 db.ExperimentTargetRule = initializeExperimentTargetRule(sequelize);
 db.AffiliateCode = initializeAffiliateCode(sequelize);
 db.GoalExperiment = initializeGoalExperiment(sequelize);
+db.Conversion = initializeConversion(sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = sequelize;
@@ -213,6 +215,25 @@ const associateModels = () => {
     foreignKey: 'goal_id',
     otherKey: 'experiment_id',
     as: 'experiments',
+  });
+
+  // Conversion associations
+  db.Conversion.belongsTo(db.SessionExperiment, {
+    foreignKey: 'session_experiment_id',
+    as: 'sessionExperiment',
+  });
+  db.SessionExperiment.hasMany(db.Conversion, {
+    foreignKey: 'session_experiment_id',
+    as: 'conversions',
+  });
+
+  db.Conversion.belongsTo(db.Goal, {
+    foreignKey: 'goal_id',
+    as: 'goal',
+  });
+  db.Goal.hasMany(db.Conversion, {
+    foreignKey: 'goal_id',
+    as: 'conversions',
   });
 };
 

@@ -27,30 +27,31 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Add ai prompting for html edits
+// TODO-p1-1: Set a max goals to track per experiment
+// TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing
+// TODO-p1-1: Add faws
+// TODO-p1-1: Find a place to add crocts ab test criteria recommendations before calling a winner
+// TODO-p1-1: Make homepage more clean like Croct's
+// TODO-p1-1: Update price
+// TODO-p1-1: Copiarle cosas a Croct
+// TODO-p1-1: Ab test works w your fav tools right below main header of homepage
+// TODO-p1-1: Set email alert to hello@gostellar.app when someone who is not me activates an experiment
+// TODO-p1-1: Be able to edit custom js/css from the table
+// TODO-p1-1: Create a dashboard
 // TODO-p1-1: Create maintenance banner
-// TODO-p1-1: Dummyproof multi element selection in editor
 // TODO-p1-1: Be able to delete goal from the edit modal
 // TODO-p1-1: Be able to edit split test var url from the table
-// TODO-p1-1: Create a dashboard
-// TODO-p1-1: I think track page visit is pushing more routes than it should, so we should check that
-// TODO-p1-1 Introduce layout with sidebar
-// TODO-p1-1: Set logo
-// TODO-p1-1: HAve sessions be created with a created_ad that is passed from the FE, so if the queue is stalled, it eventually shows the right data in the chart
-// TODO-p1-1: Be able to edit custom js from the table
 // TODO-p1-1: mass email about split url testing
 // TODO-p1-1: Create backdoor to flush redis
 // TODO-p1-1: Tidy up auto-name generation for experiments
 // TODO-p1-1: In edit variant modal, have focus of attention placed in the edited variant fields
-// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: UI for squashed convs
 // TODO-p1-1: Hacer un carrousel a lo lemlist pero de Work with your favorite tools: https://www.lemlist.com/es Sacar mas ideas de lemlist
 // TODO-p1-1: Have ended experiments come in a separate query
-// TODO-p1-1: Find shopify influencers
-// TODO-p1-1: Ab test having the without money... pics in the first viewport
 // TODO-p1-1: Refes de https://customer.io/
 // TODO-p1-1: Check billing is good across all infra
 // TODO-p1-1: Follow up w walter low
-// TODO-p1-1: Considerar mandar mas guita de lo que hoy mando a la bolsa, a G ads
 // TODO-p1-1: Analizar varybee y copiarme https://www.varybee.com/features - seccion use on any platform
 // TODO-p1-1: Launch shopify g ads campaign
 // TODO-p1-1: Followup Joe Doveton with my progress
@@ -72,7 +73,6 @@ export const metadata = {
 // TODO-p1-1: Dont allow editing rules after launching
 // TODO-p1-1: Allow previewing different urls
 // TODO-p1-1: Set up follow up email asking for feedback on lack of activity
-// TODO-p1-1: Create retargetting audience on FB ads - consider lookalike
 
 // TODO-p1-1: Add Faqs
 // TODO-p1-1: A way to fav or flag experiments

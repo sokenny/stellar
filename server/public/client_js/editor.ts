@@ -244,7 +244,7 @@
       #sve-html-content {
         width: 100%;
         min-height: 100px;
-        font-family: monospace;
+        font-family: Consolas, Monaco, 'Courier New', monospace;
         font-size: 12px;
         padding: 8px;
         border: 1px solid rgba(0, 0, 0, 0.2);
@@ -255,6 +255,22 @@
         font-size: 10px;
         color: rgba(60, 146, 226, 1);
         font-weight: 600;
+      }
+
+      .sve-selector-scope {
+        margin-top: 8px;
+        font-size: 12px;
+        display: flex;
+        gap: 16px;
+      }
+
+      .sve-selector-scope input[type="radio"] {
+        margin-right: 4px;
+        width: auto;
+      }
+
+      .sve-selector-scope label {
+        cursor: pointer;
       }
     `;
 
@@ -335,8 +351,11 @@
             function initializeEditedElements(variant) {
               variant.modifications.forEach((mod) => {
                 const elements = document.querySelectorAll(mod.selector);
+                const elementsToModify = mod.affectAll
+                  ? elements
+                  : [elements[0]];
 
-                elements.forEach((element) => {
+                elementsToModify.forEach((element) => {
                   const stellarElementId = generateUniqueId();
                   element.setAttribute('stellar-element-id', stellarElementId);
                   element.setAttribute('stellar-selector-ref', mod.selector);
@@ -368,6 +387,7 @@
                   global__editedElements.push({
                     selector: mod.selector,
                     stellarElementId: stellarElementId,
+                    affectAll: mod.affectAll,
                   });
                 });
 
@@ -554,7 +574,7 @@
           #sve-global-code-textarea {
             height: 400px;
             font-size: 11px;
-            font-family: monospace;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
             line-height: 1.4;
             tab-size: 2;
             background-color: #f8f9fa;
@@ -608,8 +628,13 @@
           }
 
           .sve-element-selector {
+            width: 100%;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+            padding: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
             font-size: 12px;
-            color: #666;
+            transition: border-color 0.2s ease;
           }
 
           .sve-element-selector code {
@@ -694,6 +719,18 @@
                   <input type="text" id="stellar-element-selector" value="${elementSelector}">
                   <div class="sve-selector-validation"></div>
                 </div>
+                ${
+                  matchCount > 1
+                    ? `
+                  <div class="sve-selector-scope">
+                    <input type="radio" id="affect-single" name="selector-scope" value="single" checked>
+                    <label for="affect-single">Affect only first element</label>
+                    <input type="radio" id="affect-all" name="selector-scope" value="all">
+                    <label for="affect-all">Affect all ${matchCount} elements</label>
+                  </div>
+                `
+                    : ''
+                }
               </div>`
               : '';
             const innerText = element ? element.innerText : '';
@@ -951,25 +988,23 @@
                 stellarElementId
               ] as HTMLElement;
 
+              // Create modification object with all current properties of the element
               const modification: any = {
                 selector: global__editedElements[i].selector,
+                affectAll: global__editedElements[i].affectAll,
               };
 
-              // Include display:none if specifically modified through hide checkbox
-              if (displayModified) {
-                modification.cssText = el?.style?.cssText || 'display: none;';
-              }
-              // Include other style changes if they exist
-              else if (el?.style?.cssText) {
-                modification.cssText = el?.style?.cssText;
+              // Always include the current state of these properties if they exist
+              if (el?.innerText) {
+                modification.innerText = el.innerText;
               }
 
-              if (el?.innerText && innerTextModified) {
-                modification.innerText = el?.innerText;
+              if (el?.innerHTML) {
+                modification.innerHTML = el.innerHTML;
               }
 
-              if (el?.innerHTML && innerHtmlModified) {
-                modification.innerHTML = el?.innerHTML;
+              if (el?.style?.cssText) {
+                modification.cssText = el.style.cssText;
               }
 
               // Handle specific attributes for images and links
@@ -1089,6 +1124,10 @@
             const selectedElementNode = document.querySelector(selectedElement);
             const stellarElementId =
               selectedElementNode.getAttribute('stellar-element-id');
+            const affectAll = document.getElementById(
+              'affect-all',
+            ) as HTMLInputElement;
+            const shouldAffectAll = affectAll && affectAll.checked;
 
             if (
               selectedElement &&
@@ -1109,9 +1148,9 @@
                 innerTextModified,
                 innerHtmlModified,
                 displayModified,
+                affectAll: shouldAffectAll,
               });
             } else if (selectedElement) {
-              // Update existing element's modification flags
               const editedElement = global__editedElements.find(
                 (el) => el.stellarElementId === stellarElementId,
               );
@@ -1122,10 +1161,21 @@
                   editedElement.innerHtmlModified || innerHtmlModified;
                 editedElement.displayModified =
                   editedElement.displayModified || displayModified;
+                editedElement.affectAll = shouldAffectAll;
               }
             }
             renderEditedElements();
             renderActions();
+          }
+
+          function getTargetElements(selector: string): Element[] {
+            const elements = document.querySelectorAll(selector);
+            const affectAll = document.getElementById(
+              'affect-all',
+            ) as HTMLInputElement;
+            const shouldAffectAll = affectAll && affectAll.checked;
+
+            return shouldAffectAll ? Array.from(elements) : [elements[0]];
           }
 
           function attachEditorListeners() {
@@ -1196,9 +1246,9 @@
             if (textarea) {
               textarea.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
-                    el.innerText = this.value;
-                    handleElementMutation(true);
+                  getTargetElements(selectedElement).forEach((el) => {
+                    (el as HTMLElement).style.color = this.value;
+                    handleElementMutation();
                   });
                 }
               });
@@ -1210,8 +1260,10 @@
             if (hideElementCheckbox) {
               hideElementCheckbox.addEventListener('change', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
-                    el.style.display = this.checked ? 'none' : '';
+                  getTargetElements(selectedElement).forEach((el) => {
+                    (el as HTMLElement).style.display = this.checked
+                      ? 'none'
+                      : '';
                     handleElementMutation(false, false, this.checked);
                   });
                 }
@@ -1224,8 +1276,8 @@
             if (fontSizeInput) {
               fontSizeInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
-                    el.style.fontSize = this.value + 'px';
+                  getTargetElements(selectedElement).forEach((el) => {
+                    (el as HTMLElement).style.fontSize = this.value + 'px';
                     handleElementMutation();
                   });
                 }
@@ -1236,8 +1288,8 @@
             if (colorInput) {
               colorInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
-                    el.style.color = this.value;
+                  getTargetElements(selectedElement).forEach((el) => {
+                    (el as HTMLElement).style.color = this.value;
                     handleElementMutation();
                   });
                 }
@@ -1250,8 +1302,8 @@
             if (backgroundColorInput) {
               backgroundColorInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
-                    el.style.backgroundColor = this.value;
+                  getTargetElements(selectedElement).forEach((el) => {
+                    (el as HTMLElement).style.backgroundColor = this.value;
                     handleElementMutation();
                   });
                 }
@@ -1306,7 +1358,7 @@
             if (srcInput) {
               srcInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
+                  getTargetElements(selectedElement).forEach((el) => {
                     (el as HTMLImageElement).src = this.value;
                     // Also update srcset if it exists
                     if ((el as HTMLImageElement).hasAttribute('srcset')) {
@@ -1321,7 +1373,7 @@
             if (widthInput) {
               widthInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
+                  getTargetElements(selectedElement).forEach((el) => {
                     (el as HTMLImageElement).width = parseInt(this.value) || 0;
                     handleElementMutation();
                   });
@@ -1332,7 +1384,7 @@
             if (heightInput) {
               heightInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
+                  getTargetElements(selectedElement).forEach((el) => {
                     (el as HTMLImageElement).height = parseInt(this.value) || 0;
                   });
                   handleElementMutation();
@@ -1343,7 +1395,7 @@
             if (hrefInput) {
               hrefInput.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
+                  getTargetElements(selectedElement).forEach((el) => {
                     (el as HTMLAnchorElement).href = this.value;
                   });
                   handleElementMutation();
@@ -1423,11 +1475,11 @@
 
               htmlTextarea.addEventListener('input', function () {
                 if (selectedElement) {
-                  document.querySelectorAll(selectedElement).forEach((el) => {
+                  getTargetElements(selectedElement).forEach((el) => {
                     el.innerHTML = this.value;
                     // Update the content textarea with the new text content
                     if (contentTextarea) {
-                      contentTextarea.value = el.innerText;
+                      contentTextarea.value = (el as HTMLElement).innerText;
                     }
                     handleElementMutation(false, true);
                   });
@@ -1643,7 +1695,7 @@
     
     #stellar-element-selector {
       width: 100%;
-      font-family: monospace;
+      font-family: Consolas, Monaco, 'Courier New', monospace;
       padding: 6px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       border-radius: 4px;

@@ -11,6 +11,7 @@ class SessionExperiment extends Model {
   public had_issues?: boolean;
   public created_at!: Date;
   public updated_at!: Date;
+  public session_ended_at?: Date;
 }
 
 export const initializeSessionExperiment = (
@@ -61,6 +62,10 @@ export const initializeSessionExperiment = (
       },
       had_issues: {
         type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      session_ended_at: {
+        type: DataTypes.DATE,
         allowNull: true,
       },
       created_at: {

@@ -9,6 +9,8 @@ async function publishUserSession(req: Request, res: Response) {
   const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
   console.log('publishUserSession - ipAddress!', ipAddress);
 
+  // TODO-p1-1: Validate payload (?)
+
   try {
     const payloadString = req.body.toString();
     const payload = JSON.parse(payloadString);
