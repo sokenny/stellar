@@ -93,9 +93,10 @@
       try {
         // Try using CSSPath library first
         const cssPath = new (window as any).CSSPath({});
-        const selector = cssPath.getSelector(element);
+        let selector = cssPath.getSelector(element);
 
         if (selector && cssPath.testSelector(element, selector)) {
+          selector = selector.replace(/\.stellar-hover-effect/g, '');
           return selector;
         }
       } catch (error) {
@@ -139,7 +140,8 @@
       const startIndex = Math.max(0, path.length - maxLevels);
       const limitedPath = path.slice(startIndex);
 
-      return limitedPath.join(' > ');
+      // Join the path and remove .stellar-hover-effect from the final selector
+      return limitedPath.join(' > ').replace(/\.stellar-hover-effect/g, '');
     }
 
     async function setClickGoal({ selector }) {
@@ -760,7 +762,7 @@
           }
 
           function editorComponent(elementSelector) {
-            console.log('elementSelector lcdtm', elementSelector);
+            console.log('elementSelector:', elementSelector);
             const element = document.querySelector(elementSelector);
             const matchCount = elementSelector
               ? document.querySelectorAll(elementSelector).length
@@ -978,10 +980,17 @@
             let editorPosition = null;
 
             if (editor) {
+              // Store both transform and any direct positioning
               editorPosition = {
+                transform: editor.style.transform,
                 top: editor.style.top,
                 left: editor.style.left,
+                right: editor.style.right,
+                bottom: editor.style.bottom,
               };
+            }
+
+            if (editor) {
               editor.remove();
             }
 
@@ -990,13 +999,14 @@
             renderEditedElements();
             attachEditorListeners();
 
+            // Restore position after re-rendering
             if (editorPosition) {
               const newEditor: any = document.querySelector(
                 '.stellar-variant-editor',
               );
               if (newEditor) {
-                newEditor.style.top = editorPosition.top;
-                newEditor.style.left = editorPosition.left;
+                // Restore all positioning properties
+                Object.assign(newEditor.style, editorPosition);
               }
             }
           }
@@ -1264,8 +1274,8 @@
               // Get the current transform values before starting the drag
               const transform = window.getComputedStyle(el).transform;
               const matrix = new DOMMatrix(transform);
-              xOffset = matrix.m41; // Get the current X translation
-              yOffset = matrix.m42; // Get the current Y translation
+              xOffset = matrix.m41;
+              yOffset = matrix.m42;
 
               if (e.type === 'touchstart') {
                 initialX = e.touches[0].clientX - xOffset;
@@ -1558,12 +1568,15 @@
               });
             }
 
-            // Add event listener for the generate button
             const generateButton = document.getElementById(
               'sve-generate-modification',
             );
+
+            console.log('generateButton', generateButton);
             if (generateButton) {
+              console.log('we have generateButton!', generateButton);
               generateButton.addEventListener('click', async function () {
+                console.log('generateButton clicked!');
                 const promptTextarea = document.getElementById(
                   'sve-ai-prompt',
                 ) as HTMLTextAreaElement;
@@ -1579,10 +1592,18 @@
                   !promptTextarea ||
                   !statusContainer ||
                   !previewContainer
-                )
+                ) {
+                  console.log('Missing required elements: ', {
+                    selectedElement,
+                    promptTextarea,
+                    statusContainer,
+                    previewContainer,
+                  });
                   return;
+                }
 
                 const element = document.querySelector(selectedElement);
+                console.log('element -- ', element, selectedElement);
                 if (!element) return;
 
                 // Store original state for potential rollback
