@@ -248,9 +248,9 @@
 
 .card {
   padding: 24px;
-  background-color: #fff4fe;
+  background-color: #f8f8f8;
   border-radius: 4px;
-  border: 1px solid #ffd0fd;
+  /* border: 1px solid #ffd0fd; */
   flex-grow: 1;
 }
 
@@ -286,7 +286,7 @@
 
 .row:nth-child(2) .card {
   background-color: #ebf6ff;
-  border: 1px solid #76b3f9;
+  /* border: 1px solid #76b3f9; */
 }
 
 .block:nth-child(3) {

@@ -890,7 +890,7 @@
             const aiModificationContainer = `
               <div class="sve-ai-modification">
                 <div class="sve-field-group">
-                  <label>AI Modification Request</label>
+                  <label>AI Modification Request (in Beta✨)</label>
                   <textarea id="sve-ai-prompt" placeholder="e.g., 'Animate this button to make it stand out more'"></textarea>
                   <button id="sve-generate-modification">Request AI Changes</button>
                 </div>
