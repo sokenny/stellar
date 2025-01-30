@@ -34,16 +34,14 @@ export default function CreateExperimentPage({ params }) {
         </BreadcrumbItem>
         <BreadcrumbItem>A/B</BreadcrumbItem>
       </Breadcrumbs>
-      {isNew ? (
-        <h1 className={styles.title}>Create an A/B Experiment</h1>
-      ) : (
-        <ExperimentName
-          name={experiment?.name}
-          experimentId={id}
-          className={styles.title}
-          type="AB"
-        />
-      )}
+
+      <div className={styles.title}>
+        {isNew ? (
+          <h1>Create an A/B Experiment</h1>
+        ) : (
+          <ExperimentName name={experiment?.name} experimentId={id} type="AB" />
+        )}
+      </div>
 
       <CreateExperimentForm experimentId={id} />
     </div>

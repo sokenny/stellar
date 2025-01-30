@@ -1,11 +1,18 @@
-.title {
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name {
   font-size: 26px;
   margin-right: 10px;
   padding: 4px;
   transition: background-color 0.15s;
   color: var(--primary);
+  margin-bottom: 0;
 }
 
-.title:hover {
+.name:hover {
   background-color: rgba(0, 0, 0, 0.035);
 }

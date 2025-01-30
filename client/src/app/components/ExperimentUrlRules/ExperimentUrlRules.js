@@ -90,7 +90,7 @@ const ExperimentUrlRules = ({
             body: JSON.stringify(payload),
           },
         );
-        await response.json();
+        newExperiment = await response.json();
         toast.success('Experiment URL rules updated successfully');
       } else {
         // Create new experiment

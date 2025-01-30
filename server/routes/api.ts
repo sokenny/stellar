@@ -35,6 +35,7 @@ import createSplitUrlExperiment from './handlers/createSplitUrlExperiment';
 import setExperimentGoals from './handlers/setExperimentGoals';
 import updateGoal from './handlers/updateGoal';
 import deleteGoal from './handlers/deleteGoal';
+import getElementVariants from './handlers/getElementVariants';
 
 const router = express.Router();
 
@@ -86,5 +87,7 @@ router.post('/onboarding', saveOnboardingDataHandler);
 router.put('/user/email-settings', updateEmailSettings);
 
 router.post('/experiment/:id/goals', setExperimentGoals);
+
+router.post('/element-variants', getElementVariants);
 
 export default router;

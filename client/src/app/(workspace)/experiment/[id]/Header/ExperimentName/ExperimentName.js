@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import useStore from '../../../../../store';
-import styles from './ExperimentName.module.css';
 import ExperimentIcon from '../../../../../icons/Experiment';
 import ShuffleIcon from '../../../../../icons/Shuffle';
+import styles from './ExperimentName.module.css';
 
 const ExperimentName = ({ name, experimentId, className, type }) => {
   const { refetchProjects } = useStore();
@@ -60,7 +60,7 @@ const ExperimentName = ({ name, experimentId, className, type }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={styles.container}>
       {type === 'AB' ? (
         <ExperimentIcon height={20} width={20} />
       ) : (
@@ -71,7 +71,7 @@ const ExperimentName = ({ name, experimentId, className, type }) => {
         contentEditable={isEditingName}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        className={`${styles.title} ${className}`}
+        className={`${styles.name} ${className}`}
         onClick={() => !isEditingName && setIsEditingName(true)}
         style={{ cursor: 'text', display: 'inline-block' }}
       >

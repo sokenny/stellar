@@ -27,9 +27,10 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Have editor script only be downloaded when needed
+// TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db
 // TODO-p1-1: Launch on https://betalist.com/submissions/new - producthunt - appsumo
 // TODO-p1-1: https://reel.farm/#pricing
-// TODO-p1-1: Add ai prompting for html edits
 // TODO-p1-1: Record "how to get unique selector" And embed in editor
 // TODO-p1-1: Set a max goals to track per experiment
 // TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing

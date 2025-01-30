@@ -240,10 +240,6 @@
         width: 100%;
       }
 
-      .sve-html-editor {
-        margin-top: 8px;
-      }
-
       .sve-html-editor-disabled-message {
         font-size: 10px;
         color: black;
@@ -296,6 +292,38 @@
 
       .sve-selector-scope label {
         cursor: pointer;
+      }
+
+      .sve-preview-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .sve-apply-button {
+        flex: 1;
+        padding: 8px;
+        background-color: rgba(46, 204, 113, 0.1);
+        border: 1px solid rgba(46, 204, 113, 0.25);
+        color: #27ae60;
+        cursor: pointer;
+      }
+
+      .sve-apply-button:hover {
+        background-color: rgba(46, 204, 113, 0.2);
+      }
+
+      .sve-discard-button {
+        flex: 1;
+        padding: 8px;
+        background-color: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.25);
+        color: #c0392b;
+        cursor: pointer;
+      }
+
+      .sve-discard-button:hover {
+        background-color: rgba(231, 76, 60, 0.2);
       }
     `;
 
@@ -552,6 +580,7 @@
           #sve-save-variant {
             background-color: rgba(60, 146, 226, 1);
             color: white;
+            margin-bottom: 16px;
           }
 
           @media (max-width: 720px) {
@@ -731,6 +760,7 @@
           }
 
           function editorComponent(elementSelector) {
+            console.log('elementSelector lcdtm', elementSelector);
             const element = document.querySelector(elementSelector);
             const matchCount = elementSelector
               ? document.querySelectorAll(elementSelector).length
@@ -856,6 +886,20 @@
               </div>`;
             }
 
+            // Add AI modification container only when an element is selected
+            const aiModificationContainer = `
+              <div class="sve-ai-modification">
+                <div class="sve-field-group">
+                  <label>AI Modification Request</label>
+                  <textarea id="sve-ai-prompt" placeholder="e.g., 'Animate this button to make it stand out more'"></textarea>
+                  <button id="sve-generate-modification">Request AI Changes</button>
+                </div>
+                <div id="sve-modification-status" style="display: none;">
+                  <div class="sve-modification-preview"></div>
+                </div>
+              </div>
+            `;
+
             return `<div class="stellar-variant-editor">
               <div class="sve-inner-wrapper">
                 <div class="sve-fields">
@@ -864,6 +908,7 @@
                       ? `
                     <div class="sve-field-group">
                       ${selectorDisplay}
+                       ${elementSelector ? aiModificationContainer : ''}
                       <div class="sve-html-editor">
                         <button id="sve-toggle-html-editor" 
                           ${
@@ -899,6 +944,7 @@
                     }>
                     <label for="sve-hide-element">Hide Element</label>
                   </div>
+                 
                   <div class="sve-double-field-group">
                     <div class="sve-field-group">
                       <label>Font Size (px)</label>
@@ -1511,6 +1557,155 @@
                 }
               });
             }
+
+            // Add event listener for the generate button
+            const generateButton = document.getElementById(
+              'sve-generate-modification',
+            );
+            if (generateButton) {
+              generateButton.addEventListener('click', async function () {
+                const promptTextarea = document.getElementById(
+                  'sve-ai-prompt',
+                ) as HTMLTextAreaElement;
+                const statusContainer = document.getElementById(
+                  'sve-modification-status',
+                );
+                const previewContainer = document.querySelector(
+                  '.sve-modification-preview',
+                );
+
+                if (
+                  !selectedElement ||
+                  !promptTextarea ||
+                  !statusContainer ||
+                  !previewContainer
+                )
+                  return;
+
+                const element = document.querySelector(selectedElement);
+                if (!element) return;
+
+                // Store original state for potential rollback
+                const originalState = {
+                  innerHTML: element.innerHTML,
+                  style: element.getAttribute('style') || '',
+                };
+
+                (generateButton as HTMLButtonElement).disabled = true;
+                generateButton.textContent = 'Generating...';
+
+                try {
+                  const response = await fetch(
+                    `${STELLAR_API_URL}/element-variants`,
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                      },
+                      body: JSON.stringify({
+                        prompt: promptTextarea.value,
+                        elementHTML: element.innerHTML,
+                        elementStyles: element.getAttribute('style') || '',
+                      }),
+                    },
+                  );
+
+                  const modifications = await response.json();
+
+                  if (modifications.error) {
+                    throw new Error(modifications.error);
+                  }
+
+                  // Apply modifications immediately
+                  modifications.forEach((mod) => {
+                    if (mod.type === 'innerHTML') {
+                      element.innerHTML = mod.modification;
+                    } else if (mod.type === 'CSS') {
+                      element.style.cssText = mod.modification;
+                    }
+                  });
+
+                  // Hide the prompt section while showing preview
+                  const promptSection = document.querySelector(
+                    '.sve-ai-modification .sve-field-group',
+                  );
+                  if (promptSection) {
+                    (promptSection as HTMLElement).style.display = 'none';
+                  }
+
+                  // Show status and discard option
+                  statusContainer.style.display = 'block';
+                  previewContainer.innerHTML = `
+                    <div class="sve-success">
+                      <span>✓ Changes generated! Review the modifications:</span>
+                      <div class="sve-modifications-list">
+                        ${modifications
+                          .map(
+                            (mod) => `
+                          <div class="sve-modification-item">
+                            <strong>${mod.type}:</strong>
+                            <pre>${mod.modification}</pre>
+                          </div>
+                        `,
+                          )
+                          .join('')}
+                      </div>
+                      <div class="sve-preview-actions">
+                        <button id="sve-apply-modification" class="sve-apply-button">Apply</button>
+                        <button id="sve-discard-modification" class="sve-discard-button">Discard</button>
+                      </div>
+                    </div>
+                  `;
+
+                  // Handle discard action
+                  const applyButton = document.getElementById(
+                    'sve-apply-modification',
+                  );
+                  const discardButton = document.getElementById(
+                    'sve-discard-modification',
+                  );
+
+                  if (discardButton) {
+                    discardButton.onclick = () => {
+                      element.innerHTML = originalState.innerHTML;
+                      element.setAttribute('style', originalState.style);
+                      statusContainer.style.display = 'none';
+                      promptTextarea.value = ''; // Clear the prompt
+                      // Show the prompt section again
+                      if (promptSection) {
+                        (promptSection as HTMLElement).style.display = 'block';
+                      }
+                    };
+                  }
+
+                  if (applyButton) {
+                    applyButton.onclick = () => {
+                      statusContainer.style.display = 'none';
+                      handleElementMutation(true, true); // Update tracking
+                      promptTextarea.value = ''; // Clear the prompt
+                      // Show the prompt section again
+                      if (promptSection) {
+                        (promptSection as HTMLElement).style.display = 'block';
+                      }
+                    };
+                  }
+
+                  handleElementMutation(true, true); // Update tracking
+                } catch (error) {
+                  console.error('Error generating modification:', error);
+                  statusContainer.style.display = 'block';
+                  previewContainer.innerHTML = `
+                    <div class="sve-error">
+                      Error generating modification: ${error.message}
+                    </div>
+                  `;
+                } finally {
+                  (generateButton as HTMLButtonElement).disabled = false;
+                  generateButton.textContent = 'Request AI Changes';
+                }
+              });
+            }
           }
 
           const style = document.createElement('style');
@@ -1762,6 +1957,108 @@
     
     .sve-selector-validation.invalid {
       color: #e74c3c;
+    }
+
+    .sve-ai-modification {
+      margin-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-top: 16px;
+    }
+
+    .sve-ai-modification .sve-field-group {
+      padding: 8px;
+      border-radius: 4px;
+      background: linear-gradient(45deg, #0072f5, #cb5edc);
+      color: white;
+      font-weight: 400;
+    }
+
+    .sve-ai-modification .sve-field-group label {
+      font-size: 12px;
+    }
+
+    .sve-ai-modification textarea {
+      color: black!important;
+      font-size: 12px;
+    }
+
+    #sve-ai-prompt {
+      width: 100%;
+      min-height: 60px;
+      margin-bottom: 8px;
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    #sve-generate-modification {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      border: 1px solid white;
+      background-color: rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+    }
+
+    #sve-generate-modification:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    #sve-generate-modification:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .sve-modification-preview {
+      margin: 12px 0 0 0;
+    }
+
+    #sve-modification-status {
+      margin-bottom: 12px;
+    }
+
+    .sve-success {
+      padding: 8px;
+      background-color: rgba(46, 204, 113, 0.1);
+      border: 1px solid rgba(46, 204, 113, 0.25);
+      border-radius: 4px;
+    }
+
+    .sve-modifications-list {
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .sve-modification-item {
+      margin-top: 4px;
+    }
+
+    .sve-modification-item pre {
+      background: rgba(255, 255, 255, 0.5);
+      padding: 4px;
+      margin: 2px 0;
+      overflow-x: auto;
+    }
+
+    .sve-discard-button {
+      width: 100%;
+      padding: 8px;
+      background-color: rgba(231, 76, 60, 0.1);
+      border: 1px solid rgba(231, 76, 60, 0.25);
+      color: #c0392b;
+      cursor: pointer;
+    }
+
+    .sve-discard-button:hover {
+      background-color: rgba(231, 76, 60, 0.2);
+    }
+
+    .sve-error {
+      color: #e74c3c;
+      padding: 8px;
+      background-color: rgba(231, 76, 60, 0.1);
+      border-radius: 4px;
     }
   `),
   );

@@ -95,6 +95,9 @@ export default async function HomePage({}) {
                 rel="noopener noreferrer"
                 target="_blank"
               >
+                <SignUpCTA className={styles.goStellarBtn}>
+                  Start For Free
+                </SignUpCTA>
                 <Button
                   className={styles.bookDemoBtn}
                   color="primary"
@@ -103,9 +106,6 @@ export default async function HomePage({}) {
                   Book a Demo
                 </Button>
               </a>
-              <SignUpCTA className={styles.goStellarBtn}>
-                Start For Free
-              </SignUpCTA>
             </div>
             <div className={styles.points}>
               <div className={styles.noCard}>💳 No credit card required</div>
