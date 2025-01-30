@@ -491,6 +491,7 @@
             padding: 16px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             overflow-y: auto;
+            padding-bottom: 0;
           }
 
           @media (max-width: 720px) {
@@ -522,6 +523,7 @@
             justify-content: space-between;
             height: 100%;
             width: 100%;
+            position: relative;
           }
 
           .sve-instructions {
@@ -698,6 +700,12 @@
             padding: 2px 4px;
             border-radius: 3px;
             font-family: monospace;
+          }
+
+          #sve-actions-entry-point {
+            position: sticky;
+            bottom: 0;
+            background-color: white;
           }
           `;
 
@@ -910,7 +918,11 @@
                       ? `
                     <div class="sve-field-group">
                       ${selectorDisplay}
-                       ${elementSelector ? aiModificationContainer : ''}
+                       ${
+                         elementSelector && matchCount === 1
+                           ? aiModificationContainer
+                           : ''
+                       }
                       <div class="sve-html-editor">
                         <button id="sve-toggle-html-editor" 
                           ${
