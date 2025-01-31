@@ -2,16 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { minify } from 'uglify-js';
 
-async function sendStellarJSBundle(req, res) {
+async function sendEditorJSBundle(req, res) {
   try {
-    const stellarPath = path.join(
-      __dirname,
-      '../../public/client_js/stellar.js',
-    );
+    const editorPath = path.join(__dirname, '../../public/client_js/editor.js');
+    const editorContent = fs.readFileSync(editorPath, 'utf8');
 
-    const stellarContent = fs.readFileSync(stellarPath, 'utf8');
-
-    const populatedContent = stellarContent.replace(
+    const populatedContent = editorContent.replace(
       /process\.env\.STELLAR_API_URL/g,
       `${process.env.STELLAR_API_URL}`,
     );
@@ -21,9 +17,9 @@ async function sendStellarJSBundle(req, res) {
     res.type('.js');
     res.send(minifiedContent);
   } catch (error) {
-    console.error('Error sending stellar file:', error);
+    console.error('Error sending editor file:', error);
     res.status(500).send('Internal Server Error');
   }
 }
 
-export default sendStellarJSBundle;
+export default sendEditorJSBundle;

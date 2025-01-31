@@ -27,11 +27,9 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Fix editor sometimes not triggering button click for ai
-// TODO-p1-1: Only show ai prompt if selector targets 1 element
-// TODO-p1-1  give disabled appearance to edit html button if it is disabled
-// TODO-p1-1: Have editor script only be downloaded when needed
+// TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
+// TODO-p1-1  give disabled appearance to edit html button if it is disabled
 // TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db
 // TODO-p1-1: Allow discarding elements.
 // TODO-p1-1: Launch on https://betalist.com/submissions/new - producthunt - appsumo

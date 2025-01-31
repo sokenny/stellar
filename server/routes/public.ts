@@ -16,6 +16,7 @@ import handleConfirmEmail from './handlers/handleConfirmEmail';
 import handleLogin from './handlers/handleLogin';
 import handleValidateAffiliateCode from './handlers/handleValidateAffiliateCode';
 import publishUserSession from './handlers/publishUserSession';
+import sendEditorJSBundle from './handlers/sendEditorJSBundle';
 
 const strictLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -48,6 +49,7 @@ router.post(
 );
 
 router.get('/clientjs', sendStellarJSBundle);
+router.get('/editorjs', sendEditorJSBundle);
 
 router.get('/experiment/:id/snapshot', getVariantScreenshot);
 router.get('/experiment/:id/:variantId/snapshot', getVariantScreenshot);

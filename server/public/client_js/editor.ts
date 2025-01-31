@@ -446,11 +446,6 @@
                   });
                 });
 
-                // Initialize editor with first modification's selector
-                if (!selectedElement && elements.length > 0) {
-                  selectedElement = mod.selector;
-                }
-
                 if (elements.length === 0) {
                   console.error(
                     'No elements found for selector:',
@@ -571,6 +566,7 @@
           .sve-actions {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 16px;
           }
 
           .sve-actions button {
@@ -584,7 +580,6 @@
           #sve-save-variant {
             background-color: rgba(60, 146, 226, 1);
             color: white;
-            margin-bottom: 16px;
           }
 
           @media (max-width: 720px) {
@@ -824,8 +819,7 @@
             const isHidden = style ? style.display === 'none' : false;
             const isImage = element && element.tagName === 'IMG';
 
-            const isInitialState =
-              global__editedElements.length === 0 && element === null;
+            const isInitialState = element === null;
 
             const globalButtons = `
               <div class="sve-field-group sve-global-buttons" style="margin-top: ${
@@ -1747,6 +1741,7 @@
           document.head.appendChild(style);
 
           if (visualEditorOn === 'true') {
+            console.log('caca1');
             renderEditor({ element: selectedElement });
           }
 

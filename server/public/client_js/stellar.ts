@@ -5,6 +5,17 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
+
+  if (stellarMode === 'true') {
+    console.log('stellarMode is true loading editor');
+    const editorScript = document.createElement('script');
+    // editorScript.src = `${STELLAR_API_URL}/editorjs`;
+    editorScript.src = `https://d3niuqph2rteir.cloudfront.net/client_js/editor.js`;
+    // editorScript.src = `http://localhost:3001/public/editorjs`;
+    document.head.appendChild(editorScript);
+    return; // Exit early to prevent running the rest of the stellar code
+  }
+
   const sessionIssues = [];
   const debugging = urlParams.get('stellarDebugging');
   const scriptUrl = new URL((document as any).currentScript.src);
