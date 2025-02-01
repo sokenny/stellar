@@ -68,35 +68,35 @@ export default function StellarSpeed({ className }) {
         <div ref={containerRef} className={`flex flex-col gap-6 w-full`}>
           <Progress
             color="#cb5edc"
-            label={`Stellar (${progressValues.stellar}%)`}
+            label={`Stellar (${progressValues.stellar}ms)`}
             value={progressValues.stellar}
             maxValue={758}
             className="w-full"
           />
           <Progress
             color="warning"
-            label={`VWO (${progressValues.vwo}%)`}
+            label={`VWO (${progressValues.vwo}ms)`}
             value={progressValues.vwo}
             maxValue={758}
             className="w-full"
           />
           <Progress
             color="warning"
-            label={`Optimizely (${progressValues.optimize}%)`}
+            label={`Optimizely (${progressValues.optimize}ms)`}
             value={progressValues.optimize}
             maxValue={758}
             className="w-full"
           />
           <Progress
             color="danger"
-            label={`ABlyft (${progressValues.ablyft}%)`}
+            label={`ABlyft (${progressValues.ablyft}ms)`}
             value={progressValues.ablyft}
             maxValue={758}
             className="w-full"
           />
           <Progress
             color="danger"
-            label={`Convert (${progressValues.convert}%)`}
+            label={`Convert (${progressValues.convert}ms)`}
             value={progressValues.convert}
             maxValue={758}
             className="w-full"
@@ -108,7 +108,7 @@ export default function StellarSpeed({ className }) {
       </div>
       <div className={styles.texts}>
         <p>
-          Stellar’s script is ultra-lightweight at just 11.8KB, making it up to
+          Stellar’s script is ultra-lightweight at just 5.4KB, making it up to
           15x smaller than competitors like VWO or AB Tasty. Built with pure
           JavaScript and decluttered from unnecessary dependencies, it ensures
           minimal impact on your website’s speed and Core Web Vitals. Unlike

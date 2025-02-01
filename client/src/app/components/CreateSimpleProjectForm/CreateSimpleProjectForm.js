@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import React, { useCallback, useState } from 'react';
-import isValidDomain from '../../helpers/isValidDomain';
 import getDomainFromUrl from '../../helpers/getDomainFromUrl';
 import segmentTrack from '../../helpers/segment/segmentTrack';
 import Button from '../Button/Button';
@@ -18,8 +17,19 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
   const { token } = useStore();
 
   const onSubmit = useCallback(async () => {
-    if (!isValidDomain(domain)) {
-      toast.error('Please enter a valid domain - without http:// or https://');
+    let processedDomain = domain.trim().toLowerCase();
+
+    // Remove protocol if present
+    processedDomain = processedDomain.replace(/^(https?:\/\/)/, '');
+
+    // Remove www. if present
+    processedDomain = processedDomain.replace(/^www\./, '');
+
+    // Basic domain validation (allows letters, numbers, dots, and hyphens)
+    const domainRegex = /^[a-z0-9][a-z0-9-]*[a-z0-9]\.[a-z0-9-_.]+[a-z]$/;
+
+    if (!domainRegex.test(processedDomain)) {
+      toast.error('Please enter a valid domain or URL');
       return;
     }
 
@@ -32,7 +42,7 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ domain }),
+          body: JSON.stringify({ domain: processedDomain }),
         }),
         {
           loading: 'Creating project...',
