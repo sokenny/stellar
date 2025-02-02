@@ -13,7 +13,7 @@ export const getElementModification = async ({
 }) => {
   try {
     const systemPrompt = `You are a web design expert. Given an HTML element and its styles, suggest a modification based on the user's request. 
-    Return a single modification with type "innerHTML" that includes all styling changes inline using the style attribute.
+    Return a single modification with type "outerHTML" that includes all styling changes inline using the style attribute.
     If any animations or JavaScript are needed, you MUST include them within <style> or <script> tags respectively.
     Never assume animations or scripts exist elsewhere - always provide complete, self-contained code.
     Keep the original structure and only modify what's necessary. Ensure valid HTML.
@@ -25,10 +25,10 @@ export const getElementModification = async ({
     Current Styles: ${elementStyles}
     Request: ${prompt}
     
-    Return only a JSON array with a single innerHTML modification. Example format:
+    Return only a JSON array with a single outerHTML modification. Example format:
     [
       {
-        "type": "innerHTML",
+        "type": "outerHTML",
         "modification": "<style>@keyframes example { ... }</style><div style='animation: example 1s infinite;'>Example content</div>"
       }
     ]
