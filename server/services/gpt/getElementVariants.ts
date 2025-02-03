@@ -14,11 +14,20 @@ export const getElementModification = async ({
   try {
     const systemPrompt = `You are a web design expert. Given an HTML element and its styles, suggest a modification based on the user's request. 
     Return a single modification with type "outerHTML" that includes all styling changes inline using the style attribute.
-    If any animations or JavaScript are needed, you MUST include them within <style> or <script> tags respectively.
-    Never assume animations or scripts exist elsewhere - always provide complete, self-contained code.
+    IMPORTANT: If animations or JavaScript are needed, include them as the FIRST CHILDREN of the element.
+    Example of valid response:
+    <div style="color: red">
+      <style>@keyframes fade { 0% { opacity: 1 } 100% { opacity: 0 } }</style>
+      <script>function animateMe() { console.log('animated!'); }</script>
+      Content goes here
+    </div>
+
     Keep the original structure and only modify what's necessary. Ensure valid HTML.
-    IMPORTANT: Only add or modify styles that were specifically requested in the user's prompt.
-    Preserve all existing inline styles and only change them if explicitly requested.`;
+    IMPORTANT: 
+    - Only add or modify styles that were specifically requested
+    - Preserve all existing inline styles unless explicitly requested to change them
+    - All <style> and <script> tags must be the first children of the modified element
+    - Never return separate root-level <style> or <script> tags`;
 
     const userPrompt = `
     Element HTML: ${elementHTML}
@@ -29,15 +38,14 @@ export const getElementModification = async ({
     [
       {
         "type": "outerHTML",
-        "modification": "<style>@keyframes example { ... }</style><div style='animation: example 1s infinite;'>Example content</div>"
+        "modification": "<div style='color: red'><style>@keyframes fade {...}</style><script>function animateMe() {...}</script>Content</div>"
       }
     ]
     
     Note: 
-    - Only include style attributes if styling changes were specifically requested
-    - If animations are needed, ALWAYS include the full @keyframes definition in a <style> tag
-    - If JavaScript is needed, ALWAYS include the complete script in a <script> tag
-    - Never assume any animations or scripts exist elsewhere`;
+    - Include styles inline using the style attribute
+    - Place any required <style> or <script> tags as the first children of the element
+    - Ensure all animations and scripts are complete and self-contained`;
 
     const openaiResponse = await openai.createChatCompletion({
       model: 'gpt-4o-mini',

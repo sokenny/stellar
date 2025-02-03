@@ -84,12 +84,6 @@
     document.head.appendChild(script);
 
     function getSelector(element) {
-      // First check for existing stellar-selector-ref
-      const attr = element.getAttribute('stellar-selector-ref');
-      if (attr) {
-        return attr;
-      }
-
       try {
         // Try using CSSPath library first
         const cssPath = new (window as any).CSSPath({});
@@ -426,6 +420,7 @@
             const variant = await response.json();
 
             function initializeEditedElements(variant) {
+              console.log('initializeEditedElements variant', variant);
               variant.modifications.forEach((mod) => {
                 console.log('mod', mod);
                 const elements = document.querySelectorAll(mod.selector);
