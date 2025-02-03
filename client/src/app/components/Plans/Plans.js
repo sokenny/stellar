@@ -14,24 +14,24 @@ const Plans = () => {
   const [selectedMTU, setSelectedMTU] = useState(30); // Default 30k MTU
 
   const calculatePrice = (mtu) => {
-    const basePrice = 150;
+    const basePrice = 100;
     let totalPrice = basePrice;
 
     if (mtu > 200) {
       // Price for 30k-100k
-      totalPrice += ((100 - 30) / 10) * 50;
+      totalPrice += ((100 - 30) / 10) * 35;
       // Price for 100k-200k
-      totalPrice += ((200 - 100) / 25) * 65;
+      totalPrice += ((200 - 100) / 25) * 50;
       // Price for remaining MTU above 200k
-      totalPrice += Math.floor((mtu - 200) / 50) * 100;
+      totalPrice += Math.floor((mtu - 200) / 50) * 85;
     } else if (mtu > 100) {
       // Price for 30k-100k
-      totalPrice += ((100 - 30) / 10) * 50;
+      totalPrice += ((100 - 30) / 10) * 35;
       // Price for remaining MTU above 100k
-      totalPrice += Math.floor((mtu - 100) / 25) * 65;
+      totalPrice += Math.floor((mtu - 100) / 25) * 50;
     } else {
       // Price for MTU between 30k and 100k
-      totalPrice += Math.floor((mtu - 30) / 10) * 50;
+      totalPrice += Math.floor((mtu - 30) / 10) * 35;
     }
 
     return Math.round(totalPrice);
