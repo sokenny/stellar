@@ -84,12 +84,6 @@
     document.head.appendChild(script);
 
     function getSelector(element) {
-      // First check for existing stellar-selector-ref
-      const attr = element.getAttribute('stellar-selector-ref');
-      if (attr) {
-        return attr;
-      }
-
       try {
         // Try using CSSPath library first
         const cssPath = new (window as any).CSSPath({});
@@ -258,6 +252,7 @@
         font-size: 12px;
         cursor: pointer;
         margin-bottom: 8px;
+        width: 100%;
       }
 
       .sve-html-editor button:hover {
@@ -272,6 +267,7 @@
         padding: 8px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         resize: vertical;
+        margin-bottom: 8px;
       }
 
       .sve-affects-count {
@@ -337,8 +333,13 @@
           .stellar-hover-effect {
             outline: 2px solid blue !important;
           }
+          .stellar-selected-effect {
+            outline: 3px solid #3c92e2 !important;
+            outline-offset: 2px !important;
+          }
         `);
 
+        // Remove hover effect from all elements first
         document.querySelectorAll('.stellar-hover-effect').forEach((el) => {
           el.classList.remove('stellar-hover-effect');
         });
@@ -356,6 +357,7 @@
 
         target = e.target;
 
+        // Add hover effect to current target if not editor
         if (!isVariantEditorOrChild) {
           while (target && target !== document) {
             if (target.matches('*:not(body, html)')) {
@@ -365,6 +367,20 @@
             target = target.parentNode;
           }
         }
+
+        // Maintain selected effect on the selected element
+        if (selectedElement) {
+          const selectedEl = document.querySelector(selectedElement);
+          if (selectedEl) {
+            selectedEl.classList.add('stellar-selected-effect');
+          }
+        }
+      });
+
+      // Also handle mouseout to remove hover effect
+      document.addEventListener('mouseout', function (e) {
+        const target = e.target as Element;
+        target.classList.remove('stellar-hover-effect');
       });
     }
 
@@ -404,26 +420,34 @@
             const variant = await response.json();
 
             function initializeEditedElements(variant) {
+              console.log('initializeEditedElements variant', variant);
               variant.modifications.forEach((mod) => {
+                console.log('mod', mod);
                 const elements = document.querySelectorAll(mod.selector);
+                console.log('elements', elements);
+                if (elements.length === 0) {
+                  console.error(
+                    'No elements found for selector:',
+                    mod.selector,
+                  );
+                  return;
+                }
                 const elementsToModify = mod.affectAll
                   ? elements
                   : [elements[0]];
 
+                console.log('elementsToModify', elementsToModify);
+
                 elementsToModify.forEach((element) => {
-                  const stellarElementId = generateUniqueId();
-                  element.setAttribute('stellar-element-id', stellarElementId);
                   element.setAttribute('stellar-selector-ref', mod.selector);
-                  elementsPristineState[stellarElementId] =
-                    element.cloneNode(true);
 
                   // Only apply modifications that are explicitly defined
                   if (mod.innerText !== undefined) {
                     element.innerText = mod.innerText;
                   }
 
-                  if (mod.innerHTML !== undefined) {
-                    element.innerHTML = mod.innerHTML;
+                  if (mod.outerHTML !== undefined) {
+                    element.outerHTML = mod.outerHTML;
                   }
 
                   if (mod.cssText !== undefined) {
@@ -441,7 +465,7 @@
 
                   global__editedElements.push({
                     selector: mod.selector,
-                    stellarElementId: stellarElementId,
+                    // stellarElementId: stellarElementId,
                     affectAll: mod.affectAll,
                   });
                 });
@@ -720,8 +744,8 @@
           function editedElementsComponent() {
             let editedElementsMarkup = '';
             for (let i = 0; i < global__editedElements.length; i++) {
-              const el: any = document.querySelector(
-                `[stellar-element-id="${global__editedElements[i].stellarElementId}"]`,
+              const el = document.querySelector(
+                global__editedElements[i].selector,
               );
               if (el) {
                 editedElementsMarkup += `<div class="sve-edited-element" stellar-selector-ref="${global__editedElements[i].selector}">
@@ -932,7 +956,7 @@
                             : ''
                         }
                         <textarea id="sve-html-content" style="display: none;">${
-                          element ? element.innerHTML : ''
+                          element ? element.outerHTML : ''
                         }</textarea>
                       </div>
                       <label>Inner Text ${
@@ -1037,43 +1061,21 @@
             attachActionsListeners();
           }
 
-          function handleDeleteEditedElement(stellarElementId) {
-            // const el: any = document.querySelector(
-            //   `[stellar-element-id="${stellarElementId}"]`,
-            // );
-            // el.innerText = elementsPristineState[stellarElementId].innerText;
-            // const index = editedElements.indexOf(stellarElementId);
-            // if (index > -1) {
-            //   editedElements.splice(index, 1);
-            // }
-            // const pristineStyle = elementsPristineState[stellarElementId].style;
-            // for (let i = 0; i < pristineStyle.length; i++) {
-            //   const propName = pristineStyle[i];
-            //   el.style[propName] = pristineStyle.getPropertyValue(propName);
-            // }
-            // elementsPristineState[stellarElementId] = null;
-            // renderEditor({ element: selectedElement });
-          }
-
           async function handleSaveAndFinishVariant() {
             loadingVariantCreation = true;
             renderActions();
             const modifications = [];
 
+            console.log('global__editedElements', global__editedElements);
+
             for (let i = 0; i < global__editedElements.length; i++) {
-              const stellarElementId =
-                global__editedElements[i].stellarElementId;
-              const innerTextModified =
-                global__editedElements[i].innerTextModified;
-              const innerHtmlModified =
-                global__editedElements[i].innerHtmlModified;
-              const displayModified = global__editedElements[i].displayModified;
-              const el = document.querySelector(
-                `[stellar-element-id="${stellarElementId}"]`,
-              ) as HTMLElement;
-              const pristineEl = elementsPristineState[
-                stellarElementId
-              ] as HTMLElement;
+              const selector = global__editedElements[i].selector;
+
+              console.log('selector', selector);
+
+              const el = document.querySelector(selector) as HTMLElement;
+
+              console.log('el', el);
 
               // Create modification object with all current properties of the element
               const modification: any = {
@@ -1086,8 +1088,11 @@
                 modification.innerText = el.innerText;
               }
 
-              if (el?.innerHTML) {
-                modification.innerHTML = el.innerHTML;
+              if (el?.outerHTML) {
+                modification.outerHTML = el.outerHTML.replace(
+                  /stellar-selected-effect/g,
+                  '',
+                );
               }
 
               if (el?.style?.cssText) {
@@ -1190,17 +1195,6 @@
                 editedEl.click();
               });
             });
-
-            const deleteEditedElement = document.querySelectorAll(
-              '.sve-edited-element-delete',
-            );
-            deleteEditedElement.forEach((el) => {
-              el.addEventListener('click', function (e) {
-                e.stopPropagation();
-                const attrVal = this.getAttribute('stellar-selector-ref');
-                handleDeleteEditedElement(attrVal);
-              });
-            });
           }
 
           function handleElementMutation(
@@ -1208,9 +1202,6 @@
             innerHtmlModified: boolean = false,
             displayModified: boolean = false,
           ) {
-            const selectedElementNode = document.querySelector(selectedElement);
-            const stellarElementId =
-              selectedElementNode.getAttribute('stellar-element-id');
             const affectAll = document.getElementById(
               'affect-all',
             ) as HTMLInputElement;
@@ -1219,19 +1210,11 @@
             if (
               selectedElement &&
               !global__editedElements.some(
-                (el) => el.stellarElementId === stellarElementId,
+                (el) => el.selector === selectedElement,
               )
             ) {
-              const newStellarElementId = generateUniqueId();
-              selectedElementNode.setAttribute(
-                'stellar-element-id',
-                newStellarElementId,
-              );
-              elementsPristineState[newStellarElementId] =
-                selectedElementNode.cloneNode(true);
               global__editedElements.push({
                 selector: selectedElement,
-                stellarElementId: newStellarElementId,
                 innerTextModified,
                 innerHtmlModified,
                 displayModified,
@@ -1239,7 +1222,7 @@
               });
             } else if (selectedElement) {
               const editedElement = global__editedElements.find(
-                (el) => el.stellarElementId === stellarElementId,
+                (el) => el.selector === selectedElement,
               );
               if (editedElement) {
                 editedElement.innerTextModified =
@@ -1552,10 +1535,10 @@
                   : 'Hide HTML Editor';
 
                 if (!isVisible) {
-                  // When showing HTML editor, update it with current innerHTML
+                  // When showing HTML editor, update it with current outerHTML
                   const element = document.querySelector(selectedElement);
                   if (element) {
-                    htmlTextarea.value = element.innerHTML;
+                    htmlTextarea.value = element.outerHTML;
                   }
                 }
               });
@@ -1563,7 +1546,7 @@
               htmlTextarea.addEventListener('input', function () {
                 if (selectedElement) {
                   getTargetElements(selectedElement).forEach((el) => {
-                    el.innerHTML = this.value;
+                    el.outerHTML = this.value;
                     // Update the content textarea with the new text content
                     if (contentTextarea) {
                       contentTextarea.value = (el as HTMLElement).innerText;
@@ -1609,17 +1592,27 @@
                 }
 
                 const element = document.querySelector(selectedElement);
+
                 console.log('element -- ', element, selectedElement);
                 if (!element) return;
 
                 // Store original state for potential rollback
                 const originalState = {
-                  innerHTML: element.innerHTML,
+                  outerHTML: element.outerHTML,
                   style: element.getAttribute('style') || '',
                 };
 
                 (generateButton as HTMLButtonElement).disabled = true;
                 generateButton.textContent = 'Generating...';
+
+                console.log('sanitize');
+                console.log('element.outerHTML', element.outerHTML);
+                const sanitizedOuterHTML = element.outerHTML.replace(
+                  /stellar-selected-effect/g,
+                  '',
+                );
+
+                console.log('sanitizedOuterHTML', sanitizedOuterHTML);
 
                 try {
                   const response = await fetch(
@@ -1632,7 +1625,7 @@
                       },
                       body: JSON.stringify({
                         prompt: promptTextarea.value,
-                        elementHTML: element.innerHTML,
+                        elementHTML: sanitizedOuterHTML,
                         elementStyles: element.getAttribute('style') || '',
                       }),
                     },
@@ -1646,8 +1639,8 @@
 
                   // Apply modifications immediately
                   modifications.forEach((mod) => {
-                    if (mod.type === 'innerHTML') {
-                      element.innerHTML = mod.modification;
+                    if (mod.type === 'outerHTML') {
+                      element.outerHTML = mod.modification;
                     } else if (mod.type === 'CSS') {
                       element.style.cssText = mod.modification;
                     }
@@ -1695,8 +1688,12 @@
 
                   if (discardButton) {
                     discardButton.onclick = () => {
-                      element.innerHTML = originalState.innerHTML;
-                      element.setAttribute('style', originalState.style);
+                      const currentElement =
+                        document.querySelector(selectedElement);
+
+                      currentElement.outerHTML = originalState.outerHTML;
+
+                      currentElement.setAttribute('style', originalState.style);
                       statusContainer.style.display = 'none';
                       promptTextarea.value = ''; // Clear the prompt
                       // Show the prompt section again
@@ -1741,7 +1738,6 @@
           document.head.appendChild(style);
 
           if (visualEditorOn === 'true') {
-            console.log('caca1');
             renderEditor({ element: selectedElement });
           }
 
@@ -1754,7 +1750,7 @@
                 // Check if the target or any of its parents is .stellar-variant-editor
                 while (target != null && target !== document) {
                   if (target.classList.contains('stellar-variant-editor')) {
-                    return; // Stop the function if click is inside .stellar-variant-editor
+                    return; // Exit early without removing selection when clicking editor
                   }
                   target = target.parentNode;
                 }
@@ -1762,8 +1758,21 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Proceed with updating the selectedElement and rendering the editor
+                // Only remove previous selection if we're selecting a new element
+                if (selectedElement) {
+                  const prevSelected = document.querySelector(selectedElement);
+                  if (prevSelected) {
+                    prevSelected.classList.remove('stellar-selected-effect');
+                  }
+                }
+
+                // Update selected element and add the selected effect
                 selectedElement = getSelector(e.target);
+                const newSelected = document.querySelector(selectedElement);
+                if (newSelected) {
+                  newSelected.classList.add('stellar-selected-effect');
+                }
+
                 renderEditor({ element: selectedElement });
               },
               true,

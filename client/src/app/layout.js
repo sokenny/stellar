@@ -27,16 +27,12 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Update price - copy croct https://croct.com/pricing
-// TODO-p1-1: Allow rolling out new variants during an ongoing experiment
-// TODO-p1-1: Include actual html and not just innerhtml on the ai mod request
-// TODO-p1-1: Lax domain validation. It should not force you to remove the forward slash at the end of the domain. We can just strip the domain from the url
 // TODO-p1-1: Set up page for Skillboosterz account
-// TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
-// TODO-p1-1: Update calendly link to have juan@gostellar.app
-// TODO-p1-1: Keep element selected while editing (?)
+// TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
 // TODO-p1-1: Create B landing page and test it w split url test
+// TODO-p1-1: Update calendly link to have juan@gostellar.app
+// TODO-p1-1: Full width to edit html
 // TODO-p1-1  give disabled appearance to edit html button if it is disabled
 // TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db
 // TODO-p1-1: Allow discarding elements.

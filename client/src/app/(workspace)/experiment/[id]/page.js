@@ -174,8 +174,8 @@ export default function ExperimentPage({ params, searchParams }) {
         },
       );
       const variant = await response.json();
-      toast.success('Variant created');
       refetchProjects();
+      toast.success('Variant created');
       console.log(variant);
     } catch (error) {
       console.error(error);
@@ -187,6 +187,7 @@ export default function ExperimentPage({ params, searchParams }) {
   const hasStarted =
     experiment.status !== ExperimentStatusesEnum.PENDING &&
     experiment.status !== ExperimentStatusesEnum.QUEUED;
+  const hasEnded = !!experiment.ended_at;
   // const noGoalOrZeroChanges = !experiment.goal || hasCeroChanges;
 
   return (
@@ -411,11 +412,7 @@ export default function ExperimentPage({ params, searchParams }) {
             <div className={styles.tableTitle}>
               <h3 className={styles.sectionTitle}>Variants</h3>
               <Tooltip
-                content={
-                  hasStarted
-                    ? 'You can not add new variants to an experiment that has already started.'
-                    : 'Create a new variant'
-                }
+                content={'Create a new variant'}
                 showArrow
                 className={styles.tooltip}
                 closeDelay={0}
@@ -428,7 +425,7 @@ export default function ExperimentPage({ params, searchParams }) {
                       height={20}
                       className={styles.createButton}
                       onClick={handleCreateVariant}
-                      isDisabled={hasStarted}
+                      isDisabled={hasEnded}
                     />
                   )}
                 </span>

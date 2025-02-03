@@ -9,8 +9,8 @@ async function createVariant(req: Request, res: Response) {
     return res.status(404).send('Experiment not found');
   }
 
-  if (experiment.started_at) {
-    return res.status(400).send('Experiment has already started');
+  if (experiment.ended_at) {
+    return res.status(400).send('Cannot create variants for ended experiments');
   }
 
   const transaction = await db.sequelize.transaction();
@@ -24,27 +24,32 @@ async function createVariant(req: Request, res: Response) {
       transaction,
     });
 
-    const totalVariants = variants.length + 1;
-    const baseTraffic = Math.floor(100 / totalVariants);
-    const remainder = 100 % totalVariants;
+    let variantTraffic = 0;
+    if (!experiment.started_at) {
+      const totalVariants = variants.length + 1;
+      const baseTraffic = Math.floor(100 / totalVariants);
+      const remainder = 100 % totalVariants;
 
-    for (let i = 0; i < variants.length; i++) {
-      let newTraffic = baseTraffic + (i < remainder ? 1 : 0);
-      await db.Variant.update(
-        { traffic: newTraffic },
-        {
-          where: {
-            id: variants[i].id,
+      for (let i = 0; i < variants.length; i++) {
+        let newTraffic = baseTraffic + (i < remainder ? 1 : 0);
+        await db.Variant.update(
+          { traffic: newTraffic },
+          {
+            where: {
+              id: variants[i].id,
+            },
+            transaction,
           },
-          transaction,
-        },
-      );
+        );
+      }
+
+      variantTraffic = baseTraffic + (variants.length < remainder ? 1 : 0);
     }
 
     const variant = await db.Variant.create(
       {
         name,
-        traffic: baseTraffic + (variants.length < remainder ? 1 : 0),
+        traffic: variantTraffic,
         experiment_id: experimentId,
       },
       { transaction },

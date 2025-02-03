@@ -25,8 +25,12 @@
   font-size: 12px;
 }
 
-.hasStarted .editIcon,
 .hasStarted .deleteIcon {
+  /* Remove this rule since we don't want all delete icons disabled when experiment has started */
+}
+
+/* Add new rule for delete icons that should be disabled */
+.hasStarted .row:not([data-no-sessions='true']) .deleteIcon {
   opacity: 0.25;
   cursor: not-allowed;
 }

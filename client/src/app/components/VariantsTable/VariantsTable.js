@@ -232,7 +232,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
         uplift:
           hasStarted && variantStats?.conversionRate && !variant.is_control
             ? (
-                ((variantStats.conversionRate - controlConversionRate) /
+                ((variantStats?.conversionRate - controlConversionRate) /
                   controlConversionRate) *
                 100
               ).toFixed(2) + '%'
@@ -249,6 +249,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
           : '-',
         total_session_time: hasStarted ? variantStats?.totalSessionTime : '-',
         _isControl: variant.is_control,
+        _hasNoSessions: hasStarted && variantStats?.sessions === 0,
       };
     });
   }
@@ -259,15 +260,19 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
 
   function handleOnView(variantId) {
     const variant = variants.find((v) => v.id === variantId);
-    let url;
+    let baseUrl, queryParams;
 
     if (experiment.type === 'SPLIT_URL') {
-      url = `${variant.url}?stellarMode=true`;
+      baseUrl = variant.url;
+      queryParams = 'stellarMode=true';
+    } else {
+      baseUrl = experiment.editor_url;
+      queryParams = `stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`;
     }
 
-    if (experiment.type !== 'SPLIT_URL') {
-      url = `${experiment.editor_url}?stellarMode=true&experimentId=${experiment.id}&variantId=${variantId}&previewMode=true&token=${token}`;
-    }
+    const url = baseUrl.includes('?')
+      ? `${baseUrl}&${queryParams}`
+      : `${baseUrl}?${queryParams}`;
 
     window.open(url, '_blank');
   }
@@ -338,6 +343,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
               className={`${styles.row} ${
                 item.id === getHighestUpliftId(rows) ? styles.highestUplift : ''
               }`}
+              data-no-sessions={item._hasNoSessions}
             >
               {(columnKey) => {
                 if (columnKey === 'actions') {
@@ -364,10 +370,10 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                         {experiment.type !== 'SPLIT_URL' && (
                           <Tooltip
                             content={
-                              hasStarted
-                                ? 'Can not edit a variant after the experiment has started.'
-                                : item._isControl
+                              item._isControl
                                 ? 'Can not edit control variant'
+                                : hasEnded
+                                ? 'Can not edit variant after experiment has ended'
                                 : 'Visual Editor'
                             }
                             showArrow
@@ -379,14 +385,14 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                                 className={styles.editIcon}
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (hasStarted || item._isControl) return;
+                                  if (hasEnded || item._isControl) return;
                                   missingSnippet
                                     ? onOpenSnippetModal()
                                     : handleEditVariant(item.id);
                                 }}
                                 style={{
                                   cursor:
-                                    hasStarted || item._isControl
+                                    hasEnded || item._isControl
                                       ? 'not-allowed'
                                       : 'pointer',
                                 }}
@@ -422,21 +428,26 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
                         {!item._isControl && (
                           <Tooltip
                             content={
-                              hasStarted
-                                ? 'Can not delete a variant after the experiment has started.'
+                              hasStarted && !item._hasNoSessions
+                                ? 'Can not delete a variant after the experiment has started and has recorded sessions.'
                                 : 'Delete'
                             }
                             showArrow
                             className={styles.tooltip}
                             closeDelay={200}
-                            color={hasStarted ? 'default' : 'danger'}
+                            color={
+                              hasStarted && !item._hasNoSessions
+                                ? 'default'
+                                : 'danger'
+                            }
                           >
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
                               <DeleteIcon
                                 className={styles.deleteIcon}
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (hasStarted) return;
+                                  if (hasStarted && !item._hasNoSessions)
+                                    return;
                                   setVariantToDelete(item.id);
                                 }}
                               />

@@ -45,7 +45,7 @@ export const initializeVariant = (sequelize: Sequelize): typeof Variant => {
         defaultValue: 0,
         validate: {
           min: 0,
-          max: 99,
+          max: 100,
         },
       },
       deleted_at: {

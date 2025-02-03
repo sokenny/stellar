@@ -67,6 +67,7 @@ export default function StatisticalSignificance({ experiment }) {
       const variantStats = uvStats.find(
         (stat) => stat.variantId === variant.id,
       );
+      if (!variantStats) return max;
       return variantStats.conversionRate > max.conversionRate
         ? variantStats
         : max;
