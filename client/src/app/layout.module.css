@@ -14,3 +14,18 @@
   text-align: center;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+.footerLink {
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: rgba(0, 0, 0, 0.8);
+  text-decoration: underline;
+}
+
+.footerDivider {
+  margin: 0 8px;
+}
