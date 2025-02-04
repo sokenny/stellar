@@ -68,429 +68,398 @@ export default async function HomePage({}) {
 
       <div className={styles.HomePage}>
         <div className={styles.content}>
-          <div className={styles.header}>
-            <GridBg
-              style={{
-                position: 'absolute',
-                opacity: 0.2,
-                transform: 'translateY(-50px)',
-                width: '1200px',
-                height: '800px',
-                zIndex: 0,
-              }}
+          <section className={styles.section}>
+            <div className={styles.header}>
+              <h1 className={styles.title}>
+                <span className={styles.varA}>A</span>/
+                <span className={styles.varB}>B</span> test any website.
+              </h1>
+              <h2 className={styles.description}>
+                Built for speed and simplicity. A streamlined alternative to
+                complex testing tools.
+              </h2>
+            </div>
+            <div className={styles.ctaSection} id="cta-section">
+              <div className={styles.buttons}>
+                <a
+                  href="https://calendly.com/juan-gostellar/30min"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <SignUpCTA className={styles.goStellarBtn}>
+                    Start For Free
+                  </SignUpCTA>
+                  <Button
+                    className={styles.bookDemoBtn}
+                    color="primary"
+                    variant="bordered"
+                  >
+                    Book a Demo
+                  </Button>
+                </a>
+              </div>
+              <div className={styles.points}>
+                <div className={styles.noCard}>💳 No credit card required</div>
+                <div className={styles.lightest}>
+                  ⚡️ Lightest in the market at 2.4kb
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className={styles.section}>
+            <div className={styles.favoriteTools}>
+              <h3>Works with your favorite tools</h3>
+              <div className={styles.tools}>
+                {[
+                  'shopify',
+                  'webflow',
+                  'ga',
+                  'woocommerce',
+                  'wordpress',
+                  'wix',
+                ].map((tool, index) => {
+                  return (
+                    <div
+                      key={tool}
+                      className={`${styles.tool} ${styles[tool]}`}
+                    >
+                      <img
+                        src={`https://d3niuqph2rteir.cloudfront.net/assets/tools/stool-${tool}.png`}
+                        alt={tool}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+          <div className={styles.sixtySecLaunch}>
+            <h3>Launch with us in &lt;60 seconds</h3>
+            <AutoPlayVideo
+              src="https://d3niuqph2rteir.cloudfront.net/assets/60seclaunch3.mp4"
+              className={styles.video}
             />
-            <h1 className={styles.title}>
-              <span className={styles.varA}>A</span>/
-              <span className={styles.varB}>B</span> test any website.
-            </h1>
-            <h2 className={styles.description}>
-              Built for speed and simplicity. The ideal A/B testing tool for
-              marketing teams.
-            </h2>
           </div>
-          <div className={styles.ctaSection} id="cta-section">
-            <div className={styles.buttons}>
+
+          <section className={styles.section}>
+            <div className={styles.advantages}>
+              <h3>Advantages of Stellar</h3>
+              <div className={styles.list}>
+                <div className={styles.advantage}>
+                  <div className={styles.icon}>
+                    <Goal color="white" width={15} height={15} />
+                  </div>
+                  <div className={styles.text}>
+                    Ease of use. Clutter-free. To the point.
+                  </div>
+                </div>
+                <div className={styles.advantage}>
+                  <div className={styles.icon}>
+                    <Bolt color="white" width={15} height={15} />
+                  </div>
+                  <div className={styles.text}>
+                    Lightning-fast load time thanks to CDN caching.
+                  </div>
+                </div>
+                <div className={styles.advantage}>
+                  <div className={styles.icon}>
+                    <Traffic color="white" width={15} height={15} />
+                  </div>
+                  <div className={styles.text}>
+                    Free forever, under 25k monthly users.
+                  </div>
+                </div>
+                <div className={styles.advantage}>
+                  <div className={styles.icon}>
+                    <Cookie color="white" width={15} height={15} />
+                  </div>
+                  <div className={styles.text}>No use of cookies.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* <HomeChartSection /> */}
+          <section className={styles.section}>
+            <div className={styles.process}>
+              <div className={styles.row}>
+                <div className={styles.block}>
+                  <div className={styles.texts}>
+                    <h3 className={styles.title}>
+                      Create variants with our visual editor
+                    </h3>
+                  </div>
+                  <div>
+                    <AutoPlayVideo
+                      // src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
+                      src="https://d3niuqph2rteir.cloudfront.net/assets/ai-editor-4.mp4"
+                      poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                      width={'100%'}
+                      className={styles.video}
+                    />
+                  </div>
+                </div>
+                <div className={styles.multiBlock}>
+                  <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>No-code visual editor</h3>
+                    <p>
+                      Install our snippet to access a WYSIWYG editor directly on
+                      your site. Works with any website.
+                    </p>
+                  </div>
+                  <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>
+                      Dynamic Keyword Insertion
+                    </h3>
+                    <p>
+                      Personalize your landing pages copy with dynamic keyword
+                      insertion. Great for PPC campaigns. Zero coding required.
+                    </p>
+                  </div>
+                  <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>Custom JS and CSS</h3>
+                    <p>
+                      Add custom JavaScript and CSS for more granular control
+                      over your page. Perfect for advanced tweaks and precise
+                      adjustments.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.multiBlock}>
+                  <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>Easy Goal Setup</h3>
+                    <p>
+                      Set your goals in seconds with a simple interface. Choose
+                      from page visits, time spent on a page, or specific user
+                      actions—no coding needed.
+                    </p>
+                  </div>
+                  <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>Advanced Goal Tracking</h3>
+                    <p>
+                      Track custom user events like button clicks, form
+                      submissions, or video plays. Combine multiple goals for a
+                      more comprehensive view of performance.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.block}>
+                  <div className={`${styles.left} ${styles.texts}`}>
+                    <h3 className={styles.title}>Set your goal in seconds.</h3>
+                  </div>
+                  <div>
+                    <AutoPlayVideo
+                      src="https://d3niuqph2rteir.cloudfront.net/assets/set-goal.mp4"
+                      poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
+                      width={'100%'}
+                      className={styles.video}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className={styles.section}>
+            <div className={styles.speedContainer}>
+              <h3>Fastest in the market, built for speed and simplicity</h3>
+              <StellarSpeed />
+            </div>
+          </section>
+          <section className={styles.section}>
+            <div className={`${styles.advantages} ${styles.quote}`}>
+              <h3>Split test your way to market fit and beyond</h3>
+              <SignUpCTA className={styles.startFreeBtn}>
+                Start For Free
+              </SignUpCTA>
+            </div>
+          </section>
+          <section className={styles.section}>
+            <div className={styles.biteTestimonials}>
+              <h3>Why do users prefer Stellar?</h3>
+
+              <div className={styles.testimonials}>
+                <div
+                  className={styles.testimonial}
+                  style={{
+                    borderColor: quotes[0].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test1.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>Anna R. — CRO Specialist</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+                  <p className={styles.quote}>
+                    "Stellar is exactly what we needed. We switched from other
+                    testing tools because they were too complex and costly. With
+                    Stellar, we ran our first test in under 10 minutes, no
+                    developer required. Our conversions increased by 30% in just
+                    a few weeks. It's fast, lightweight, and the support team is
+                    amazing."
+                  </p>
+                </div>
+                <div
+                  className={styles.testimonial}
+                  style={{
+                    borderColor: quotes[1].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test3.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>David L. — Growth Marketer</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+
+                  <p className={styles.quote}>
+                    "I've tried VWO and Optimizely, but Stellar stands out for
+                    its ease of use and simplicity. The script is super
+                    lightweight, and there's no impact on our site speed.
+                    Setting up tests was quick, and the visual editor made it
+                    easy to adjust our pages without any coding. It's been a
+                    game-changer for our marketing team."
+                  </p>
+                </div>
+                <div
+                  className={styles.testimonial}
+                  style={{
+                    borderColor: quotes[2].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test2.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>Sarah M. — E-commerce Owner</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+
+                  <p className={styles.quote}>
+                    "We needed a Google Optimize replacement, and Stellar
+                    exceeded our expectations. The tool is intuitive, and the
+                    onboarding was seamless. The reporting is clear, and the
+                    results helped us increase our sales by 20% in the first
+                    month. Highly recommend for anyone serious about improving
+                    their website performance."
+                  </p>
+                </div>
+                <div
+                  className={styles.testimonial}
+                  style={{
+                    borderColor: quotes[3].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test4.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>Alex T. — Product Manager</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+
+                  <p className={styles.quote}>
+                    "Stellar is the best A/B testing platform I've used. It's
+                    lightweight, fast, and integrates perfectly with our
+                    existing setup. The visual editor is fantastic—our team was
+                    able to create and launch experiments without any dev
+                    assistance. We saw a 25% uplift in our signup conversion
+                    rate within weeks. Great tool!"
+                  </p>
+                </div>
+                <div
+                  className={styles.testimonial}
+                  style={{
+                    borderColor: quotes[5].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test7.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>Maria P. — Digital Marketing Director</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+
+                  <p className={styles.quote}>
+                    "Stellar is a breath of fresh air. It's clutter-free and
+                    does exactly what you need without the unnecessary features.
+                    The script is small and doesn't slow down our site, which
+                    was a big concern for us. The support team is responsive and
+                    knowledgeable. We've already recommended Stellar to other
+                    teams."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className={styles.section}>
+            <Plans />
+          </section>
+          <section className={styles.section}>
+            <div className={styles.notSure}>
+              <h3>
+                Still not sure? <span>Let's talk</span>
+              </h3>
               <a
-                href="https://calendly.com/juanchaher99/stellar-demo"
+                href="https://calendly.com/juan-gostellar/30min"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <SignUpCTA className={styles.goStellarBtn}>
-                  Start For Free
-                </SignUpCTA>
-                <Button
-                  className={styles.bookDemoBtn}
-                  color="primary"
-                  variant="bordered"
-                >
-                  Book a Demo
-                </Button>
+                <Button className={styles.scheduleBtn}>Book a Demo</Button>
               </a>
             </div>
-            <div className={styles.points}>
-              <div className={styles.noCard}>💳 No credit card required</div>
-              <div className={styles.lightest}>
-                ⚡️ Lightest in the market at 7.5kb
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.loomContainer} id="loom-demo-1">
-            <div className={styles.infoBar}>watch our quick demo :)</div>
-
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          </div>
-
-          <HomeChartSection />
-
-          <div
-            style={{
-              position: 'relative',
-              boxSizing: 'content-box',
-              maxHeight: '80vh',
-              maxHeight: '80svh',
-              width: '675px',
-              maxWidth: '100%',
-              aspectRatio: '1.764294049008168',
-              padding: '40px 0 40px 0',
-            }}
-            className={styles.supademo}
-            id="supademo"
-          >
-            <iframe
-              src="https://app.supademo.com/embed/cm648ecrn0d30h0o82hp4mx8a?embed_v=2"
-              loading="lazy"
-              title="Gostellar Demo"
-              allow="clipboard-write"
-              frameBorder="0"
-              webkitallowfullscreen="true"
-              mozallowfullscreen="true"
-              allowFullScreen
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              }}
-            ></iframe>
-          </div>
-          <div className={styles.advantages}>
-            <h3>Advantages of Stellar</h3>
-            <div className={styles.list}>
-              <div className={styles.advantage}>
-                <div className={styles.icon}>
-                  <Goal color="white" width={15} height={15} />
-                </div>
-                <div className={styles.text}>
-                  Ease of use. Clutter-free. To the point.
-                </div>
-              </div>
-              <div className={styles.advantage}>
-                <div className={styles.icon}>
-                  <Bolt color="white" width={15} height={15} />
-                </div>
-                <div className={styles.text}>
-                  Lightning-fast load time thanks to CDN caching.
-                </div>
-              </div>
-              <div className={styles.advantage}>
-                <div className={styles.icon}>
-                  <Traffic color="white" width={15} height={15} />
-                </div>
-                <div className={styles.text}>
-                  Free forever, under 25k monthly users.
-                </div>
-              </div>
-              <div className={styles.advantage}>
-                <div className={styles.icon}>
-                  <Cookie color="white" width={15} height={15} />
-                </div>
-                <div className={styles.text}>No use of cookies.</div>
-              </div>
-            </div>
-          </div>
-          {/* <HomeChartSection /> */}
-          <div className={styles.process}>
-            <div className={styles.row}>
-              <div className={styles.block}>
-                <div className={styles.texts}>
-                  <h3 className={styles.title}>
-                    Create variants with our visual editor
-                  </h3>
-                </div>
-                <div>
-                  <AutoPlayVideo
-                    src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
-                    poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
-                    width={'100%'}
-                    className={styles.video}
-                  />
-                </div>
-              </div>
-              <div className={styles.multiBlock}>
-                <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>No-code visual editor</h3>
-                  <p>
-                    Install our snippet to access a WYSIWYG editor directly on
-                    your site. Works with any website.
-                  </p>
-                </div>
-                <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>
-                    Dynamic Keyword Insertion
-                  </h3>
-                  <p>
-                    Personalize your landing pages copy with dynamic keyword
-                    insertion. Great for PPC campaigns. Zero coding required.
-                  </p>
-                </div>
-                <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>Custom JS and CSS</h3>
-                  <p>
-                    Add custom JavaScript and CSS for more granular control over
-                    your page. Perfect for advanced tweaks and precise
-                    adjustments.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.multiBlock}>
-                <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>Easy Goal Setup</h3>
-                  <p>
-                    Set your goals in seconds with a simple interface. Choose
-                    from page visits, time spent on a page, or specific user
-                    actions—no coding needed.
-                  </p>
-                </div>
-                <div className={styles.card}>
-                  <h3 className={styles.cardTitle}>Advanced Goal Tracking</h3>
-                  <p>
-                    Track custom user events like button clicks, form
-                    submissions, or video plays. Combine multiple goals for a
-                    more comprehensive view of performance.
-                  </p>
-                </div>
-              </div>
-              <div className={styles.block}>
-                <div className={`${styles.left} ${styles.texts}`}>
-                  <h3 className={styles.title}>Set your goal in seconds.</h3>
-                  <p>
-                    Our goal setting is easy yet powerful. Set one based on
-                    clicks, page visits or time spent on the page. Zero coding
-                    required.
-                  </p>
-                </div>
-                <div>
-                  <AutoPlayVideo
-                    src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/set-goal.mp4"
-                    poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
-                    width={'100%'}
-                    className={styles.video}
-                  />
-                </div>
-              </div>
-            </div>
-            {/* <div className={styles.block}>
-              <div className={styles.texts}>
-                <h3 className={styles.title}>
-                  Control your experiments and track their performance.
-                </h3>
-                <p>
-                  Stay on top of your experiment's progress. Pause and resumen
-                  if needed. Track your conversion rates and see how your
-                  variants are performing.
-                </p>
-              </div>
-              <div>
-                <img
-                  src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-experiment-page.webp"
-                  alt="Control your experiment"
-                  width={'100%'}
-                />
-              </div>
-            </div> */}
-          </div>
-          <div className={`${styles.advantages} ${styles.quote}`}>
-            <h3>Split test your way to market fit and beyond</h3>
-            <SignUpCTA className={styles.startFreeBtn}>
-              Start For Free
-            </SignUpCTA>
-          </div>
-          <div className={styles.speedContainer}>
-            <h3>Fastest in the market, built for speed and simplicity</h3>
-            <StellarSpeed />
-          </div>
-          <div className={styles.biteTestimonials}>
-            <h3>Why do users prefer Stellar?</h3>
-
-            <div className={styles.testimonials}>
-              <div
-                className={styles.testimonial}
-                style={{
-                  borderColor: quotes[0].color,
-                }}
-              >
-                <div className={styles.testimonialHeader}>
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test1.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div>
-                    <p className={styles.name}>
-                      <strong>Anna R. — CRO Specialist</strong>
-                    </p>
-                    <p>⭐️⭐️⭐️⭐️⭐️</p>
-                  </div>
-                </div>
-                <p className={styles.quote}>
-                  "Stellar is exactly what we needed. We switched from other
-                  testing tools because they were too complex and costly. With
-                  Stellar, we ran our first test in under 10 minutes, no
-                  developer required. Our conversions increased by 30% in just a
-                  few weeks. It's fast, lightweight, and the support team is
-                  amazing."
-                </p>
-              </div>
-              <div
-                className={styles.testimonial}
-                style={{
-                  borderColor: quotes[1].color,
-                }}
-              >
-                <div className={styles.testimonialHeader}>
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test3.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div>
-                    <p className={styles.name}>
-                      <strong>David L. — Growth Marketer</strong>
-                    </p>
-                    <p>⭐️⭐️⭐️⭐️⭐️</p>
-                  </div>
-                </div>
-
-                <p className={styles.quote}>
-                  "I've tried VWO and Optimizely, but Stellar stands out for its
-                  ease of use and simplicity. The script is super lightweight,
-                  and there's no impact on our site speed. Setting up tests was
-                  quick, and the visual editor made it easy to adjust our pages
-                  without any coding. It's been a game-changer for our marketing
-                  team."
-                </p>
-              </div>
-              <div
-                className={styles.testimonial}
-                style={{
-                  borderColor: quotes[2].color,
-                }}
-              >
-                <div className={styles.testimonialHeader}>
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test2.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div>
-                    <p className={styles.name}>
-                      <strong>Sarah M. — E-commerce Owner</strong>
-                    </p>
-                    <p>⭐️⭐️⭐️⭐️⭐️</p>
-                  </div>
-                </div>
-
-                <p className={styles.quote}>
-                  "We needed a Google Optimize replacement, and Stellar exceeded
-                  our expectations. The tool is intuitive, and the onboarding
-                  was seamless. The reporting is clear, and the results helped
-                  us increase our sales by 20% in the first month. Highly
-                  recommend for anyone serious about improving their website
-                  performance."
-                </p>
-              </div>
-              <div
-                className={styles.testimonial}
-                style={{
-                  borderColor: quotes[3].color,
-                }}
-              >
-                <div className={styles.testimonialHeader}>
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test4.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div>
-                    <p className={styles.name}>
-                      <strong>Alex T. — Product Manager</strong>
-                    </p>
-                    <p>⭐️⭐️⭐️⭐️⭐️</p>
-                  </div>
-                </div>
-
-                <p className={styles.quote}>
-                  "Stellar is the best A/B testing platform I've used. It's
-                  lightweight, fast, and integrates perfectly with our existing
-                  setup. The visual editor is fantastic—our team was able to
-                  create and launch experiments without any dev assistance. We
-                  saw a 25% uplift in our signup conversion rate within weeks.
-                  Great tool!"
-                </p>
-              </div>
-              <div
-                className={styles.testimonial}
-                style={{
-                  borderColor: quotes[5].color,
-                }}
-              >
-                <div className={styles.testimonialHeader}>
-                  <div
-                    className={styles.avPic}
-                    style={{
-                      backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test7.webp)`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  ></div>
-                  <div>
-                    <p className={styles.name}>
-                      <strong>Maria P. — Digital Marketing Director</strong>
-                    </p>
-                    <p>⭐️⭐️⭐️⭐️⭐️</p>
-                  </div>
-                </div>
-
-                <p className={styles.quote}>
-                  "Stellar is a breath of fresh air. It's clutter-free and does
-                  exactly what you need without the unnecessary features. The
-                  script is small and doesn't slow down our site, which was a
-                  big concern for us. The support team is responsive and
-                  knowledgeable. We've already recommended Stellar to other
-                  teams."
-                </p>
-              </div>
-            </div>
-          </div>
-          <Plans />
-          <div className={styles.notSure}>
-            <h3>
-              Still not sure? <span>Let's talk</span>
-            </h3>
-            <a
-              href="https://calendly.com/juanchaher99/stellar-demo"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Button className={styles.scheduleBtn}>Book a Demo</Button>
-            </a>
-          </div>
+          </section>
         </div>
       </div>
     </>

@@ -39,7 +39,7 @@ export default function Sidebar() {
               isActive('/account') ? styles.active : ''
             }`}
           >
-            Projects
+            Domains
           </div>
         </Link>
       </div>

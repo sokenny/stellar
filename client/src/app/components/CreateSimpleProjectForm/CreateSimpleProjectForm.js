@@ -25,6 +25,8 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
     // Remove www. if present
     processedDomain = processedDomain.replace(/^www\./, '');
 
+    processedDomain = processedDomain.replace(/\/$/, '');
+
     // Basic domain validation (allows letters, numbers, dots, and hyphens)
     const domainRegex = /^[a-z0-9][a-z0-9-]*[a-z0-9]\.[a-z0-9-_.]+[a-z]$/;
 

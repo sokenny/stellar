@@ -242,11 +242,11 @@ const Nav = ({ token }) => {
               })}
               <DropdownItem
                 key="new"
-                description="Create a new project"
+                description="Add a new domain"
                 startContent={<AddNote className={iconClasses} />}
                 onClick={onOpenCreateNewProjectModal}
               >
-                New project
+                New domain
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

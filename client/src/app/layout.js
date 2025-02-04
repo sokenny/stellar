@@ -27,17 +27,12 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Solo poner paises del bien en g ads
-// TODO-p1-1: Make billing a bit cheaper (?)
-// TODO-p1-1: Set up page for Skillboosterz account
 // TODO-p1-1: Record with screen.studio and add recordings to home page
 // TODO-p1-1: Think about integration w g analytics similar to varify / Trigger an "experiment started" event for each variant w g analytics (?) - https://chatgpt.com/c/67a0b87a-2554-8009-a172-e0badc48999d
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
+// TODO-p1-1: Rename goals to conversions (?)
 // TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
 // TODO-p1-1: Create B landing page and test it w split url test
-// TODO-p1-1: Update calendly link to have juan@gostellar.app
-// TODO-p1-1: Full width to edit html
-// TODO-p1-1  give disabled appearance to edit html button if it is disabled
 // TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db
 // TODO-p1-1: Allow discarding elements.
 // TODO-p1-1: Launch on https://betalist.com/submissions/new - producthunt - appsumo

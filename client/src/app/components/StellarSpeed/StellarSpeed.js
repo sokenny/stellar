@@ -108,7 +108,7 @@ export default function StellarSpeed({ className }) {
       </div>
       <div className={styles.texts}>
         <p>
-          Stellar’s script is ultra-lightweight at just 5.4KB, making it up to
+          Stellar’s script is ultra-lightweight at just 2.4KB, making it up to
           15x smaller than competitors like VWO or AB Tasty. Built with pure
           JavaScript and decluttered from unnecessary dependencies, it ensures
           minimal impact on your website’s speed and Core Web Vitals. Unlike
