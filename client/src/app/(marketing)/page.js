@@ -268,6 +268,22 @@ export default async function HomePage({}) {
               <StellarSpeed />
             </div>
           </section>
+          <section className={`${styles.section} ${styles.ytContainer}`}>
+            <div className={styles.loomContainer} id="loom-demo-1">
+              <div className={styles.infoBar}>watch our quick demo :)</div>
+
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/dpDv5s4CZGA?si=cyF0jI97yfNdFI5b"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </section>
           <section className={styles.section}>
             <div className={`${styles.advantages} ${styles.quote}`}>
               <h3>Split test your way to market fit and beyond</h3>
