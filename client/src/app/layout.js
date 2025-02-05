@@ -27,7 +27,7 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Create Published Security Whitepapers & Attestations (SOC 2, ISO 27000, etc.)
+// TODO-p1-1: Think of a place to start collecting reviews
 // TODO-p1-1: Record with screen.studio and add recordings to home page
 // TODO-p1-1: Think about integration w g analytics similar to varify / Trigger an "experiment started" event for each variant w g analytics (?) - https://chatgpt.com/c/67a0b87a-2554-8009-a172-e0badc48999d
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).

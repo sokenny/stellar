@@ -103,7 +103,7 @@ const PrivacyPolicy = () => {
           <strong>Data Encryption:</strong>
           <ul>
             <li>
-              <strong>In transit:</strong> Encrypted using{' '}
+              {/* <strong>In transit:</strong> Encrypted using{' '} */}
               <strong>TLS 1.2+</strong>
             </li>
             <li>

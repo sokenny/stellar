@@ -101,7 +101,7 @@ export default async function HomePage({}) {
               <div className={styles.points}>
                 <div className={styles.noCard}>💳 No credit card required</div>
                 <div className={styles.lightest}>
-                  ⚡️ Lightest in the market at 2.4kb
+                  ⚡️ Lightest in the market at 5.4kb
                 </div>
               </div>
             </div>

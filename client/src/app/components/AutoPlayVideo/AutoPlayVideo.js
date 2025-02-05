@@ -12,7 +12,7 @@ const AutoPlayVideo = ({ src, poster, width, className, onPlayClassName }) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isIntersecting = entry.intersectionRatio > 0.95;
+        const isIntersecting = entry.intersectionRatio > 0.6;
         if (isIntersecting && !isPlaying) {
           videoElement.play();
           setIsPlaying(true);
@@ -22,7 +22,7 @@ const AutoPlayVideo = ({ src, poster, width, className, onPlayClassName }) => {
         }
       },
       {
-        threshold: [0, 0.95],
+        threshold: [0, 0.6],
       },
     );
 
