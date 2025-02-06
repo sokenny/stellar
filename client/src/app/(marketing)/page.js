@@ -70,10 +70,7 @@ export default async function HomePage({}) {
         <div className={styles.content}>
           <section className={styles.section}>
             <div className={styles.header}>
-              <h1 className={styles.title}>
-                <span className={styles.varA}>A</span>/
-                <span className={styles.varB}>B</span> test any website.
-              </h1>
+              <h1 className={styles.title}>A/B test any website</h1>
               <h2 className={styles.description}>
                 Built for speed and simplicity. A streamlined alternative to
                 complex testing tools.
@@ -103,6 +100,21 @@ export default async function HomePage({}) {
                 <div className={styles.lightest}>
                   ⚡️ Lightest in the market at 5.4kb
                 </div>
+              </div>
+              <div className={styles.lovedBy} id="loved-by">
+                <div className={styles.faces}>
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((face, index) => {
+                    return (
+                      <div key={index} className={styles.face}>
+                        <img
+                          src={`https://d3niuqph2rteir.cloudfront.net/assets/test${face}.webp`}
+                          alt="face"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <h3>🚀 Loved by CRO marketers</h3>
               </div>
             </div>
           </section>
@@ -138,6 +150,7 @@ export default async function HomePage({}) {
             <AutoPlayVideo
               src="https://d3niuqph2rteir.cloudfront.net/assets/60seclaunch3.mp4"
               className={styles.video}
+              showProgress={true}
             />
           </div>
 
@@ -191,9 +204,8 @@ export default async function HomePage({}) {
                   </div>
                   <div>
                     <AutoPlayVideo
-                      // src="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/visual-editor.mp4"
                       src="https://d3niuqph2rteir.cloudfront.net/assets/ai-editor-4.mp4"
-                      poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-visual-editor.webp"
+                      poster="https://d3niuqph2rteir.cloudfront.net/assets/stellar-visual-editor.webp"
                       width={'100%'}
                       className={styles.video}
                     />
@@ -253,7 +265,7 @@ export default async function HomePage({}) {
                   <div>
                     <AutoPlayVideo
                       src="https://d3niuqph2rteir.cloudfront.net/assets/set-goal.mp4"
-                      poster="https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/stellar-goal-setting.webp"
+                      poster="https://d3niuqph2rteir.cloudfront.net/assets/stellar-goal-setting.webp"
                       width={'100%'}
                       className={styles.video}
                     />
@@ -307,7 +319,7 @@ export default async function HomePage({}) {
                     <div
                       className={styles.avPic}
                       style={{
-                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test1.webp)`,
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test1.webp)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -338,7 +350,7 @@ export default async function HomePage({}) {
                     <div
                       className={styles.avPic}
                       style={{
-                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test3.webp)`,
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test3.webp)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -370,7 +382,7 @@ export default async function HomePage({}) {
                     <div
                       className={styles.avPic}
                       style={{
-                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test2.webp)`,
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test2.webp)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -402,7 +414,7 @@ export default async function HomePage({}) {
                     <div
                       className={styles.avPic}
                       style={{
-                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test4.webp)`,
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test4.webp)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -434,7 +446,7 @@ export default async function HomePage({}) {
                     <div
                       className={styles.avPic}
                       style={{
-                        backgroundImage: `url(https://stellar-app-bucket.s3.us-east-2.amazonaws.com/assets/test7.webp)`,
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test7.webp)`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}

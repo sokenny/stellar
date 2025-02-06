@@ -27,26 +27,28 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Reddit ads - social proof review widget
+// TODO-p1-1: Disable IBKR purchases (?)
+// More mindful homepage - address pains - explain value better
+// TODO-p1-1: Finish GA integration
+// TODO-p1-1: Create B landing page and test it w split url test and GA4
+// TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing
+// TODO-p1-1: Add faqs
 // TODO-p1-1: Think of a place to start collecting reviews
 // TODO-p1-1: Record with screen.studio and add recordings to home page
 // TODO-p1-1: Think about integration w g analytics similar to varify / Trigger an "experiment started" event for each variant w g analytics (?) - https://chatgpt.com/c/67a0b87a-2554-8009-a172-e0badc48999d
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
 // TODO-p1-1: Rename goals to conversions (?)
 // TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
-// TODO-p1-1: Create B landing page and test it w split url test
 // TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db
 // TODO-p1-1: Allow discarding elements.
 // TODO-p1-1: Launch on https://betalist.com/submissions/new - producthunt - appsumo
 // TODO-p1-1: https://reel.farm/#pricing
 // TODO-p1-1: Record "how to get unique selector" And embed in editor
 // TODO-p1-1: Set a max goals to track per experiment
-// TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing
-// TODO-p1-1: Add faqs
-// TODO-p1-1: Show case ai editor in the homepage
 // TODO-p1-1: Find a place to add crocts ab test criteria recommendations before calling a winner
 // TODO-p1-1: Make homepage more clean like Croct's
 // TODO-p1-1: Copiarle cosas a Croct
-// TODO-p1-1: Ab test works w your fav tools right below main header of homepage
 // TODO-p1-1: Set email alert to hello@gostellar.app when someone who is not me activates an experiment
 // TODO-p1-1: Be able to edit custom js/css from the table
 // TODO-p1-1: Create a dashboard
