@@ -27,17 +27,21 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Reddit ads - social proof review widget
-// TODO-p1-1: Disable IBKR purchases (?)
-// More mindful homepage - address pains - explain value better
+// TODO-p1-1: Set cloudfront for api responses
+// TODO-p1-1: More mindful homepage - adapt for mobile - address pains - explain value better
 // TODO-p1-1: Finish GA integration
+// TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
+// TODO-p1-1: Setup cloudfront for api calls for client experiments
+// TODO-p1-1: Start redshift PoC
+// TODO-p1-1: Create account on capterra  & linkedin
+// TODO-p1-1: Create ad for r/Shopify showing shopify edits and r/Copywriting and r/PPC showing DKI (dynamic keyword insertion)
+// TODO-p1-1: Disable IBKR purchases (?)
 // TODO-p1-1: Create B landing page and test it w split url test and GA4
 // TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing
 // TODO-p1-1: Add faqs
 // TODO-p1-1: Think of a place to start collecting reviews
 // TODO-p1-1: Record with screen.studio and add recordings to home page
 // TODO-p1-1: Think about integration w g analytics similar to varify / Trigger an "experiment started" event for each variant w g analytics (?) - https://chatgpt.com/c/67a0b87a-2554-8009-a172-e0badc48999d
-// TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).
 // TODO-p1-1: Rename goals to conversions (?)
 // TODO-p1-1: If client js fetched with a flag in params, return it with prod endpoint
 // TODO-p1-1 Investigate this thing where we are storing much more sessions than the ones recorded in the db

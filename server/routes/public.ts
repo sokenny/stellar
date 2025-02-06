@@ -1,6 +1,8 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import getExperimentsForClient from './handlers/getExperimentsForClient';
+import getExperimentsForClient, {
+  getExperimentsForClientTest,
+} from './handlers/getExperimentsForClient';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import autoGenerate from './handlers/autoGenerate';
 import createAccountSocial from './handlers/createAccountSocial';
@@ -41,6 +43,7 @@ router.get('/confirm-email', handleConfirmEmail);
 router.post('/create-account-social', createAccountSocial);
 
 router.get('/experiments/client', getExperimentsForClient);
+router.get('/experiments/client/test/:apiKey', getExperimentsForClientTest);
 router.post(
   '/experiments/end-session',
   // strictLimiter, // I might need this soon, perhaps not too strict

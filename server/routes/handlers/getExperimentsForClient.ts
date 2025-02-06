@@ -160,4 +160,22 @@ async function getExperimentsForClient(req, res) {
   res.json(experiments);
 }
 
+export async function getExperimentsForClientTest(req, res) {
+  const apiKey = req.params.apiKey;
+
+  if (!apiKey) {
+    return res.status(401).send('API key is required');
+  }
+
+  const keyData: any = decryptApiKey(apiKey);
+
+  if (!keyData) {
+    return res.status(401).send('Invalid API key');
+  }
+
+  const experiments = await getProjectExperiments(keyData.projectId);
+
+  res.json(experiments);
+}
+
 export default getExperimentsForClient;

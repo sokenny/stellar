@@ -272,6 +272,7 @@ export default async function HomePage({}) {
                   </div>
                 </div>
               </div>
+              {/* add realtime reporting section that talks about GA4 */}
             </div>
           </section>
           <section className={styles.section}>
@@ -312,6 +313,38 @@ export default async function HomePage({}) {
                 <div
                   className={styles.testimonial}
                   style={{
+                    borderColor: quotes[5].color,
+                  }}
+                >
+                  <div className={styles.testimonialHeader}>
+                    <div
+                      className={styles.avPic}
+                      style={{
+                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test7.webp)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    ></div>
+                    <div>
+                      <p className={styles.name}>
+                        <strong>Maria P. — Digital Marketing Director</strong>
+                      </p>
+                      <p>⭐️⭐️⭐️⭐️⭐️</p>
+                    </div>
+                  </div>
+
+                  <p className={styles.quote}>
+                    "Stellar is a breath of fresh air. It's clutter-free and
+                    does exactly what you need without the unnecessary features.
+                    The script is small and doesn't slow down our site, which
+                    was a big concern for us. The support team is responsive and
+                    knowledgeable. We've already recommended Stellar to other
+                    teams."
+                  </p>
+                </div>
+                <div
+                  className={styles.testimonial}
+                  style={{
                     borderColor: quotes[0].color,
                   }}
                 >
@@ -334,10 +367,10 @@ export default async function HomePage({}) {
                   <p className={styles.quote}>
                     "Stellar is exactly what we needed. We switched from other
                     testing tools because they were too complex and costly. With
-                    Stellar, we ran our first test in under 10 minutes, no
-                    developer required. Our conversions increased by 30% in just
-                    a few weeks. It's fast, lightweight, and the support team is
-                    amazing."
+                    Stellar we ran our first test in under 10 minutes, no
+                    developer required. Our landing's visitor-to-signup rate
+                    increased by about 30% in just a few weeks. It’s fast,
+                    lightweight, and the support team is amazing."
                   </p>
                 </div>
                 <div
@@ -398,10 +431,10 @@ export default async function HomePage({}) {
                   <p className={styles.quote}>
                     "We needed a Google Optimize replacement, and Stellar
                     exceeded our expectations. The tool is intuitive, and the
-                    onboarding was seamless. The reporting is clear, and the
-                    results helped us increase our sales by 20% in the first
-                    month. Highly recommend for anyone serious about improving
-                    their website performance."
+                    onboarding was seamless. The reporting is clear aside from
+                    the fact that they integrate well with GA4. Highly recommend
+                    for anyone serious about improving their website
+                    performance."
                   </p>
                 </div>
                 <div
@@ -434,38 +467,6 @@ export default async function HomePage({}) {
                     able to create and launch experiments without any dev
                     assistance. We saw a 25% uplift in our signup conversion
                     rate within weeks. Great tool!"
-                  </p>
-                </div>
-                <div
-                  className={styles.testimonial}
-                  style={{
-                    borderColor: quotes[5].color,
-                  }}
-                >
-                  <div className={styles.testimonialHeader}>
-                    <div
-                      className={styles.avPic}
-                      style={{
-                        backgroundImage: `url(https://d3niuqph2rteir.cloudfront.net/assets/test7.webp)`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                    ></div>
-                    <div>
-                      <p className={styles.name}>
-                        <strong>Maria P. — Digital Marketing Director</strong>
-                      </p>
-                      <p>⭐️⭐️⭐️⭐️⭐️</p>
-                    </div>
-                  </div>
-
-                  <p className={styles.quote}>
-                    "Stellar is a breath of fresh air. It's clutter-free and
-                    does exactly what you need without the unnecessary features.
-                    The script is small and doesn't slow down our site, which
-                    was a big concern for us. The support team is responsive and
-                    knowledgeable. We've already recommended Stellar to other
-                    teams."
                   </p>
                 </div>
               </div>

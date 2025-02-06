@@ -331,7 +331,7 @@ const Nav = ({ token }) => {
       </Navbar>
       <div className={styles.statusBar} data-testid="status-bar">
         <div>
-          #1 Fastest on the market.{' '}
+          #1 Fastest in the market.{' '}
           <a
             href="https://forms.gle/h2ytTVbdYLH5ZWKs9"
             target="_blank"

@@ -51,9 +51,10 @@ const SignUpPage = () => {
               <p className={styles.quote}>
                 "Stellar is exactly what we needed. We switched from other
                 testing tools because they were too complex and costly. With
-                Stellar, we ran our first test in under 10 minutes, no developer
-                required. Our conversions increased by 30% in just a few weeks.
-                It’s fast, lightweight, and the support team is amazing."
+                Stellar we ran our first test in under 10 minutes, no developer
+                required. Our landing's visitor-to-signup rate increased by
+                about 30% in just a few weeks. It’s fast, lightweight, and the
+                support team is amazing."
               </p>
             </div>
             <div
@@ -113,9 +114,9 @@ const SignUpPage = () => {
               <p className={styles.quote}>
                 "We needed a Google Optimize replacement, and Stellar exceeded
                 our expectations. The tool is intuitive, and the onboarding was
-                seamless. The reporting is clear, and the results helped us
-                increase our sales by 20% in the first month. Highly recommend
-                for anyone serious about improving their website performance."
+                seamless. The reporting is clear aside from the fact that they
+                integrate well with GA4. Highly recommend for anyone serious
+                about improving their website performance."
               </p>
             </div>
           </div>
