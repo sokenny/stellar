@@ -27,7 +27,7 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Set cloudfront for api responses
+// TODO-p1-1: Deploy CF test endpoint - Test cloudfront caching performance - Finish cloudfront caching for api setup
 // TODO-p1-1: More mindful homepage - adapt for mobile - address pains - explain value better
 // TODO-p1-1: Finish GA integration
 // TODO-p1-1: Only refetch experiment, then update the node (for exp modifs.).

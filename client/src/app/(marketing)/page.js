@@ -208,6 +208,7 @@ export default async function HomePage({}) {
                       poster="https://d3niuqph2rteir.cloudfront.net/assets/stellar-visual-editor.webp"
                       width={'100%'}
                       className={styles.video}
+                      // showProgress={true}
                     />
                   </div>
                 </div>
@@ -264,10 +265,11 @@ export default async function HomePage({}) {
                   </div>
                   <div>
                     <AutoPlayVideo
-                      src="https://d3niuqph2rteir.cloudfront.net/assets/set-goal.mp4"
+                      src="https://d3niuqph2rteir.cloudfront.net/assets/goal-setting-2.mp4"
                       poster="https://d3niuqph2rteir.cloudfront.net/assets/stellar-goal-setting.webp"
                       width={'100%'}
                       className={styles.video}
+                      // showProgress={true}
                     />
                   </div>
                 </div>

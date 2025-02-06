@@ -14,22 +14,27 @@ const AutoPlayVideo = ({
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const animationFrameRef = useRef();
 
   useEffect(() => {
     const videoElement = videoRef.current;
 
-    const handleTimeUpdate = () => {
-      const progress = (videoElement.currentTime / videoElement.duration) * 100;
-      setProgress(progress);
+    const updateProgress = () => {
+      if (videoElement) {
+        const progress =
+          (videoElement.currentTime / videoElement.duration) * 100;
+        setProgress(progress);
+        animationFrameRef.current = requestAnimationFrame(updateProgress);
+      }
     };
 
     if (videoElement && showProgress) {
-      videoElement.addEventListener('timeupdate', handleTimeUpdate);
+      animationFrameRef.current = requestAnimationFrame(updateProgress);
     }
 
     return () => {
-      if (videoElement && showProgress) {
-        videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, [showProgress]);
