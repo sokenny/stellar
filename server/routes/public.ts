@@ -1,7 +1,7 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import getExperimentsForClient, {
-  getExperimentsForClientTest,
+  getExperimentsForClientCF,
 } from './handlers/getExperimentsForClient';
 import sendStellarJSBundle from './handlers/sendStellarJSBundle';
 import autoGenerate from './handlers/autoGenerate';
@@ -42,8 +42,8 @@ router.get('/confirm-email', handleConfirmEmail);
 
 router.post('/create-account-social', createAccountSocial);
 
-router.get('/experiments/client', getExperimentsForClient);
-router.get('/experiments/client/test/:apiKey', getExperimentsForClientTest);
+router.get('/experiments/client', getExperimentsForClient); // We will eventually deprecate this one
+router.get('/experiments/client/:apiKey', getExperimentsForClientCF); // New endpoint that is served with cloudfront
 router.post(
   '/experiments/end-session',
   // strictLimiter, // I might need this soon, perhaps not too strict

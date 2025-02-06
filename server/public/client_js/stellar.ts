@@ -625,13 +625,16 @@
           return;
         }
 
-        const response = await fetch(`${STELLAR_API_URL}/experiments/client`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
+        const response = await fetch(
+          `${STELLAR_API_URL}/experiments/client/${apiKey}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Authorization': `Bearer ${apiKey}`,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

@@ -160,7 +160,7 @@ async function getExperimentsForClient(req, res) {
   res.json(experiments);
 }
 
-export async function getExperimentsForClientTest(req, res) {
+export async function getExperimentsForClientCF(req, res) {
   const apiKey = req.params.apiKey;
 
   if (!apiKey) {
