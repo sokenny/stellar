@@ -127,6 +127,7 @@ const Variant = ({
           <DeleteVariantModal
             onClose={() => setShowDeleteVariantModal(false)}
             variantId={thisVariant.id}
+            experimentId={experiment.id}
           />
         )}
       </div>

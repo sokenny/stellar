@@ -8,7 +8,7 @@ import styles from './ResumeExperimentModal.module.css';
 
 const ResumeExperimentModal = ({ onClose, experimentId }) => {
   const router = useRouter();
-  const { refetchProjects } = useStore();
+  const { refetchExperiment } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleResumeExperiment() {
@@ -22,7 +22,7 @@ const ResumeExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => res.json())
       .then((res) => {
         setSubmitting(false);
-        refetchProjects();
+        refetchExperiment(experimentId);
         toast.success('Experiment turned on');
         onClose();
       });

@@ -62,7 +62,7 @@ function getEndTriggerType(experiment) {
 
 const SettingsForm = ({ experiment }) => {
   const router = useRouter();
-  const { currentProject, refetchProjects } = useStore();
+  const { currentProject, refetchExperiment } = useStore();
   const otherNonEndedExperiments = currentProject.experiments.filter((exp) => {
     return exp.id !== experiment.id && !exp.ended_at;
   });
@@ -120,7 +120,7 @@ const SettingsForm = ({ experiment }) => {
         pristineFormState.current = settingsForm;
         setSubmitting(false);
         toast.success('Settings saved');
-        refetchProjects();
+        refetchExperiment(experiment.id);
         router.push(`/experiment/${experiment.id}`);
       })
       .catch((err) => {

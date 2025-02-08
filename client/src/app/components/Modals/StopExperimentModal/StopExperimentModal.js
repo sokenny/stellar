@@ -6,7 +6,7 @@ import Button from '../../Button/Button';
 import styles from './StopExperimentModal.module.css';
 
 const StopExperimentModal = ({ onClose, experimentId }) => {
-  const { refetchProjects } = useStore();
+  const { refetchExperiment } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleStopExperiment() {
@@ -25,7 +25,7 @@ const StopExperimentModal = ({ onClose, experimentId }) => {
       .then((res) => {
         setSubmitting(false);
         toast.success('Experiment stopped');
-        refetchProjects();
+        refetchExperiment(experimentId);
         onClose();
       });
   }

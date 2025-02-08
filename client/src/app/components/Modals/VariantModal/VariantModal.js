@@ -28,7 +28,7 @@ const VariantModal = ({
   },
 }) => {
   const router = useRouter();
-  const { refetchProjects, currentProject } = useStore();
+  const { refetchProjects, currentProject, refetchExperiment } = useStore();
   const missingSnippet = currentProject?.snippet_status !== 1;
   const initialValuesRef = useRef(initialValues);
   const [formData, setFormData] = useState(initialValues);
@@ -94,8 +94,7 @@ const VariantModal = ({
       );
       console.log('response', response);
       if (response.status === 200) {
-        console.log('SI PA');
-        refetchProjects();
+        refetchExperiment(experiment.id);
         toast.success(`Variant updated`);
         onClose();
       }

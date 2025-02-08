@@ -43,7 +43,7 @@ const SelectGoalForm = ({
   onCreateNewGoal,
   onEditGoal,
 }) => {
-  const { refetchProjects } = useStore();
+  const { refetchExperiment } = useStore();
   console.log('goals aca', goals);
   const defaultSelectedGoal =
     goals.find((goal) => goal.GoalExperiment.is_main) || null;
@@ -90,7 +90,7 @@ const SelectGoalForm = ({
 
       toast.success('Goals saved successfully');
       onOpenChange(false);
-      await refetchProjects();
+      await refetchExperiment(experimentId);
     } catch (error) {
       console.error('Error saving goals:', error);
       toast.error('Failed to save goals. Please try again.');

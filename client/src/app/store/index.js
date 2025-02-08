@@ -123,6 +123,41 @@ const useStore = create((set, get) => ({
   setUser: (user) => set({ user }),
   errorModal: null,
   setErrorModal: (errorModal) => set({ errorModal }),
+  refetchExperiment: async (experimentId) => {
+    console.log('refetching experiment', experimentId);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/experiment/${experimentId}`,
+        {
+          cache: 'no-store',
+        },
+      );
+      const updatedExperiment = await response.json();
+      console.log('refetched exp response', updatedExperiment);
+
+      set((state) => ({
+        currentProject: {
+          ...state.currentProject,
+          experiments: state.currentProject.experiments.map((exp) => {
+            if (exp.id == experimentId) {
+              console.log('Experiment ID matched:', experimentId);
+              return updatedExperiment;
+            } else {
+              console.log('Experiment ID did not match:', exp.id, experimentId);
+              return exp;
+            }
+          }),
+        },
+      }));
+
+      console.log('updatedExperiment', updatedExperiment);
+
+      return updatedExperiment;
+    } catch (error) {
+      console.error('Failed to fetch experiment:', error);
+      throw error;
+    }
+  },
 }));
 
 export default useStore;

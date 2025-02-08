@@ -56,7 +56,7 @@ const TargetAudienceForm = ({
   disabledEditing = false,
 }) => {
   console.log('targetRules111', targetRules);
-  const { refetchProjects } = useStore();
+  const { refetchExperiment } = useStore();
   const [deviceRulesEnabled, setDeviceRulesEnabled] = useState(
     targetRules?.device?.enabled ?? false,
   );
@@ -128,7 +128,7 @@ const TargetAudienceForm = ({
         },
       );
       if (response.ok) {
-        refetchProjects();
+        refetchExperiment(experimentId);
         toast.success('Target rules saved successfully');
         onSuccess?.();
         onClose?.();

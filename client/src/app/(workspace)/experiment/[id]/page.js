@@ -51,18 +51,11 @@ export default function ExperimentPage({ params, searchParams }) {
   const [showSetUpGoalModal, setShowSetUpGoalModal] = useState(false);
   const [creatingVariant, setCreatingVariant] = useState(false);
   const experimentId = params.id;
-  const {
-    user,
-    currentProject,
-    refetchProjects,
-    token,
-    charts,
-    setCharts,
-    stats,
-  } = useStore();
+  const { user, currentProject, refetchExperiment, token, charts, setCharts } =
+    useStore();
 
   console.log('user! ', user);
-  console.log('currentProject! ', currentProject);
+  console.log('currentProject from expid ', currentProject);
 
   const missingSnippet = currentProject?.snippet_status !== 1;
   const loading = user === null || !currentProject;
@@ -174,7 +167,8 @@ export default function ExperimentPage({ params, searchParams }) {
         },
       );
       const variant = await response.json();
-      refetchProjects();
+      // refetchProjects();
+      refetchExperiment(experiment.id);
       toast.success('Variant created');
       console.log(variant);
     } catch (error) {
@@ -442,6 +436,7 @@ export default function ExperimentPage({ params, searchParams }) {
             variants={experiment.variants}
             experiment={experiment}
             statsType={statsType}
+            key={experiment.variants.length}
           />
           {hasStarted && (
             <ExperimentChart

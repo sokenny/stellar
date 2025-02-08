@@ -523,6 +523,7 @@ const VariantsTable = ({ variants = [], experiment, statsType }) => {
         <DeleteVariantModal
           onClose={() => setVariantToDelete(null)}
           variantId={variantToDelete}
+          experimentId={experiment.id}
         />
       )}
     </>

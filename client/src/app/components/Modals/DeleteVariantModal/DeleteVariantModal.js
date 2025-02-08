@@ -5,8 +5,8 @@ import Modal from '../Modal/Modal';
 import Button from '../../Button/Button';
 import styles from './DeleteVariantModal.module.css';
 
-const DeleteVariantModal = ({ onClose, variantId }) => {
-  const { refetchProjects } = useStore();
+const DeleteVariantModal = ({ onClose, variantId, experimentId }) => {
+  const { refetchExperiment } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteVariant() {
@@ -19,7 +19,7 @@ const DeleteVariantModal = ({ onClose, variantId }) => {
         if (res.success) {
           setSubmitting(false);
           toast.success('Variant deleted');
-          refetchProjects();
+          refetchExperiment(experimentId);
           onClose();
         }
       });

@@ -8,7 +8,7 @@ import urlMatchesTargetCriteria from '../../helpers/urlMatchesTargetCriteria';
 import useStore from '../../store';
 
 const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
-  const { currentProject, refetchProjects } = useStore();
+  const { currentProject, refetchExperiment } = useStore();
   const [editorUrl, setEditorUrl] = useState(experiment?.editor_url || '');
   const [editorUrlSubmitting, setEditorUrlSubmitting] = useState(false);
   const [isEditorUrlPristine, setIsEditorUrlPristine] = useState(true);
@@ -48,7 +48,7 @@ const ExperimentEditorUrl = ({ experiment, onSuccess, error }) => {
 
       if (!response.ok) throw new Error('Failed to update editor URL');
 
-      await refetchProjects();
+      await refetchExperiment(experiment.id);
       toast.success('Editor URL updated successfully');
       onSuccess?.();
     } catch (error) {
