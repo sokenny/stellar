@@ -1,6 +1,7 @@
 import express from 'express';
+import compression from 'compression';
 // import deleteProject from './handlers/deleteProject';
-// import getExperiment from './handlers/getExperiment';
+import getExperiment from './handlers/getExperiment';
 import createGoal from './handlers/createGoal';
 import editExperiment from './handlers/editExperiment';
 import editVariant from './handlers/editVariant';
@@ -49,7 +50,7 @@ router.post('/kickstart-project', autoGenerate);
 // This one is used on the client side to mount experiments for users
 router.post('/experiments', createExperiment);
 router.post('/experiments/split-url', createSplitUrlExperiment);
-// router.get('/experiment/:id', getExperiment);
+router.get('/experiment/:id', getExperiment);
 router.put('/experiment/:id', editExperiment);
 router.put('/experiment/:id/url-rules', editExperimentUrlRules);
 router.put('/experiment/:id/editor-url', updateEditorUrl);
@@ -78,7 +79,7 @@ router.delete('/goals/:id', deleteGoal);
 router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
 // Should be called getUserData or sth like that
-router.get('/projects/:userEmail', getProjects);
+router.get('/projects/:userEmail', compression(), getProjects);
 // router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
 
