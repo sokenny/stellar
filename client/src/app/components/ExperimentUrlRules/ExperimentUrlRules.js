@@ -26,7 +26,7 @@ const ExperimentUrlRules = ({
     exclude: [{ type: 'exact', url: '' }],
   });
 
-  const { currentProject, refetchExperiment } = useStore();
+  const { currentProject, refetchProject } = useStore();
   const [experimentUrl, setExperimentUrl] = useState(
     experiment ? experiment.url : `https://${currentProject.domain}`,
   );
@@ -111,7 +111,7 @@ const ExperimentUrlRules = ({
         toast.success('Experiment created successfully');
       }
 
-      await refetchExperiment(newExperiment.id);
+      await refetchProject(currentProject.id);
       onSuccess && onSuccess(newExperiment.id);
     } catch (error) {
       console.error(error);

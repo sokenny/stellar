@@ -38,6 +38,14 @@ const SignUpForm = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'signup_page_viewed',
+      });
+    }
+  }, []);
+
   const handleSignUp = async () => {
     if (!firstName || !lastName) {
       setError('Please enter both first and last name.');

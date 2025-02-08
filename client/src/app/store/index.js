@@ -187,6 +187,32 @@ const useStore = create((set, get) => ({
       throw error;
     }
   },
+  refetchProject: async (projectId) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/project/${projectId}`,
+        {
+          cache: 'no-store',
+        },
+      );
+      const updatedProject = await response.json();
+
+      set((state) => ({
+        projects: state.projects.map((project) =>
+          project.id === projectId ? updatedProject : project,
+        ),
+        currentProject:
+          state.currentProject?.id === projectId
+            ? updatedProject
+            : state.currentProject,
+      }));
+
+      return updatedProject;
+    } catch (error) {
+      console.error('Failed to fetch project:', error);
+      throw error;
+    }
+  },
 }));
 
 export default useStore;
