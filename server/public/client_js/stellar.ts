@@ -1,7 +1,9 @@
 (function () {
   'use strict';
 
-  const STELLAR_API_URL = 'process.env.STELLAR_API_URL/public';
+  const STELLAR_API_URL = '{{STELLAR_API_URL}}';
+  const EDITOR_URL = '{{EDITOR_URL}}';
+  const CLIENT_EXPERIMENTS_URL = '{{CLIENT_EXPERIMENTS_URL}}';
 
   const urlParams = new URLSearchParams(window.location.search);
   const stellarMode = urlParams.get('stellarMode');
@@ -9,8 +11,7 @@
   if (stellarMode === 'true') {
     console.log('stellarMode is true loading editor');
     const editorScript = document.createElement('script');
-    // editorScript.src = `${STELLAR_API_URL}/editorjs`;
-    editorScript.src = `https://d3niuqph2rteir.cloudfront.net/client_js/editor.js`;
+    editorScript.src = EDITOR_URL;
     document.head.appendChild(editorScript);
     return; // Exit early to prevent running the rest of the stellar code
   }
@@ -245,7 +246,7 @@
 
           // TODO-p2: Averiguar porque en mobile e incognito no sale el beacon.
           navigator.sendBeacon(
-            `${STELLAR_API_URL}/experiments/end-session`,
+            `${STELLAR_API_URL}/public/experiments/end-session`,
             JSON.stringify(data),
           );
         }
@@ -625,16 +626,12 @@
           return;
         }
 
-        const response = await fetch(
-          `${STELLAR_API_URL}/experiments/client/${apiKey}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              // 'Authorization': `Bearer ${apiKey}`,
-            },
+        const response = await fetch(`${CLIENT_EXPERIMENTS_URL}/${apiKey}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
