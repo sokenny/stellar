@@ -52,6 +52,12 @@ const OnboardingForm = () => {
     if (formElement) {
       formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'onboarding_started',
+      });
+    }
   }, []);
 
   const handleSubmit = async () => {
@@ -88,6 +94,12 @@ const OnboardingForm = () => {
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
       toast.success('Onboarding data submitted successfully');
+
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'onboarding_completed',
+        });
+      }
 
       const redirectUrl = session?.user?.email?.includes('@gostellar.app')
         ? '/dashboard'

@@ -55,6 +55,11 @@ const CreateSimpleProjectForm = ({ className, onSuccess, isHomePage }) => {
               'lastSelectedProject',
               parsedResponse.project.id,
             );
+            if (window.dataLayer) {
+              window.dataLayer.push({
+                event: 'project_created',
+              });
+            }
             window?.location?.reload();
             return 'Project created successfully';
           },

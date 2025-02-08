@@ -27,8 +27,11 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Implement refetchProject for changes in goal level, etc
+// TODO-p1-1: Setup reddit conversion tracking
 // TODO-p1-1: Only return ended experiments when navigated to that page
+// TODO-p1-1: Good round of qa
+// TODO-p1-1: Maybe have currentProject work with an id to have 1 single source of truth for the project
+// TODO-p1-1: Implement refetchProject for changes in goal level, etc
 // TODO-p1-1: Disable IBKR purchases (?)
 // TODO-p1-1: Finish GA integration - triggers user custom dimensions, event for experiment started, and event for conversion performed
 // TODO-p1-1: Start redshift PoC
@@ -165,6 +168,7 @@ export default function RootLayout({ children }) {
           ></iframe>
         </noscript>
         <Providers>
+          {/* <PageViewTracker /> */}
           <Nav token={nextAuthSessionToken?.value} />
           <div>{children}</div>
           <footer className={styles.footer}>

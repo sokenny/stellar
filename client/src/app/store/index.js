@@ -158,6 +158,35 @@ const useStore = create((set, get) => ({
       throw error;
     }
   },
+  fetchEndedExperiments: async (projectId) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_STELLAR_API}/api/ended-experiments`,
+        {
+          cache: 'no-store',
+        },
+      );
+      const endedExperiments = await response.json();
+
+      set((state) => ({
+        currentProject: {
+          ...state.currentProject,
+          experiments: [
+            ...state.currentProject.experiments.filter(
+              (exp) =>
+                !endedExperiments.some((endedExp) => endedExp.id === exp.id),
+            ),
+            ...endedExperiments,
+          ],
+        },
+      }));
+
+      return endedExperiments;
+    } catch (error) {
+      console.error('Failed to fetch ended experiments:', error);
+      throw error;
+    }
+  },
 }));
 
 export default useStore;

@@ -37,6 +37,7 @@ import setExperimentGoals from './handlers/setExperimentGoals';
 import updateGoal from './handlers/updateGoal';
 import deleteGoal from './handlers/deleteGoal';
 import getElementVariants from './handlers/getElementVariants';
+import getEndedExperiments from './handlers/getEndedExperiments';
 
 const router = express.Router();
 
@@ -80,6 +81,7 @@ router.get('/test-statistical-significance/:id', getStatisticalSignificance);
 
 // Should be called getUserData or sth like that
 router.get('/projects/:userEmail', compression(), getProjects);
+router.get('/ended-experiments', compression(), getEndedExperiments);
 // router.delete('/project/:projectId', deleteProject);
 router.post('/check-snippet', checkSnippet);
 

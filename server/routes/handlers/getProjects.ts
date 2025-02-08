@@ -16,6 +16,7 @@ async function getProjects(req, res) {
             as: 'experiments',
             where: {
               deleted_at: null,
+              ended_at: null,
             },
             required: false,
             include: [

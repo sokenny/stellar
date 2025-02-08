@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import useStore from '../../store';
 import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
 import segmentTrack from '../../helpers/segment/segmentTrack';
@@ -12,7 +13,7 @@ const tabs = ['Active', 'Draft', 'Ended', 'All'];
 
 const TabsAndExperiments = ({ experiments }) => {
   const router = useRouter();
-
+  const { fetchEndedExperiments } = useStore();
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   experiments.sort((a, b) => {
@@ -64,7 +65,12 @@ const TabsAndExperiments = ({ experiments }) => {
                   className={`${styles.tab} ${
                     tab === activeTab ? styles.active : ''
                   }`}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    if (tab === 'Ended') {
+                      fetchEndedExperiments();
+                    }
+                  }}
                 >
                   {tab}
                 </div>
