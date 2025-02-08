@@ -54,6 +54,17 @@ async function getProjectExperiments(projectId: number): Promise<any[]> {
 
 async function fetchExperiments(projectId: number) {
   const experimentInstances = await db.Experiment.findAll({
+    attributes: [
+      'id',
+      'name',
+      'project_id',
+      'url',
+      'started_at',
+      'advanced_url_rules',
+      'smart_trigger',
+      'type',
+      'status',
+    ],
     where: {
       [Op.and]: [
         { started_at: { [Op.ne]: null } },
@@ -67,12 +78,35 @@ async function fetchExperiments(projectId: number) {
         model: db.Variant,
         as: 'variants',
         required: true,
+        attributes: [
+          'id',
+          'name',
+          'experiment_id',
+          'is_control',
+          'modifications',
+          'traffic',
+          'global_css',
+          'global_js',
+          'preserve_url_params',
+          'url',
+        ],
         where: { deleted_at: null },
       },
       {
         model: db.Goal,
         as: 'goals',
         required: true,
+        attributes: [
+          'id',
+          'experiment_id',
+          'project_id',
+          'name',
+          'type',
+          'selector',
+          'url_match_type',
+          'url_match_value',
+          'element_url',
+        ],
         through: {
           model: db.GoalExperiment,
           where: {

@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import getExperimentsForClient, {
   getExperimentsForClientCF,
@@ -42,8 +43,12 @@ router.get('/confirm-email', handleConfirmEmail);
 
 router.post('/create-account-social', createAccountSocial);
 
-router.get('/experiments/client', getExperimentsForClient); // We will eventually deprecate this one
-router.get('/experiments/client/:apiKey', getExperimentsForClientCF); // New endpoint that is served with cloudfront
+router.get('/experiments/client', compression(), getExperimentsForClient);
+router.get(
+  '/experiments/client/:apiKey',
+  compression(),
+  getExperimentsForClientCF,
+);
 router.post(
   '/experiments/end-session',
   // strictLimiter, // I might need this soon, perhaps not too strict

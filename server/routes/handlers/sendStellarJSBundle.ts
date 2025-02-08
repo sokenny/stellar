@@ -9,7 +9,8 @@ const PROD_EDITOR_URL =
 const DEV_CLIENT_EXPERIMENTS_URL =
   'http://localhost:3001/public/experiments/client';
 const PROD_CLIENT_EXPERIMENTS_URL =
-  'https://d3niuqph2rteir.cloudfront.net/public/experiments/client';
+  'https://api.gostellar.app/public/experiments/client';
+// 'https://d3niuqph2rteir.cloudfront.net/public/experiments/client'; // NOTE: until we figure out why cloudfront is slower we will keep using origin
 
 const DEV_STELLAR_API_URL = 'http://localhost:3001';
 const PROD_STELLAR_API_URL = 'https://api.gostellar.app';
