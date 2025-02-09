@@ -1,8 +1,7 @@
 import SignUpCTA from '../components/SignUpCTA';
 import AutoPlayVideo from '../components/AutoPlayVideo';
 import Plans from '../components/Plans';
-import GridBg from '../components/GridBg/GridBg';
-import HomeChartSection from '../components/HomeChartSection';
+import Link from 'next/link';
 import StellarSpeed from '../components/StellarSpeed';
 import Bolt from '../icons/Bolt';
 import Traffic from '../icons/Traffic';
@@ -101,21 +100,23 @@ export default async function HomePage({}) {
                   ⚡️ Lightest in the market at 5.4kb
                 </div>
               </div>
-              <div className={styles.lovedBy} id="loved-by">
-                <div className={styles.faces}>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((face, index) => {
-                    return (
-                      <div key={index} className={styles.face}>
-                        <img
-                          src={`https://d3niuqph2rteir.cloudfront.net/assets/test${face}.webp`}
-                          alt="face"
-                        />
-                      </div>
-                    );
-                  })}
+              <Link href="#testimonials">
+                <div className={styles.lovedBy} id="loved-by">
+                  <div className={styles.faces}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((face, index) => {
+                      return (
+                        <div key={index} className={styles.face}>
+                          <img
+                            src={`https://d3niuqph2rteir.cloudfront.net/assets/test${face}.webp`}
+                            alt="face"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <h3>🚀 Loved by CRO marketers</h3>
                 </div>
-                <h3>🚀 Loved by CRO marketers</h3>
-              </div>
+              </Link>
             </div>
           </section>
           <section className={styles.section}>
@@ -307,7 +308,7 @@ export default async function HomePage({}) {
               </SignUpCTA>
             </div>
           </section>
-          <section className={styles.section}>
+          <section className={styles.section} id="testimonials">
             <div className={styles.biteTestimonials}>
               <h3>Why do users prefer Stellar?</h3>
 

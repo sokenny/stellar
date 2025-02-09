@@ -167,7 +167,6 @@ export default function ExperimentPage({ params, searchParams }) {
         },
       );
       const variant = await response.json();
-      // refetchProjects();
       refetchExperiment(experiment.id);
       toast.success('Variant created');
       console.log(variant);

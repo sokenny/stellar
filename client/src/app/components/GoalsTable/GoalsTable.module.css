@@ -30,3 +30,29 @@
     max-width: 250px;
     text-align: center;
   }
+
+.selectorCell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.selectorCell span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectorTooltip {
+  max-width: 450px;
+  padding: 12px;
+  text-align: center;
+}
+
+.urlMatchType {
+  font-size: 12px!important;
+  color: #666!important;
+  background-color: red!important;
+}

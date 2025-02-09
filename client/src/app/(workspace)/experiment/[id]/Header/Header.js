@@ -15,7 +15,7 @@ import getMainGoal from '../../../../helpers/getMainGoal';
 
 const Header = ({ experiment }) => {
   const experimentGoal = getMainGoal(experiment);
-  const { refetchProjects, currentProject, setErrorModal } = useStore();
+  const { refetchProject, currentProject, setErrorModal } = useStore();
   const [launchingExperiment, setLaunchingExperiment] = useState(false);
   const queuedAfter = currentProject?.experiments?.find(
     (e) => experiment.queue_after === e.id,
@@ -48,7 +48,7 @@ const Header = ({ experiment }) => {
         {
           loading: 'Launching experiment...',
           success: async () => {
-            refetchProjects();
+            refetchProject(currentProject.id);
             setLaunchingExperiment(false);
             return 'Experiment launched successfully';
           },
@@ -78,7 +78,7 @@ const Header = ({ experiment }) => {
         {
           loading: 'Pausing experiment...',
           success: async () => {
-            refetchProjects();
+            refetchProject(currentProject.id);
             return 'Experiment paused';
           },
           error: 'Failed to pause experiment',
@@ -95,7 +95,7 @@ const Header = ({ experiment }) => {
       {
         loading: 'Resuming experiment...',
         success: async () => {
-          refetchProjects();
+          refetchProject(currentProject.id);
           return 'Experiment resumed';
         },
         error: 'Failed to resume experiment',

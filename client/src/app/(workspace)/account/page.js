@@ -49,7 +49,7 @@ export default function Account({}) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Projects</h3>
+      <h3 className={styles.title}>Domains</h3>
       <div className={styles.projects}>
         {user?.projects?.map((project) => {
           const apiKey = user?.api_keys.find(

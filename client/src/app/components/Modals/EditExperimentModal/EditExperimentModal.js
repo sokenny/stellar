@@ -9,7 +9,7 @@ import styles from './EditExperimentModal.module.css';
 
 const EditExperimentModal = ({ onClose, experiment, initialValues = {} }) => {
   const router = useRouter();
-  const { refetchProjects } = useStore();
+  const { refetchProject, currentProject } = useStore();
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState(initialValues);
 
@@ -31,7 +31,7 @@ const EditExperimentModal = ({ onClose, experiment, initialValues = {} }) => {
       );
       if (response.status === 200) {
         toast.success('Experiment updated');
-        refetchProjects();
+        refetchProject(currentProject.id);
         onClose();
       }
     } catch (e) {

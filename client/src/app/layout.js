@@ -27,14 +27,14 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
-// TODO-p1-1: Good round of qa
+// TODO-p1-1: improve url match display on goals table
+// TODO-p1-1: Launch hyper targetted ads  -shopify w shopify video - PPC with dynamic keyword insertion (PUT A QUOTE ABOUT X% of ecommerces boost CR by x% with dynamic keyword insertion ) | USE DKI TO CHANGE WORDS LIKE "CRO MARKETERS" to address shopify users / copywriters / ppc campaign runners / etc
+// TODO-p1-1: Improve look of goals table
 // TODO-p1-1: Maybe have currentProject work with an id to have 1 single source of truth for the project
-// TODO-p1-1: Implement refetchProject for changes in goal level, etc
 // TODO-p1-1: Disable IBKR purchases (?)
 // TODO-p1-1: Finish GA integration - triggers user custom dimensions, event for experiment started, and event for conversion performed
 // TODO-p1-1: Start redshift PoC
 // TODO-p1-1: Create account on capterra  & linkedin
-// TODO-p1-1: Create ad for r/Shopify showing shopify edits and r/Copywriting and r/PPC showing DKI (dynamic keyword insertion)
 // TODO-p1-1: Create B landing page and test it w split url test and GA4
 // TODO-p1-1: Have a "save big with Stellar" like croct https://croct.com/pricing
 // TODO-p1-1: Add faqs
@@ -79,9 +79,7 @@ export const metadata = {
 // TODO-p1-1: resume handleGettingStartedCampaign testing carefully / re-check emails make sense
 // TODO-p1-1: Be able to filter out sessions between desktop and mobile and perhaps some more cohorts too
 // TODO-p1-1: Allow editing global JS and global CSS from the table
-// TODO-p1-p1: If G-ads is not working on the weekends, set chedule to pause it those days
 // TODO-p1-1: Setup retargeting campaign in g ads w video
-// TODO-p1-1: Try out Supa Demo
 // TODO-p1-1: Allow reusing goals / implement left sidebar (?)
 // TODO/p1-1: swithc to project after creating it
 // Que lo de parallel experiments no cuente si url es null

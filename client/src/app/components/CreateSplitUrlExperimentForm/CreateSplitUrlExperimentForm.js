@@ -13,7 +13,7 @@ import Info from '../../icons/Info/Info';
 
 const CreateSplitUrlExperimentForm = ({ experimentId }) => {
   const router = useRouter();
-  const { currentProject, refetchProjects } = useStore();
+  const { currentProject, refetchProject } = useStore();
   const experiment =
     currentProject?.experiments?.find((e) => e.id == experimentId) || null;
   const targetRules = experiment?.targetRules?.[0]?.rules || null;
@@ -91,7 +91,7 @@ const CreateSplitUrlExperimentForm = ({ experimentId }) => {
       );
 
       const newExperiment = await response.json();
-      await refetchProjects();
+      await refetchProject(currentProject.id);
       toast.success('URL split test created successfully');
       router.push(`/experiment/${newExperiment.id}`);
     } catch (error) {

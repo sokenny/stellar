@@ -20,7 +20,7 @@ import ExperimentEditorUrl from '../ExperimentEditorUrl/ExperimentEditorUrl';
 const CreateExperimentForm = ({ experimentId }) => {
   const router = useRouter();
   const variantsCheckIntervalRef = useRef(null);
-  const { user, currentProject, refetchProjects } = useStore();
+  const { user, currentProject, refetchProject } = useStore();
   const experiment =
     currentProject?.experiments?.find((e) => e.id == experimentId) || null;
   const targetRules = experiment?.targetRules?.[0]?.rules || null;
@@ -70,7 +70,7 @@ const CreateExperimentForm = ({ experimentId }) => {
         },
       );
       const variant = await response.json();
-      refetchProjects();
+      refetchProject(currentProject.id);
 
       console.log(variant);
       toast.success('Variant added successfully');
@@ -89,7 +89,7 @@ const CreateExperimentForm = ({ experimentId }) => {
       {
         loading: 'Deleting variant...',
         success: async () => {
-          await refetchProjects();
+          await refetchProject(currentProject.id);
           return 'Variant deleted';
         },
       },

@@ -53,7 +53,7 @@ const goals = [
 ];
 
 const GoalsForm = ({ experiment, goal, onClose }) => {
-  const { refetchProjects, token, currentProject } = useStore();
+  const { refetchProject, token, currentProject } = useStore();
   const domain = currentProject.domain;
   const initialGoalName = goal?.name ? goal.name : 'Untitled Goal';
   const goalCheckIntervalRef = useRef(null);
@@ -149,7 +149,7 @@ const GoalsForm = ({ experiment, goal, onClose }) => {
       });
 
       if (response.status === 200) {
-        await refetchProjects();
+        await refetchProject(currentProject.id);
 
         if (!toastSuccessCalledRef.current) {
           toast.success('Goal set successfully');

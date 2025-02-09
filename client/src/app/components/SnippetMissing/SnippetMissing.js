@@ -19,7 +19,7 @@ const SnippetMissing = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [withAntiFlicker, setWithAntiFlicker] = useState(true);
-  const { user, refetchProjects, currentProject } = useStore();
+  const { user, refetchProject, currentProject } = useStore();
   console.log('user', user);
   console.log('currentProject', currentProject);
   const apiKey = user?.api_keys.find(
@@ -63,7 +63,7 @@ const SnippetMissing = ({
         loading: 'Checking snippet...',
         success: async () => {
           setLoading(false);
-          refetchProjects();
+          refetchProject(currentProject.id);
           onSuccess && onSuccess();
           newWindow && newWindow.close();
           return 'Snippet installation confirmed';

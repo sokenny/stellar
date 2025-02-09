@@ -22,7 +22,7 @@ import GoalSetupModal from '../Modals/GoalSetupModal/GoalSetupModal';
 const GoalsTable = ({ goals = [] }) => {
   const [page, setPage] = React.useState(1);
   const [editingGoal, setEditingGoal] = useState(null);
-  const { refetchProjects } = useStore();
+  const { refetchProject, currentProject } = useStore();
 
   const rows = goals
     .map((goal) => ({
@@ -129,7 +129,7 @@ const GoalsTable = ({ goals = [] }) => {
                                   {
                                     loading: 'Deleting goal...',
                                     success: async () => {
-                                      await refetchProjects();
+                                      await refetchProject(currentProject.id);
                                       return 'Goal deleted successfully';
                                     },
                                     error: (error) => {
@@ -145,6 +145,23 @@ const GoalsTable = ({ goals = [] }) => {
                           />
                         </span>
                       </div>
+                    </TableCell>
+                  );
+                }
+                if (columnKey === 'selector') {
+                  return (
+                    <TableCell className={styles.selectorCell}>
+                      <Tooltip
+                        content={getKeyValue(item, columnKey)}
+                        className={styles.selectorTooltip}
+                        closeDelay={50}
+                        isDisabled={
+                          !getKeyValue(item, columnKey) ||
+                          getKeyValue(item, columnKey) === '-'
+                        }
+                      >
+                        <span>{getKeyValue(item, columnKey)}</span>
+                      </Tooltip>
                     </TableCell>
                   );
                 }

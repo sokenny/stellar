@@ -6,7 +6,7 @@ import ShuffleIcon from '../../../../../icons/Shuffle';
 import styles from './ExperimentName.module.css';
 
 const ExperimentName = ({ name, experimentId, className, type }) => {
-  const { refetchProjects } = useStore();
+  const { refetchProject, currentProject } = useStore();
   const [isEditingName, setIsEditingName] = useState(false);
   const nameRef = useRef(null);
   useEffect(() => {
@@ -46,7 +46,7 @@ const ExperimentName = ({ name, experimentId, className, type }) => {
         {
           loading: 'Updating experiment name...',
           success: async () => {
-            refetchProjects();
+            refetchProject(currentProject.id);
             return 'Experiment name updated';
           },
           error: async () => `Failed to update experiment name`,

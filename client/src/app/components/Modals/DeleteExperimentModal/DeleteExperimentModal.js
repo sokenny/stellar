@@ -12,7 +12,7 @@ const DeleteExperimentModal = ({
   onComplete,
   isUnauthRequest,
 }) => {
-  const { refetchProjects } = useStore();
+  const { refetchProject, currentProject } = useStore();
   const [submitting, setSubmitting] = useState(false);
 
   function handleDeleteExperiment() {
@@ -29,7 +29,7 @@ const DeleteExperimentModal = ({
       .then((res) => {
         setSubmitting(false);
         toast.success('Experiment deleted');
-        refetchProjects();
+        refetchProject(currentProject.id);
         onClose();
         onComplete && onComplete();
       });
