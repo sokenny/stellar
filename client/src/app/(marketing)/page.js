@@ -152,6 +152,7 @@ export default async function HomePage({}) {
               src="https://d3niuqph2rteir.cloudfront.net/assets/60seclaunch3.mp4"
               className={styles.video}
               showProgress={true}
+              animate={true}
             />
           </div>
 

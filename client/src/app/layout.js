@@ -27,6 +27,10 @@ export const metadata = {
 
 // Rough estimate of events processed per monthL: Per day we can do 172,800 with 1 worker. LEts cut out 20% of that to be conservative, so 138,240. PEr month that is 4,147,200.
 
+// TODO-p1-1: Have GA integration ready on Goals & Exp for Dog digital demo
+// TODO-p1-1: Fix reddit trcking
+// TODO-p1-1: Dont allow deleting var of a started exp
+// TODO-p1-1: Fix issue w goalsetmodal "clicks on specific element" when queryselector is provided
 // TODO-p1-1: improve url match display on goals table
 // TODO-p1-1: Launch hyper targetted ads  -shopify w shopify video - PPC with dynamic keyword insertion (PUT A QUOTE ABOUT X% of ecommerces boost CR by x% with dynamic keyword insertion ) | USE DKI TO CHANGE WORDS LIKE "CRO MARKETERS" to address shopify users / copywriters / ppc campaign runners / etc
 // TODO-p1-1: Improve look of goals table

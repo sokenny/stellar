@@ -10,9 +10,11 @@ const AutoPlayVideo = ({
   className,
   onPlayClassName,
   showProgress = false,
+  animate = false,
 }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const animationFrameRef = useRef();
 
@@ -48,9 +50,11 @@ const AutoPlayVideo = ({
         if (isIntersecting && !isPlaying) {
           videoElement.play();
           setIsPlaying(true);
+          setIsVisible(true);
         } else if (!isIntersecting && isPlaying) {
           videoElement.pause();
           setIsPlaying(false);
+          setIsVisible(false);
         }
       },
       {
@@ -75,7 +79,8 @@ const AutoPlayVideo = ({
         ref={videoRef}
         className={`${styles.video} ${className ? className : ''} ${
           isPlaying ? onPlayClassName : ''
-        }`}
+        } ${animate && isVisible ? styles.animate : ''}`}
+        data-animate={animate}
         src={src}
         poster={poster}
         width={width}

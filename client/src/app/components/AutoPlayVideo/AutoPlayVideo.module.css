@@ -8,6 +8,18 @@
   display: block;
 }
 
+.video[data-animate="true"] {
+  transform-origin: top;
+  transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: perspective(1000px) rotateX(25deg) scale(0.8);
+  opacity: 1;
+}
+
+.video[data-animate="true"].animate {
+  transform: perspective(1000px) rotateX(0) scale(1);
+  opacity: 1;
+}
+
 .progressBar {
   position: absolute;
   bottom: 0;
@@ -16,6 +28,13 @@
   height: 10px;
   background-color: white;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  transition-delay: 1.4s;
+}
+
+.video[data-animate="true"].animate ~ .progressBar {
+  opacity: 1;
 }
 
 .progress {
